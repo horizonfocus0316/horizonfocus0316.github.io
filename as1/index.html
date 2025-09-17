@@ -3,26 +3,77 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AS1：我的第一個網站</title>
+  <title>BT by ChatGPT｜示範頁</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="site-header">
-    <h1>網頁設計作業一（AS1）</h1>
-    <p>姓名：莊馨予 ｜ 學號：B11610060</p>
-    <p>課程：Syllabus-Web114 網頁設計</p>
+  <!-- 頂端 Banner -->
+  <header class="banner" id="home">
+    <div class="banner-inner">
+      <h1>這裡是 Banner</h1>
+      <p>滿版視窗高度、置中對齊的示範文字</p>
+    </div>
   </header>
 
-  <main>
-    <section class="cards">
-      <div class="card">區塊 A</div>
-      <div class="card">區塊 B</div>
-      <div class="card">區塊 C</div>
-    </section>
-  </main>
+  <!-- 置頂導覽列 -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a class="brand" href="#home">首頁</a>
+      <ul class="nav-links">
+        <li><a href="#section1">區段1</a></li>
+        <li><a href="#section2">區段2</a></li>
+        <li><a href="#section3">區段3</a></li>
+      </ul>
+    </div>
+  </nav>
 
+  <!-- 區段 1 -->
+  <section id="section1" class="section section-a">
+    <div class="content">
+      <h2>區段 1</h2>
+      <p>這是區段 1 的內容示範。請自由更換文字或加入圖片。Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id, quaerat.</p>
+      <p>你也可以在此放入更多段落，或用清單快速描述要點。</p>
+    </div>
+  </section>
+
+  <!-- 區段 2 -->
+  <section id="section2" class="section section-b">
+    <div class="content">
+      <h2>區段 2</h2>
+      <p>這是區段 2 的內容示範。區塊採白底、置中、陰影與圓角，以凸顯主要內容。</p>
+      <p>版面寬度透過 max-width 控制，左右保留舒適留白。</p>
+    </div>
+  </section>
+
+  <!-- 區段 3 -->
+  <section id="section3" class="section section-c">
+    <div class="content">
+      <h2>區段 3</h2>
+      <p>這是區段 3 的內容示範。你可以把這裡改成 FAQ、服務列表、或聯絡表單連結。</p>
+      <p>如需更強的對比，可替每個 section 指定不同底色。</p>
+    </div>
+  </section>
+
+  <!-- 頁尾 -->
   <footer class="site-footer">
-    <small>© 2025 horizonfocus0316</small>
+    <small>© 2025 horizonfocus0316｜BT by ChatGPT Demo</small>
   </footer>
+
+  <script>
+    // 平滑滾動補強（大多瀏覽器已支援 CSS 的 scroll-behavior）
+    // 此段確保舊版瀏覽器點錨點也能平順滾動
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href');
+        if (id.length > 1) {
+          const target = document.querySelector(id);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
 </body>
 </html>
