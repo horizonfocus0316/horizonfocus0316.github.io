@@ -77,6 +77,19 @@ body {
   margin-top: 0;
   color: #007acc;
 }
+.portfolio-section {
+  margin-top: 60px;
+}
+
+.section-title {
+  font-size: 28px;
+  margin-bottom: 24px;
+  text-align: center;
+  color: #007acc;
+  border-bottom: 2px solid #007acc;
+  display: inline-block;
+  padding-bottom: 4px;
+}
 
 .card a {
   display: inline-block;
