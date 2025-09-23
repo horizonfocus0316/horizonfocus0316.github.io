@@ -1,126 +1,205 @@
-/* 全域設定 */
+/* =========================
+   Global / Reset
+========================= */
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
-body {
+:root{
+  --brand:#0a7bdc;         /* 主色 */
+  --brand-dark:#065fa8;    /* 主色 hover */
+  --ink:#222;              /* 文字 */
+  --muted:#666;            /* 次要文字 */
+  --bg:#f5f7fb;            /* 頁面底色 */
+  --card:#fff;             /* 卡片底色 */
+  --line:#e6e9ef;          /* 邊線 */
+  --shadow:0 6px 18px rgba(9,25,71,.06);
+}
+
+body{
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", Arial, "PingFang TC", sans-serif;
-  line-height: 1.6;
-  margin: 0;
-  background: #f7f7f7;
-  color: #222;
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.65;
   display: flex;
   flex-direction: column;
-  align-items: center;   /* 整體致中 */
+  align-items: center;
 }
 
-/* 頁首設計 */
-.site-header {
-  text-align: center;
-  padding: 60px 16px 40px;
-  background: linear-gradient(135deg, #e0f0ff, #ffffff);
-  border-bottom: 1px solid #ddd;
+/* =========================
+   Header （老師問候區）
+========================= */
+.site-header{
   width: 100%;
+  text-align: center;
+  padding: 64px 16px 40px;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #dff0ff 0%, #eaf5ff 35%, transparent 60%),
+    radial-gradient(1200px 600px at 120% 120%, #eaf5ff 0%, #f5faff 40%, transparent 70%),
+    #eaf5ff;
+  border-bottom: 2px solid #d9e8f7;
 }
-
-.main-title {
-  font-size: 42px;
-  color: #007acc;
+.main-title{
   margin: 0;
-  font-weight: bold;
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 800;
+  letter-spacing: .5px;
+  color: var(--brand);
+}
+.subtitle{
+  margin: 10px auto 0;
+  font-size: clamp(16px, 2.6vw, 20px);
+  color: var(--muted);
+  max-width: 880px;
 }
 
-.subtitle {
-  font-size: 20px;
-  color: #555;
-  margin-top: 12px;
-}
-
-/* 按鈕設計 */
-.decision-btn {
-  margin-top: 20px;
-  padding: 12px 24px;
-  font-size: 18px;
+/* 互動按鈕 */
+.decision-btn{
+  margin-top: 18px;
+  padding: 12px 22px;
+  font-size: 16px;
   color: #fff;
-  background-color: #007acc;
+  background: var(--brand);
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  box-shadow: 0 6px 14px rgba(10,123,220,.16);
+  transition: transform .04s ease, background .2s ease, box-shadow .2s ease;
 }
-.decision-btn:hover {
-  background-color: #005fa3;
-}
+.decision-btn:hover{ background: var(--brand-dark); box-shadow: 0 8px 18px rgba(10,123,220,.22); }
+.decision-btn:active{ transform: translateY(1px); }
 
-/* 容器 */
-.container {
-  max-width: 1100px;
-  margin: 24px auto;
-  padding: 0 16px;
+/* =========================
+   Layout Container
+========================= */
+.container{
   width: 100%;
+  max-width: 1120px;
+  padding: 24px 16px 64px;
+  margin: 0 auto;
 }
 
-/* 作品集專區 */
-.portfolio-section {
-  margin-top: 60px;
+/* =========================
+   Section / Cards
+========================= */
+.portfolio-section{
+  margin-top: 48px;
+  padding: 28px 20px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
 }
 
-.section-title {
-  font-size: 28px;
-  margin-bottom: 24px;
+.section-title{
+  margin: 0 0 18px;
   text-align: center;
-  color: #007acc;
-  border-bottom: 2px solid #007acc;
-  display: inline-block;
-  padding-bottom: 4px;
+  font-size: clamp(20px, 3.2vw, 26px);
+  color: var(--brand);
+  font-weight: 700;
+  letter-spacing: .3px;
+  position: relative;
+}
+.section-title::after{
+  content:"";
+  display:block;
+  width: 72px;
+  height: 3px;
+  border-radius: 3px;
+  margin: 10px auto 0;
+  background: linear-gradient(90deg, var(--brand), #62b4ff);
 }
 
-/* 卡片容器 */
-.cards {
+/* 卡片群組（使用 flex，符合作業的 flex 要求） */
+.cards{
   display: flex;
-  justify-content: center;
-  gap: 20px;
   flex-wrap: wrap;
-}
-
-.card {
-  flex: 1 1 300px;
-  max-width: 340px;
-  background: #fff;
-  border: 1px solid #e6e6e6;
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-}
-
-.card h3 {
-  margin-top: 0;
-  color: #007acc;
-}
-
-.card p {
-  min-height: 60px; /* 高度一致 */
-}
-
-.card a {
-  display: inline-block;
+  justify-content: center;
+  gap: 18px;
   margin-top: 10px;
-  padding: 8px 14px;
-  background: #007acc;
+}
+
+/* 單張卡片 */
+.card{
+  flex: 1 1 300px;         /* 目標寬 300px，可收縮/放大 */
+  max-width: 340px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 18px 20px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: transform .08s ease, box-shadow .2s ease;
+}
+.card:hover{ transform: translateY(-2px); box-shadow: 0 10px 24px rgba(9,25,71,.10); }
+
+.card h3{
+  margin: 2px 0 8px;
+  font-size: 18px;
+  color: var(--brand);
+}
+.card p{
+  margin: 0 auto 12px;
+  color: #39424e;
+  min-height: 56px;        /* 不同字數時維持高度一致 */
+}
+
+/* 卡片按鈕／連結 */
+.card a{
+  display: inline-block;
+  padding: 9px 14px;
+  background: var(--brand);
   color: #fff;
   text-decoration: none;
-  border-radius: 6px;
-  transition: background 0.3s;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: background .2s ease, transform .04s ease;
 }
+.card a + a{ margin-left: 8px; } /* 同卡片多個按鈕的間距 */
+.card a:hover{ background: var(--brand-dark); }
+.card a:active{ transform: translateY(1px); }
 
-.card a:hover {
-  background: #005fa3;
+/* =========================
+   Reporter Section (若有)
+========================= */
+.reporter-section{ margin-top: 48px; text-align: center; }
+.reporter-cards{
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;
 }
+.reporter-card{
+  flex: 1 1 420px;
+  max-width: 520px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: left;
+  box-shadow: var(--shadow);
+}
+.reporter-card h3{ margin: 0 0 8px; color: var(--brand); }
+.reporter-card ul{ margin: 6px 0 0 18px; padding: 0; }
+.reporter-card li{ margin: 6px 0; }
+.reporter-card a{ color: var(--brand-dark); text-decoration: none; }
+.reporter-card a:hover{ text-decoration: underline; }
 
-/* 頁尾 */
-.site-footer {
-  text-align: center;
-  padding: 24px 16px;
-  border-top: 1px solid #eee;
-  margin-top: 40px;
+/* =========================
+   Footer
+========================= */
+.site-footer{
   width: 100%;
+  text-align: center;
+  padding: 28px 16px 40px;
+  color: var(--muted);
+}
+
+/* =========================
+   Responsive Tweaks
+========================= */
+@media (max-width: 900px){
+  .portfolio-section{ padding: 22px 16px; }
+}
+@media (max-width: 700px){
+  .card{ flex: 1 1 100%; max-width: 100%; }
+  .reporter-card{ flex: 1 1 100%; max-width: 100%; }
+}
+@media (prefers-reduced-motion: reduce){
+  *{ transition: none !important; }
 }
