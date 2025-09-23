@@ -1,43 +1,82 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>作業 as01</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <header class="site-header">
-    <h1 class="main-title">嗨 老師 歡迎光臨！</h1>
-    <p class="subtitle">我目前正在苦惱要不要申請研究所的推甄考試！</p>
-    <button class="decision-btn" onclick="alert('老師，請給我一點建議吧 😭')">
-      點我幫我做決定 😭
-    </button>
-  </header>
+<main class="container">
 
-  <main class="container">
-    <section class="cards" aria-label="作品集展示">
+  <!-- 得獎作品 -->
+  <section class="portfolio-section">
+    <h2 class="section-title">🏆 得獎作品</h2>
+    <div class="cards">
       <div class="card">
-        <h2>📽️ 紀錄片創作</h2>
-        <p>拍攝 <strong>《田心連綿》</strong> 與 <strong>《瑞德里11號的慢飛奇跡》</strong>，以影像呈現農村與社會議題。</p>
-        <a href="https://youtu.be/vTIyOoXAyUU" target="_blank">▶️ 觀看作品</a>
-        <a href="https://www.youtube.com/watch?v=cA3vODyuBzo" target="_blank">▶️ 觀看作品</a>
+        <h3>自己定義自己的簡姿翊</h3>
+        <p>酷緯松 銀獎</p>
+        <a href="https://www.youtube.com/watch?v=nWX_Ic0fV5k" target="_blank">▶️ 觀看影片</a>
       </div>
       <div class="card">
-        <h2>🌾 農村計畫</h2>
-        <p>主持 <strong>米米之音 On Air</strong> 與 <strong>種一碗會說話的飯</strong>，推動食農教育與文化轉譯。</p>
-        <a href="https://shan-zhe-you.github.io/mimi_doremiso/index.html"_blank">📖 查看企劃</a>
+        <h3>田心連綿</h3>
+        <p>青春還鄉微電影獎</p>
+        <a href="https://www.youtube.com/watch?v=vTIyOoXAyUU" target="_blank">▶️ 觀看影片</a>
       </div>
       <div class="card">
-        <h2>📰 新聞與報導</h2>
-        <p>參與 <strong>職涯人物專訪</strong> 與 <strong>華文永續報導獎</strong>，用文字與影像傳播社會價值。</p>
-        <a href="https://pr.ntnu.edu.tw/news/index.php?mode=data&id=22668&keywords=%E8%8E%8A%E9%A6%A8%E4%BA%88" target="_blank">📰 閱讀報導</a>
+        <h3>瑞德里 11 號奇蹟</h3>
+        <p>「拍桃園」短片比賽 第二名</p>
+        <a href="https://www.youtube.com/watch?v=cA3vODyuBzo" target="_blank">▶️ 觀看影片</a>
       </div>
-    </section>
-  </main>
+      <div class="card">
+        <h3>走入森林，找回時間</h3>
+        <p>入圍 觀光局壯遊心體驗 圓夢企劃</p>
+        <a href="https://youtu.be/G_vf5z7xERI?si=hJtxP5SJ9mfXiaau" target="_blank">▶️ 觀看影片</a>
+      </div>
+    </div>
+  </section>
 
-  <footer class="site-footer">
-    <small>© 2025 horizonfocus0316</small>
-  </footer>
-</body>
-</html>
+  <!-- 主要影片專案 -->
+  <section class="portfolio-section">
+    <h2 class="section-title">🎬 主要影片專案</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>縫一塊布，也縫一段人生</h3>
+        <p>短片創作，呈現腦麻青年與家庭支持。</p>
+        <a href="https://youtu.be/SDKwoDIZ2Cs" target="_blank">▶️ 觀看影片</a>
+      </div>
+      <div class="card">
+        <h3>新竹縣五個農民的故事</h3>
+        <p>紀錄農民生活與在地故事的專案。</p>
+        <a href="https://www.youtube.com/playlist?list=PLUb-PQTcwLgAFdSkbKAda9bi-65B1ZZVu" target="_blank">▶️ 觀看影片</a>
+      </div>
+      <div class="card">
+        <h3>2025 洄游農村精華影片</h3>
+        <p>活動紀錄影片，展現團隊成果。</p>
+        <a href="https://www.youtube.com/watch?v=6zukLthfPWk&list=PLQ0OEtP17S6GzkaxKjHbQnJdYqWgY79I0&index=19" target="_blank">▶️ 觀看影片</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 專題／新聞報導 -->
+  <section class="portfolio-section">
+    <h2 class="section-title">📑 專題／新聞報導</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>師大校園記者專區</h3>
+        <p>包含影音報導與專題報導。</p>
+        <a href="https://pr.ntnu.edu.tw/all_search/?keywords=%E8%8E%8A%E9%A6%A8%E4%BA%88&Submit1=" target="_blank">📌 查看作品</a>
+        <p>共4個專題影音報導與15篇文字報導。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 其他參與作品 -->
+  <section class="portfolio-section">
+    <h2 class="section-title">⚡ 其他參與作品</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>慢飛，不落單</h3>
+        <p>融媒體版本，延伸影像敘事。</p>
+        <a href="https://shan-zhe-you.github.io/xuanyi_young/" target="_blank">▶️ 觀看作品</a>
+      </div>
+      <div class="card">
+        <h3>米米之音 On Air</h3>
+        <p>團隊合作的影音平台，聚焦農村教育。</p>
+        <a href="https://shan-zhe-you.github.io/mimi_doremiso/index.html" target="_blank">▶️ 觀看作品</a>
+      </div>
+    </div>
+  </section>
+
+</main>
