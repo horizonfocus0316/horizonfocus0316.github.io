@@ -1,12 +1,37 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <title>作業01 測試頁面</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>作業 as01</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Hello GitHub Pages!</h1>
-  <p>這是 as01 的測試頁面 🎉</p>
+  <header class="site-header">
+    <h1>嗨老師歡迎光臨 ㄟ</h1>
+    <p class="subtitle">（as01｜index.html＋style.css｜三欄改用 flex）</p>
+  </header>
+
+  <main class="container">
+    <!-- 三個並排的 div：用 flex 取代 float -->
+    <section class="cards" aria-label="三欄展示">
+      <div class="card">
+        <h2>區塊 A</h2>
+        <p>這是第一個區塊。示範以 flex 方式排列。</p>
+      </div>
+      <div class="card">
+        <h2>區塊 B</h2>
+        <p>這是第二個區塊。寬度會隨螢幕自適應。</p>
+      </div>
+      <div class="card">
+        <h2>區塊 C</h2>
+        <p>這是第三個區塊。小螢幕會自動換行成 1 欄或 2 欄。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <small>© 2025 horizonfocus0316</small>
+  </footer>
 </body>
 </html>
