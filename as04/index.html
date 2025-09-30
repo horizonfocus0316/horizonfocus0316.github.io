@@ -3,8 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AS#4｜一粒米的旅程（Generative-Images + Sticky-top）</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <title>AS#4｜一粒米的旅程</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
     :root{
@@ -12,7 +11,6 @@
       --ink:#e6edf3;
       --muted:#93a0ad;
       --accent:#7bd389;
-      --accent-2:#88c0ff;
       --nav-h:72px;
       --maxw:1100px;
       --glass:rgba(12,15,18,.55);
@@ -20,187 +18,47 @@
       --radius:18px;
       --card-shadow:0 10px 30px rgba(0,0,0,.35);
     }
-
     *{box-sizing:border-box}
-    html{
-      scroll-behavior:smooth;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", Arial, sans-serif;
-    }
+    html{ scroll-behavior:smooth; background:var(--bg); color:var(--ink); font-family:"Nunito",sans-serif; }
     body{margin:0;}
 
-    /* Sticky-top Navbar */
-    .nav{
-      position: sticky; /* sticky-top */
-      top: 0;
-      height: var(--nav-h);
-      z-index: 1000;
-      backdrop-filter: blur(var(--blur));
-      background: linear-gradient(180deg, rgba(12,15,18,.85), rgba(12,15,18,.55));
-      border-bottom: 1px solid rgba(255,255,255,.06);
-    }
-    .nav .wrap{
-      height: 100%;
-      margin: 0 auto;
-      max-width: var(--maxw);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 16px;
-    }
-    .brand{
-      font-weight: 800;
-      letter-spacing: .5px;
-    }
-    .brand span{ color: var(--accent); }
-    .links{
-      display:flex; gap: 8px; flex-wrap: wrap;
-    }
-    .links a{
-      padding: 10px 14px;
-      color: var(--ink); text-decoration: none;
-      border-radius: 12px;
-      transition: transform .12s ease, background .2s ease, color .2s ease;
-    }
-    .links a:hover{
-      background: rgba(255,255,255,.08);
-      transform: translateY(-1px);
-      color: #fff;
-    }
-    .links a:active{ transform: translateY(0); }
+    /* Sticky Nav */
+    .nav{ position:sticky; top:0; height:var(--nav-h); z-index:1000;
+      backdrop-filter:blur(var(--blur));
+      background:rgba(12,15,18,.85); border-bottom:1px solid rgba(255,255,255,.06);}
+    .nav .wrap{ max-width:var(--maxw); margin:0 auto; height:100%;
+      display:flex; align-items:center; justify-content:space-between; padding:0 16px;}
+    .brand{font-weight:800;} .brand span{color:var(--accent);}
+    .links{display:flex; gap:8px;}
+    .links a{padding:10px 14px; color:var(--ink); text-decoration:none; border-radius:12px;}
+    .links a:hover{background:rgba(255,255,255,.08); color:#fff;}
 
-    /* Banner / Intro */
-    .banner{
-      min-height: calc(100vh - var(--nav-h));
-      display:grid; place-items:center;
-      padding: 48px 16px;
-      background:
-        radial-gradient(1200px 500px at 70% -10%, rgba(123, 211, 137, .15), transparent 60%),
-        radial-gradient(1200px 500px at -10% 10%, rgba(136, 192, 255, .12), transparent 60%);
-    }
-    .intro{
-      max-width: 860px;
-      background: var(--glass);
-      border: 1px solid rgba(255,255,255,.06);
-      border-radius: var(--radius);
-      box-shadow: var(--card-shadow);
-      padding: 28px 22px;
-    }
-    .intro h1{
-      margin:0 0 8px 0; font-size: clamp(28px, 3.5vw, 44px); line-height:1.15;
-    }
-    .intro p{ color: var(--muted); margin: 8px 0 0 0; font-size: 16px; }
-    .intro .cta{
-      margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;
-    }
-    .btn{
-      display:inline-flex; align-items:center; gap:8px;
-      padding: 12px 16px; border-radius: 12px; text-decoration:none;
-      font-weight:700; letter-spacing:.2px;
-      background: #1d8f4b; color: #fff; border:1px solid rgba(255,255,255,.08);
-      box-shadow: 0 8px 20px rgba(29,143,75,.3);
-      transition: transform .12s ease, box-shadow .2s ease, filter .2s ease;
-    }
-    .btn:hover{ transform: translateY(-1px); filter: brightness(1.03); }
-    .btn.alt{
-      background: #1c2a3b; color: var(--ink);
-      box-shadow: 0 8px 20px rgba(28,42,59,.3);
-    }
+    /* Intro Banner */
+    .banner{min-height:calc(100vh - var(--nav-h)); display:grid; place-items:center; padding:48px 16px;}
+    .intro{max-width:860px; background:var(--glass); border-radius:var(--radius); padding:28px 22px;}
+    .intro h1{margin:0 0 8px; font-size:clamp(28px,3.5vw,44px);}
+    .intro p{color:var(--muted);}
+    .btn{display:inline-block; margin-top:16px; padding:12px 16px; border-radius:12px; font-weight:700;
+      background:#1d8f4b; color:#fff; text-decoration:none;}
 
-    /* Parallax panels (fixed background) */
-    .panel{
-      position: relative;
-      min-height: 80vh;
-      display:grid; place-items:center;
-      --overlay: rgba(0,0,0,.45);
-      background-attachment: fixed;           /* 這裡就是 fixed background 主角 */
-      background-position: center center;
-      background-size: cover;
-      background-repeat: no-repeat;
-      border-top: 1px solid rgba(255,255,255,.06);
-      border-bottom: 1px solid rgba(255,255,255,.06);
-    }
-    /* 在手機某些瀏覽器 fixed 可能降級，仍維持可讀性 */
-    @supports (-webkit-touch-callout: none) {
-      .panel{ background-attachment: scroll; }
-    }
+    /* Panels */
+    .panel{position:relative; min-height:80vh; display:grid; place-items:center;
+      background-attachment:fixed; background-size:cover; background-position:center;}
+    .panel::before{content:""; position:absolute; inset:0; background:rgba(0,0,0,.45);}
+    .panel .content{position:relative; background:rgba(12,15,18,.55); border-radius:var(--radius);
+      padding:22px 20px; max-width:860px;}
+    .panel h2{margin:0 0 8px;}
+    .panel p{margin:0; color:var(--muted);}
 
-    .panel::before{
-      content:"";
-      position:absolute; inset:0;
-      background: linear-gradient(180deg, rgba(12,15,18,.3), var(--overlay));
-    }
-    .panel .content{
-      position: relative;
-      width: min(92vw, var(--maxw));
-      background: rgba(12,15,18,.55);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: var(--radius);
-      box-shadow: var(--card-shadow);
-      padding: 22px 20px;
-      backdrop-filter: blur(var(--blur));
-    }
-    .panel h2{
-      margin:0 0 8px 0; font-size: clamp(24px, 2.8vw, 36px);
-    }
-    .panel p{ margin: 0; color: var(--muted); font-size: 16px; }
-
-    /* 讓錨點有滾動補償（避免被 sticky nav 蓋到） */
-    section[id]{
-      scroll-margin-top: calc(var(--nav-h) + 14px);
-    }
-
-    /* Credits (100% viewport high + Full width) */
-    .credits{
-      min-height: 100vh;      /* 100% Viewport high */
-      width: 100%;            /* Full width */
-      display:grid; place-items:center;
-      padding: 32px 16px 48px;
-      background:
-        radial-gradient(900px 400px at 20% 10%, rgba(123,211,137,.12), transparent 60%),
-        radial-gradient(900px 400px at 80% 90%, rgba(136,192,255,.12), transparent 60%);
-    }
-    .credits .card{
-      width: min(92vw, 980px);
-      background: var(--glass);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: var(--radius);
-      box-shadow: var(--card-shadow);
-      padding: 26px 22px;
-    }
-    .credits h2{ margin:0 0 12px 0; font-size: clamp(24px, 2.6vw, 34px); }
-    .tool-grid{
-      display:grid; gap:12px;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      margin-top: 14px;
-    }
-    .tool{
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.06);
-      border-radius: 14px;
-      padding: 14px;
-    }
-    .tool h3{ margin:0 0 6px 0; font-size:18px;}
-    .tool p{ margin:0; color: var(--muted); font-size: 14px; line-height:1.5;}
-
-    /* Footer note */
-    .foot{
-      text-align:center; color: var(--muted);
-      margin-top: 16px; font-size: 13px;
-    }
-
-    /* 小裝置微調 */
-    @media (max-width:600px){
-      .links{ display:none; } /* 手機可簡化導覽（作業需求以 sticky-top 為主，故省略展開） */
-      .intro{ padding: 20px 16px; }
-      .panel .content{ padding: 18px 16px; }
-    }
+    /* Credits */
+    .credits{min-height:100vh; width:100%; display:grid; place-items:center; padding:32px 16px;}
+    .credits .card{max-width:860px; background:var(--glass); border-radius:var(--radius); padding:26px 22px;}
+    .credits h2{margin:0 0 12px;}
+    .foot{text-align:center; color:var(--muted); margin-top:16px; font-size:13px;}
   </style>
 </head>
 <body>
-
-  <!-- Sticky-top Navbar -->
+  <!-- Navbar -->
   <nav class="nav">
     <div class="wrap">
       <div class="brand">AS#4｜<span>一粒米的旅程</span></div>
@@ -214,132 +72,51 @@
     </div>
   </nav>
 
-  <!-- Intro Banner -->
+  <!-- Intro -->
   <header class="banner" id="home">
     <div class="intro">
       <h1>從田到餐桌：一粒米如何誕生</h1>
-      <p>
-        這是一個用「生成式影像」說故事的嘗試。四張圖像圍繞同一敘事主軸：<b>一粒米</b> 的生命旅程——
-        從萌芽、抽穗與收穫、進入碾米工序，到最終端成為餐桌上的那一碗白飯。
-        每張圖都由同一風格提示語生成，以確保視覺一致。
-      </p>
-      <div class="cta">
-        <a class="btn" href="#s1">開始閱讀</a>
-        <a class="btn alt" href="#credits">看製作過程</a>
-      </div>
+      <p>這是一個用「生成式影像」說故事的嘗試。四張圖像圍繞同一敘事主軸：一粒米的生命旅程——從萌芽、收穫、碾製，到最終端成為餐桌上的白飯。</p>
+      <a class="btn" href="#s1">開始閱讀</a>
     </div>
   </header>
 
-  <!-- Panel 1: 萌芽（替換成你的生成圖 URL 或 ./images/01.jpg） -->
-  <section id="s1" class="panel" style="background-image:url('./images/01.jpg');">
+  <!-- Panels -->
+  <section id="s1" class="panel" style="background-image:url('./01.jpg');">
     <div class="content">
       <h2>01｜萌芽</h2>
-      <p>
-        早春，秧苗透過水光映照出嫩綠。這張圖以「柔和晨霧、低角度、景深淺」的提示生成，傳達
-        「微小開始」的質地：所有的飽滿，都從一點點的光與養分累積。
-      </p>
+      <p>春天秧苗初生，嫩芽在晨霧中閃著綠意，象徵生命的起點。</p>
     </div>
   </section>
 
-  <!-- Panel 2: 收穫 -->
-  <section id="s2" class="panel" style="background-image:url('./images/02.jpg');">
+  <section id="s2" class="panel" style="background-image:url('./02.jpg');">
     <div class="content">
       <h2>02｜收穫</h2>
-      <p>
-        初秋，稻穗轉為金黃。生成提示聚焦「廣角視角、夕陽逆光、微風擺動的穗粒」，讓畫面呈現
-        介於靜與動之間的律動感——收穫不是一瞬間，而是整季時間的回聲。
-      </p>
+      <p>金黃的稻穗在秋日微風中搖曳，收穫的喜悅滿溢田間。</p>
     </div>
   </section>
 
-  <!-- Panel 3: 碾製 -->
-  <section id="s3" class="panel" style="background-image:url('./images/03.jpg');">
+  <section id="s3" class="panel" style="background-image:url('./03.jpg');">
     <div class="content">
       <h2>03｜碾製</h2>
-      <p>
-        進入碾米流程。以「工藝感、極簡工廠光影、局部特寫」的提示，強化米粒從糙米到白米的轉化。
-        我們不常看見這一段，但正是細緻的加工，決定了口感與香氣。
-      </p>
+      <p>稻米進入碾米機，從糙米轉為白米，散發出清新的米香。</p>
     </div>
   </section>
 
-  <!-- Panel 4: 上桌 -->
-  <section id="s4" class="panel" style="background-image:url('./images/04.jpg');">
+  <section id="s4" class="panel" style="background-image:url('./04.jpg');">
     <div class="content">
       <h2>04｜上桌</h2>
-      <p>
-        熱騰騰的白飯上桌。以「軟光、蒸氣可見、木質桌面、家庭氛圍」的提示生成，回到最日常的那口飯。
-        這不只是能量來源，更是風土、時間與人的連結。
-      </p>
+      <p>熱氣騰騰的白飯端上桌，成為家庭餐桌上最溫暖的陪伴。</p>
     </div>
   </section>
 
-  <!-- Credits: 100vh + full width 結尾說明頁 -->
+  <!-- Credits -->
   <section id="credits" class="credits">
     <div class="card">
-      <h2>製作說明｜生成式影像流程與設定</h2>
-      <p>
-        本頁以「Sticky-top 導覽列」＋「Fixed Background（parallax）」呈現，並實作平順滑動與卷動位置修正。
-        下方記錄影像生產工具與步驟，作為作業佐證與重現指引。
-      </p>
-
-      <div class="tool-grid">
-        <div class="tool">
-          <h3>工具與風格一致性</h3>
-          <p>
-            影像生成工具：Nano Banana / 其他可替代的生成器（如 Midjourney、Stable Diffusion）。
-            為維持視覺一致，四張圖共用：<br>
-            ・鏡頭語彙：柔和光線、低對比色調、淺景深<br>
-            ・色相域：綠金中性偏暖，避免高飽和<br>
-            ・顆粒：輕微膠片感
-          </p>
-        </div>
-        <div class="tool">
-          <h3>提示語（範例骨架）</h3>
-          <p>
-            主題＋鏡頭（wide/low angle/close-up）＋時間（dawn/dusk）＋光影（soft rim light/fog）＋
-            質感（grain/film look）＋後期（subtle color grading）。<br>
-            例：「young rice seedlings in shallow water, low angle, dawn mist, soft rim light, shallow depth of field, film grain, subtle warm grading」
-          </p>
-        </div>
-        <div class="tool">
-          <h3>檔案命名與尺寸</h3>
-          <p>
-            請將產出的四張圖放入 <code>/images</code> 以 <code>01.jpg~04.jpg</code> 命名。
-            建議長邊 1600px 以上（橫幅 16:9 或 4:3 均可），壓縮至 300–500KB 區間。
-          </p>
-        </div>
-        <div class="tool">
-          <h3>前端實作重點</h3>
-          <p>
-            ・導覽列 <b>position: sticky; top:0</b>，加上 hover 效果。<br>
-            ・段落使用 <b>background-attachment: fixed</b> 達到視差。<br>
-            ・對錨點用 <b>scroll-margin-top</b> 與 JS 的 offset 修正捲動位置。<br>
-            ・最後一頁以 <b>min-height: 100vh</b> + <b>width:100%</b> 呈現。
-          </p>
-        </div>
-      </div>
-
-      <div class="foot">© 2025 AS#4 Demo · Feel free to fork and replace with your own prompts & images.</div>
+      <h2>製作說明</h2>
+      <p>本頁以 Sticky-top 導覽列 + Fixed Background 呈現。圖片由 Nano Banana / DALL·E 生成，四張圖代表「米的一生」。最後以 100% viewport 高度和 full width 的 Credits 區塊說明生成過程，符合作業要求。</p>
+      <div class="foot">© 2025 AS#4 Demo</div>
     </div>
   </section>
-
-  <script>
-    // 平順滑動 + 固定導覽列的 offset 修正（兼容部分瀏覽器）
-    (function(){
-      const NAV_H = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 72;
-      document.querySelectorAll('a[href^="#"]').forEach(a=>{
-        a.addEventListener('click', function(e){
-          const id = this.getAttribute('href');
-          if(!id || id === '#') return;
-          const el = document.querySelector(id);
-          if(!el) return;
-          e.preventDefault();
-          const y = el.getBoundingClientRect().top + window.pageYOffset - (NAV_H + 14);
-          window.scrollTo({ top: y, behavior: 'smooth' });
-        });
-      });
-    })();
-  </script>
 </body>
 </html>
