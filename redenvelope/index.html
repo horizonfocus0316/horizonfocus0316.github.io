@@ -4,39 +4,41 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>紅包場紀事｜Scrollytelling 新聞專題</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
   <style>
-    body{margin:0; background:#0b0a0f; color:#f5f5f7; font-family:"Noto Sans TC", sans-serif;}
-    .container{width:min(1100px,92%); margin:auto}
-    .gallery{display:grid; grid-template-columns:repeat(12,1fr); gap:12px}
-    .thumb{grid-column:span 3; aspect-ratio:4/3; border-radius:16px; overflow:hidden; position:relative; border:1px solid rgba(255,255,255,.08)}
-    .thumb img{width:100%; height:100%; object-fit:cover;}
-    .thumb .cap{position:absolute; inset:auto 10px 10px 10px; background:linear-gradient(180deg, transparent, rgba(0,0,0,.6)); padding:8px 10px; border-radius:10px; font-size:.9rem}
+    body {margin:0; background:#0b0a0f; color:#f5f5f7; font-family:"Noto Sans TC", sans-serif; line-height:1.7;}
+    .scrolly {padding:60px 0;}
+    .container {width:min(1100px, 92%); margin:auto;}
+    .scrolly .grid {display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center;}
+    .sticky {position:sticky; top:80px; border-radius:12px; overflow:hidden;}
+    .sticky img {width:100%; height:auto; border-radius:12px;}
+    .step {padding:20px; border-left:4px solid transparent;}
+    .step.is-active {border-color:#ff004d; background:rgba(255,255,255,0.03); border-radius:12px;}
+    .step h3 {margin-top:0; font-size:1.6rem;}
+    .step p {font-size:1.05rem; line-height:1.8;}
+    @media(max-width:900px){.scrolly .grid{grid-template-columns:1fr;}}
   </style>
 </head>
 <body>
-  <section id="gallery" class="container">
-    <p class="section-kicker">相簿</p>
-    <h2 class="section-title">看見現場</h2>
-    <div class="gallery" style="margin-top:12px">
-      <a class="thumb" href="#" data-lightbox="https://images.unsplash.com/photo-1574293876202-ef8cc9e6f3e9?q=80&w=2069&auto=format&fit=crop">
-        <img alt="霓虹街景" src="https://images.unsplash.com/photo-1574293876202-ef8cc9e6f3e9?q=80&w=800&auto=format&fit=crop"/>
-        <span class="cap">霓虹與人潮</span>
-      </a>
-      <a class="thumb" href="#" data-lightbox="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=2069&auto=format&fit=crop">
-        <img alt="舞台燈光" src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=800&auto=format&fit=crop"/>
-        <span class="cap">燈亮，音起</span>
-      </a>
-      <a class="thumb" href="#" data-lightbox="https://images.unsplash.com/photo-1521337706269-4b84e99d0a8b?q=80&w=2069&auto=format&fit=crop">
-        <img alt="老歌黑膠" src="https://images.unsplash.com/photo-1521337706269-4b84e99d0a8b?q=80&w=800&auto=format&fit=crop"/>
-        <span class="cap">中古歌曲記憶</span>
-      </a>
-      <a class="thumb" href="#" data-lightbox="https://images.unsplash.com/photo-1521335629791-ce4aec67dd53?q=80&w=2069&auto=format&fit=crop">
-        <img alt="掌聲" src="https://images.unsplash.com/photo-1521335629791-ce4aec67dd53?q=80&w=800&auto=format&fit=crop"/>
-        <span class="cap">掌聲與包場</span>
-      </a>
+  <section id="scrolly" class="scrolly">
+    <div class="container grid">
+      <div class="sticky">
+        <img id="stageImg" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop" alt="現場視覺">
+        <div id="stageCap" style="margin-top:8px;color:#b7b7c2;font-size:.9rem">舞台上的回聲：觀眾的點歌單，往往決定今晚歌手的走向。</div>
+      </div>
+      <div>
+        <article class="step" data-img="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop" data-cap="舞台上的回聲：觀眾的點歌單，往往決定今晚歌手的走向。">
+          <h3>一、點歌與「紅」的誕生</h3>
+          <p>觀眾以現金點歌，歌手即時回應，某首歌若被頻繁點唱，歌手的「紅」也隨之累積。這是一個由現場投票、快速迭代的音樂市場。</p>
+        </article>
+        <article class="step" data-img="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1200&auto=format&fit=crop" data-cap="中古歌曲在此被不斷翻唱、修辭，逐步形成經典。">
+          <h3>二、經典的生成</h3>
+          <p>大量的老歌、中古歌經由紅包場的集體實踐，被賦予新的詮釋與情感連結，終於成為經典。</p>
+        </article>
+        <article class="step" data-img="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=1200&auto=format&fit=crop" data-cap="產業背後是勞動：伴奏樂師、服務人員、櫃台、保全，支撐夜色經濟。">
+          <h3>三、夜色勞動鏈</h3>
+          <p>從樂師到服務人員，每晚的演出牽動一條勞動鏈。景氣、法規與都更，都可能改變他們的生活節奏。</p>
+        </article>
+      </div>
     </div>
   </section>
 </body>
