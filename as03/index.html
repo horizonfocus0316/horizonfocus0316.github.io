@@ -28,20 +28,32 @@
     }
 
     /* 導覽列（固定頂端 + hover 效果 + 置於最上層） */
-    .navbar.fixed-top {
-      z-index: 1030;
-    }
+    .navbar.fixed-top { z-index: 1030; }
     .navbar .nav-link {
       transition: all .15s ease-in-out;
       position: relative;
     }
     .navbar .nav-link:hover,
     .navbar .nav-link:focus {
-      text-decoration: underline;
-      opacity: .9;
+      text-decoration: none;
+      opacity: .95;
     }
-    .navbar .nav-link.active {
-      font-weight: 600;
+    .navbar .nav-link.active { font-weight: 600; }
+
+    /* Navlink 底線滑動動畫（深色導覽列用白色底線） */
+    .navbar.bg-dark .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      width: 0%;
+      height: 2px;
+      background-color: #fff;
+      transition: width .25s ease;
+    }
+    .navbar.bg-dark .nav-link:hover::after,
+    .navbar.bg-dark .nav-link.active::after {
+      width: 100%;
     }
 
     /* Hero Banner：背景滿版，文字置中容器 */
@@ -52,19 +64,13 @@
       color: #fff;
       background:
         linear-gradient( rgba(0,0,0,.5), rgba(0,0,0,.5) ),
-        url('https://images.unsplash.com/photo-1495020689067-958852a7765e?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;
+        url('https://source.unsplash.com/1600x900/?news,journalism,reporter') center/cover no-repeat;
     }
-    .hero .lead {
-      max-width: 56ch;
-    }
+    .hero .lead { max-width: 56ch; }
 
     /* Section 統一留白，內容卡片白底（老師規則示例） */
-    section[id] {
-      scroll-margin-top: var(--nav-h); /* 以防個別瀏覽器忽略 root 的 scroll-padding-top */
-    }
-    .section-wrap {
-      padding: 4rem 0;
-    }
+    section[id] { scroll-margin-top: var(--nav-h); }
+    .section-wrap { padding: 4rem 0; }
     .content-div {
       background: #fff;                 /* 指定白底 */
       border-radius: 1rem;
@@ -86,7 +92,7 @@
     .bg-soft-yellow { background: #fff6da; }
     .bg-soft-green { background: #e8fff2; }
 
-    /* 置中段落內的圖片示意（若未使用可忽略） */
+    /* 置中段落內的圖片示意 */
     .img-fit {
       width: 100%;
       height: auto;
@@ -133,7 +139,8 @@
       <p class="lead mb-4">
         從現場到版面、從錄音到成稿——新聞記者在資訊雜訊中辨識脈絡、核實事實、以負責的敘事回應公共關切。
       </p>
-      <a href="#about" class="btn btn-primary btn-lg">了解記者使命</a>
+      <a href="#about" class="btn btn-primary btn-lg me-2">了解記者使命</a>
+      <button class="btn btn-outline-light btn-lg mt-3 mt-sm-0" onclick="changeBanner()">換一張圖</button>
     </div>
   </header>
 
@@ -367,6 +374,14 @@
     toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     document.addEventListener('scroll', toggleToTop);
     window.addEventListener('load', toggleToTop);
+
+    // 5) Hero 隨機換圖（按需更新）
+    function changeBanner() {
+      const hero = document.querySelector('.hero');
+      const url = `https://source.unsplash.com/1600x900/?news,journalism,reporter&t=${Date.now()}`;
+      hero.style.backgroundImage =
+        `linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)), url('${url}')`;
+    }
   </script>
 </body>
 </html>
