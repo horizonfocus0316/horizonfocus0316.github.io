@@ -14,99 +14,51 @@
   />
 
   <style>
-    :root {
-      /* 由 JS 動態更新，作為 scroll 偏移修正 */
-      --nav-h: 72px;
-    }
-    html {
-      scroll-behavior: smooth;               /* 平順滑動 */
-      scroll-padding-top: var(--nav-h);      /* 重整帶錨點也能正確定位 */
-    }
-    body {
-      padding-top: var(--nav-h);             /* 避免 fixed-top 蓋住首屏內容 */
-      background: #f6f7f9;
-    }
+    :root { --nav-h: 72px; }
+    html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+    body { padding-top: var(--nav-h); background: #f6f7f9; }
 
-    /* 導覽列（固定頂端 + hover 效果 + 置於最上層） */
+    /* 導覽列 */
     .navbar.fixed-top { z-index: 1030; }
-    .navbar .nav-link {
-      transition: all .15s ease-in-out;
-      position: relative;
-    }
+    .navbar .nav-link { transition: all .15s ease-in-out; position: relative; }
     .navbar .nav-link:hover,
-    .navbar .nav-link:focus {
-      text-decoration: none;
-      opacity: .95;
-    }
+    .navbar .nav-link:focus { text-decoration: none; opacity: .95; }
     .navbar .nav-link.active { font-weight: 600; }
-
-    /* Navlink 底線滑動動畫（深色導覽列用白色底線） */
+    /* 底線滑動動畫（深色列） */
     .navbar.bg-dark .nav-link::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -3px;
-      width: 0%;
-      height: 2px;
-      background-color: #fff;
-      transition: width .25s ease;
+      content: ""; position: absolute; left: 0; bottom: -3px; width: 0%;
+      height: 2px; background-color: #fff; transition: width .25s ease;
     }
     .navbar.bg-dark .nav-link:hover::after,
-    .navbar.bg-dark .nav-link.active::after {
-      width: 100%;
-    }
+    .navbar.bg-dark .nav-link.active::after { width: 100%; }
 
-    /* Hero Banner：背景滿版，文字置中容器 */
-    .hero {
-      min-height: 68vh;
-      display: grid;
-      place-items: center;
-      color: #fff;
+    /* Hero */
+    .hero{
+      min-height:68vh; display:grid; place-items:center; color:#fff;
       background:
-        linear-gradient( rgba(0,0,0,.5), rgba(0,0,0,.5) ),
-        url('https://source.unsplash.com/1600x900/?news,journalism,reporter') center/cover no-repeat;
+        linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)),
+        url('https://picsum.photos/1600/900?random=1') center/cover no-repeat;
     }
-    .hero .lead { max-width: 56ch; }
+    .hero .lead{ max-width:56ch; }
 
-    /* Section 統一留白，內容卡片白底（老師規則示例） */
-    section[id] { scroll-margin-top: var(--nav-h); }
-    .section-wrap { padding: 4rem 0; }
-    .content-div {
-      background: #fff;                 /* 指定白底 */
-      border-radius: 1rem;
-      box-shadow: 0 8px 24px rgba(0,0,0,.08);
-      padding: 2rem;
+    /* Section + content 白底 */
+    section[id]{ scroll-margin-top: var(--nav-h); }
+    .section-wrap{ padding:4rem 0; }
+    .content-div{
+      background:#fff; border-radius:1rem; box-shadow:0 8px 24px rgba(0,0,0,.08);
+      padding:2rem;
     }
 
-    /* 小標題樣式 */
-    .eyebrow {
-      font-size: .85rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: #6c757d;
-      margin-bottom: .25rem;
-    }
+    .eyebrow{ font-size:.85rem; letter-spacing:.12em; text-transform:uppercase; color:#6c757d; margin-bottom:.25rem; }
 
-    /* 方便示意的色塊（可按需求自由換色） */
-    .bg-soft-blue { background: #e8f1ff; }
-    .bg-soft-yellow { background: #fff6da; }
-    .bg-soft-green { background: #e8fff2; }
+    /* 色塊示意 */
+    .bg-soft-blue{ background:#e8f1ff; }
+    .bg-soft-yellow{ background:#fff6da; }
+    .bg-soft-green{ background:#e8fff2; }
 
-    /* 置中段落內的圖片示意 */
-    .img-fit {
-      width: 100%;
-      height: auto;
-      border-radius: .75rem;
-    }
+    .img-fit{ width:100%; height:auto; border-radius:.75rem; }
 
-    /* 返回頂部快捷（非作業必要） */
-    .back-to-top {
-      position: fixed;
-      right: 1rem;
-      bottom: 1rem;
-      display: none;
-      opacity: .9;
-    }
+    .back-to-top{ position:fixed; right:1rem; bottom:1rem; display:none; opacity:.9; }
   </style>
 </head>
 <body>
@@ -131,7 +83,7 @@
     </div>
   </nav>
 
-  <!-- Banner / Hero -->
+  <!-- Hero -->
   <header id="home" class="hero">
     <div class="container text-center">
       <span class="eyebrow text-white-50">JOURNALISM • FIELD REPORTING • STORYTELLING</span>
@@ -314,7 +266,7 @@
     </div>
   </section>
 
-  <!-- Back to Top (自動顯示/隱藏) -->
+  <!-- 回頂部按鈕 -->
   <button type="button" class="btn btn-primary back-to-top" aria-label="Back to top">↑</button>
 
   <!-- Bootstrap JS -->
@@ -325,7 +277,7 @@
   ></script>
 
   <script>
-    // 1) 動態設定導覽列高度，修正滾動偏移與內容頂端留白
+    // 1) 動態設定導覽列高度
     const nav = document.querySelector('.navbar.fixed-top');
     function updateNavHeight() {
       const h = nav.offsetHeight || 72;
@@ -334,11 +286,10 @@
     window.addEventListener('load', updateNavHeight);
     window.addEventListener('resize', updateNavHeight);
 
-    // 2) 滾動時高亮目前區塊的導覽連結
+    // 2) 滾動時高亮導覽連結
     const sections = [...document.querySelectorAll('section[id], header#home')];
     const links = [...document.querySelectorAll('.navbar .nav-link')];
     const linkById = new Map(links.map(a => [a.getAttribute('href').replace('#',''), a]));
-
     function onScroll() {
       const y = window.scrollY + (nav.offsetHeight || 72) + 4;
       let currentId = 'home';
@@ -353,7 +304,7 @@
     document.addEventListener('scroll', onScroll);
     window.addEventListener('load', onScroll);
 
-    // 3) 行動裝置點擊導覽後自動收合
+    // 3) 行動裝置導覽收合
     document.querySelectorAll('.navbar .nav-link').forEach(a => {
       a.addEventListener('click', () => {
         const toggler = document.querySelector('.navbar-toggler');
@@ -362,23 +313,19 @@
       });
     });
 
-    // 4) Back-to-top 顯示/隱藏 & 點擊行為
+    // 4) 回頂部顯示/隱藏與行為
     const toTop = document.querySelector('.back-to-top');
     function toggleToTop() {
-      if (window.scrollY > 600) {
-        toTop.style.display = 'inline-block';
-      } else {
-        toTop.style.display = 'none';
-      }
+      toTop.style.display = window.scrollY > 600 ? 'inline-block' : 'none';
     }
     toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     document.addEventListener('scroll', toggleToTop);
     window.addEventListener('load', toggleToTop);
 
-    // 5) Hero 隨機換圖（按需更新）
+    // 5) Hero 隨機換圖（使用 Picsum，避免快取）
     function changeBanner() {
       const hero = document.querySelector('.hero');
-      const url = `https://source.unsplash.com/1600x900/?news,journalism,reporter&t=${Date.now()}`;
+      const url = `https://picsum.photos/1600/900?random=${Date.now()}`;
       hero.style.backgroundImage =
         `linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)), url('${url}')`;
     }
