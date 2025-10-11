@@ -19,6 +19,7 @@
     img {
       width: 100%;
       height: auto;
+      display: block;
     }
     main {
       max-width: 800px;
@@ -28,6 +29,17 @@
     h1 {
       text-align: center;
       color: #222;
+    }
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      border: none;
+      background-color: #333;
+      color: #fff;
+      border-radius: 6px;
     }
     footer {
       text-align: center;
@@ -39,7 +51,9 @@
 </head>
 <body>
   <header>
-    <img src="https://source.unsplash.com/1200x400/?ai,technology" alt="AI banner">
+    <!-- 使用 Picsum，確保圖片一定會載入 -->
+    <img id="banner" src="https://picsum.photos/1200/400?random" alt="Random banner">
+    <button onclick="changeBanner()">換一張圖</button>
   </header>
 
   <main>
@@ -58,6 +72,12 @@
   <footer>
     <p>© 2025 Created by [Your Name] | Practice for AS02 Assignment</p>
   </footer>
+
+  <script>
+    function changeBanner() {
+      // 加上時間戳確保每次都會重新抓圖
+      document.getElementById('banner').src = 'https://picsum.photos/1200/400?random&t=' + Date.now();
+    }
+  </script>
 </body>
 </html>
-
