@@ -60,6 +60,10 @@
 
     /* Footer */
     .outro { padding: 18vh 0 24vh; text-align: center; }
+    .fallback{background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0));display:grid;place-items:center;color:var(--muted);}
+    /* Robust media sizing */
+    .panel .visual, .card figure{ aspect-ratio: 16/9; background: linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0)); }
+    .panel .visual img, .card figure img{ width:100%; height:100%; object-fit:cover; object-position:center; }
   </style>
 </head>
 <body>
@@ -84,22 +88,22 @@
     <h2 id="dayflow" style="color:var(--accent-2); margin-top:0">黎明 → 日間 → 黃昏 → 深夜</h2>
     <div class="cards" style="margin-top:24px">
       <article class="card" aria-labelledby="dawn">
-        <figure><img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1600&auto=format&fit=crop" alt="清晨的城市天際線與薄霧" /></figure>
+        <figure><img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1600&q=80" alt="清晨的城市天際線與薄霧" onerror="this.onerror=null;this.src='https://picsum.photos/1600/900?random=101'" /></figure>
         <h3 id="dawn">黎明：第一班公車亮起</h3>
         <p class="copy">空氣裡混合著麵包與柏油味，報紙機器剛停下。城市吸一口長氣。</p>
       </article>
       <article class="card" aria-labelledby="noon">
-        <figure><img src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=1600&auto=format&fit=crop" alt="日間的十字路口與人潮" /></figure>
+        <figure><img src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1600&q=80" alt="日間的十字路口與人潮" onerror="this.onerror=null;this.src='https://picsum.photos/1600/900?random=102'" /></figure>
         <h3 id="noon">日間：斑馬線鼓掌</h3>
         <p class="copy">喇叭、解鎖聲、咖啡機蒸汽。節拍加快，人群成為城市的鼓點。</p>
       </article>
       <article class="card" aria-labelledby="dusk">
-        <figure><img src="https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=1600&auto=format&fit=crop" alt="夕陽照映的高樓與雲層" /></figure>
+        <figure><img src="https://images.unsplash.com/photo-1502920917128-1aa500764cbd?auto=format&fit=crop&w=1600&q=80" alt="夕陽照映的高樓與雲層" onerror="this.onerror=null;this.src='https://picsum.photos/1600/900?random=103'" /></figure>
         <h3 id="dusk">黃昏：光線斜倚</h3>
         <p class="copy">落日把玻璃染成琥珀色，熄燈與開霓虹的間歇，像一次深吐。</p>
       </article>
       <article class="card" aria-labelledby="night">
-        <figure><img src="https://images.unsplash.com/photo-1518306727298-4c17e1bf6942?q=80&w=1600&auto=format&fit=crop" alt="夜色中的霓虹街景與反光" /></figure>
+        <figure><img src="https://images.unsplash.com/photo-1518306727298-4c17e1bf6942?auto=format&fit=crop&w=1600&q=80" alt="夜色中的霓虹街景與反光" onerror="this.onerror=null;this.src='https://picsum.photos/1600/900?random=104'" /></figure>
         <h3 id="night">深夜：霓虹呼吸</h3>
         <p class="copy">路面留住雨，倒影延長了招牌的呼吸。少數窗燈，替代了白日的人聲。</p>
       </article>
@@ -116,28 +120,28 @@
             <h2 id="p1">夜歸人的腳步</h2>
             <p class="copy">有些人此刻才結束白日，有些人剛開始他們的夜。反向的滾動，像是把心事往回拉。</p>
           </div>
-          <div class="visual"><img src="https://images.unsplash.com/photo-1475274226684-5f1d1b3d43a2?q=80&w=1600&auto=format&fit=crop" alt="夜歸的人影走過濕亮的巷口" /></div>
+          <div class="visual"><img src="https://images.unsplash.com/photo-1475274226684-5f1d1b3d43a2?auto=format&fit=crop&w=1600&q=80" alt="夜歸的人影走過濕亮的巷口" onerror="this.onerror=null;this.src='https://picsum.photos/1600/900?random=105'" /></div>
         </section>
         <section class="panel" aria-labelledby="p2">
           <div>
             <h2 id="p2">窗光的獨白</h2>
             <p class="copy">每一扇窗都是一段未說完的句子。有人讀書，有人復盤，有人只是靜坐。</p>
           </div>
-          <div class="visual"><img src="https://images.unsplash.com/photo-1506377711776-0a1b43b87ada?q=80&w=1600&auto=format&fit=crop" alt="夜裡公寓的一扇黃燈窗戶特寫" /></div>
+          <div class="visual"><img src="https://images.unsplash.com/photo-1506377711776-0a1b43b87ada?auto=format&fit=crop&w=1600&q=80" alt="夜裡公寓的一扇黃燈窗戶特寫" onerror="this.onerror=null;this.src='https://picsum.photos/1600/900?random=106'" /></div>
         </section>
         <section class="panel" aria-labelledby="p3">
           <div>
             <h2 id="p3">霓虹與心率</h2>
             <p class="copy">城市的心率隨著色彩變化。霓虹在閃爍，你的念頭也在閃爍。</p>
           </div>
-          <div class="visual"><img src="https://images.unsplash.com/photo-1482192505345-5655af888cc4?q=80&w=1600&auto=format&fit=crop" alt="霓虹招牌與行人匆匆的街口" /></div>
+          <div class="visual"><img src="https://images.unsplash.com/photo-1482192505345-5655af888cc4?auto=format&fit=crop&w=1600&q=80" alt="霓虹招牌與行人匆匆的街口" onerror="this.onerror=null;this.src='https://picsum.photos/1600/900?random=107'" /></div>
         </section>
         <section class="panel" aria-labelledby="p4">
           <div>
             <h2 id="p4">凌晨四點的空白</h2>
             <p class="copy">最安靜的時刻，城市與你都在同一個深呼吸裡。反向的結束，是另一個開始。</p>
           </div>
-          <div class="visual"><img src="https://images.unsplash.com/photo-1456945415000-cffed14f2fad?q=80&w=1600&auto=format&fit=crop" alt="凌晨空無一人的街道，微弱路燈" /></div>
+          <div class="visual"><img src="https://images.unsplash.com/photo-1456945415000-cffed14f2fad?auto=format&fit=crop&w=1600&q=80" alt="凌晨空無一人的街道，微弱路燈" onerror="this.onerror=null;this.src='https://picsum.photos/1600/900?random=108'" /></div>
         </section>
       </div>
       <div class="dots" aria-hidden="true">
@@ -184,7 +188,7 @@
     function sync(){
       const rect = section.getBoundingClientRect();
       const vh = window.innerHeight;
-      const total = section.offsetHeight - vh; // 可滾動高度
+      const total = Math.max(1, section.offsetHeight - vh); // 可滾動高度（避免除以 0）
       const progress = clamp((0 - rect.top) / total, 0, 1); // 0..1
 
       const panels = track.children.length;
