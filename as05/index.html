@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>Scroll Trigger Demo – Flip Card / Focus Mode / Underline</title>
+  <title>走進台灣散文作家：Scroll 敘事小展</title>
   <style>
     :root {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -210,31 +210,33 @@
 </head>
 <body>
   <header>
-    <h1>Scroll 觸發的三種動態效果示範</h1>
+    <h1>走進台灣散文作家：Scroll 敘事小展</h1>
     <p>
-      包含翻卡（圖片 → 文字）、章節 Focus mode、以及捲動至
-      <span>&lt;span&gt;</span> 時出現的底線動畫。
+      以「閱讀散文」為主題，示範三種由捲動觸發的動態效果：翻卡、章節 Focus mode，以及關鍵文字底線動畫。
     </p>
   </header>
 
   <main>
-    <!-- 1. Flip Card 區塊 -->
+    <!-- 1. Flip Card 區塊：像翻開散文書頁 -->
     <section id="flip-card-section">
-      <h2>1. 翻卡 Flip Card（捲動到視窗中央自動翻面）</h2>
-      <p class="hint">向下捲動，當卡片接近視窗中央時，會自動翻成文字面。</p>
+      <h2>1. 翻卡 Flip Card：像翻開散文書頁</h2>
+      <p class="hint">
+        向下捲動，當卡片接近視窗中央時，會自動翻面，從「遠景」的意象進入「展開文字」的閱讀狀態。
+      </p>
 
       <div class="flip-card-wrapper">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-face flip-card-front">
-              <span>向下捲動，看看會發生什麼。</span>
+              <span>向下捲動，翻開一頁台灣散文。</span>
             </div>
             <div class="flip-card-face flip-card-back">
-              <h3>翻卡完成！</h3>
+              <h3>從景色，到文字</h3>
               <p>
-                這張卡片的前面是圖片，當它捲動到視窗中間附近時，
-                會自動觸發翻面，顯示文字內容。這模擬的是：
-                當重要圖像進入「閱讀者視線中心」後，主動提供更深一層的資訊。
+                很多台灣散文，總是從一個風景開始：山路、海岸、城市黃昏。
+                這張卡片的正面只是一張朦朧的山景，當它被捲到視窗中央，
+                才自動翻開，露出文字，就像讀者在現實生活中走到某個地方，
+                才忽然意識到：這裡，其實是一篇散文的開頭。
               </p>
             </div>
           </div>
@@ -242,84 +244,88 @@
       </div>
     </section>
 
-    <!-- 2. Focus Mode 章節 -->
+    <!-- 2. Focus Mode 章節：四位作家的閱讀節奏 -->
     <section id="focus-mode-section">
-      <h2>2. Section Focus mode（正在閱讀的段落被高亮）</h2>
+      <h2>2. Focus mode：在捲動中專心讀一位作家</h2>
       <p class="hint">
-        繼續向下捲動，可以看到「目前停留的段落」會變亮、放大，
-        其他段落則會略為變暗，幫助讀者集中注意力。
+        以下四個段落，各以一位台灣散文作家的閱讀感受為核心。
+        捲動時，「目前停留的那一段」會被高亮，像在長長的書架中，替你暫時拉出一本書。
       </p>
 
       <article class="focus-section">
-        <h3>段落 A：建立背景</h3>
+        <h3>張曉風：從日常小事，看到柔軟的重量</h3>
         <p>
-          當資訊量變得越來越龐大時，閱讀者在一個畫面上可能同時看到好幾個段落。
-          Focus mode 的概念，是當某一段落進入主要視窗區域時，
-          讓它在視覺上稍微「跳出來」，例如增加亮度、對比、或微幅放大。
+          張曉風的散文，常從廚房、窗邊、課堂這些微小場景開始，
+          慢慢推開到更大的世界。她把生活中看似微不足道的瞬間，
+          轉成一種帶著溫度的思考。當這一段被高亮時，就像我們在翻閱她的作品：
+          先停在生活的小細節上，才被帶往背後更大的價值與提問。
         </p>
       </article>
 
       <article class="focus-section">
-        <h3>段落 B：引導視線</h3>
+        <h3>吳明益：在自然書寫裡練習凝視</h3>
         <p>
-          在這個示範中，我們利用 <code>IntersectionObserver</code>
-          定期偵測哪一個段落目前位在畫面中間附近，並替它加上
-          <code>.in-focus</code> 的 class。CSS 則會讓這個段落的
-          <strong>透明度變高、陰影變深、飽和度稍微提高</strong>。
+          吳明益常寫昆蟲、潮汐、季風與河川，他的散文讓人重新學習「怎麼看」。
+          不是只看風景，而是看生態系彼此的牽連。當這一小節成為畫面中的焦點，
+          其他段落暫時隱入背景，就像在田野裡專心盯著一隻甲蟲時，
+          世界的喧鬧會慢慢退到遠方。
         </p>
       </article>
 
       <article class="focus-section">
-        <h3>段落 C：降低干擾</h3>
+        <h3>駱以軍：碎裂記憶與城市陰影</h3>
         <p>
-          對長篇文章或多媒體專題來說，這種效果有助於讓讀者理解：
-          「我現在正在哪一個段落」，也能降低其他區塊帶來的干擾，
-          尤其當畫面上同時有圖片、文字、甚至互動元素時。
+          駱以軍的文字常像一條忽明忽暗的巷子，帶著斷裂的記憶與跳接的畫面。
+          他寫家庭、寫童年、寫城市邊緣的種種不安，使散文成為一種「意識流」的探索。
+          讓這段文字被聚焦，就像在紛亂的訊息流裡，刻意停留在一塊陰影，
+          承認那些不那麼平靜的情緒也值得被看見。
         </p>
       </article>
 
       <article class="focus-section">
-        <h3>段落 D：收尾與延伸</h3>
+        <h3>鍾文音：身體、海與遠行的書寫</h3>
         <p>
-          當段落的底部即將離開畫面時，下一個段落會被判定為新的焦點；
-          如此便形成一種「閱讀節奏」，讓畫面在使用者捲動的過程中，
-          不斷提醒：現在的注意力應該放在哪裡。
+          鍾文音筆下的身體經驗、旅程與海洋意象，總帶著某種游移與不安定。
+          她讓「旅行」不只是地理移動，而是對自我邊界的追問。
+          當最後這個段落浮出成為焦點時，也像在閱讀她的作品：
+          你會同時感到拉扯與召喚——離開熟悉的地方，卻也因此更靠近自己。
         </p>
       </article>
     </section>
 
-    <!-- 3. Span underline on scroll -->
+    <!-- 3. Span underline on scroll：標記散文中的關鍵詞 -->
     <section id="underline-section">
-      <h2>3. 捲動觸發文字底線（自訂效果）</h2>
+      <h2>3. 捲動觸發文字底線：標記散文裡的「慢慢看」</h2>
       <p class="hint">
-        以下段落中有幾個關鍵字被
-        <code>&lt;span class="underline-target"&gt;</code>
-        包起來，當它們捲動到可視範圍時，會自動出現底線動畫。
+        下面兩段像是閱讀散文時的心情備忘錄。被
+        <code>&lt;span class="underline-target"&gt;</code> 包住的字，
+        代表那些你可能會想畫線、摺角、或抄在筆記本上的句子。
       </p>
 
       <p class="scroll-text">
-        在長篇閱讀中，適度地<strong>標記關鍵詞</strong>可以幫助使用者抓住主線。
-        例如：當讀者捲動到
-        <span class="underline-target">重要概念</span>
-        或
-        <span class="underline-target">轉折句</span>
-        所在的位置時，我們可以利用細微的動畫，
-        <span class="underline-target">像是底線展開</span>，
-        來提醒：「這一段話值得多停留一點時間」。
+        台灣的散文，常常從
+        <span class="underline-target">很小的地方</span>
+        長出來：早餐店裡的對話、樓下那棵被修剪過頭的樹、某一班捷運上短暫的眼神交會。
+        當我們捲動頁面，讓這些字被畫上底線時，也是在提醒自己：
+        閱讀並不是只接收訊息，而是一種
+        <span class="underline-target">把日常重新看一遍</span>
+        的練習。
       </p>
 
       <p class="scroll-text">
-        相較於突兀的配色或大量粗體，這種
-        <span class="underline-target">動態式標記</span>
-        不會打斷閱讀流，卻能在讀者自然的捲動行為中，
-        悄悄地<strong>喚起注意力</strong>。同時，也讓設計有更多層次的表現空間，
-        而不是只有靜態的邊線或底色。
+        有些作家擅長安靜地寫：一盞黃燈、一張木椅、一個人久坐不語；有些則擅長把混亂攤開，
+        讓你看到城市的
+        <span class="underline-target">騷動與裂縫</span>。
+        無論哪一種，散文真正留下來的，往往不是情節，而是某種
+        <span class="underline-target">被理解的感覺</span>。
+        所以當這些關鍵詞在捲動間慢慢浮現底線時，
+        它們就像閱讀時心裡那一道小小的亮光：告訴你，這裡，可以多停留一會。
       </p>
     </section>
   </main>
 
   <footer>
-    Scroll interaction demo – flip card, focus mode, underline on scroll.
+    走進台灣散文作家：以 scroll 互動示範翻卡、焦點段落與關鍵文字標記。
   </footer>
 
   <script>
