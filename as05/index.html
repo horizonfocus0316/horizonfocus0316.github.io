@@ -69,7 +69,7 @@
       width: 100%;
       height: 100%;
       transform-style: preserve-3d;
-      transition: transform 0.8s ease;
+      transition: transform 0.9s ease; /* 稍微放慢翻面動畫 */
     }
 
     .flip-card.flipped .flip-card-inner {
@@ -86,13 +86,13 @@
     }
 
     .flip-card-front {
-      background: url("https://images.pexels.com/photos/158607/cairn-fog-mystical-background-158607.jpeg?auto=compress&cs=tinysrgb&w=800")
-        center / cover no-repeat;
       display: flex;
       align-items: flex-end;
       justify-content: flex-start;
       padding: 1rem;
       color: #fff;
+      background-size: cover;
+      background-position: center;
     }
 
     .flip-card-front span {
@@ -100,6 +100,37 @@
       padding: 0.4rem 0.7rem;
       border-radius: 999px;
       font-size: 0.9rem;
+    }
+
+    /* 各作家不同風格的圖片（可依喜好再自行調整 URL 或改成自己圖片） */
+    .flip-card-front.zhang {
+      background-image: url("https://images.pexels.com/photos/3738730/pexels-photo-3738730.jpeg?auto=compress&cs=tinysrgb&w=800");
+      /* 柔和室內光線，像日常小事 */
+    }
+
+    .flip-card-front.wu {
+      background-image: url("https://images.pexels.com/photos/1179229/pexels-photo-1179229.jpeg?auto=compress&cs=tinysrgb&w=800");
+      /* 山林與霧氣，偏自然書寫 */
+    }
+
+    .flip-card-front.luo {
+      background-image: url("https://images.pexels.com/photos/220067/pexels-photo-220067.jpeg?auto=compress&cs=tinysrgb&w=800");
+      /* 都市夜色，有一點陰影感 */
+    }
+
+    .flip-card-front.chung {
+      background-image: url("https://images.pexels.com/photos/2387873/pexels-photo-2387873.jpeg?auto=compress&cs=tinysrgb&w=800");
+      /* 海邊與旅程感 */
+    }
+
+    .flip-card-front.jian {
+      background-image: url("https://images.pexels.com/photos/7130475/pexels-photo-7130475.jpeg?auto=compress&cs=tinysrgb&w=800");
+      /* 柔和室內與花，女性／情感氣氛 */
+    }
+
+    .flip-card-front.yang {
+      background-image: url("https://images.pexels.com/photos/2103847/pexels-photo-2103847.jpeg?auto=compress&cs=tinysrgb&w=800");
+      /* 書與紙張，有思想與歷史感 */
     }
 
     .flip-card-back {
@@ -246,13 +277,13 @@
     <section id="flip-card-section">
       <h2>翻開台灣散文作家的另一面</h2>
       <p class="hint">
-        一張張往下滑，每到視線中央，就會翻開背後的小小介紹。
+        一張張往下滑，每到視線中央稍作停留，卡片就會翻開背後的小小介紹。
       </p>
 
       <div class="flip-card-wrapper">
         <div class="flip-card">
           <div class="flip-card-inner">
-            <div class="flip-card-face flip-card-front">
+            <div class="flip-card-face flip-card-front zhang">
               <span>張曉風</span>
             </div>
             <div class="flip-card-face flip-card-back">
@@ -269,7 +300,7 @@
       <div class="flip-card-wrapper">
         <div class="flip-card">
           <div class="flip-card-inner">
-            <div class="flip-card-face flip-card-front">
+            <div class="flip-card-face flip-card-front wu">
               <span>吳明益</span>
             </div>
             <div class="flip-card-face flip-card-back">
@@ -286,7 +317,7 @@
       <div class="flip-card-wrapper">
         <div class="flip-card">
           <div class="flip-card-inner">
-            <div class="flip-card-face flip-card-front">
+            <div class="flip-card-face flip-card-front luo">
               <span>駱以軍</span>
             </div>
             <div class="flip-card-face flip-card-back">
@@ -303,7 +334,7 @@
       <div class="flip-card-wrapper">
         <div class="flip-card">
           <div class="flip-card-inner">
-            <div class="flip-card-face flip-card-front">
+            <div class="flip-card-face flip-card-front chung">
               <span>鍾文音</span>
             </div>
             <div class="flip-card-face flip-card-back">
@@ -320,7 +351,7 @@
       <div class="flip-card-wrapper">
         <div class="flip-card">
           <div class="flip-card-inner">
-            <div class="flip-card-face flip-card-front">
+            <div class="flip-card-face flip-card-front jian">
               <span>簡媜</span>
             </div>
             <div class="flip-card-face flip-card-back">
@@ -337,7 +368,7 @@
       <div class="flip-card-wrapper">
         <div class="flip-card">
           <div class="flip-card-inner">
-            <div class="flip-card-face flip-card-front">
+            <div class="flip-card-face flip-card-front yang">
               <span>楊索</span>
             </div>
             <div class="flip-card-face flip-card-back">
@@ -464,20 +495,26 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      /* ===== 1. 多張 Flip Cards：各自捲到中間就翻面 ===== */
+      /* ===== 1. 多張 Flip Cards：各自捲到中間就翻面（稍微延遲） ===== */
       const flipCards = document.querySelectorAll(".flip-card");
 
       if (flipCards.length > 0) {
         const flipObserver = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add("flipped");
+              const card = entry.target;
+              if (entry.isIntersecting && !card.dataset.flipping && !card.classList.contains("flipped")) {
+                // 標記正在準備翻，避免重複排程
+                card.dataset.flipping = "true";
+                // 稍微延遲 800ms，讓讀者先看一下圖片
+                setTimeout(() => {
+                  card.classList.add("flipped");
+                }, 800);
               }
             });
           },
           {
-            threshold: 0.6, // 卡片有 60% 進入視窗，就視為在「中間附近」
+            threshold: 0.9, // 幾乎整張卡都進入視窗，才觸發
           }
         );
 
