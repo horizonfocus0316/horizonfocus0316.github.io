@@ -179,7 +179,6 @@
       }
     }
 
-    /* 小提示樣式 */
     .hint {
       font-size: 0.9rem;
       color: #666;
@@ -212,31 +211,84 @@
   <header>
     <h1>走進台灣散文作家：Scroll 敘事小展</h1>
     <p>
-      以「閱讀散文」為主題，示範三種由捲動觸發的動態效果：翻卡、章節 Focus mode，以及關鍵文字底線動畫。
+      跟著頁面慢慢往下捲，就像翻著一本散文選集：每一段，都在等待被看見的那一刻。
     </p>
   </header>
 
   <main>
-    <!-- 1. Flip Card 區塊：像翻開散文書頁 -->
+    <!-- 1. Flip Cards：四位作家的小卡，一張張翻開 -->
     <section id="flip-card-section">
-      <h2>1. 翻卡 Flip Card：像翻開散文書頁</h2>
+      <h2>先認識幾張作家的臉</h2>
       <p class="hint">
-        向下捲動，當卡片接近視窗中央時，會自動翻面，從「遠景」的意象進入「展開文字」的閱讀狀態。
+        一張張往下滑，每到視線中央，就會翻開背後的小小介紹。
       </p>
 
       <div class="flip-card-wrapper">
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-face flip-card-front">
-              <span>向下捲動，翻開一頁台灣散文。</span>
+              <span>張曉風</span>
             </div>
             <div class="flip-card-face flip-card-back">
-              <h3>從景色，到文字</h3>
+              <h3>張曉風</h3>
               <p>
-                很多台灣散文，總是從一個風景開始：山路、海岸、城市黃昏。
-                這張卡片的正面只是一張朦朧的山景，當它被捲到視窗中央，
-                才自動翻開，露出文字，就像讀者在現實生活中走到某個地方，
-                才忽然意識到：這裡，其實是一篇散文的開頭。
+                常從廚房、院子、教室這些細碎場景出發，把看似普通的日常，
+                寫成帶有溫度與重量的段落。她的散文像一盞燈，
+                在不急不徐的話語裡，慢慢照亮讀者心裡某個柔軟的角落。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card-wrapper">
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-face flip-card-front">
+              <span>吳明益</span>
+            </div>
+            <div class="flip-card-face flip-card-back">
+              <h3>吳明益</h3>
+              <p>
+                透過昆蟲、河川、季風與潮汐，帶讀者重新學習「怎麼看」世界。
+                他不是只寫風景，而是寫整個生態系的牽連，
+                讓自然不只是背景，而是故事真正的主角之一。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card-wrapper">
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-face flip-card-front">
+              <span>駱以軍</span>
+            </div>
+            <div class="flip-card-face flip-card-back">
+              <h3>駱以軍</h3>
+              <p>
+                文字像巷弄一樣曲折，記憶與敘事碎片彼此碰撞。
+                他寫家庭與童年的陰影，也寫城市裡不那麼光亮的角落，
+                把散文變成一場在意識裡迷路、又慢慢找到出口的旅程。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card-wrapper">
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-face flip-card-front">
+              <span>鍾文音</span>
+            </div>
+            <div class="flip-card-face flip-card-back">
+              <h3>鍾文音</h3>
+              <p>
+                以身體與旅程作為書寫起點，海成為情緒的隱喻。
+                她的文字經常在離開與回望之間擺盪，
+                讓讀者在一趟又一趟的遠行中，重新辨認自己真正所在的位置。
               </p>
             </div>
           </div>
@@ -246,10 +298,9 @@
 
     <!-- 2. Focus Mode 章節：四位作家的閱讀節奏 -->
     <section id="focus-mode-section">
-      <h2>2. Focus mode：在捲動中專心讀一位作家</h2>
+      <h2>在不同作家之間切換焦點</h2>
       <p class="hint">
-        以下四個段落，各以一位台灣散文作家的閱讀感受為核心。
-        捲動時，「目前停留的那一段」會被高亮，像在長長的書架中，替你暫時拉出一本書。
+        繼續往下讀，你會發現，有些段落特別像被輕輕打上聚光燈。
       </p>
 
       <article class="focus-section">
@@ -257,7 +308,7 @@
         <p>
           張曉風的散文，常從廚房、窗邊、課堂這些微小場景開始，
           慢慢推開到更大的世界。她把生活中看似微不足道的瞬間，
-          轉成一種帶著溫度的思考。當這一段被高亮時，就像我們在翻閱她的作品：
+          轉成一種帶著溫度的思考。當這一段特別顯眼時，就像我們在翻閱她的作品：
           先停在生活的小細節上，才被帶往背後更大的價值與提問。
         </p>
       </article>
@@ -277,7 +328,7 @@
         <p>
           駱以軍的文字常像一條忽明忽暗的巷子，帶著斷裂的記憶與跳接的畫面。
           他寫家庭、寫童年、寫城市邊緣的種種不安，使散文成為一種「意識流」的探索。
-          讓這段文字被聚焦，就像在紛亂的訊息流裡，刻意停留在一塊陰影，
+          讓這段文字浮出畫面，就像在紛亂的訊息流裡，刻意停留在一塊陰影，
           承認那些不那麼平靜的情緒也值得被看見。
         </p>
       </article>
@@ -287,7 +338,7 @@
         <p>
           鍾文音筆下的身體經驗、旅程與海洋意象，總帶著某種游移與不安定。
           她讓「旅行」不只是地理移動，而是對自我邊界的追問。
-          當最後這個段落浮出成為焦點時，也像在閱讀她的作品：
+          當最後這個段落變得突出時，也像在閱讀她的作品：
           你會同時感到拉扯與召喚——離開熟悉的地方，卻也因此更靠近自己。
         </p>
       </article>
@@ -295,11 +346,9 @@
 
     <!-- 3. Span underline on scroll：標記散文中的關鍵詞 -->
     <section id="underline-section">
-      <h2>3. 捲動觸發文字底線：標記散文裡的「慢慢看」</h2>
+      <h2>那些會想畫線的句子</h2>
       <p class="hint">
-        下面兩段像是閱讀散文時的心情備忘錄。被
-        <code>&lt;span class="underline-target"&gt;</code> 包住的字，
-        代表那些你可能會想畫線、摺角、或抄在筆記本上的句子。
+        下面兩段像是閱讀散文時的心情備忘錄，有些字會在你滑過時，悄悄被加上一道底線。
       </p>
 
       <p class="scroll-text">
@@ -325,29 +374,29 @@
   </main>
 
   <footer>
-    走進台灣散文作家：以 scroll 互動示範翻卡、焦點段落與關鍵文字標記。
+    走進台灣散文作家：一頁一頁地，在捲動之間讀懂自己。
   </footer>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      /* ===== 1. Flip Card：捲動到視窗中間附近時翻面 ===== */
-      const flipCard = document.querySelector(".flip-card");
+      /* ===== 1. 多張 Flip Cards：各自捲到中間就翻面 ===== */
+      const flipCards = document.querySelectorAll(".flip-card");
 
-      if (flipCard) {
+      if (flipCards.length > 0) {
         const flipObserver = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
-                flipCard.classList.add("flipped");
+                entry.target.classList.add("flipped");
               }
             });
           },
           {
-            threshold: 0.6, // 60% 卡片進入視窗，就算是在「中間附近」
+            threshold: 0.6, // 卡片有 60% 進入視窗，就視為在「中間附近」
           }
         );
 
-        flipObserver.observe(flipCard);
+        flipCards.forEach((card) => flipObserver.observe(card));
       }
 
       /* ===== 2. Focus Mode：目前視窗內的 section 高亮 ===== */
@@ -358,17 +407,15 @@
           (entries) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
-                // 先移除所有 section 的 in-focus
                 focusSections.forEach((sec) =>
                   sec.classList.remove("in-focus")
                 );
-                // 將目前進入中心區域的 section 設為 in-focus
                 entry.target.classList.add("in-focus");
               }
             });
           },
           {
-            threshold: 0.6, // section 有 60% 在畫面內時，視為正在閱讀
+            threshold: 0.6,
           }
         );
 
@@ -384,14 +431,12 @@
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
                 entry.target.classList.add("visible");
-                // 加一次就好，可以取消監看（避免重複動畫）
                 underlineObserver.unobserve(entry.target);
               }
             });
           },
           {
             root: null,
-            // 提前一點觸發，讓底線在完全看見前就開始動畫
             rootMargin: "0px 0px -15% 0px",
             threshold: 0.2,
           }
