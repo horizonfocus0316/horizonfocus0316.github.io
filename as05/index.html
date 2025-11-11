@@ -1,215 +1,401 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>當城市開始呼吸｜都市日夜與人的內在節奏</title>
+  <meta charset="UTF-8" />
+  <title>Scroll Trigger Demo – Flip Card / Focus Mode / Underline</title>
   <style>
     :root {
-      --bg: #0c0f14;
-      --fg: #e7ecf3;
-      --muted: #98a2b3;
-      --accent: #5eead4; /* for progress bar */
-      --accent-2: #60a5fa; /* for headings */
-      --card: #12161d;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      color: #222;
+      background: #f4f4f4;
+      line-height: 1.6;
     }
-    html, body { margin: 0; padding: 0; color: var(--fg); background: var(--bg); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans CJK TC", "Hiragino Sans", "Microsoft JhengHei", Arial, Helvetica, sans-serif; line-height: 1.6; }
-    img { max-width: 100%; height: auto; display: block; }
-    a { color: var(--accent-2); text-decoration: none; }
 
-    /* Container & Sections */
-    .container { width: min(1100px, 92vw); margin: 0 auto; }
-    .section { padding: 12vh 0; }
+    body {
+      margin: 0;
+    }
 
-    /* ===== Progress-bar-left-right-without-pos-detection ===== */
-    .progress-wrap { position: sticky; top: 0; z-index: 30; background: linear-gradient(180deg, rgba(12,15,20,0.82), rgba(12,15,20,0.4)); backdrop-filter: saturate(120%) blur(6px); }
-    .progress-bar { height: 4px; background: rgba(255,255,255,0.08); }
-    .progress { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width 0.15s linear; }
-    .progress-labels { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; font-size: 12px; padding: 8px 0 6px; color: var(--muted); }
+    header {
+      padding: 3rem 10vw 2rem;
+      background: #111;
+      color: #f9f9f9;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
 
-    /* Hero */
-    .hero { padding: 18vh 0 10vh; }
-    .hero h1 { font-size: clamp(2rem, 4.8vw, 4rem); line-height: 1.1; letter-spacing: 0.4px; margin: 0 0 8px; }
-    .hero p.sub { color: var(--muted); font-size: clamp(1rem, 1.1rem + 0.2vw, 1.3rem); max-width: 70ch; }
+    header h1 {
+      margin: 0 0 0.5rem;
+      font-size: 1.6rem;
+    }
 
-    /* Day cards */
-    .cards { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
-    .card { grid-column: span 6; background: var(--card); border-radius: 16px; padding: 18px; box-shadow: 0 10px 26px rgba(0,0,0,.22); }
-    .card h3 { margin: 6px 0 8px; font-size: 1.2rem; color: var(--accent-2); }
-    .card p { margin: 0; color: var(--fg); opacity: 0.9; }
-    .card figure { margin: 0 0 12px; border-radius: 12px; overflow: hidden; }
-    @media (max-width: 900px) { .card { grid-column: span 12; } }
+    header p {
+      margin: 0;
+      font-size: 0.95rem;
+      opacity: 0.8;
+    }
 
-    /* ===== horizontal-section-reverse ===== */
-    .h-section { position: relative; }
-    .h-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; display: grid; place-items: center; background: radial-gradient(1200px 600px at 50% 10%, rgba(96,165,250,.22), transparent 60%); }
-    .h-track { position: relative; width: 400vw; height: 100%; display: grid; grid-auto-flow: column; grid-auto-columns: 100vw; align-items: stretch; will-change: transform; }
-    .panel { padding: 6vh min(12vw, 60px); display: grid; grid-template-columns: 1.1fr 0.9fr; gap: min(6vw,60px); align-items: center; }
-    .panel:nth-child(odd){ background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0)); }
-    .panel:nth-child(even){ background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0)); }
-    .panel h2 { font-size: clamp(1.5rem, 2.4vw, 2.6rem); margin: 0 0 10px; }
-    .panel .copy { color: var(--muted); }
-    .panel .visual { border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,.35); }
-    .panel .visual img { width: 100%; height: 100%; object-fit: cover; }
-    @media (max-width: 900px) { .panel { grid-template-columns: 1fr; } }
+    main {
+      padding: 2rem 10vw 4rem;
+    }
 
-    /* dot indicators */
-    .dots { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); display: grid; gap: 10px; }
-    .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.25); }
-    .dot[aria-current="true"] { background: var(--accent-2); box-shadow: 0 0 0 6px rgba(96,165,250,.16); }
+    section {
+      margin-bottom: 5rem;
+    }
 
-    /* Footer */
-    .outro { padding: 18vh 0 24vh; text-align: center; }
-    .fallback{background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0));display:grid;place-items:center;color:var(--muted);}
-    /* Robust media sizing */
-    .panel .visual, .card figure{ aspect-ratio: 16/9; background: linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0)); }
-    .panel .visual img, .card figure img{ width:100%; height:100%; object-fit:cover; object-position:center; }
+    h2 {
+      margin-top: 0;
+      font-size: 1.4rem;
+    }
+
+    /* ===== 1. Flip Card 區塊 ===== */
+
+    .flip-card-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 80vh; /* 確保需要捲動才會進入視窗中間 */
+    }
+
+    .flip-card {
+      width: 320px;
+      height: 200px;
+      perspective: 1000px;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.8s ease;
+    }
+
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 18px 35px rgba(0, 0, 0, 0.25);
+    }
+
+    .flip-card-front {
+      background: url("https://images.pexels.com/photos/158607/cairn-fog-mystical-background-158607.jpeg?auto=compress&cs=tinysrgb&w=800")
+        center / cover no-repeat;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding: 1rem;
+      color: #fff;
+    }
+
+    .flip-card-front span {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 0.4rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+    }
+
+    .flip-card-back {
+      background: #ffffff;
+      transform: rotateY(180deg);
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .flip-card-back h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+
+    .flip-card-back p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #444;
+    }
+
+    /* ===== 2. Focus Mode 章節高亮 ===== */
+
+    .focus-section {
+      padding: 2.5rem 2rem;
+      border-radius: 18px;
+      margin-bottom: 2.5rem;
+      background: #ffffff;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+      opacity: 0.45;
+      transform: scale(0.98);
+      transition:
+        opacity 0.4s ease,
+        transform 0.4s ease,
+        box-shadow 0.4s ease,
+        filter 0.4s ease;
+    }
+
+    .focus-section.in-focus {
+      opacity: 1;
+      transform: scale(1);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.16);
+      filter: saturate(1.05);
+    }
+
+    .focus-section h3 {
+      margin-top: 0;
+      margin-bottom: 0.8rem;
+    }
+
+    /* ===== 3. Scroll underline for span ===== */
+
+    .scroll-text {
+      font-size: 1.05rem;
+      max-width: 720px;
+    }
+
+    .underline-target {
+      position: relative;
+      background-image: linear-gradient(currentColor, currentColor);
+      background-position: 0 100%;
+      background-repeat: no-repeat;
+      background-size: 0% 2px; /* 一開始沒有底線 */
+    }
+
+    .underline-target.visible {
+      animation: underline-grow 0.45s ease forwards;
+    }
+
+    @keyframes underline-grow {
+      from {
+        background-size: 0% 2px;
+      }
+      to {
+        background-size: 100% 2px;
+      }
+    }
+
+    /* 小提示樣式 */
+    .hint {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 0.5rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 0 1rem;
+      font-size: 0.85rem;
+      color: #777;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding-inline: 6vw;
+      }
+
+      main {
+        padding-inline: 6vw;
+      }
+
+      .focus-section {
+        padding-inline: 1.4rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- Progress bar (Left→Right) -->
-  <div class="progress-wrap" role="presentation" aria-hidden="true">
-    <div class="container">
-      <div class="progress-bar" aria-label="頁面閱讀進度"><div class="progress" id="progress"></div></div>
-      <div class="progress-labels" aria-hidden="true">
-        <span>黎明</span><span>日間</span><span>黃昏</span><span>深夜</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Hero -->
-  <header class="hero container section">
-    <h1>當城市開始呼吸</h1>
-    <p class="sub">從黎明到深夜，城市與人互為呼吸。向右流動的是時間，向左退回的是心事。</p>
+  <header>
+    <h1>Scroll 觸發的三種動態效果示範</h1>
+    <p>
+      包含翻卡（圖片 → 文字）、章節 Focus mode、以及捲動至
+      <span>&lt;span&gt;</span> 時出現的底線動畫。
+    </p>
   </header>
 
-  <!-- Day timeline cards -->
-  <section class="container section" aria-labelledby="dayflow">
-    <h2 id="dayflow" style="color:var(--accent-2); margin-top:0">黎明 → 日間 → 黃昏 → 深夜</h2>
-    <div class="cards" style="margin-top:24px">
-      <article class="card" aria-labelledby="dawn">
-        <figure><img src="https://picsum.photos/id/1011/1600/900" alt="清晨的城市天際線與薄霧" loading="lazy" referrerpolicy="no-referrer" /></figure>
-        <h3 id="dawn">黎明：第一班公車亮起</h3>
-        <p class="copy">空氣裡混合著麵包與柏油味，報紙機器剛停下。城市吸一口長氣。</p>
-      </article>
-      <article class="card" aria-labelledby="noon">
-        <figure><img src="https://picsum.photos/id/1027/1600/900" alt="日間的十字路口與人潮" loading="lazy" referrerpolicy="no-referrer" /></figure>
-        <h3 id="noon">日間：斑馬線鼓掌</h3>
-        <p class="copy">喇叭、解鎖聲、咖啡機蒸汽。節拍加快，人群成為城市的鼓點。</p>
-      </article>
-      <article class="card" aria-labelledby="dusk">
-        <figure><img src="https://picsum.photos/id/1003/1600/900" alt="夕陽照映的高樓與雲層" loading="lazy" referrerpolicy="no-referrer" /></figure>
-        <h3 id="dusk">黃昏：光線斜倚</h3>
-        <p class="copy">落日把玻璃染成琥珀色，熄燈與開霓虹的間歇，像一次深吐。</p>
-      </article>
-      <article class="card" aria-labelledby="night">
-        <figure><img src="https://picsum.photos/id/1012/1600/900" alt="夜色中的霓虹街景與反光" loading="lazy" referrerpolicy="no-referrer" /></figure>
-        <h3 id="night">深夜：霓虹呼吸</h3>
-        <p class="copy">路面留住雨，倒影延長了招牌的呼吸。少數窗燈，替代了白日的人聲。</p>
-      </article>
-    </div>
-  </section>
+  <main>
+    <!-- 1. Flip Card 區塊 -->
+    <section id="flip-card-section">
+      <h2>1. 翻卡 Flip Card（捲動到視窗中央自動翻面）</h2>
+      <p class="hint">向下捲動，當卡片接近視窗中央時，會自動翻成文字面。</p>
 
-  <!-- Horizontal Section (Reverse) | 垂直捲動→橫向反向推進 -->
-  <section class="h-section" id="inner" aria-label="內在節奏：橫向反向敘事">
-    <!-- 高度會在 JS 依面板數自動設定為 panels*100vh；sticky 會固定在視窗內 -->
-    <div class="h-sticky">
-      <div class="h-track" id="track" aria-live="polite">
-        <section class="panel" aria-labelledby="p1">
-          <div>
-            <h2 id="p1">夜歸人的腳步</h2>
-            <p class="copy">有些人此刻才結束白日，有些人剛開始他們的夜。反向的滾動，像是把心事往回拉。</p>
+      <div class="flip-card-wrapper">
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-face flip-card-front">
+              <span>向下捲動，看看會發生什麼。</span>
+            </div>
+            <div class="flip-card-face flip-card-back">
+              <h3>翻卡完成！</h3>
+              <p>
+                這張卡片的前面是圖片，當它捲動到視窗中間附近時，
+                會自動觸發翻面，顯示文字內容。這模擬的是：
+                當重要圖像進入「閱讀者視線中心」後，主動提供更深一層的資訊。
+              </p>
+            </div>
           </div>
-          <div class="visual"><img src="https://picsum.photos/id/1018/1600/900" alt="夜歸的人影走過濕亮的巷口" loading="lazy" referrerpolicy="no-referrer" /></div>
-        </section>
-        <section class="panel" aria-labelledby="p2">
-          <div>
-            <h2 id="p2">窗光的獨白</h2>
-            <p class="copy">每一扇窗都是一段未說完的句子。有人讀書，有人復盤，有人只是靜坐。</p>
-          </div>
-          <div class="visual"><img src="https://picsum.photos/id/1062/1600/900" alt="夜裡公寓的一扇黃燈窗戶特寫" loading="lazy" referrerpolicy="no-referrer" /></div>
-        </section>
-        <section class="panel" aria-labelledby="p3">
-          <div>
-            <h2 id="p3">霓虹與心率</h2>
-            <p class="copy">城市的心率隨著色彩變化。霓虹在閃爍，你的念頭也在閃爍。</p>
-          </div>
-          <div class="visual"><img src="https://picsum.photos/id/1015/1600/900" alt="霓虹招牌與行人匆匆的街口" loading="lazy" referrerpolicy="no-referrer" /></div>
-        </section>
-        <section class="panel" aria-labelledby="p4">
-          <div>
-            <h2 id="p4">凌晨四點的空白</h2>
-            <p class="copy">最安靜的時刻，城市與你都在同一個深呼吸裡。反向的結束，是另一個開始。</p>
-          </div>
-          <div class="visual"><img src="https://picsum.photos/id/1031/1600/900" alt="凌晨空無一人的街道，微弱路燈" loading="lazy" referrerpolicy="no-referrer" /></div>
-        </section>
+        </div>
       </div>
-      <div class="dots" aria-hidden="true">
-        <div class="dot" id="d0" aria-current="true"></div>
-        <div class="dot" id="d1"></div>
-        <div class="dot" id="d2"></div>
-        <div class="dot" id="d3"></div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <footer class="outro container">
-    <h2 style="color:var(--accent-2); margin:0 0 8px">城市仍在呼吸</h2>
-    <p class="copy" style="color:var(--muted)">一日的終點，將成為另一個開始。</p>
+    <!-- 2. Focus Mode 章節 -->
+    <section id="focus-mode-section">
+      <h2>2. Section Focus mode（正在閱讀的段落被高亮）</h2>
+      <p class="hint">
+        繼續向下捲動，可以看到「目前停留的段落」會變亮、放大，
+        其他段落則會略為變暗，幫助讀者集中注意力。
+      </p>
+
+      <article class="focus-section">
+        <h3>段落 A：建立背景</h3>
+        <p>
+          當資訊量變得越來越龐大時，閱讀者在一個畫面上可能同時看到好幾個段落。
+          Focus mode 的概念，是當某一段落進入主要視窗區域時，
+          讓它在視覺上稍微「跳出來」，例如增加亮度、對比、或微幅放大。
+        </p>
+      </article>
+
+      <article class="focus-section">
+        <h3>段落 B：引導視線</h3>
+        <p>
+          在這個示範中，我們利用 <code>IntersectionObserver</code>
+          定期偵測哪一個段落目前位在畫面中間附近，並替它加上
+          <code>.in-focus</code> 的 class。CSS 則會讓這個段落的
+          <strong>透明度變高、陰影變深、飽和度稍微提高</strong>。
+        </p>
+      </article>
+
+      <article class="focus-section">
+        <h3>段落 C：降低干擾</h3>
+        <p>
+          對長篇文章或多媒體專題來說，這種效果有助於讓讀者理解：
+          「我現在正在哪一個段落」，也能降低其他區塊帶來的干擾，
+          尤其當畫面上同時有圖片、文字、甚至互動元素時。
+        </p>
+      </article>
+
+      <article class="focus-section">
+        <h3>段落 D：收尾與延伸</h3>
+        <p>
+          當段落的底部即將離開畫面時，下一個段落會被判定為新的焦點；
+          如此便形成一種「閱讀節奏」，讓畫面在使用者捲動的過程中，
+          不斷提醒：現在的注意力應該放在哪裡。
+        </p>
+      </article>
+    </section>
+
+    <!-- 3. Span underline on scroll -->
+    <section id="underline-section">
+      <h2>3. 捲動觸發文字底線（自訂效果）</h2>
+      <p class="hint">
+        以下段落中有幾個關鍵字被
+        <code>&lt;span class="underline-target"&gt;</code>
+        包起來，當它們捲動到可視範圍時，會自動出現底線動畫。
+      </p>
+
+      <p class="scroll-text">
+        在長篇閱讀中，適度地<strong>標記關鍵詞</strong>可以幫助使用者抓住主線。
+        例如：當讀者捲動到
+        <span class="underline-target">重要概念</span>
+        或
+        <span class="underline-target">轉折句</span>
+        所在的位置時，我們可以利用細微的動畫，
+        <span class="underline-target">像是底線展開</span>，
+        來提醒：「這一段話值得多停留一點時間」。
+      </p>
+
+      <p class="scroll-text">
+        相較於突兀的配色或大量粗體，這種
+        <span class="underline-target">動態式標記</span>
+        不會打斷閱讀流，卻能在讀者自然的捲動行為中，
+        悄悄地<strong>喚起注意力</strong>。同時，也讓設計有更多層次的表現空間，
+        而不是只有靜態的邊線或底色。
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    Scroll interaction demo – flip card, focus mode, underline on scroll.
   </footer>
 
   <script>
-    // ===== Progress bar =====
-    const progressEl = document.getElementById('progress');
-    function updateProgress(){
-      const h = document.documentElement;
-      const max = h.scrollHeight - h.clientHeight;
-      const p = max > 0 ? (h.scrollTop / max) * 100 : 0;
-      progressEl.style.width = p.toFixed(2) + '%';
-    }
-    document.addEventListener('scroll', updateProgress, { passive: true });
-    window.addEventListener('resize', updateProgress);
-    updateProgress();
+    document.addEventListener("DOMContentLoaded", () => {
+      /* ===== 1. Flip Card：捲動到視窗中間附近時翻面 ===== */
+      const flipCard = document.querySelector(".flip-card");
 
-    // ===== Horizontal (reverse) =====
-    const section = document.getElementById('inner');
-    const track = document.getElementById('track');
-    const dots = [document.getElementById('d0'), document.getElementById('d1'), document.getElementById('d2'), document.getElementById('d3')];
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (flipCard) {
+        const flipObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                flipCard.classList.add("flipped");
+              }
+            });
+          },
+          {
+            threshold: 0.6, // 60% 卡片進入視窗，就算是在「中間附近」
+          }
+        );
 
-    function clamp(n, min, max){ return Math.max(min, Math.min(n, max)); }
-
-    function sizeSection(){
-      const panels = track.children.length;
-      // 設定可滾動高度 = 面板數 * 100vh
-      section.style.height = (panels * 100) + 'vh';
-    }
-
-    function sync(){
-      const rect = section.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const total = Math.max(1, section.offsetHeight - vh); // 可滾動高度（避免除以 0）
-      const progress = clamp((0 - rect.top) / total, 0, 1); // 0..1
-
-      const panels = track.children.length;
-      const maxTranslate = (panels - 1) * 100; // 300vw for 4 panels
-      const tx = -maxTranslate * (1 - progress); // 反向：開始在最左，往右回到0
-
-      if (!prefersReduced) {
-        track.style.transform = `translate3d(${tx}vw,0,0)`;
-      } else {
-        const idx = Math.round((1 - progress) * (panels - 1));
-        track.style.transform = `translate3d(${-idx * 100}vw,0,0)`;
+        flipObserver.observe(flipCard);
       }
 
-      const activeIndex = clamp(Math.round(progress * (panels - 1)), 0, panels - 1);
-      dots.forEach((d, i) => d.setAttribute('aria-current', i === activeIndex ? 'true' : 'false'));
-    }
+      /* ===== 2. Focus Mode：目前視窗內的 section 高亮 ===== */
+      const focusSections = document.querySelectorAll(".focus-section");
 
-    window.addEventListener('resize', () => { sizeSection(); sync(); });
-    document.addEventListener('scroll', sync, { passive: true });
-    window.addEventListener('load', () => { sizeSection(); updateProgress(); sync(); });
-    sizeSection(); sync();
+      if (focusSections.length > 0) {
+        const focusObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                // 先移除所有 section 的 in-focus
+                focusSections.forEach((sec) =>
+                  sec.classList.remove("in-focus")
+                );
+                // 將目前進入中心區域的 section 設為 in-focus
+                entry.target.classList.add("in-focus");
+              }
+            });
+          },
+          {
+            threshold: 0.6, // section 有 60% 在畫面內時，視為正在閱讀
+          }
+        );
+
+        focusSections.forEach((sec) => focusObserver.observe(sec));
+      }
+
+      /* ===== 3. Span underline：捲動到可視範圍時底線展開 ===== */
+      const underlineTargets = document.querySelectorAll(".underline-target");
+
+      if (underlineTargets.length > 0) {
+        const underlineObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                // 加一次就好，可以取消監看（避免重複動畫）
+                underlineObserver.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            root: null,
+            // 提前一點觸發，讓底線在完全看見前就開始動畫
+            rootMargin: "0px 0px -15% 0px",
+            threshold: 0.2,
+          }
+        );
+
+        underlineTargets.forEach((span) =>
+          underlineObserver.observe(span)
+        );
+      }
+    });
   </script>
 </body>
 </html>
