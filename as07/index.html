@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>當城市開始呼吸｜都市日夜與人的內在節奏</title>
+  <style>
+    :root {
+      --bg: #0c0f14;
+      --fg: #e7ecf3;
+      --muted: #98a2b3;
+      --accent: #5eead4; /* for progress bar */
+      --accent-2: #60a5fa; /* for headings */
+      --card: #12161d;
+    }
+    html, body { margin: 0; padding: 0; color: var(--fg); background: var(--bg); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans CJK TC", "Hiragino Sans", "Microsoft JhengHei", Arial, Helvetica, sans-serif; line-height: 1.6; }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: var(--accent-2); text-decoration: none; }
+
+    /* Container & Sections */
+    .container { width: min(1100px, 92vw); margin: 0 auto; }
+    .section { padding: 12vh 0; }
+
+    /* ===== Progress-bar-left-right-without-pos-detection ===== */
+    .progress-wrap { position: sticky; top: 0; z-index: 30; background: linear-gradient(180deg, rgba(12,15,20,0.82), rgba(12,15,20,0.4)); backdrop-filter: saturate(120%) blur(6px); }
+    .progress-bar { height: 4px; background: rgba(255,255,255,0.08); }
+    .progress { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width 0.15s linear; }
+    .progress-labels { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; font-size: 12px; padding: 8px 0 6px; color: var(--muted); }
+
+    /* Hero */
+    .hero { padding: 18vh 0 10vh; }
+    .hero h1 { font-size: clamp(2rem, 4.8vw, 4rem); line-height: 1.1; letter-spacing: 0.4px; margin: 0 0 8px; }
+    .hero p.sub { color: var(--muted); font-size: clamp(1rem, 1.1rem + 0.2vw, 1.3rem); max-width: 70ch; }
+
+    /* Day cards */
+    .cards { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
+    .card { grid-column: span 6; background: var(--card); border-radius: 16px; padding: 18px; box-shadow: 0 10px 26px rgba(0,0,0,.22); }
+    .card h3 { margin: 6px 0 8px; font-size: 1.2rem; color: var(--accent-2); }
+    .card p { margin: 0; color: var(--fg); opacity: 0.9; }
+    .card figure { margin: 0 0 12px; border-radius: 12px; overflow: hidden; }
+    @media (max-width: 900px) { .card { grid-column: span 12; } }
+
+    /* ===== horizontal-section-reverse ===== */
+    .h-section { position: relative; }
+    .h-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; display: grid; place-items: center; background: radial-gradient(1200px 600px at 50% 10%, rgba(96,165,250,.22), transparent 60%); }
+    .h-track { position: relative; width: 400vw; height: 100%; display: grid; grid-auto-flow: column; grid-auto-columns: 100vw; align-items: stretch; will-change: transform; }
+    .panel { padding: 6vh min(12vw, 60px); display: grid; grid-template-columns: 1.1fr 0.9fr; gap: min(6vw,60px); align-items: center; }
+    .panel:nth-child(odd){ background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0)); }
+    .panel:nth-child(even){ background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0)); }
+    .panel h2 { font-size: clamp(1.5rem, 2.4vw, 2.6rem); margin: 0 0 10px; }
+    .panel .copy { color: var(--muted); }
+    .panel .visual { border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,.35); }
+    .panel .visual img { width: 100%; height: 100%; object-fit: cover; }
+    @media (max-width: 900px) { .panel { grid-template-columns: 1fr; } }
+
+    /* dot indicators */
+    .dots { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); display: grid; gap: 10px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.25); }
+    .dot[aria-current="true"] { background: var(--accent-2); box-shadow: 0 0 0 6px rgba(96,165,250,.16); }
+
+    /* Footer */
+    .outro { padding: 18vh 0 24vh; text-align: center; }
+    .fallback{background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0));display:grid;place-items:center;color:var(--muted);}
+    /* Robust media sizing */
+    .panel .visual, .card figure{ aspect-ratio: 16/9; background: linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0)); }
+    .panel .visual img, .card figure img{ width:100%; height:100%; object-fit:cover; object-position:center; }
+  </style>
+</head>
+<body>
+  <!-- Progress bar (Left→Right) -->
+  <div class="progress-wrap" role="presentation" aria-hidden="true">
+    <div class="container">
+      <div class="progress-bar" aria-label="頁面閱讀進度"><div class="progress" id="progress"></div></div>
+      <div class="progress-labels" aria-hidden="true">
+        <span>黎明</span><span>日間</span><span>黃昏</span><span>深夜</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <header class="hero container section">
+    <h1>當城市開始呼吸</h1>
+    <p class="sub">從黎明到深夜，城市與人互為呼吸。向右流動的是時間，向左退回的是心事。</p>
+  </header>
+
+  <!-- Day timeline cards -->
+  <section class="container section" aria-labelledby="dayflow">
+    <h2 id="dayflow" style="color:var(--accent-2); margin-top:0">黎明 → 日間 → 黃昏 → 深夜</h2>
+    <div class="cards" style="margin-top:24px">
+      <article class="card" aria-labelledby="dawn">
+        <figure><img src="https://picsum.photos/id/1011/1600/900" alt="清晨的城市天際線與薄霧" loading="lazy" referrerpolicy="no-referrer" /></figure>
+        <h3 id="dawn">黎明：第一班公車亮起</h3>
+        <p class="copy">空氣裡混合著麵包與柏油味，報紙機器剛停下。城市吸一口長氣。</p>
+      </article>
+      <article class="card" aria-labelledby="noon">
+        <figure><img src="https://picsum.photos/id/1027/1600/900" alt="日間的十字路口與人潮" loading="lazy" referrerpolicy="no-referrer" /></figure>
+        <h3 id="noon">日間：斑馬線鼓掌</h3>
+        <p class="copy">喇叭、解鎖聲、咖啡機蒸汽。節拍加快，人群成為城市的鼓點。</p>
+      </article>
+      <article class="card" aria-labelledby="dusk">
+        <figure><img src="https://picsum.photos/id/1003/1600/900" alt="夕陽照映的高樓與雲層" loading="lazy" referrerpolicy="no-referrer" /></figure>
+        <h3 id="dusk">黃昏：光線斜倚</h3>
+        <p class="copy">落日把玻璃染成琥珀色，熄燈與開霓虹的間歇，像一次深吐。</p>
+      </article>
+      <article class="card" aria-labelledby="night">
+        <figure><img src="https://picsum.photos/id/1012/1600/900" alt="夜色中的霓虹街景與反光" loading="lazy" referrerpolicy="no-referrer" /></figure>
+        <h3 id="night">深夜：霓虹呼吸</h3>
+        <p class="copy">路面留住雨，倒影延長了招牌的呼吸。少數窗燈，替代了白日的人聲。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Horizontal Section (Reverse) | 垂直捲動→橫向反向推進 -->
+  <section class="h-section" id="inner" aria-label="內在節奏：橫向反向敘事">
+    <!-- 高度會在 JS 依面板數自動設定為 panels*100vh；sticky 會固定在視窗內 -->
+    <div class="h-sticky">
+      <div class="h-track" id="track" aria-live="polite">
+        <section class="panel" aria-labelledby="p1">
+          <div>
+            <h2 id="p1">夜歸人的腳步</h2>
+            <p class="copy">有些人此刻才結束白日，有些人剛開始他們的夜。反向的滾動，像是把心事往回拉。</p>
+          </div>
+          <div class="visual"><img src="https://picsum.photos/id/1018/1600/900" alt="夜歸的人影走過濕亮的巷口" loading="lazy" referrerpolicy="no-referrer" /></div>
+        </section>
+        <section class="panel" aria-labelledby="p2">
+          <div>
+            <h2 id="p2">窗光的獨白</h2>
+            <p class="copy">每一扇窗都是一段未說完的句子。有人讀書，有人復盤，有人只是靜坐。</p>
+          </div>
+          <div class="visual"><img src="https://picsum.photos/id/1062/1600/900" alt="夜裡公寓的一扇黃燈窗戶特寫" loading="lazy" referrerpolicy="no-referrer" /></div>
+        </section>
+        <section class="panel" aria-labelledby="p3">
+          <div>
+            <h2 id="p3">霓虹與心率</h2>
+            <p class="copy">城市的心率隨著色彩變化。霓虹在閃爍，你的念頭也在閃爍。</p>
+          </div>
+          <div class="visual"><img src="https://picsum.photos/id/1015/1600/900" alt="霓虹招牌與行人匆匆的街口" loading="lazy" referrerpolicy="no-referrer" /></div>
+        </section>
+        <section class="panel" aria-labelledby="p4">
+          <div>
+            <h2 id="p4">凌晨四點的空白</h2>
+            <p class="copy">最安靜的時刻，城市與你都在同一個深呼吸裡。反向的結束，是另一個開始。</p>
+          </div>
+          <div class="visual"><img src="https://picsum.photos/id/1031/1600/900" alt="凌晨空無一人的街道，微弱路燈" loading="lazy" referrerpolicy="no-referrer" /></div>
+        </section>
+      </div>
+      <div class="dots" aria-hidden="true">
+        <div class="dot" id="d0" aria-current="true"></div>
+        <div class="dot" id="d1"></div>
+        <div class="dot" id="d2"></div>
+        <div class="dot" id="d3"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="outro container">
+    <h2 style="color:var(--accent-2); margin:0 0 8px">城市仍在呼吸</h2>
+    <p class="copy" style="color:var(--muted)">一日的終點，將成為另一個開始。</p>
+  </footer>
+
+  <script>
+    // ===== Progress bar =====
+    const progressEl = document.getElementById('progress');
+    function updateProgress(){
+      const h = document.documentElement;
+      const max = h.scrollHeight - h.clientHeight;
+      const p = max > 0 ? (h.scrollTop / max) * 100 : 0;
+      progressEl.style.width = p.toFixed(2) + '%';
+    }
+    document.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress);
+    updateProgress();
+
+    // ===== Horizontal (reverse) =====
+    const section = document.getElementById('inner');
+    const track = document.getElementById('track');
+    const dots = [document.getElementById('d0'), document.getElementById('d1'), document.getElementById('d2'), document.getElementById('d3')];
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function clamp(n, min, max){ return Math.max(min, Math.min(n, max)); }
+
+    function sizeSection(){
+      const panels = track.children.length;
+      // 設定可滾動高度 = 面板數 * 100vh
+      section.style.height = (panels * 100) + 'vh';
+    }
+
+    function sync(){
+      const rect = section.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const total = Math.max(1, section.offsetHeight - vh); // 可滾動高度（避免除以 0）
+      const progress = clamp((0 - rect.top) / total, 0, 1); // 0..1
+
+      const panels = track.children.length;
+      const maxTranslate = (panels - 1) * 100; // 300vw for 4 panels
+      const tx = -maxTranslate * (1 - progress); // 反向：開始在最左，往右回到0
+
+      if (!prefersReduced) {
+        track.style.transform = `translate3d(${tx}vw,0,0)`;
+      } else {
+        const idx = Math.round((1 - progress) * (panels - 1));
+        track.style.transform = `translate3d(${-idx * 100}vw,0,0)`;
+      }
+
+      const activeIndex = clamp(Math.round(progress * (panels - 1)), 0, panels - 1);
+      dots.forEach((d, i) => d.setAttribute('aria-current', i === activeIndex ? 'true' : 'false'));
+    }
+
+    window.addEventListener('resize', () => { sizeSection(); sync(); });
+    document.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('load', () => { sizeSection(); updateProgress(); sync(); });
+    sizeSection(); sync();
+  </script>
+</body>
+</html>
