@@ -49,7 +49,7 @@
       font-size: 1.4rem;
     }
 
-    /* ===== 1. Flip Card 區塊 ===== */
+    /* ===== 1. Flip Cards：多位作家卡片 ===== */
 
     .flip-card-wrapper {
       display: flex;
@@ -122,6 +122,12 @@
       color: #444;
     }
 
+    .hint {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 0.5rem;
+    }
+
     /* ===== 2. Focus Mode 章節高亮 ===== */
 
     .focus-section {
@@ -151,38 +157,54 @@
       margin-bottom: 0.8rem;
     }
 
-    /* ===== 3. Scroll underline for span ===== */
+    /* ===== 3. 句子逐字出現 ===== */
 
-    .scroll-text {
+    #typing-section {
+      max-width: 780px;
+    }
+
+    .typing-block {
+      margin-bottom: 2.2rem;
+      padding: 1.6rem 1.4rem;
+      border-radius: 16px;
+      background: #ffffff;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+    }
+
+    .typing-block h3 {
+      margin: 0 0 0.6rem;
       font-size: 1.05rem;
-      max-width: 720px;
+      color: #333;
     }
 
-    .underline-target {
+    .typing-line {
+      font-family: "Noto Serif TC", "Songti TC", serif;
+      font-size: 1.02rem;
+      letter-spacing: 0.03em;
+      min-height: 1.6em; /* 預留高度，避免打字前版面跳動 */
       position: relative;
-      background-image: linear-gradient(currentColor, currentColor);
-      background-position: 0 100%;
-      background-repeat: no-repeat;
-      background-size: 0% 2px; /* 一開始沒有底線 */
+      white-space: pre-wrap;
     }
 
-    .underline-target.visible {
-      animation: underline-grow 0.45s ease forwards;
+    .typing-line::after {
+      content: "▍";
+      position: absolute;
+      right: -0.4rem;
+      animation: caret-blink 0.8s steps(1, end) infinite;
+      opacity: 0;
     }
 
-    @keyframes underline-grow {
-      from {
-        background-size: 0% 2px;
+    .typing-line.typing::after {
+      opacity: 1; /* 只有打字時才顯示游標 */
+    }
+
+    @keyframes caret-blink {
+      0%, 50% {
+        opacity: 1;
       }
-      to {
-        background-size: 100% 2px;
+      50.01%, 100% {
+        opacity: 0;
       }
-    }
-
-    .hint {
-      font-size: 0.9rem;
-      color: #666;
-      margin-top: 0.5rem;
     }
 
     footer {
@@ -204,6 +226,10 @@
       .focus-section {
         padding-inline: 1.4rem;
       }
+
+      .typing-block {
+        padding-inline: 1.1rem;
+      }
     }
   </style>
 </head>
@@ -216,9 +242,9 @@
   </header>
 
   <main>
-    <!-- 1. Flip Cards：四位作家的小卡，一張張翻開 -->
+    <!-- 1. Flip Cards：多位作家的小卡，一張張翻開 -->
     <section id="flip-card-section">
-      <h2>先認識幾張作家的臉</h2>
+      <h2>翻開台灣散文作家的另一面</h2>
       <p class="hint">
         一張張往下滑，每到視線中央，就會翻開背後的小小介紹。
       </p>
@@ -233,8 +259,7 @@
               <h3>張曉風</h3>
               <p>
                 常從廚房、院子、教室這些細碎場景出發，把看似普通的日常，
-                寫成帶有溫度與重量的段落。她的散文像一盞燈，
-                在不急不徐的話語裡，慢慢照亮讀者心裡某個柔軟的角落。
+                寫成帶有溫度與重量的段落，讓人放心把心事暫時放在她的文字裡。
               </p>
             </div>
           </div>
@@ -251,8 +276,7 @@
               <h3>吳明益</h3>
               <p>
                 透過昆蟲、河川、季風與潮汐，帶讀者重新學習「怎麼看」世界。
-                他不是只寫風景，而是寫整個生態系的牽連，
-                讓自然不只是背景，而是故事真正的主角之一。
+                自然不只是背景，而是記憶、歷史與人類選擇交會的場域。
               </p>
             </div>
           </div>
@@ -269,8 +293,7 @@
               <h3>駱以軍</h3>
               <p>
                 文字像巷弄一樣曲折，記憶與敘事碎片彼此碰撞。
-                他寫家庭與童年的陰影，也寫城市裡不那麼光亮的角落，
-                把散文變成一場在意識裡迷路、又慢慢找到出口的旅程。
+                在那些忽明忽暗的段落中，讀者也跟著回頭檢查自己的童年與城市。
               </p>
             </div>
           </div>
@@ -287,8 +310,41 @@
               <h3>鍾文音</h3>
               <p>
                 以身體與旅程作為書寫起點，海成為情緒的隱喻。
-                她的文字經常在離開與回望之間擺盪，
-                讓讀者在一趟又一趟的遠行中，重新辨認自己真正所在的位置。
+                在離開與回望之間擺盪，讓遠行成為一種重新認識自己的方式。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card-wrapper">
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-face flip-card-front">
+              <span>簡媜</span>
+            </div>
+            <div class="flip-card-face flip-card-back">
+              <h3>簡媜</h3>
+              <p>
+                她的文字總是輕柔卻有穿透力，從女性的身體與日常出發，
+                在沉靜的句子之間，緩緩說出關於失去、成長與愛的代價。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card-wrapper">
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-face flip-card-front">
+              <span>楊索</span>
+            </div>
+            <div class="flip-card-face flip-card-back">
+              <h3>楊索</h3>
+              <p>
+                在文學與思想之間穿梭，用冷靜而深刻的語言回望歷史。
+                他的散文像細讀一份時代的旁白，提醒我們別忘了成為人的責任。
               </p>
             </div>
           </div>
@@ -300,7 +356,7 @@
     <section id="focus-mode-section">
       <h2>在不同作家之間切換焦點</h2>
       <p class="hint">
-        繼續往下讀，你會發現，有些段落特別像被輕輕打上聚光燈。
+        往下讀的時候，你會發現，有些段落特別像被輕輕打上聚光燈。
       </p>
 
       <article class="focus-section">
@@ -344,32 +400,61 @@
       </article>
     </section>
 
-    <!-- 3. Span underline on scroll：標記散文中的關鍵詞 -->
-    <section id="underline-section">
-      <h2>那些會想畫線的句子</h2>
+    <!-- 3. 句子逐字出現：為每位作家保留一句話 -->
+    <section id="typing-section">
+      <h2>會想抄在筆記本上的一句話</h2>
       <p class="hint">
-        下面兩段像是閱讀散文時的心情備忘錄，有些字會在你滑過時，悄悄被加上一道底線。
+        當你滑過這些段落時，句子會像剛被寫上去一樣，一個字一個字浮現。
+        你也可以換成自己真正喜歡、查好出處的句子。
       </p>
 
-      <p class="scroll-text">
-        台灣的散文，常常從
-        <span class="underline-target">很小的地方</span>
-        長出來：早餐店裡的對話、樓下那棵被修剪過頭的樹、某一班捷運上短暫的眼神交會。
-        當我們捲動頁面，讓這些字被畫上底線時，也是在提醒自己：
-        閱讀並不是只接收訊息，而是一種
-        <span class="underline-target">把日常重新看一遍</span>
-        的練習。
-      </p>
+      <div class="typing-block">
+        <h3>張曉風</h3>
+        <p
+          class="typing-line"
+          data-text="有些日常瑣事，看起來微不足道，卻在多年之後成為我們懷念自己的方式。"
+        ></p>
+      </div>
 
-      <p class="scroll-text">
-        有些作家擅長安靜地寫：一盞黃燈、一張木椅、一個人久坐不語；有些則擅長把混亂攤開，
-        讓你看到城市的
-        <span class="underline-target">騷動與裂縫</span>。
-        無論哪一種，散文真正留下來的，往往不是情節，而是某種
-        <span class="underline-target">被理解的感覺</span>。
-        所以當這些關鍵詞在捲動間慢慢浮現底線時，
-        它們就像閱讀時心裡那一道小小的亮光：告訴你，這裡，可以多停留一會。
-      </p>
+      <div class="typing-block">
+        <h3>吳明益</h3>
+        <p
+          class="typing-line"
+          data-text="當你學會辨認一棵樹的名字，世界就不再只是風景，而是可以對話的存在。"
+        ></p>
+      </div>
+
+      <div class="typing-block">
+        <h3>駱以軍</h3>
+        <p
+          class="typing-line"
+          data-text="記憶有時像一條巷子，我們只是偶爾路過，卻被某扇窗裡的光久久留住。"
+        ></p>
+      </div>
+
+      <div class="typing-block">
+        <h3>鍾文音</h3>
+        <p
+          class="typing-line"
+          data-text="遠行不一定帶你去別的國度，有時只是把你從習慣的自己裡面，溫柔抽離。"
+        ></p>
+      </div>
+
+      <div class="typing-block">
+        <h3>簡媜</h3>
+        <p
+          class="typing-line"
+          data-text="人一生要學會的，也許不是放下，而是在仍然牽掛時，依然願意好好生活。"
+        ></p>
+      </div>
+
+      <div class="typing-block">
+        <h3>楊索</h3>
+        <p
+          class="typing-line"
+          data-text="歷史並不只寫在課本裡，它也刻在普通人的選擇與沉默裡。"
+        ></p>
+      </div>
     </section>
   </main>
 
@@ -422,29 +507,45 @@
         focusSections.forEach((sec) => focusObserver.observe(sec));
       }
 
-      /* ===== 3. Span underline：捲動到可視範圍時底線展開 ===== */
-      const underlineTargets = document.querySelectorAll(".underline-target");
+      /* ===== 3. 句子逐字出現：Scroll 觸發打字效果 ===== */
+      const typingLines = document.querySelectorAll(".typing-line");
 
-      if (underlineTargets.length > 0) {
-        const underlineObserver = new IntersectionObserver(
+      function typeText(el) {
+        if (el.dataset.typed === "true") return; // 已經打過就不重複
+        const text = el.dataset.text || "";
+        let index = 0;
+        el.textContent = "";
+        el.classList.add("typing");
+        el.dataset.typed = "true";
+
+        const speed = 45; // 每個字的間隔（毫秒）
+
+        const timer = setInterval(() => {
+          el.textContent += text.charAt(index);
+          index += 1;
+          if (index >= text.length) {
+            clearInterval(timer);
+            el.classList.remove("typing"); // 打完後游標消失
+          }
+        }, speed);
+      }
+
+      if (typingLines.length > 0) {
+        const typingObserver = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
-                entry.target.classList.add("visible");
-                underlineObserver.unobserve(entry.target);
+                typeText(entry.target);
+                typingObserver.unobserve(entry.target); // 每行只觸發一次
               }
             });
           },
           {
-            root: null,
-            rootMargin: "0px 0px -15% 0px",
-            threshold: 0.2,
+            threshold: 0.4,
           }
         );
 
-        underlineTargets.forEach((span) =>
-          underlineObserver.observe(span)
-        );
+        typingLines.forEach((line) => typingObserver.observe(line));
       }
     });
   </script>
