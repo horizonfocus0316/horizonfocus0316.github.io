@@ -1,541 +1,240 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>挖一顆地瓜，遇見一塊土</title>
+  <title>四個片刻：挖地瓜的一天</title>
+
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "PingFang TC", "Helvetica Neue", Arial, sans-serif;
-      background: radial-gradient(circle at top, #101728 0%, #050711 55%, #020308 100%);
-      color: #f5f5f7;
+      font-family: 'Arial', sans-serif;
+      background: #05060c;
+      color: #fff;
       overflow-x: hidden;
     }
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
 
-    /* ---------- Layout helpers ---------- */
-    .wrapper {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-    section {
-      position: relative;
-    }
-
-    /* ---------- Landing ---------- */
+    /* =====================
+       ✅ Landing Section
+       ===================== */
     .landing {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       position: relative;
-      overflow: hidden;
-    }
-    .landing-video {
-      position: absolute;
-      inset: 0;
+      height: 100vh;
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: brightness(0.45);
-    }
-    .landing-overlay {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top, rgba(48, 119, 255, 0.35), transparent 55%);
-      pointer-events: none;
-    }
-    .landing-content {
-      position: relative;
-      z-index: 2;
-      text-align: left;
-      max-width: 680px;
-    }
-    .landing-kicker {
-      font-size: 0.85rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: #c2c7ff;
-      margin-bottom: 0.75rem;
-    }
-    .landing h1 {
-      font-size: clamp(2.4rem, 4vw, 3.2rem);
-      line-height: 1.2;
-      margin-bottom: 1rem;
-    }
-    .landing-lead {
-      font-size: 1.02rem;
-      line-height: 1.9;
-      color: #d0d3e6;
-      margin-bottom: 1.8rem;
-      max-width: 32rem;
-    }
-    .scroll-hint {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.9rem;
-      color: #9aa1c9;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    .scroll-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: #f5f5f7;
-      animation: pulse 1.6s infinite;
-    }
-    @keyframes pulse {
-      0% { transform: translateY(0); opacity: 0.8; }
-      50% { transform: translateY(6px); opacity: 0.4; }
-      100% { transform: translateY(0); opacity: 0.8; }
+      overflow: hidden;
     }
 
-    /* ---------- Onboarding ---------- */
-    .onboarding {
-      padding: 72px 0 80px;
-    }
-    .onboarding-header h2 {
-      font-size: clamp(1.8rem, 3vw, 2.3rem);
-      margin-bottom: 0.75rem;
-    }
-    .onboarding-header p {
-      font-size: 0.98rem;
-      line-height: 1.9;
-      color: #b9bfdc;
-      max-width: 40rem;
-    }
-    .thumb-grid {
-      margin-top: 40px;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 18px;
-    }
-    @media (max-width: 900px) {
-      .thumb-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-    @media (max-width: 640px) {
-      .thumb-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-    .thumb {
-      position: relative;
-      background: radial-gradient(circle at top left, #252b48 0%, #121527 40%, #050712 100%);
-      border-radius: 22px;
-      padding: 18px 18px 20px;
-      overflow: hidden;
-      cursor: pointer;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-    }
-    .thumb:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 22px 55px rgba(0, 0, 0, 0.7);
-      border-color: rgba(255, 255, 255, 0.16);
-      background: radial-gradient(circle at top left, #2d355b 0%, #151931 45%, #050712 100%);
-    }
-    .thumb-video-wrapper {
-      position: absolute;
-      inset: 0;
-      opacity: 0.35;
-      mix-blend-mode: screen;
-      pointer-events: none;
-    }
-    .thumb-video {
+    .landing video {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      filter: brightness(0.78) contrast(1.05);
     }
-    .thumb-gradient {
+
+    .landing-title {
       position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(2, 3, 10, 0.95) 0%, rgba(2, 3, 10, 0.4) 55%, transparent 100%);
-      pointer-events: none;
+      bottom: 12vh;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
     }
-    .thumb-content {
+
+    .landing-title h1 {
+      font-size: 3.2rem;
+      font-weight: 700;
+      text-shadow: 0 0 24px rgba(0,0,0,0.6);
+    }
+
+    /* =====================
+       ✅ Onboarding Section
+       ===================== */
+    .onboarding {
+      padding: 8vh 6vw;
+      background: #080a12;
+    }
+
+    .onboarding h2 {
+      font-size: 2.4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .onboarding p {
+      font-size: 1.18rem;
+      line-height: 1.9;
+      max-width: 820px;
+      opacity: 0.88;
+    }
+
+    .chapter-grid {
+      display: flex;
+      gap: 2rem;
+      margin-top: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .chapter-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      width: 30%;
+      padding: 2rem;
+      min-height: 200px;
       position: relative;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 160px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
     }
-    .thumb-top {
-      display: flex;
-      justify-content: flex-end;
+
+    .chapter-card:hover {
+      transform: translateY(-6px);
     }
-    .play-pill {
-      width: 34px;
-      height: 34px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.2), transparent 55%);
+
+    .chapter-card h4 {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 0.4rem;
+      letter-spacing: 2px;
     }
-    .play-pill span {
-      border-style: solid;
-      border-width: 6px 0 6px 9px;
-      border-color: transparent transparent transparent #ffffff;
-      margin-left: 1px;
-    }
-    .thumb-kicker {
-      display: inline-flex;
-      align-items: center;
-      padding: 4px 12px;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #ffb199;
-      background: rgba(255, 163, 125, 0.16);
-      border: 1px solid rgba(255, 163, 125, 0.35);
-      margin-bottom: 10px;
-    }
-    .thumb-title {
-      font-size: 1rem;
+
+    .chapter-card h3 {
+      font-size: 1.3rem;
       line-height: 1.5;
     }
 
-    /* ---------- Chapters ---------- */
-    .chapter {
+    /* =====================
+       ✅ Core Video Chapters
+       ===================== */
+    .chapter-section {
+      height: 100vh;
       position: relative;
-      min-height: 100vh;
-      padding: 90px 0;
       overflow: hidden;
     }
-    .chapter:nth-of-type(odd) {
-      background: radial-gradient(circle at top, #101727 0%, #04050d 60%, #020309 100%);
-    }
-    .chapter:nth-of-type(even) {
-      background: radial-gradient(circle at top, #0c151f 0%, #04060c 55%, #020308 100%);
-    }
+
     .chapter-video {
-      position: absolute;
-      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0.45;
-      filter: saturate(1.1);
+      opacity: 0.78;
+      filter: brightness(1.32) contrast(1.06) saturate(1.12);
     }
+
     .chapter-overlay {
       position: absolute;
-      inset: 0;
+      top: 0;
+      height: 100%;
+      width: 100%;
       background: linear-gradient(
         to bottom,
-        rgba(4, 6, 18, 0.85) 0%,
-        rgba(4, 6, 18, 0.65) 30%,
-        rgba(4, 6, 18, 0.96) 100%
+        rgba(4, 6, 18, 0.42) 0%,
+        rgba(4, 6, 18, 0.32) 28%,
+        rgba(4, 6, 18, 0.62) 100%
       );
-      pointer-events: none;
-    }
-    .chapter-inner {
-      position: relative;
-      z-index: 2;
-      max-width: 720px;
-    }
-    .chapter-kicker {
-      font-size: 0.8rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: #ffb199;
-      margin-bottom: 0.8rem;
-    }
-    .chapter-title {
-      font-size: clamp(1.7rem, 3vw, 2.1rem);
-      margin-bottom: 1.2rem;
-    }
-    .chapter-body p {
-      font-size: 1rem;
-      line-height: 1.9;
-      color: #d0d4ea;
-      margin-bottom: 1rem;
-      text-align: justify;
-    }
-    .chapter-body p:last-child {
-      margin-bottom: 0;
+      display: flex;
+      align-items: flex-end;
+      padding: 10vh 8vw;
     }
 
-    @media (max-width: 640px) {
-      .chapter {
-        padding: 72px 0;
-      }
-      .chapter-inner {
-        max-width: 100%;
-      }
+    .chapter-overlay p {
+      font-size: 1.3rem;
+      max-width: 780px;
+      line-height: 1.9;
     }
+
   </style>
 </head>
+
 <body>
 
-  <!-- Landing -->
+  <!-- ✅ Landing with 0.mp4 -->
   <section class="landing">
-    <video class="landing-video" src="videos/1.mp4" autoplay muted loop playsinline></video>
-    <div class="landing-overlay"></div>
-    <div class="wrapper">
-      <div class="landing-content">
-        <div class="landing-kicker">FIELD NOTES · SWEET POTATO DAY</div>
-        <h1>挖一顆地瓜，遇見一塊土。</h1>
-        <p class="landing-lead">
-          從台北搭車到新豐，大約兩個小時的距離。  
-          但真正的距離，是從「只在超市買地瓜」到「第一次把腳踩進這塊田」。  
-          這個網頁，記錄我在田裡度過的一整天。
-        </p>
-        <div class="scroll-hint">
-          <div class="scroll-dot"></div>
-          <span>Scroll 開始挖地瓜的一天</span>
-        </div>
-      </div>
+    <video autoplay muted loop playsinline>
+      <source src="videos/0.mp4" type="video/mp4" />
+    </video>
+
+    <div class="landing-title">
+      <h1>挖地瓜的一天</h1>
     </div>
   </section>
 
-  <!-- Onboarding -->
+  <!-- ✅ Onboarding -->
   <section class="onboarding">
-    <div class="wrapper">
-      <div class="onboarding-header">
-        <h2>四個片刻，打開一次挖地瓜的旅程</h2>
-        <p>
-          從抵達田邊、下田挖地瓜，到和農友聊天、把地瓜搬上車，這四支影片記錄的不是觀光行程，
-          而是真正「蹲下來」的一天。你可以從任何一章開始，也可以按照順序跟著時間走。
-        </p>
+    <h2>四個片刻，打開一次挖地瓜的旅程</h2>
+    <p>
+      從抵達田邊、下田挖地瓜，到和農友聊天、把地瓜搬上車，
+      這四支影片紀錄的不是觀光行程，而是一整天真正的「蹲下來」。
+      你可以從任何一章開始看，也可以按照順序跟著時間走。
+    </p>
+
+    <div class="chapter-grid">
+      <div class="chapter-card" onclick="scrollToChapter(1)">
+        <h4>CHAPTER 1</h4>
+        <h3>抵達田邊：第一次把腳踩進這塊土</h3>
       </div>
 
-      <div class="thumb-grid">
-        <!-- card 1 -->
-        <div class="thumb" onclick="scrollToChapter(1)">
-          <div class="thumb-video-wrapper">
-            <video class="thumb-video" muted loop playsinline preload="metadata">
-              <source src="videos/1.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <div class="thumb-gradient"></div>
-          <div class="thumb-content">
-            <div class="thumb-top">
-              <div class="play-pill"><span></span></div>
-            </div>
-            <div>
-              <div class="thumb-kicker">CHAPTER 1</div>
-              <div class="thumb-title">抵達田邊：第一次把腳踩進這塊土</div>
-            </div>
-          </div>
-        </div>
+      <div class="chapter-card" onclick="scrollToChapter(2)">
+        <h4>CHAPTER 2</h4>
+        <h3>蹲下去挖：用手去記住泥土的感覺</h3>
+      </div>
 
-        <!-- card 2 -->
-        <div class="thumb" onclick="scrollToChapter(2)">
-          <div class="thumb-video-wrapper">
-            <video class="thumb-video" muted loop playsinline preload="metadata">
-              <source src="videos/2.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <div class="thumb-gradient"></div>
-          <div class="thumb-content">
-            <div class="thumb-top">
-              <div class="play-pill"><span></span></div>
-            </div>
-            <div>
-              <div class="thumb-kicker">CHAPTER 2</div>
-              <div class="thumb-title">蹲下去挖：用手去記住泥土的感覺</div>
-            </div>
-          </div>
-        </div>
+      <div class="chapter-card" onclick="scrollToChapter(3)">
+        <h4>CHAPTER 3</h4>
+        <h3>和農友聊天：這裡的人，從土地長出來</h3>
+      </div>
 
-        <!-- card 3 -->
-        <div class="thumb" onclick="scrollToChapter(3)">
-          <div class="thumb-video-wrapper">
-            <video class="thumb-video" muted loop playsinline preload="metadata">
-              <source src="videos/3.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <div class="thumb-gradient"></div>
-          <div class="thumb-content">
-            <div class="thumb-top">
-              <div class="play-pill"><span></span></div>
-            </div>
-            <div>
-              <div class="thumb-kicker">CHAPTER 3</div>
-              <div class="thumb-title">和農友聊天：這裡的人，怎麼看這塊田</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- card 4 -->
-        <div class="thumb" onclick="scrollToChapter(4)">
-          <div class="thumb-video-wrapper">
-            <video class="thumb-video" muted loop playsinline preload="metadata">
-              <source src="videos/4.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <div class="thumb-gradient"></div>
-          <div class="thumb-content">
-            <div class="thumb-top">
-              <div class="play-pill"><span></span></div>
-            </div>
-            <div>
-              <div class="thumb-kicker">CHAPTER 4</div>
-              <div class="thumb-title">收成與離開：把地瓜搬上車之前</div>
-            </div>
-          </div>
-        </div>
+      <div class="chapter-card" onclick="scrollToChapter(4)">
+        <h4>CHAPTER 4</h4>
+        <h3>搬上車：把今天帶回去，也把土地留在心裡</h3>
       </div>
     </div>
   </section>
 
-  <!-- Chapter 1 -->
-  <section class="chapter" id="chapter1">
+  <!-- ✅ Four Video Chapters -->
+  <section class="chapter-section" id="chapter1">
     <video class="chapter-video" autoplay muted loop playsinline>
       <source src="videos/1.mp4" type="video/mp4" />
     </video>
-    <div class="chapter-overlay"></div>
-    <div class="wrapper">
-      <div class="chapter-inner">
-        <div class="chapter-kicker">CHAPTER 1</div>
-        <h2 class="chapter-title">抵達田邊：第一次把腳踩進這塊土</h2>
-        <div class="chapter-body">
-          <p>
-            車一離開高速公路，窗外的景色就開始有點不一樣。招牌變少了，田變多了，路邊出現一整串曬乾的稻穗，
-            像是提醒你——「你真的離城市有一段距離了」。
-          </p>
-          <p>
-            田埂邊停著幾台小貨車。我一下車，鞋底立刻被田間潮濕的泥土吸住，那種黏著感讓人立刻意識到：
-            這裡不是拍照用的背景，而是有人每天踩過、反覆耕過的地方。
-          </p>
-          <p>
-            農友笑笑地說：「等一下就知道怎麼挖了。」那一刻我突然有點緊張，擔心自己會挖不好、挖太慢，
-            也擔心只是在「體驗」，沒辦法真正幫上忙。
-          </p>
-        </div>
-      </div>
+    <div class="chapter-overlay">
+      <p>第一次踏進田裡，鞋底陷進泥土的瞬間，世界變得安靜，只剩下風吹過秧苗的聲音。</p>
     </div>
   </section>
 
-  <!-- Chapter 2 -->
-  <section class="chapter" id="chapter2">
+  <section class="chapter-section" id="chapter2">
     <video class="chapter-video" autoplay muted loop playsinline>
       <source src="videos/2.mp4" type="video/mp4" />
     </video>
-    <div class="chapter-overlay"></div>
-    <div class="wrapper">
-      <div class="chapter-inner">
-        <div class="chapter-kicker">CHAPTER 2</div>
-        <h2 class="chapter-title">蹲下去挖：用手去記住泥土的感覺</h2>
-        <div class="chapter-body">
-          <p>
-            工具插進土裡的瞬間，才發現自己根本不知道地瓜藏在哪裡。農友示範時動作很俐落，
-            像是早就知道哪一塊土下面會有一整串地瓜，一鏟就翻出。
-          </p>
-          <p>
-            換成我來，鏟子一下子太用力、一下子又不夠深，不是挖到空土，就是差點把地瓜劃傷。
-            後來乾脆直接蹲下，用手去撥那些濕黏的泥巴，一點一點摸索出地瓜的形狀。
-          </p>
-          <p>
-            那是很特別的觸感——你能感覺這顆地瓜在土裡待了很久，像是慢慢被推擠成現在的樣子。
-            當它終於被整串拉出來時，陽光打在還沾著泥的表面，那一刻比任何超市貨架都更像「食物」。
-          </p>
-        </div>
-      </div>
+    <div class="chapter-overlay">
+      <p>手伸進泥裡，像是在尋找某種熟悉的重量。地瓜不是被挖出來，而是被請出來。</p>
     </div>
   </section>
 
-  <!-- Chapter 3 -->
-  <section class="chapter" id="chapter3">
+  <section class="chapter-section" id="chapter3">
     <video class="chapter-video" autoplay muted loop playsinline>
       <source src="videos/3.mp4" type="video/mp4" />
     </video>
-    <div class="chapter-overlay"></div>
-    <div class="wrapper">
-      <div class="chapter-inner">
-        <div class="chapter-kicker">CHAPTER 3</div>
-        <h2 class="chapter-title">和農友聊天：這裡的人，怎麼看這塊田</h2>
-        <div class="chapter-body">
-          <p>
-            中午休息時，我們坐在田邊，腳邊是剛剛堆起來的地瓜山。農友說，他們這裡這幾年開始轉作雜糧，
-            一方面是因為水資源，一方面是因為想讓土地有不同的呼吸方式。
-          </p>
-          <p>
-            聽他們講氣候、講補助、講市場，才發現「要不要種」從來不是浪漫的選擇題，
-            而是每天都要重新計算的現實。可是當他們談到哪一塊田的土比較好、哪一個品種特別香時，
-            眼神裡又有一種很單純的喜歡。
-          </p>
-          <p>
-            我突然覺得，自己不是只是在拍一段「挖地瓜的一日遊」，而是在看一群人怎麼跟土地談長期的關係。
-            而我只是在這段關係裡，短暫插入的一個旁觀者。
-          </p>
-        </div>
-      </div>
+    <div class="chapter-overlay">
+      <p>聊天比挖地瓜更重要。土地不是風景，是有人在生活的地方。</p>
     </div>
   </section>
 
-  <!-- Chapter 4 -->
-  <section class="chapter" id="chapter4">
+  <section class="chapter-section" id="chapter4">
     <video class="chapter-video" autoplay muted loop playsinline>
       <source src="videos/4.mp4" type="video/mp4" />
     </video>
-    <div class="chapter-overlay"></div>
-    <div class="wrapper">
-      <div class="chapter-inner">
-        <div class="chapter-kicker">CHAPTER 4</div>
-        <h2 class="chapter-title">收成與離開：把地瓜搬上車之前</h2>
-        <div class="chapter-body">
-          <p>
-            太陽往山的後面移動時，田裡的影子被拉得很長。我們開始把地瓜一簍一簍搬上車，
-            手臂已經有點酸，但心裡卻有一種說不上來的滿足感。
-          </p>
-          <p>
-            那些被分類、裝袋、貼標籤的地瓜，很快就會出現在某個市場、某家店，或是某個人晚餐的烤箱裡。
-            到那時，大概不會有人想到，它們曾經安靜地躺在這塊田裡，被泥土包著。
-          </p>
-          <p>
-            我望著逐漸空下來的田，心裡默默地想：下次在便利商店拿起一盒地瓜時，
-            應該也會想起今天踩過的這些泥土吧。
-          </p>
-        </div>
-      </div>
+    <div class="chapter-overlay">
+      <p>把地瓜搬上車的時候，才知道原來帶走的不是收成，而是某種放不下的溫度。</p>
     </div>
   </section>
 
   <script>
-    // 平滑捲動到章節
-    function scrollToChapter(n) {
-      const el = document.getElementById("chapter" + n);
-      if (!el) return;
-      const top = el.getBoundingClientRect().top + window.pageYOffset - 40;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
-
-    // Onboarding 縮圖 hover 預覽
-    document.addEventListener("DOMContentLoaded", function () {
-      const thumbs = document.querySelectorAll(".thumb");
-      thumbs.forEach((card) => {
-        const vid = card.querySelector(".thumb-video");
-        if (!vid) return;
-
-        card.addEventListener("mouseenter", () => {
-          vid.currentTime = 0;
-          vid.play().catch(() => {});
-        });
-        card.addEventListener("mouseleave", () => {
-          vid.pause();
-          vid.currentTime = 0;
-        });
+    function scrollToChapter(num) {
+      document.getElementById(`chapter${num}`).scrollIntoView({
+        behavior: "smooth"
       });
-    });
+    }
   </script>
+
 </body>
 </html>
