@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>在城市裡練習慢下來｜AS08 影片敘事專題</title>
+  <title>挖一顆地瓜，遇見一塊土｜農村體驗影片專題</title>
   <style>
     :root {
       --bg: #020617;
       --fg: #f9fafb;
       --muted: #9ca3af;
-      --accent: #38bdf8;
-      --accent-soft: rgba(56,189,248,0.18);
+      --accent: #f97316;
+      --accent-soft: rgba(248, 153, 54, 0.18);
     }
     * { box-sizing: border-box; }
     html, body {
@@ -136,8 +136,6 @@
       margin: 0;
       font-size: 1rem;
     }
-
-    /* Hover preview icon */
     .thumb .play-icon {
       position: absolute;
       right: 12px;
@@ -174,7 +172,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at top, rgba(15,23,42,0.1), #020617 70%);
+      background: radial-gradient(circle at top, rgba(15,23,42,0.18), #020617 70%);
       mix-blend-mode: multiply;
       z-index: -1;
     }
@@ -204,12 +202,8 @@
     }
 
     @media (max-width: 768px) {
-      .chapter {
-        padding: 0 5vw;
-      }
-      .chapter-inner {
-        padding: 18px 18px 20px;
-      }
+      .chapter { padding: 0 5vw; }
+      .chapter-inner { padding: 18px 18px 20px; }
     }
 
     /* ===== Outro ===== */
@@ -231,64 +225,63 @@
 
   <!-- ===== Landing Page ===== -->
   <section class="landing">
-    <!-- 用老師給的其中一支影片或你自己的影片 -->
-    <video src="videos/landing.mp4" autoplay muted loop playsinline></video>
+    <!-- 開頭：用第 1 支挖地瓜影片當背景 -->
+    <video src="videos/1.MP4" autoplay muted loop playsinline></video>
     <div class="landing-inner">
       <p class="tagline">AS08｜Storytelling with Videos</p>
-      <h1>在城市裡練習慢下來</h1>
+      <h1>挖一顆地瓜，遇見一塊土</h1>
       <p class="tagline">
-        一天之中，有很多時刻可以按下暫停鍵。跟著四段影像，試著在熟悉的城市裡，找回一點點「慢」。
+        我們跟著一支鏡頭，走進挖地瓜的那一天。泥土的重量、笑聲的節奏、以及躲在土裡的故事，都被裝進四段影像裡。
       </p>
-      <div class="hint">向下捲動開啟旅程</div>
+      <div class="hint">向下捲動，從第一鏟土開始</div>
     </div>
   </section>
 
   <!-- ===== Onboarding Page (Thumbnails) ===== -->
   <section class="onboarding">
-    <h2>四段影像，四種慢下來的方式</h2>
+    <h2>四個片刻，打開一次挖地瓜的旅程</h2>
     <p class="lead">
-      從早晨的通勤，到深夜的街口，這四支影片是同一座城市的不同心跳。你可以從任一章節開始，也可以按照時間順序看完整個故事。
+      從抵達田邊、下田挖地瓜，到和農友聊天、把地瓜搬上車，這四支影片紀錄的不是觀光行程，而是一整天真正的「蹲下來」。你可以從任何一章開始看，也可以按照順序跟著時間走。
     </p>
 
     <div class="thumb-grid">
       <!-- Chapter 1 -->
       <article class="thumb" onclick="scrollToChapter(1)">
-        <!-- 若要 hover 播放，改成 <video>，src 可直接用 ch1.mp4 -->
-        <video src="videos/ch1.mp4" muted loop playsinline></video>
+        <video src="videos/1.MP4" muted loop playsinline></video>
         <div class="play-icon">▶</div>
         <div class="thumb-label">
           <span class="kicker">Chapter 1</span>
-          <h3>早晨的匆忙裡，為自己多留一分鐘</h3>
+          <h3>抵達田邊：第一次把腳踩進這塊土</h3>
         </div>
       </article>
 
       <!-- Chapter 2 -->
       <article class="thumb" onclick="scrollToChapter(2)">
-        <video src="videos/ch2.mp4" muted loop playsinline></video>
+        <video src="videos/2.MP4" muted loop playsinline></video>
         <div class="play-icon">▶</div>
         <div class="thumb-label">
           <span class="kicker">Chapter 2</span>
-          <h3>午後的光，照進玻璃與螢幕之間</h3>
+          <h3>蹲下去挖：用手去記住泥土的感覺</h3>
         </div>
       </article>
 
       <!-- Chapter 3 -->
       <article class="thumb" onclick="scrollToChapter(3)">
-        <video src="videos/ch3.mp4" muted loop playsinline></video>
+        <video src="videos/3.MOV" muted loop playsinline></video>
         <div class="play-icon">▶</div>
         <div class="thumb-label">
           <span class="kicker">Chapter 3</span>
-          <h3>下班路上的黃昏，其實不是終點</h3>
+          <h3>和農友聊天：這裡的人，怎麼看這塊地</h3>
         </div>
       </article>
 
       <!-- Chapter 4 -->
       <article class="thumb" onclick="scrollToChapter(4)">
-        <video src="videos/ch4.mp4" muted loop playsinline></video>
+        <video src="videos/4.MOV" muted loop playsinline></video>
         <div class="play-icon">▶</div>
         <div class="thumb-label">
           <span class="kicker">Chapter 4</span>
-          <h3>深夜的街口，留給還醒著的人</h3>
+          <h3>把地瓜搬上車：一整天的重量，被抬起來</h3>
         </div>
       </article>
     </div>
@@ -298,81 +291,81 @@
 
   <!-- Chapter 1 -->
   <section class="chapter" id="chapter1">
-    <video src="videos/ch1.mp4" autoplay muted loop playsinline></video>
+    <video src="videos/1.MP4" autoplay muted loop playsinline></video>
     <div class="chapter-inner">
-      <p class="kicker">CHAPTER 1 · MORNING</p>
-      <h2>在車門關上之前，先深呼吸一次</h2>
+      <p class="kicker">CHAPTER 1 · 抵達田邊</p>
+      <h2>從柏油路轉進田埂的那一刻，世界的節奏就變了</h2>
       <p class="body">
-        早晨的節奏總是最快。捷運門開開關關，站牌上的數字不停倒數，訊息從還沒醒透的手機螢幕跳出來。
+        一開始，只是坐在車上往窗外看。水田、風機、遠方的山都還像風景明信片一樣，被隔在玻璃外面。直到車停在田埂旁，腳踩上鬆鬆的土，才突然意識到：今天不是來「看」農村，而是要真的把身體交給這塊地。
       </p>
       <p class="body">
-        影片裡的畫面，也許是你每天都會經過的路：一個轉角、一條天橋、一扇還亮著燈的咖啡店。慢下來，不代表要放棄所有速度，而是允許自己在匆忙之間，偷一口完整的呼吸。
+        影片裡可以看到大家一下車就有點手足無措：有人先拿手機拍照，有人低頭看鞋子會不會弄髒，有人站在田埂邊猶豫要不要下去。這些猶豫很真實，也提醒我們，城市人的步伐其實很少為了一塊土地而停下。
       </p>
       <p class="body">
-        當我們願意抬頭，看一眼窗外的光線，或讓耳朵真正聽清楚列車進站的聲音，城市就不再只是一條任務清單，而是可以被感受的一個地方。
+        農友站在田裡揮手，像是在說：「來啦，田不會咬人。」那一刻，距離才真的被縮短——不是 Google 地圖上的公里數，而是我們願不願意跨出第一步。
       </p>
     </div>
   </section>
 
   <!-- Chapter 2 -->
   <section class="chapter" id="chapter2">
-    <video src="videos/ch2.mp4" autoplay muted loop playsinline></video>
+    <video src="videos/2.MP4" autoplay muted loop playsinline></video>
     <div class="chapter-inner">
-      <p class="kicker">CHAPTER 2 · AFTERNOON</p>
-      <h2>在中午前後，替自己按下暫停鍵</h2>
+      <p class="kicker">CHAPTER 2 · 下田挖地瓜</p>
+      <h2>鏟子插下去之前，先學會怎麼蹲下來</h2>
       <p class="body">
-        午後的城市光線最溫柔，卻也是會議最密集、訊息最多的時段。影片裡的陽光，可能只在玻璃上停留幾秒，就又被拉回到螢幕裡。
+        挖地瓜看起來很簡單：鏟子插進土裡，往上撬，就會有一顆一顆橘色的地瓜冒出來。但影片裡你會看到，我們一開始挖得很生硬：力氣用錯方向，鏟子插太深，甚至不小心把地瓜切成兩半。
       </p>
       <p class="body">
-        慢下來，也可以只是多看一眼影子的位置。它從桌腳一路爬到牆上，提醒我們時間正在流動，而我們有權利決定自己要不要跟著一起狂奔。
+        農友在旁邊示範的時候，動作沒有多帥氣，卻很穩。他會先用腳把鏟子踩穩，再慢慢往上撬，像是很熟悉這裡的每一塊土塊，知道哪裡藏著地瓜、哪裡只是空氣。
       </p>
       <p class="body">
-        也許你可以選一個畫面暫停：那杯還沒喝完的咖啡、同事笑出來的那一格、或窗外恰好走過的一個陌生人。把那些片刻存起來，讓這座城市不只剩下 KPI。
+        「不要急著找地瓜，先感覺土。」這句話本來只是提醒我們不要挖壞作物，卻也有點像是對生活的提醒。當我們願意蹲下來，手沾滿泥巴，才知道食物離我們其實沒有那麼遠。
       </p>
     </div>
   </section>
 
   <!-- Chapter 3 -->
   <section class="chapter" id="chapter3">
-    <video src="videos/ch3.mp4" autoplay muted loop playsinline></video>
+    <video src="videos/3.MOV" autoplay muted loop playsinline></video>
     <div class="chapter-inner">
-      <p class="kicker">CHAPTER 3 · DUSK</p>
-      <h2>黃昏不是句點，而是換行</h2>
+      <p class="kicker">CHAPTER 3 · 田裡的對話</p>
+      <h2>挖出來的不只是地瓜，還有這裡的人生故事</h2>
       <p class="body">
-        下班路上，大家都往同一個方向移動：往車站、往公車站牌、往某一條熟悉的巷子。天空開始變色，街燈一盞一盞亮起。
+        當手上的動作慢慢穩定下來，影片裡開始出現更多聲音：農友講著今年的氣候、颱風有沒有影響、政府補助好不好申請，也會聊到以前怎麼種、以前的價格有多不一樣。
       </p>
       <p class="body">
-        影片裡的黃昏，試圖把這個瞬間拉長一點。當你慢下腳步，會發現城市在這個時候反而最像一篇散文：節奏介於白天與黑夜之間，既不是開始，也還沒結束。
+        其中有一句話特別讓人記得：「我們不是在種地瓜，是在種下一個大家還願意留在這裡的理由。」鏡頭帶到他們笑的臉、晒到裂開的手、以及曬得發亮的地瓜皮，農村突然不再只是「產地」，而是一種選擇。
       </p>
       <p class="body">
-        如果可能，給自己一小段繞路的空間。繞到一條沒那麼擁擠的路、一個可以看到天空的轉角，讓今天的你有機會跟昨天的自己說句「辛苦了」。
+        對我們這些短暫來訪的人來說，挖地瓜可能只是一個活動；但對他們而言，這是一整年一次又一次的日常。透過這段聊天，我們慢慢明白，農村並不是「落後」，而是有自己步調的一種未來想像。
       </p>
     </div>
   </section>
 
   <!-- Chapter 4 -->
   <section class="chapter" id="chapter4">
-    <video src="videos/ch4.mp4" autoplay muted loop playsinline></video>
+    <video src="videos/4.MOV" autoplay muted loop playsinline></video>
     <div class="chapter-inner">
-      <p class="kicker">CHAPTER 4 · NIGHT</p>
-      <h2>當城市安靜下來，你還醒著嗎？</h2>
+      <p class="kicker">CHAPTER 4 · 收成與回程</p>
+      <h2>當一籃一籃地瓜被抬起來，才知道今天真的發生過</h2>
       <p class="body">
-        深夜的街口，車子變少了，霓虹卻還在亮。有人加班到很晚，有人剛結束聚會，有人只是捨不得睡。
+        影片的最後，是把地瓜裝籃、搬上車的畫面。每一籃都比剛開始想像的還重一點，手臂會痠、腰會有點緊，但那個重量裡面，有今天所有的笑聲、失誤、重新來過，還有一起完成一件事的踏實感。
       </p>
       <p class="body">
-        慢下來，在這裡不再是奢侈，而是一種保護自己的方式。你可以讓影片繼續播放，把自己交給那些光點與聲音；也可以按下暫停，讓畫面變成一張靜止的照片。
+        有人開始在田埂旁分地瓜，現場就直接烤起來；有人忙著合照，想把自己弄得亂七八糟的樣子也記錄下來。鏡頭慢慢拉遠，田裡剩下的是一些踩過的腳印和被翻鬆的土。
       </p>
       <p class="body">
-        無論你身在這座城市的哪一個角落，願這一段影像提醒你：不被節奏推著走，也是可以練習的能力。明天醒來時，也許就能稍微不那麼匆忙地，重新開始。
+        回程的路上，車子又開回柏油路上，但身上還帶著泥巴味。也許一段時間之後，我們會忘記當天的行程細節，卻會記得：「原來一顆地瓜要長成這樣，不只是時間，還需要很多人的腰痠背痛。」那種感謝，會在之後每一次吃到地瓜時，再被喚起一次。
       </p>
     </div>
   </section>
 
   <!-- ===== Outro ===== -->
   <section class="outro">
-    <h2>在城市裡，為自己保留一點「慢」</h2>
+    <h2>下一次吃到地瓜的時候，還會想到這塊田嗎？</h2>
     <p>
-      這四則影片沒有標準觀看順序，你可以回頭再看一次，也可以關掉畫面，去聽聽今晚的風聲。故事到這裡暫時告一段落，但你和這座城市的對話，還可以繼續。
+      這四段影像只是某一個農村早上的縮影。希望在你看完之後，哪怕只是多花一秒鐘，看一眼餐桌上地瓜的紋路，也是在跟這塊土地說一聲：「我有看到你。」
     </p>
   </section>
 
