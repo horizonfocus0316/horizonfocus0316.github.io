@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AS08｜影片互動式專題示範</title>
+  <style>
+    :root {
+      --bg: #000;
+      --fg: #fff;
+      --muted: #bbbbbb;
+      --accent: #4ade80;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans CJK TC", Arial, sans-serif;
+      line-height: 1.6;
+    }
+    section {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+    }
+    /* ===== Landing Page ===== */
+    .landing {
+      height: 100vh;
+      display: grid;
+      place-items: center;
+    }
+    .landing video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+    .landing h1 {
+      font-size: clamp(2rem, 6vw, 5rem);
+      margin: 0;
+      text-align: center;
+      letter-spacing: 0.06em;
+    }
+
+    /* ===== Onboarding Thumbnails ===== */
+    .onboarding {
+      padding: 10vh 6vw;
+      background: #111;
+    }
+    .thumb-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+    }
+    .thumb {
+      position: relative;
+      cursor: pointer;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #222;
+    }
+    .thumb video, .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .thumb span {
+      position: absolute;
+      bottom: 10px;
+      left: 12px;
+      font-size: 1rem;
+      background: rgba(0,0,0,0.55);
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+
+    /* ===== Core Narrative Chapters ===== */
+    .chapter {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 6vw;
+    }
+    .chapter video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+    .chapter .text {
+      max-width: 60ch;
+      font-size: clamp(1rem, 1.2vw, 1.8rem);
+      color: var(--fg);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
+
+    /* ===== Outro ===== */
+    .outro {
+      padding: 20vh 6vw;
+      background: #0c0c0c;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Landing Page ===== -->
+  <section class="landing">
+    <video src="videos/landing.mp4" autoplay muted loop playsinline></video>
+    <h1>專題標題放這裡</h1>
+  </section>
+
+  <!-- ===== Onboarding Page (Thumbnails) ===== -->
+  <section class="onboarding">
+    <h2 style="margin-bottom:24px; font-size:2rem">探索四個章節</h2>
+    <div class="thumb-grid">
+      <div class="thumb" onclick="scrollToChapter(1)">
+        <img src="videos/thumb1.jpg" alt="Chapter 1" />
+        <span>Chapter 1</span>
+      </div>
+      <div class="thumb" onclick="scrollToChapter(2)">
+        <img src="videos/thumb2.jpg" alt="Chapter 2" />
+        <span>Chapter 2</span>
+      </div>
+      <div class="thumb" onclick="scrollToChapter(3)">
+        <img src="videos/thumb3.jpg" alt="Chapter 3" />
+        <span>Chapter 3</span>
+      </div>
+      <div class="thumb" onclick="scrollToChapter(4)">
+        <img src="videos/thumb4.jpg" alt="Chapter 4" />
+        <span>Chapter 4</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Core Chapters ===== -->
+  <section class="chapter" id="chapter1">
+    <video src="videos/ch1.mp4" autoplay muted loop playsinline></video>
+    <div class="text">第一章節的敘事內容：可搭配卷動時淡入淡出或段落切換。</div>
+  </section>
+
+  <section class="chapter" id="chapter2">
+    <video src="videos/ch2.mp4" autoplay muted loop playsinline></video>
+    <div class="text">第二章節內容：影片持續播放，文字可隨卷動更新。</div>
+  </section>
+
+  <section class="chapter" id="chapter3">
+    <video src="videos/ch3.mp4" autoplay muted loop playsinline></video>
+    <div class="text">第三章節內容：可加入更多段落與互動。</div>
+  </section>
+
+  <section class="chapter" id="chapter4">
+    <video src="videos/ch4.mp4" autoplay muted loop playsinline></video>
+    <div class="text">第四章節內容：故事收束或開展未來方向。</div>
+  </section>
+
+  <!-- ===== Outro ===== -->
+  <section class="outro">
+    <h2>感謝觀看</h2>
+  </section>
+
+  <script>
+    function scrollToChapter(n) {
+      const el = document.getElementById(`chapter${n}`);
+      el && el.scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
