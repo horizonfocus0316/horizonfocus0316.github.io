@@ -3,20 +3,23 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AS08｜影片互動式專題示範</title>
+  <title>在城市裡練習慢下來｜AS08 影片敘事專題</title>
   <style>
     :root {
-      --bg: #000;
-      --fg: #fff;
-      --muted: #bbbbbb;
-      --accent: #4ade80;
+      --bg: #020617;
+      --fg: #f9fafb;
+      --muted: #9ca3af;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56,189,248,0.18);
     }
+    * { box-sizing: border-box; }
     html, body {
       margin: 0;
       padding: 0;
       background: var(--bg);
       color: var(--fg);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans CJK TC", Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Noto Sans CJK TC", "Microsoft JhengHei", Arial, sans-serif;
       line-height: 1.6;
     }
     section {
@@ -24,90 +27,203 @@
       width: 100%;
       overflow: hidden;
     }
+
     /* ===== Landing Page ===== */
     .landing {
       height: 100vh;
       display: grid;
       place-items: center;
+      text-align: center;
     }
     .landing video {
       position: absolute;
-      top: 0;
-      left: 0;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      filter: brightness(0.45);
       z-index: -1;
     }
+    .landing-inner {
+      padding: 0 6vw;
+    }
     .landing h1 {
-      font-size: clamp(2rem, 6vw, 5rem);
-      margin: 0;
-      text-align: center;
-      letter-spacing: 0.06em;
+      font-size: clamp(2.4rem, 6vw, 4.8rem);
+      letter-spacing: 0.08em;
+      margin: 0 0 12px;
+    }
+    .landing p.tagline {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: clamp(0.95rem, 1.2vw, 1.25rem);
+    }
+    .landing .hint {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 32px;
     }
 
-    /* ===== Onboarding Thumbnails ===== */
+    /* ===== Onboarding Page ===== */
     .onboarding {
       padding: 10vh 6vw;
-      background: #111;
+      background: radial-gradient(circle at top, #02081f, #020617 55%);
+    }
+    .onboarding h2 {
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      margin: 0 0 10px;
+    }
+    .onboarding p.lead {
+      margin: 0 0 32px;
+      max-width: 60ch;
+      color: var(--muted);
     }
     .thumb-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 24px;
     }
     .thumb {
       position: relative;
       cursor: pointer;
-      border-radius: 12px;
+      border-radius: 16px;
       overflow: hidden;
-      background: #222;
+      background: #020617;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.5);
+      isolation: isolate;
+      border: 1px solid rgba(148,163,184,0.25);
     }
-    .thumb video, .thumb img {
+    .thumb video,
+    .thumb img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
+      transition: transform 0.6s ease;
     }
-    .thumb span {
+    .thumb:hover video,
+    .thumb:hover img {
+      transform: scale(1.04);
+    }
+    .thumb::after {
+      content: "";
       position: absolute;
-      bottom: 10px;
-      left: 12px;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        transparent 40%,
+        rgba(0,0,0,0.9) 100%
+      );
+      pointer-events: none;
+    }
+    .thumb-label {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      z-index: 2;
+    }
+    .thumb-label span.kicker {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(15,23,42,0.9);
+      border-radius: 999px;
+      margin-bottom: 4px;
+    }
+    .thumb-label h3 {
+      margin: 0;
       font-size: 1rem;
-      background: rgba(0,0,0,0.55);
-      padding: 6px 10px;
-      border-radius: 6px;
+    }
+
+    /* Hover preview icon */
+    .thumb .play-icon {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(248,250,252,0.6);
+      display: grid;
+      place-items: center;
+      background: rgba(15,23,42,0.7);
+      z-index: 2;
+      font-size: 0.65rem;
     }
 
     /* ===== Core Narrative Chapters ===== */
     .chapter {
-      height: 100vh;
+      position: relative;
+      min-height: 100vh;
       display: flex;
       align-items: center;
-      justify-content: center;
       padding: 0 6vw;
+      color: var(--fg);
     }
     .chapter video {
       position: absolute;
-      top: 0;
-      left: 0;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      z-index: -2;
+    }
+    .chapter::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(15,23,42,0.1), #020617 70%);
+      mix-blend-mode: multiply;
       z-index: -1;
     }
-    .chapter .text {
+    .chapter-inner {
       max-width: 60ch;
-      font-size: clamp(1rem, 1.2vw, 1.8rem);
-      color: var(--fg);
-      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+      background: radial-gradient(circle at top left, var(--accent-soft), rgba(15,23,42,0.96));
+      padding: 24px 26px 26px;
+      border-radius: 18px;
+      box-shadow: 0 22px 50px rgba(0,0,0,0.7);
+      border: 1px solid rgba(148,163,184,0.4);
+    }
+    .chapter-inner h2 {
+      margin: 0 0 8px;
+      font-size: clamp(1.4rem, 2.4vw, 2rem);
+    }
+    .chapter-inner p.kicker {
+      margin: 0 0 10px;
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .chapter-inner p.body {
+      margin: 0 0 10px;
+      font-size: clamp(0.95rem, 1.1vw, 1.1rem);
+      color: #e5e7eb;
+    }
+
+    @media (max-width: 768px) {
+      .chapter {
+        padding: 0 5vw;
+      }
+      .chapter-inner {
+        padding: 18px 18px 20px;
+      }
     }
 
     /* ===== Outro ===== */
     .outro {
-      padding: 20vh 6vw;
-      background: #0c0c0c;
+      padding: 16vh 6vw 18vh;
+      background: #020617;
       text-align: center;
+      border-top: 1px solid rgba(148,163,184,0.3);
+    }
+    .outro p {
+      color: var(--muted);
+      max-width: 60ch;
+      margin: 8px auto 0;
+      font-size: 0.95rem;
     }
   </style>
 </head>
@@ -115,64 +231,169 @@
 
   <!-- ===== Landing Page ===== -->
   <section class="landing">
+    <!-- 用老師給的其中一支影片或你自己的影片 -->
     <video src="videos/landing.mp4" autoplay muted loop playsinline></video>
-    <h1>專題標題放這裡</h1>
+    <div class="landing-inner">
+      <p class="tagline">AS08｜Storytelling with Videos</p>
+      <h1>在城市裡練習慢下來</h1>
+      <p class="tagline">
+        一天之中，有很多時刻可以按下暫停鍵。跟著四段影像，試著在熟悉的城市裡，找回一點點「慢」。
+      </p>
+      <div class="hint">向下捲動開啟旅程</div>
+    </div>
   </section>
 
   <!-- ===== Onboarding Page (Thumbnails) ===== -->
   <section class="onboarding">
-    <h2 style="margin-bottom:24px; font-size:2rem">探索四個章節</h2>
+    <h2>四段影像，四種慢下來的方式</h2>
+    <p class="lead">
+      從早晨的通勤，到深夜的街口，這四支影片是同一座城市的不同心跳。你可以從任一章節開始，也可以按照時間順序看完整個故事。
+    </p>
+
     <div class="thumb-grid">
-      <div class="thumb" onclick="scrollToChapter(1)">
-        <img src="videos/thumb1.jpg" alt="Chapter 1" />
-        <span>Chapter 1</span>
-      </div>
-      <div class="thumb" onclick="scrollToChapter(2)">
-        <img src="videos/thumb2.jpg" alt="Chapter 2" />
-        <span>Chapter 2</span>
-      </div>
-      <div class="thumb" onclick="scrollToChapter(3)">
-        <img src="videos/thumb3.jpg" alt="Chapter 3" />
-        <span>Chapter 3</span>
-      </div>
-      <div class="thumb" onclick="scrollToChapter(4)">
-        <img src="videos/thumb4.jpg" alt="Chapter 4" />
-        <span>Chapter 4</span>
-      </div>
+      <!-- Chapter 1 -->
+      <article class="thumb" onclick="scrollToChapter(1)">
+        <!-- 若要 hover 播放，改成 <video>，src 可直接用 ch1.mp4 -->
+        <video src="videos/ch1.mp4" muted loop playsinline></video>
+        <div class="play-icon">▶</div>
+        <div class="thumb-label">
+          <span class="kicker">Chapter 1</span>
+          <h3>早晨的匆忙裡，為自己多留一分鐘</h3>
+        </div>
+      </article>
+
+      <!-- Chapter 2 -->
+      <article class="thumb" onclick="scrollToChapter(2)">
+        <video src="videos/ch2.mp4" muted loop playsinline></video>
+        <div class="play-icon">▶</div>
+        <div class="thumb-label">
+          <span class="kicker">Chapter 2</span>
+          <h3>午後的光，照進玻璃與螢幕之間</h3>
+        </div>
+      </article>
+
+      <!-- Chapter 3 -->
+      <article class="thumb" onclick="scrollToChapter(3)">
+        <video src="videos/ch3.mp4" muted loop playsinline></video>
+        <div class="play-icon">▶</div>
+        <div class="thumb-label">
+          <span class="kicker">Chapter 3</span>
+          <h3>下班路上的黃昏，其實不是終點</h3>
+        </div>
+      </article>
+
+      <!-- Chapter 4 -->
+      <article class="thumb" onclick="scrollToChapter(4)">
+        <video src="videos/ch4.mp4" muted loop playsinline></video>
+        <div class="play-icon">▶</div>
+        <div class="thumb-label">
+          <span class="kicker">Chapter 4</span>
+          <h3>深夜的街口，留給還醒著的人</h3>
+        </div>
+      </article>
     </div>
   </section>
 
-  <!-- ===== Core Chapters ===== -->
+  <!-- ===== Core Narrative Chapters ===== -->
+
+  <!-- Chapter 1 -->
   <section class="chapter" id="chapter1">
     <video src="videos/ch1.mp4" autoplay muted loop playsinline></video>
-    <div class="text">第一章節的敘事內容：可搭配卷動時淡入淡出或段落切換。</div>
+    <div class="chapter-inner">
+      <p class="kicker">CHAPTER 1 · MORNING</p>
+      <h2>在車門關上之前，先深呼吸一次</h2>
+      <p class="body">
+        早晨的節奏總是最快。捷運門開開關關，站牌上的數字不停倒數，訊息從還沒醒透的手機螢幕跳出來。
+      </p>
+      <p class="body">
+        影片裡的畫面，也許是你每天都會經過的路：一個轉角、一條天橋、一扇還亮著燈的咖啡店。慢下來，不代表要放棄所有速度，而是允許自己在匆忙之間，偷一口完整的呼吸。
+      </p>
+      <p class="body">
+        當我們願意抬頭，看一眼窗外的光線，或讓耳朵真正聽清楚列車進站的聲音，城市就不再只是一條任務清單，而是可以被感受的一個地方。
+      </p>
+    </div>
   </section>
 
+  <!-- Chapter 2 -->
   <section class="chapter" id="chapter2">
     <video src="videos/ch2.mp4" autoplay muted loop playsinline></video>
-    <div class="text">第二章節內容：影片持續播放，文字可隨卷動更新。</div>
+    <div class="chapter-inner">
+      <p class="kicker">CHAPTER 2 · AFTERNOON</p>
+      <h2>在中午前後，替自己按下暫停鍵</h2>
+      <p class="body">
+        午後的城市光線最溫柔，卻也是會議最密集、訊息最多的時段。影片裡的陽光，可能只在玻璃上停留幾秒，就又被拉回到螢幕裡。
+      </p>
+      <p class="body">
+        慢下來，也可以只是多看一眼影子的位置。它從桌腳一路爬到牆上，提醒我們時間正在流動，而我們有權利決定自己要不要跟著一起狂奔。
+      </p>
+      <p class="body">
+        也許你可以選一個畫面暫停：那杯還沒喝完的咖啡、同事笑出來的那一格、或窗外恰好走過的一個陌生人。把那些片刻存起來，讓這座城市不只剩下 KPI。
+      </p>
+    </div>
   </section>
 
+  <!-- Chapter 3 -->
   <section class="chapter" id="chapter3">
     <video src="videos/ch3.mp4" autoplay muted loop playsinline></video>
-    <div class="text">第三章節內容：可加入更多段落與互動。</div>
+    <div class="chapter-inner">
+      <p class="kicker">CHAPTER 3 · DUSK</p>
+      <h2>黃昏不是句點，而是換行</h2>
+      <p class="body">
+        下班路上，大家都往同一個方向移動：往車站、往公車站牌、往某一條熟悉的巷子。天空開始變色，街燈一盞一盞亮起。
+      </p>
+      <p class="body">
+        影片裡的黃昏，試圖把這個瞬間拉長一點。當你慢下腳步，會發現城市在這個時候反而最像一篇散文：節奏介於白天與黑夜之間，既不是開始，也還沒結束。
+      </p>
+      <p class="body">
+        如果可能，給自己一小段繞路的空間。繞到一條沒那麼擁擠的路、一個可以看到天空的轉角，讓今天的你有機會跟昨天的自己說句「辛苦了」。
+      </p>
+    </div>
   </section>
 
+  <!-- Chapter 4 -->
   <section class="chapter" id="chapter4">
     <video src="videos/ch4.mp4" autoplay muted loop playsinline></video>
-    <div class="text">第四章節內容：故事收束或開展未來方向。</div>
+    <div class="chapter-inner">
+      <p class="kicker">CHAPTER 4 · NIGHT</p>
+      <h2>當城市安靜下來，你還醒著嗎？</h2>
+      <p class="body">
+        深夜的街口，車子變少了，霓虹卻還在亮。有人加班到很晚，有人剛結束聚會，有人只是捨不得睡。
+      </p>
+      <p class="body">
+        慢下來，在這裡不再是奢侈，而是一種保護自己的方式。你可以讓影片繼續播放，把自己交給那些光點與聲音；也可以按下暫停，讓畫面變成一張靜止的照片。
+      </p>
+      <p class="body">
+        無論你身在這座城市的哪一個角落，願這一段影像提醒你：不被節奏推著走，也是可以練習的能力。明天醒來時，也許就能稍微不那麼匆忙地，重新開始。
+      </p>
+    </div>
   </section>
 
   <!-- ===== Outro ===== -->
   <section class="outro">
-    <h2>感謝觀看</h2>
+    <h2>在城市裡，為自己保留一點「慢」</h2>
+    <p>
+      這四則影片沒有標準觀看順序，你可以回頭再看一次，也可以關掉畫面，去聽聽今晚的風聲。故事到這裡暫時告一段落，但你和這座城市的對話，還可以繼續。
+    </p>
   </section>
 
   <script>
+    // 點縮圖捲到對應章節
     function scrollToChapter(n) {
       const el = document.getElementById(`chapter${n}`);
-      el && el.scrollIntoView({ behavior: 'smooth' });
+      if (el) el.scrollIntoView({ behavior: "smooth" });
     }
+
+    // Onboarding：滑鼠移上去預覽影片
+    const thumbs = document.querySelectorAll(".thumb video");
+    thumbs.forEach(v => {
+      v.addEventListener("mouseenter", () => {
+        v.play().catch(()=>{});
+      });
+      v.addEventListener("mouseleave", () => {
+        v.pause();
+        v.currentTime = 0;
+      });
+    });
   </script>
 </body>
 </html>
