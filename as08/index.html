@@ -1,390 +1,539 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>挖一顆地瓜，遇見一塊土｜農村體驗影片專題</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>挖一顆地瓜，遇見一塊土</title>
   <style>
-    :root {
-      --bg: #020617;
-      --fg: #f9fafb;
-      --muted: #9ca3af;
-      --accent: #f97316;
-      --accent-soft: rgba(248, 153, 54, 0.18);
-    }
-    * { box-sizing: border-box; }
-    html, body {
+    * {
       margin: 0;
       padding: 0;
-      background: var(--bg);
-      color: var(--fg);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-        "Noto Sans CJK TC", "Microsoft JhengHei", Arial, sans-serif;
-      line-height: 1.6;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "PingFang TC", "Helvetica Neue", Arial, sans-serif;
+      background: radial-gradient(circle at top, #101728 0%, #050711 55%, #020308 100%);
+      color: #f5f5f7;
+      overflow-x: hidden;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ---------- Layout helpers ---------- */
+    .wrapper {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 20px;
     }
     section {
       position: relative;
-      width: 100%;
-      overflow: hidden;
     }
 
-    /* ===== Landing Page ===== */
+    /* ---------- Landing ---------- */
     .landing {
-      height: 100vh;
-      display: grid;
-      place-items: center;
-      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
     }
-    .landing video {
+    .landing-video {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
       filter: brightness(0.45);
-      z-index: -1;
     }
-    .landing-inner {
-      padding: 0 6vw;
+    .landing-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(48, 119, 255, 0.35), transparent 55%);
+      pointer-events: none;
+    }
+    .landing-content {
+      position: relative;
+      z-index: 2;
+      text-align: left;
+      max-width: 680px;
+    }
+    .landing-kicker {
+      font-size: 0.85rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #c2c7ff;
+      margin-bottom: 0.75rem;
     }
     .landing h1 {
-      font-size: clamp(2.4rem, 6vw, 4.8rem);
+      font-size: clamp(2.4rem, 4vw, 3.2rem);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .landing-lead {
+      font-size: 1.02rem;
+      line-height: 1.9;
+      color: #d0d3e6;
+      margin-bottom: 1.8rem;
+      max-width: 32rem;
+    }
+    .scroll-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: #9aa1c9;
       letter-spacing: 0.08em;
-      margin: 0 0 12px;
+      text-transform: uppercase;
     }
-    .landing p.tagline {
-      margin: 0 0 18px;
-      color: var(--muted);
-      font-size: clamp(0.95rem, 1.2vw, 1.25rem);
+    .scroll-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #f5f5f7;
+      animation: pulse 1.6s infinite;
     }
-    .landing .hint {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-top: 32px;
+    @keyframes pulse {
+      0% { transform: translateY(0); opacity: 0.8; }
+      50% { transform: translateY(6px); opacity: 0.4; }
+      100% { transform: translateY(0); opacity: 0.8; }
     }
 
-    /* ===== Onboarding Page ===== */
+    /* ---------- Onboarding ---------- */
     .onboarding {
-      padding: 10vh 6vw;
-      background: radial-gradient(circle at top, #02081f, #020617 55%);
+      padding: 72px 0 80px;
     }
-    .onboarding h2 {
-      font-size: clamp(1.8rem, 3vw, 2.4rem);
-      margin: 0 0 10px;
+    .onboarding-header h2 {
+      font-size: clamp(1.8rem, 3vw, 2.3rem);
+      margin-bottom: 0.75rem;
     }
-    .onboarding p.lead {
-      margin: 0 0 32px;
-      max-width: 60ch;
-      color: var(--muted);
+    .onboarding-header p {
+      font-size: 0.98rem;
+      line-height: 1.9;
+      color: #b9bfdc;
+      max-width: 40rem;
     }
     .thumb-grid {
+      margin-top: 40px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+    @media (max-width: 900px) {
+      .thumb-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 640px) {
+      .thumb-grid {
+        grid-template-columns: 1fr;
+      }
     }
     .thumb {
       position: relative;
-      cursor: pointer;
-      border-radius: 16px;
+      background: radial-gradient(circle at top left, #252b48 0%, #121527 40%, #050712 100%);
+      border-radius: 22px;
+      padding: 18px 18px 20px;
       overflow: hidden;
-      background: #020617;
-      box-shadow: 0 18px 40px rgba(0,0,0,0.5);
-      isolation: isolate;
-      border: 1px solid rgba(148,163,184,0.25);
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
     }
-    .thumb video,
-    .thumb img {
+    .thumb:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 22px 55px rgba(0, 0, 0, 0.7);
+      border-color: rgba(255, 255, 255, 0.16);
+      background: radial-gradient(circle at top left, #2d355b 0%, #151931 45%, #050712 100%);
+    }
+    .thumb-video-wrapper {
+      position: absolute;
+      inset: 0;
+      opacity: 0.35;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+    .thumb-video {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
-      transition: transform 0.6s ease;
     }
-    .thumb:hover video,
-    .thumb:hover img {
-      transform: scale(1.04);
-    }
-    .thumb::after {
-      content: "";
+    .thumb-gradient {
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        180deg,
-        transparent 40%,
-        rgba(0,0,0,0.9) 100%
-      );
+      background: linear-gradient(to top, rgba(2, 3, 10, 0.95) 0%, rgba(2, 3, 10, 0.4) 55%, transparent 100%);
       pointer-events: none;
     }
-    .thumb-label {
-      position: absolute;
-      left: 14px;
-      bottom: 14px;
+    .thumb-content {
+      position: relative;
       z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 160px;
     }
-    .thumb-label span.kicker {
-      display: inline-block;
-      padding: 2px 8px;
+    .thumb-top {
+      display: flex;
+      justify-content: flex-end;
+    }
+    .play-pill {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.2), transparent 55%);
+    }
+    .play-pill span {
+      border-style: solid;
+      border-width: 6px 0 6px 9px;
+      border-color: transparent transparent transparent #ffffff;
+      margin-left: 1px;
+    }
+    .thumb-kicker {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      border-radius: 999px;
       font-size: 0.75rem;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--accent);
-      background: rgba(15,23,42,0.9);
-      border-radius: 999px;
-      margin-bottom: 4px;
+      color: #ffb199;
+      background: rgba(255, 163, 125, 0.16);
+      border: 1px solid rgba(255, 163, 125, 0.35);
+      margin-bottom: 10px;
     }
-    .thumb-label h3 {
-      margin: 0;
+    .thumb-title {
       font-size: 1rem;
-    }
-    .thumb .play-icon {
-      position: absolute;
-      right: 12px;
-      top: 12px;
-      width: 26px;
-      height: 26px;
-      border-radius: 999px;
-      border: 1px solid rgba(248,250,252,0.6);
-      display: grid;
-      place-items: center;
-      background: rgba(15,23,42,0.7);
-      z-index: 2;
-      font-size: 0.65rem;
+      line-height: 1.5;
     }
 
-    /* ===== Core Narrative Chapters ===== */
+    /* ---------- Chapters ---------- */
     .chapter {
       position: relative;
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 0 6vw;
-      color: var(--fg);
+      padding: 90px 0;
+      overflow: hidden;
     }
-    .chapter video {
+    .chapter:nth-of-type(odd) {
+      background: radial-gradient(circle at top, #101727 0%, #04050d 60%, #020309 100%);
+    }
+    .chapter:nth-of-type(even) {
+      background: radial-gradient(circle at top, #0c151f 0%, #04060c 55%, #020308 100%);
+    }
+    .chapter-video {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      z-index: -2;
+      opacity: 0.45;
+      filter: saturate(1.1);
     }
-    .chapter::before {
-      content: "";
+    .chapter-overlay {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at top, rgba(15,23,42,0.18), #020617 70%);
-      mix-blend-mode: multiply;
-      z-index: -1;
+      background: linear-gradient(
+        to bottom,
+        rgba(4, 6, 18, 0.85) 0%,
+        rgba(4, 6, 18, 0.65) 30%,
+        rgba(4, 6, 18, 0.96) 100%
+      );
+      pointer-events: none;
     }
     .chapter-inner {
-      max-width: 60ch;
-      background: radial-gradient(circle at top left, var(--accent-soft), rgba(15,23,42,0.96));
-      padding: 24px 26px 26px;
-      border-radius: 18px;
-      box-shadow: 0 22px 50px rgba(0,0,0,0.7);
-      border: 1px solid rgba(148,163,184,0.4);
+      position: relative;
+      z-index: 2;
+      max-width: 720px;
     }
-    .chapter-inner h2 {
-      margin: 0 0 8px;
-      font-size: clamp(1.4rem, 2.4vw, 2rem);
-    }
-    .chapter-inner p.kicker {
-      margin: 0 0 10px;
+    .chapter-kicker {
       font-size: 0.8rem;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: #ffb199;
+      margin-bottom: 0.8rem;
     }
-    .chapter-inner p.body {
-      margin: 0 0 10px;
-      font-size: clamp(0.95rem, 1.1vw, 1.1rem);
-      color: #e5e7eb;
+    .chapter-title {
+      font-size: clamp(1.7rem, 3vw, 2.1rem);
+      margin-bottom: 1.2rem;
+    }
+    .chapter-body p {
+      font-size: 1rem;
+      line-height: 1.9;
+      color: #d0d4ea;
+      margin-bottom: 1rem;
+      text-align: justify;
+    }
+    .chapter-body p:last-child {
+      margin-bottom: 0;
     }
 
-    @media (max-width: 768px) {
-      .chapter { padding: 0 5vw; }
-      .chapter-inner { padding: 18px 18px 20px; }
-    }
-
-    /* ===== Outro ===== */
-    .outro {
-      padding: 16vh 6vw 18vh;
-      background: #020617;
-      text-align: center;
-      border-top: 1px solid rgba(148,163,184,0.3);
-    }
-    .outro p {
-      color: var(--muted);
-      max-width: 60ch;
-      margin: 8px auto 0;
-      font-size: 0.95rem;
+    @media (max-width: 640px) {
+      .chapter {
+        padding: 72px 0;
+      }
+      .chapter-inner {
+        max-width: 100%;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- ===== Landing Page ===== -->
+  <!-- Landing -->
   <section class="landing">
-    <!-- 開頭：用第 1 支挖地瓜影片當背景 -->
-    <video src="videos/1.MP4" autoplay muted loop playsinline></video>
-    <div class="landing-inner">
-      <p class="tagline">AS08｜Storytelling with Videos</p>
-      <h1>挖一顆地瓜，遇見一塊土</h1>
-      <p class="tagline">
-        我們跟著一支鏡頭，走進挖地瓜的那一天。泥土的重量、笑聲的節奏、以及躲在土裡的故事，都被裝進四段影像裡。
-      </p>
-      <div class="hint">向下捲動，從第一鏟土開始</div>
+    <video class="landing-video" src="videos/1.mp4" autoplay muted loop playsinline></video>
+    <div class="landing-overlay"></div>
+    <div class="wrapper">
+      <div class="landing-content">
+        <div class="landing-kicker">FIELD NOTES · SWEET POTATO DAY</div>
+        <h1>挖一顆地瓜，遇見一塊土。</h1>
+        <p class="landing-lead">
+          從台北搭車到新豐，大約兩個小時的距離。  
+          但真正的距離，是從「只在超市買地瓜」到「第一次把腳踩進這塊田」。  
+          這個網頁，記錄我在田裡度過的一整天。
+        </p>
+        <div class="scroll-hint">
+          <div class="scroll-dot"></div>
+          <span>Scroll 開始挖地瓜的一天</span>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- ===== Onboarding Page (Thumbnails) ===== -->
+  <!-- Onboarding -->
   <section class="onboarding">
-    <h2>四個片刻，打開一次挖地瓜的旅程</h2>
-    <p class="lead">
-      從抵達田邊、下田挖地瓜，到和農友聊天、把地瓜搬上車，這四支影片紀錄的不是觀光行程，而是一整天真正的「蹲下來」。你可以從任何一章開始看，也可以按照順序跟著時間走。
-    </p>
+    <div class="wrapper">
+      <div class="onboarding-header">
+        <h2>四個片刻，打開一次挖地瓜的旅程</h2>
+        <p>
+          從抵達田邊、下田挖地瓜，到和農友聊天、把地瓜搬上車，這四支影片記錄的不是觀光行程，
+          而是真正「蹲下來」的一天。你可以從任何一章開始，也可以按照順序跟著時間走。
+        </p>
+      </div>
 
-    <div class="thumb-grid">
-      <!-- Chapter 1 -->
-      <article class="thumb" onclick="scrollToChapter(1)">
-        <video src="videos/1.MP4" muted loop playsinline></video>
-        <div class="play-icon">▶</div>
-        <div class="thumb-label">
-          <span class="kicker">Chapter 1</span>
-          <h3>抵達田邊：第一次把腳踩進這塊土</h3>
+      <div class="thumb-grid">
+        <!-- card 1 -->
+        <div class="thumb" onclick="scrollToChapter(1)">
+          <div class="thumb-video-wrapper">
+            <video class="thumb-video" muted loop playsinline preload="metadata">
+              <source src="videos/1.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <div class="thumb-gradient"></div>
+          <div class="thumb-content">
+            <div class="thumb-top">
+              <div class="play-pill"><span></span></div>
+            </div>
+            <div>
+              <div class="thumb-kicker">CHAPTER 1</div>
+              <div class="thumb-title">抵達田邊：第一次把腳踩進這塊土</div>
+            </div>
+          </div>
         </div>
-      </article>
 
-      <!-- Chapter 2 -->
-      <article class="thumb" onclick="scrollToChapter(2)">
-        <video src="videos/2.MP4" muted loop playsinline></video>
-        <div class="play-icon">▶</div>
-        <div class="thumb-label">
-          <span class="kicker">Chapter 2</span>
-          <h3>蹲下去挖：用手去記住泥土的感覺</h3>
+        <!-- card 2 -->
+        <div class="thumb" onclick="scrollToChapter(2)">
+          <div class="thumb-video-wrapper">
+            <video class="thumb-video" muted loop playsinline preload="metadata">
+              <source src="videos/2.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <div class="thumb-gradient"></div>
+          <div class="thumb-content">
+            <div class="thumb-top">
+              <div class="play-pill"><span></span></div>
+            </div>
+            <div>
+              <div class="thumb-kicker">CHAPTER 2</div>
+              <div class="thumb-title">蹲下去挖：用手去記住泥土的感覺</div>
+            </div>
+          </div>
         </div>
-      </article>
 
-      <!-- Chapter 3 -->
-      <article class="thumb" onclick="scrollToChapter(3)">
-        <video src="videos/3.MOV" muted loop playsinline></video>
-        <div class="play-icon">▶</div>
-        <div class="thumb-label">
-          <span class="kicker">Chapter 3</span>
-          <h3>和農友聊天：這裡的人，怎麼看這塊地</h3>
+        <!-- card 3 -->
+        <div class="thumb" onclick="scrollToChapter(3)">
+          <div class="thumb-video-wrapper">
+            <video class="thumb-video" muted loop playsinline preload="metadata">
+              <source src="videos/3.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <div class="thumb-gradient"></div>
+          <div class="thumb-content">
+            <div class="thumb-top">
+              <div class="play-pill"><span></span></div>
+            </div>
+            <div>
+              <div class="thumb-kicker">CHAPTER 3</div>
+              <div class="thumb-title">和農友聊天：這裡的人，怎麼看這塊田</div>
+            </div>
+          </div>
         </div>
-      </article>
 
-      <!-- Chapter 4 -->
-      <article class="thumb" onclick="scrollToChapter(4)">
-        <video src="videos/4.MOV" muted loop playsinline></video>
-        <div class="play-icon">▶</div>
-        <div class="thumb-label">
-          <span class="kicker">Chapter 4</span>
-          <h3>把地瓜搬上車：一整天的重量，被抬起來</h3>
+        <!-- card 4 -->
+        <div class="thumb" onclick="scrollToChapter(4)">
+          <div class="thumb-video-wrapper">
+            <video class="thumb-video" muted loop playsinline preload="metadata">
+              <source src="videos/4.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <div class="thumb-gradient"></div>
+          <div class="thumb-content">
+            <div class="thumb-top">
+              <div class="play-pill"><span></span></div>
+            </div>
+            <div>
+              <div class="thumb-kicker">CHAPTER 4</div>
+              <div class="thumb-title">收成與離開：把地瓜搬上車之前</div>
+            </div>
+          </div>
         </div>
-      </article>
+      </div>
     </div>
   </section>
-
-  <!-- ===== Core Narrative Chapters ===== -->
 
   <!-- Chapter 1 -->
   <section class="chapter" id="chapter1">
-    <video src="videos/1.MP4" autoplay muted loop playsinline></video>
-    <div class="chapter-inner">
-      <p class="kicker">CHAPTER 1 · 抵達田邊</p>
-      <h2>從柏油路轉進田埂的那一刻，世界的節奏就變了</h2>
-      <p class="body">
-        一開始，只是坐在車上往窗外看。水田、風機、遠方的山都還像風景明信片一樣，被隔在玻璃外面。直到車停在田埂旁，腳踩上鬆鬆的土，才突然意識到：今天不是來「看」農村，而是要真的把身體交給這塊地。
-      </p>
-      <p class="body">
-        影片裡可以看到大家一下車就有點手足無措：有人先拿手機拍照，有人低頭看鞋子會不會弄髒，有人站在田埂邊猶豫要不要下去。這些猶豫很真實，也提醒我們，城市人的步伐其實很少為了一塊土地而停下。
-      </p>
-      <p class="body">
-        農友站在田裡揮手，像是在說：「來啦，田不會咬人。」那一刻，距離才真的被縮短——不是 Google 地圖上的公里數，而是我們願不願意跨出第一步。
-      </p>
+    <video class="chapter-video" autoplay muted loop playsinline>
+      <source src="videos/1.mp4" type="video/mp4" />
+    </video>
+    <div class="chapter-overlay"></div>
+    <div class="wrapper">
+      <div class="chapter-inner">
+        <div class="chapter-kicker">CHAPTER 1</div>
+        <h2 class="chapter-title">抵達田邊：第一次把腳踩進這塊土</h2>
+        <div class="chapter-body">
+          <p>
+            車一離開高速公路，窗外的景色就開始有點不一樣。招牌變少了，田變多了，路邊出現一整串曬乾的稻穗，
+            像是提醒你——「你真的離城市有一段距離了」。
+          </p>
+          <p>
+            田埂邊停著幾台小貨車。我一下車，鞋底立刻被田間潮濕的泥土吸住，那種黏著感讓人立刻意識到：
+            這裡不是拍照用的背景，而是有人每天踩過、反覆耕過的地方。
+          </p>
+          <p>
+            農友笑笑地說：「等一下就知道怎麼挖了。」那一刻我突然有點緊張，擔心自己會挖不好、挖太慢，
+            也擔心只是在「體驗」，沒辦法真正幫上忙。
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Chapter 2 -->
   <section class="chapter" id="chapter2">
-    <video src="videos/2.MP4" autoplay muted loop playsinline></video>
-    <div class="chapter-inner">
-      <p class="kicker">CHAPTER 2 · 下田挖地瓜</p>
-      <h2>鏟子插下去之前，先學會怎麼蹲下來</h2>
-      <p class="body">
-        挖地瓜看起來很簡單：鏟子插進土裡，往上撬，就會有一顆一顆橘色的地瓜冒出來。但影片裡你會看到，我們一開始挖得很生硬：力氣用錯方向，鏟子插太深，甚至不小心把地瓜切成兩半。
-      </p>
-      <p class="body">
-        農友在旁邊示範的時候，動作沒有多帥氣，卻很穩。他會先用腳把鏟子踩穩，再慢慢往上撬，像是很熟悉這裡的每一塊土塊，知道哪裡藏著地瓜、哪裡只是空氣。
-      </p>
-      <p class="body">
-        「不要急著找地瓜，先感覺土。」這句話本來只是提醒我們不要挖壞作物，卻也有點像是對生活的提醒。當我們願意蹲下來，手沾滿泥巴，才知道食物離我們其實沒有那麼遠。
-      </p>
+    <video class="chapter-video" autoplay muted loop playsinline>
+      <source src="videos/2.mp4" type="video/mp4" />
+    </video>
+    <div class="chapter-overlay"></div>
+    <div class="wrapper">
+      <div class="chapter-inner">
+        <div class="chapter-kicker">CHAPTER 2</div>
+        <h2 class="chapter-title">蹲下去挖：用手去記住泥土的感覺</h2>
+        <div class="chapter-body">
+          <p>
+            工具插進土裡的瞬間，才發現自己根本不知道地瓜藏在哪裡。農友示範時動作很俐落，
+            像是早就知道哪一塊土下面會有一整串地瓜，一鏟就翻出。
+          </p>
+          <p>
+            換成我來，鏟子一下子太用力、一下子又不夠深，不是挖到空土，就是差點把地瓜劃傷。
+            後來乾脆直接蹲下，用手去撥那些濕黏的泥巴，一點一點摸索出地瓜的形狀。
+          </p>
+          <p>
+            那是很特別的觸感——你能感覺這顆地瓜在土裡待了很久，像是慢慢被推擠成現在的樣子。
+            當它終於被整串拉出來時，陽光打在還沾著泥的表面，那一刻比任何超市貨架都更像「食物」。
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Chapter 3 -->
   <section class="chapter" id="chapter3">
-    <video src="videos/3.MOV" autoplay muted loop playsinline></video>
-    <div class="chapter-inner">
-      <p class="kicker">CHAPTER 3 · 田裡的對話</p>
-      <h2>挖出來的不只是地瓜，還有這裡的人生故事</h2>
-      <p class="body">
-        當手上的動作慢慢穩定下來，影片裡開始出現更多聲音：農友講著今年的氣候、颱風有沒有影響、政府補助好不好申請，也會聊到以前怎麼種、以前的價格有多不一樣。
-      </p>
-      <p class="body">
-        其中有一句話特別讓人記得：「我們不是在種地瓜，是在種下一個大家還願意留在這裡的理由。」鏡頭帶到他們笑的臉、晒到裂開的手、以及曬得發亮的地瓜皮，農村突然不再只是「產地」，而是一種選擇。
-      </p>
-      <p class="body">
-        對我們這些短暫來訪的人來說，挖地瓜可能只是一個活動；但對他們而言，這是一整年一次又一次的日常。透過這段聊天，我們慢慢明白，農村並不是「落後」，而是有自己步調的一種未來想像。
-      </p>
+    <video class="chapter-video" autoplay muted loop playsinline>
+      <source src="videos/3.mp4" type="video/mp4" />
+    </video>
+    <div class="chapter-overlay"></div>
+    <div class="wrapper">
+      <div class="chapter-inner">
+        <div class="chapter-kicker">CHAPTER 3</div>
+        <h2 class="chapter-title">和農友聊天：這裡的人，怎麼看這塊田</h2>
+        <div class="chapter-body">
+          <p>
+            中午休息時，我們坐在田邊，腳邊是剛剛堆起來的地瓜山。農友說，他們這裡這幾年開始轉作雜糧，
+            一方面是因為水資源，一方面是因為想讓土地有不同的呼吸方式。
+          </p>
+          <p>
+            聽他們講氣候、講補助、講市場，才發現「要不要種」從來不是浪漫的選擇題，
+            而是每天都要重新計算的現實。可是當他們談到哪一塊田的土比較好、哪一個品種特別香時，
+            眼神裡又有一種很單純的喜歡。
+          </p>
+          <p>
+            我突然覺得，自己不是只是在拍一段「挖地瓜的一日遊」，而是在看一群人怎麼跟土地談長期的關係。
+            而我只是在這段關係裡，短暫插入的一個旁觀者。
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Chapter 4 -->
   <section class="chapter" id="chapter4">
-    <video src="videos/4.MOV" autoplay muted loop playsinline></video>
-    <div class="chapter-inner">
-      <p class="kicker">CHAPTER 4 · 收成與回程</p>
-      <h2>當一籃一籃地瓜被抬起來，才知道今天真的發生過</h2>
-      <p class="body">
-        影片的最後，是把地瓜裝籃、搬上車的畫面。每一籃都比剛開始想像的還重一點，手臂會痠、腰會有點緊，但那個重量裡面，有今天所有的笑聲、失誤、重新來過，還有一起完成一件事的踏實感。
-      </p>
-      <p class="body">
-        有人開始在田埂旁分地瓜，現場就直接烤起來；有人忙著合照，想把自己弄得亂七八糟的樣子也記錄下來。鏡頭慢慢拉遠，田裡剩下的是一些踩過的腳印和被翻鬆的土。
-      </p>
-      <p class="body">
-        回程的路上，車子又開回柏油路上，但身上還帶著泥巴味。也許一段時間之後，我們會忘記當天的行程細節，卻會記得：「原來一顆地瓜要長成這樣，不只是時間，還需要很多人的腰痠背痛。」那種感謝，會在之後每一次吃到地瓜時，再被喚起一次。
-      </p>
+    <video class="chapter-video" autoplay muted loop playsinline>
+      <source src="videos/4.mp4" type="video/mp4" />
+    </video>
+    <div class="chapter-overlay"></div>
+    <div class="wrapper">
+      <div class="chapter-inner">
+        <div class="chapter-kicker">CHAPTER 4</div>
+        <h2 class="chapter-title">收成與離開：把地瓜搬上車之前</h2>
+        <div class="chapter-body">
+          <p>
+            太陽往山的後面移動時，田裡的影子被拉得很長。我們開始把地瓜一簍一簍搬上車，
+            手臂已經有點酸，但心裡卻有一種說不上來的滿足感。
+          </p>
+          <p>
+            那些被分類、裝袋、貼標籤的地瓜，很快就會出現在某個市場、某家店，或是某個人晚餐的烤箱裡。
+            到那時，大概不會有人想到，它們曾經安靜地躺在這塊田裡，被泥土包著。
+          </p>
+          <p>
+            我望著逐漸空下來的田，心裡默默地想：下次在便利商店拿起一盒地瓜時，
+            應該也會想起今天踩過的這些泥土吧。
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- ===== Outro ===== -->
-  <section class="outro">
-    <h2>下一次吃到地瓜的時候，還會想到這塊田嗎？</h2>
-    <p>
-      這四段影像只是某一個農村早上的縮影。希望在你看完之後，哪怕只是多花一秒鐘，看一眼餐桌上地瓜的紋路，也是在跟這塊土地說一聲：「我有看到你。」
-    </p>
-  </section>
-
   <script>
-    // 點縮圖捲到對應章節
+    // 平滑捲動到章節
     function scrollToChapter(n) {
-      const el = document.getElementById(`chapter${n}`);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
+      const el = document.getElementById("chapter" + n);
+      if (!el) return;
+      const top = el.getBoundingClientRect().top + window.pageYOffset - 40;
+      window.scrollTo({ top, behavior: "smooth" });
     }
 
-    // Onboarding：滑鼠移上去預覽影片
-    const thumbs = document.querySelectorAll(".thumb video");
-    thumbs.forEach(v => {
-      v.addEventListener("mouseenter", () => {
-        v.play().catch(()=>{});
-      });
-      v.addEventListener("mouseleave", () => {
-        v.pause();
-        v.currentTime = 0;
+    // Onboarding 縮圖 hover 預覽
+    document.addEventListener("DOMContentLoaded", function () {
+      const thumbs = document.querySelectorAll(".thumb");
+      thumbs.forEach((card) => {
+        const vid = card.querySelector(".thumb-video");
+        if (!vid) return;
+
+        card.addEventListener("mouseenter", () => {
+          vid.currentTime = 0;
+          vid.play().catch(() => {});
+        });
+        card.addEventListener("mouseleave", () => {
+          vid.pause();
+          vid.currentTime = 0;
+        });
       });
     });
   </script>
