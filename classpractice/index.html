@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AS08 — Map Practice</title>
+
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <style>
+        body {
+            margin: 0;
+            background: #0b0e16;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            padding: 1.5rem 0 0.5rem;
+            font-size: 2rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            opacity: 0.85;
+        }
+
+        #map {
+            height: 85vh;
+            width: 100vw;
+            border-top: 1px solid rgba(255,255,255,0.15);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>AS08 — Map-making Practice</h1>
+    <p>Leaflet 台灣地圖練習（今天上課示範功能）</p>
+
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // 初始化地圖（台灣中心）
+        const map = L.map('map').setView([23.7, 121], 7.3);
+
+        // OpenStreetMap 圖資
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // 標記一個示範地點（新竹新豐）
+        L.circleMarker([24.903, 120.982], {
+            radius: 12,
+            color: '#ff9f43',
+            fillColor: '#ffbe76',
+            fillOpacity: 0.9
+        })
+        .addTo(map)
+        .bindPopup('<b>今天的練習完成！</b><br>Leaflet 地圖成功運作 ✅');
+    </script>
+</body>
+</html>
