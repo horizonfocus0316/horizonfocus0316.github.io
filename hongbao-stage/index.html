@@ -138,9 +138,10 @@
       background:
         radial-gradient(circle at 15% 20%, rgba(250,188,80,0.2) 0, transparent 55%),
         radial-gradient(circle at 80% 60%, rgba(214,32,50,0.4) 0, transparent 60%),
-        url("assets/placeholder-stage-grain.jpg") center/cover no-repeat;
+        url("https://samplelib.com/lib/preview/jpeg/sample-city-park-400x300.jpg") center/cover no-repeat;
       mix-blend-mode: screen;
-      filter: blur(1px);
+      filter: blur(2px);
+      transform: translate3d(0,0,0);
     }
 
     .hero-title {
@@ -170,6 +171,10 @@
       font-size: 1rem;
       color: var(--muted);
       margin-bottom: 1.4rem;
+    }
+
+    .hero-subtitle span {
+      color: #f4e7dd;
     }
 
     .article-meta {
@@ -212,6 +217,7 @@
       display: flex;
       align-items: center;
       gap: 1rem;
+      flex-wrap: wrap;
     }
 
     .hero-cta button {
@@ -251,6 +257,7 @@
       border: 1px solid rgba(255,255,255,0.07);
       box-shadow: 0 20px 50px rgba(0,0,0,0.6);
       position: relative;
+      background: #000;
     }
 
     .hero-video-shell::after {
@@ -265,8 +272,8 @@
       border-radius: 999px;
     }
 
-    .hero-video-shell video,
-    .hero-video-shell img {
+    .hero-video-shell img,
+    .hero-video-shell video {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -384,6 +391,11 @@
       padding-bottom: 5rem;
       border-top: 1px solid rgba(255,255,255,0.04);
       background: linear-gradient(to bottom, rgba(255,255,255,0.01), rgba(0,0,0,0.85));
+      transition: background 0.8s ease;
+    }
+
+    #chapter3.active {
+      background: radial-gradient(circle at top, #0b0508 0, #000 55%, #000 100%);
     }
 
     .chapter-grid {
@@ -689,6 +701,80 @@
       transform: translateY(0);
     }
 
+    /* Before/After slider */
+    .ba-wrapper {
+      position: relative;
+      margin-top: 1.7rem;
+      border-radius: 1.2rem;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.7);
+      aspect-ratio: 4/3;
+      background: #000;
+    }
+
+    .ba-img {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .ba-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .ba-img-after {
+      width: 50%;
+      border-right: 2px solid rgba(244,194,74,0.85);
+      box-shadow: 8px 0 18px rgba(0,0,0,0.7);
+    }
+
+    .ba-label {
+      position: absolute;
+      top: 0.6rem;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.7rem;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.6);
+      color: var(--muted);
+    }
+
+    .ba-label.before { left: 0.8rem; }
+    .ba-label.after { right: 0.8rem; }
+
+    .ba-range {
+      position: absolute;
+      left: 50%;
+      bottom: 0.6rem;
+      transform: translateX(-50%);
+      width: 70%;
+    }
+
+    /* Ambient audio toggle */
+    .audio-toggle-btn {
+      position: fixed;
+      left: 1.2rem;
+      bottom: 1.2rem;
+      z-index: 950;
+      background: rgba(0,0,0,0.75);
+      color: var(--muted);
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 0.4rem 0.9rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .audio-toggle-btn span.icon {
+      font-size: 0.9rem;
+    }
+
     @media (max-width: 960px) {
       header {
         padding-inline: 5vw;
@@ -736,6 +822,11 @@
       nav {
         display: none;
       }
+
+      .audio-toggle-btn {
+        left: 0.8rem;
+        bottom: 0.8rem;
+      }
     }
   </style>
 </head>
@@ -755,6 +846,12 @@
 
   <div class="hero-bg" aria-hidden="true"></div>
 
+  <!-- ambient audio（之後換成你們現場聲） -->
+  <audio id="introAudio" src="https://download.samplelib.com/mp3/sample-3s.mp3" preload="auto" loop></audio>
+  <button class="audio-toggle-btn" id="audioToggle">
+    <span class="icon">🔇</span><span class="label">開啟現場環境聲</span>
+  </button>
+
   <main>
     <!-- HERO -->
     <section class="hero" id="hero">
@@ -769,28 +866,28 @@
         </div>
 
         <p class="hero-subtitle">
-          夜色落在西門町巷口，霓虹仍亮著，但多數人已經不知道，那是一家紅包歌廳。  
-          在台北僅存的紅包場裡，歌手每天站上舞台，對著愈來愈少的觀眾唱歌──
-          她們的工作，既被誤解，也被遺忘。
+          夜色落在西門町巷口，霓虹仍亮著，但多數人已經不知道，那裡曾是一家紅包歌廳。  
+          <span>你推開門，冷氣夾著香水與煙味迎面而來；舞台燈還沒亮，卻有人已在調音。</span>  
+          你不確定自己即將看見的是什麼，只知道這裡的觀眾，比你想像中還要少，也還要忠誠。
         </p>
 
         <div class="hero-meta">
           <strong>場景：</strong>西門町金鑽歌廳，台北唯一仍以「紅包場」形式營運的歌廳。<br />
-          <strong>關鍵提問：</strong>當紅包場被視為「老人的娛樂」、城市拆除一間又一間歌廳，  
+          <strong>關鍵提問：</strong>當紅包場被視為「老人的娛樂」、城市拆掉一間又一間歌廳，  
           誰還願意在這裡唱？她們，又在堅持什麼？
         </div>
 
         <div class="hero-cta">
-          <button type="button" data-scroll="#onboarding">進入報導</button>
-          <span>滑動螢幕，從一晚的進場開始。</span>
+          <button type="button" data-scroll="#onboarding" id="enterBtn">進入報導</button>
+          <span>點下按鈕、滑動螢幕，從一晚的進場開始。</span>
         </div>
       </div>
 
       <div class="hero-right reveal">
         <div class="hero-video-shell">
-          <!-- 之後換成 opening 影片或現場 cut -->
-          <!-- <video src="assets/hongbao-opening.mp4" autoplay muted loop playsinline></video> -->
-          <img src="assets/placeholder-hero-video.jpg" alt="紅包場舞台示意圖" />
+          <!-- 之後換成你們拍的 opening 影片，加上 class="autoPlay" -->
+          <!-- <video class="autoPlay" src="assets/hongbao-opening.mp4" muted playsinline loop></video> -->
+          <img src="https://samplelib.com/lib/preview/jpeg/sample-clouds-400x300.jpg" alt="紅包場舞台示意圖" />
         </div>
         <p class="hero-tagline">
           灯光、紅包、酒席與老歌，交織出屬於某一個世代的夜生活場景。  
@@ -813,7 +910,7 @@
         <article class="thumb-card" data-scroll="#chapter1">
           <div class="thumb-index">00</div>
           <div class="thumb-media">
-            <img src="assets/thumb-live-show.jpg" alt="現場演出縮圖" />
+            <img src="https://samplelib.com/lib/preview/jpeg/sample-city-park-400x300.jpg" alt="現場演出縮圖" />
           </div>
           <div class="thumb-body">
             <div class="thumb-kicker">Prologue</div>
@@ -827,7 +924,7 @@
         <article class="thumb-card" data-scroll="#chapter1">
           <div class="thumb-index">01</div>
           <div class="thumb-media">
-            <img src="assets/thumb-history.jpg" alt="老歌廳海報牆示意圖" />
+            <img src="https://samplelib.com/lib/preview/jpeg/sample-clouds-400x300.jpg" alt="老歌廳海報牆示意圖" />
           </div>
           <div class="thumb-body">
             <div class="thumb-kicker">Chapter 1</div>
@@ -841,7 +938,7 @@
         <article class="thumb-card" data-scroll="#chapter2">
           <div class="thumb-index">02</div>
           <div class="thumb-media">
-            <img src="assets/thumb-singer.jpg" alt="帽子姑娘楊雅喬示意圖" />
+            <img src="https://samplelib.com/lib/preview/jpeg/sample-city-park-400x300.jpg" alt="帽子姑娘示意圖" />
           </div>
           <div class="thumb-body">
             <div class="thumb-kicker">Chapter 2</div>
@@ -855,7 +952,7 @@
         <article class="thumb-card" data-scroll="#chapter3">
           <div class="thumb-index">03</div>
           <div class="thumb-media">
-            <img src="assets/thumb-after.jpg" alt="歌廳散場後的座位示意圖" />
+            <img src="https://samplelib.com/lib/preview/jpeg/sample-clouds-400x300.jpg" alt="歌廳散場後的座位示意圖" />
           </div>
           <div class="thumb-body">
             <div class="thumb-kicker">Chapter 3</div>
@@ -897,6 +994,19 @@
             </p>
           </div>
 
+          <!-- Before / After slider：過去與現在的對照（示意圖） -->
+          <div class="ba-wrapper" id="baSlider">
+            <div class="ba-img ba-img-before">
+              <img src="https://samplelib.com/lib/preview/jpeg/sample-clouds-400x300.jpg" alt="過去的熱鬧示意圖" />
+            </div>
+            <div class="ba-img ba-img-after">
+              <img src="https://samplelib.com/lib/preview/jpeg/sample-city-park-400x300.jpg" alt="今日街景示意圖" />
+            </div>
+            <div class="ba-label before">曾經的歌廳街</div>
+            <div class="ba-label after">現在的同一條路</div>
+            <input type="range" min="0" max="100" value="50" class="ba-range" aria-label="拖曳比較過去與現在">
+          </div>
+
           <div class="data-band" id="historyStats">
             <div class="data-item">
               <div class="data-label">年代</div>
@@ -931,7 +1041,7 @@
 
         <aside class="chapter-visual reveal">
           <div class="chapter-visual-main">
-            <img src="assets/ch1-posterwall.jpg" alt="紅包場老海報牆示意圖" />
+            <img src="https://samplelib.com/lib/preview/jpeg/sample-city-park-400x300.jpg" alt="紅包場老海報牆示意圖" />
           </div>
           <p class="chapter-visual-caption">
             老照片與節目單，記錄紅包場曾經的熱鬧。今日路過同一條街，多數人只認得連鎖飲料店與新商場。
@@ -1019,9 +1129,9 @@
 
         <aside class="chapter-visual reveal">
           <div class="chapter-visual-main">
-            <!-- 之後換你們拍的現場演出影片 -->
-            <!-- <video src="assets/singer-stage.mp4" controls></video> -->
-            <img src="assets/ch2-stage-closeup.jpg" alt="舞台特寫示意圖" />
+            <!-- 之後換你們拍的現場演出影片，加 class="autoPlay" -->
+            <!-- <video class="autoPlay" src="assets/singer-stage.mp4" controls muted playsinline></video> -->
+            <img src="https://samplelib.com/lib/preview/jpeg/sample-clouds-400x300.jpg" alt="舞台特寫示意圖" />
           </div>
           <p class="chapter-visual-caption">
             舞台看起來華麗，休息室卻相對簡陋。歌手在光與影之間進出，  
@@ -1060,6 +1170,7 @@
               <div>
                 <div><strong>聲音裡的散場：一晚結束後的紅包場</strong></div>
                 <div>觀眾離席、酒杯碰撞聲漸弱，工作人員收拾桌面，歌手在後台卸妝說笑。</div>
+                <!-- 之後換成你們錄的散場聲 -->
                 <!-- <audio src="assets/after-show-ambience.mp3" controls style="margin-top:0.4rem;width:100%;"></audio> -->
               </div>
             </div>
@@ -1102,7 +1213,7 @@
 
         <aside class="chapter-visual reveal">
           <div class="chapter-visual-main">
-            <img src="assets/ch3-empty-hall.jpg" alt="散場後空景示意圖" />
+            <img src="https://samplelib.com/lib/preview/jpeg/sample-clouds-400x300.jpg" alt="散場後空景示意圖" />
           </div>
           <p class="chapter-visual-caption">
             散場後的空椅子，像是城市裡一塊被抽掉的記憶。  
@@ -1144,6 +1255,8 @@
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       scrollProgress.style.width = progress + "%";
+
+      const heroBg = document.querySelector(".hero-bg::before");
     });
 
     function smoothScrollTo(targetSelector) {
@@ -1242,6 +1355,100 @@
       { threshold: 0.4 }
     );
     bars.forEach(bar => barObserver.observe(bar));
+
+    // Before/After slider
+    const baWrapper = document.getElementById("baSlider");
+    if (baWrapper) {
+      const range = baWrapper.querySelector(".ba-range");
+      const afterImg = baWrapper.querySelector(".ba-img-after");
+      range.addEventListener("input", () => {
+        const val = range.value;
+        afterImg.style.width = val + "%";
+      });
+    }
+
+    // autoPlay videos on scroll
+    const videos = document.querySelectorAll(".autoPlay");
+    if (videos.length) {
+      const videoObserver = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            const v = entry.target;
+            if (entry.isIntersecting) {
+              v.play().catch(() => {});
+            } else {
+              v.pause();
+            }
+          });
+        },
+        { threshold: 0.5 }
+      );
+      videos.forEach(v => videoObserver.observe(v));
+    }
+
+    // Chapter 3 darken when in view
+    const ch3 = document.getElementById("chapter3");
+    if (ch3) {
+      const ch3Observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(e => {
+            if (e.isIntersecting) ch3.classList.add("active");
+          });
+        },
+        { threshold: 0.3 }
+      );
+      ch3Observer.observe(ch3);
+    }
+
+    // ambient audio control
+    const introAudio = document.getElementById("introAudio");
+    const audioToggle = document.getElementById("audioToggle");
+    const enterBtn = document.getElementById("enterBtn");
+    let audioEnabled = false;
+
+    function updateAudioToggle() {
+      const icon = audioToggle.querySelector(".icon");
+      const label = audioToggle.querySelector(".label");
+      if (audioEnabled) {
+        icon.textContent = "🔊";
+        label.textContent = "關閉現場環境聲";
+      } else {
+        icon.textContent = "🔇";
+        label.textContent = "開啟現場環境聲";
+      }
+    }
+
+    function playAmbient() {
+      if (!introAudio) return;
+      introAudio.volume = 0.4;
+      introAudio.play().catch(() => {});
+      audioEnabled = true;
+      updateAudioToggle();
+    }
+
+    if (enterBtn) {
+      enterBtn.addEventListener("click", () => {
+        smoothScrollTo("#onboarding");
+        if (!audioEnabled) {
+          playAmbient();
+        }
+      });
+    }
+
+    if (audioToggle) {
+      audioToggle.addEventListener("click", () => {
+        if (!introAudio) return;
+        if (!audioEnabled) {
+          playAmbient();
+        } else {
+          introAudio.pause();
+          audioEnabled = false;
+          updateAudioToggle();
+        }
+      });
+    }
+
+    updateAudioToggle();
   </script>
 </body>
 </html>
