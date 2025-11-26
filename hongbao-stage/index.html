@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>唱給不在場的人｜紅包歌手的世代誤解與生存現場</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #0c0506;
+      --bg-alt: #1a0e10;
+      --accent: #d62032;
+      --accent-soft: #f4c24a;
+      --text: #f9f4ef;
+      --muted: #bba7a3;
+      --card: #1f1012;
+      --font-title: "Noto Serif TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-body: "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: radial-gradient(circle at top, #351016 0, #050002 45%, #000 100%);
+      color: var(--text);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    img, video {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      width: 0;
+      background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+      z-index: 999;
+      transition: width 0.1s linear;
+    }
+
+    header {
+      position: fixed;
+      top: 4px;
+      left: 0;
+      right: 0;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 4vw;
+      backdrop-filter: blur(16px);
+      background: linear-gradient(to bottom, rgba(5,0,0,0.9), rgba(5,0,0,0.0));
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .logo {
+      font-family: var(--font-title);
+      letter-spacing: 0.2em;
+      font-size: 0.9rem;
+    }
+
+    .logo span {
+      color: var(--accent-soft);
+    }
+
+    nav {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    nav a {
+      opacity: 0.76;
+      position: relative;
+      padding-bottom: 2px;
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 2px;
+      width: 0;
+      background: var(--accent-soft);
+      transition: width 0.2s ease;
+    }
+
+    nav a:hover::after,
+    nav a.active::after {
+      width: 100%;
+    }
+
+    main {
+      overflow-x: hidden;
+    }
+
+    section {
+      padding: 6rem 8vw;
+      position: relative;
+    }
+
+    .hero {
+      min-height: 100vh;
+      padding-top: 5.5rem;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .hero-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      opacity: 0.65;
+      pointer-events: none;
+    }
+
+    .hero-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(250,188,80,0.2) 0, transparent 55%),
+        radial-gradient(circle at 80% 60%, rgba(214,32,50,0.4) 0, transparent 60%),
+        url("assets/placeholder-stage-grain.jpg") center/cover no-repeat;
+      mix-blend-mode: screen;
+      filter: blur(1px);
+    }
+
+    .hero-title {
+      max-width: 32rem;
+    }
+
+    .hero-kicker {
+      font-size: 0.85rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .hero-title h1 {
+      font-family: var(--font-title);
+      font-size: clamp(2.4rem, 4vw, 3.3rem);
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-title h1 span {
+      color: var(--accent-soft);
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 1.4rem;
+    }
+
+    .article-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 1.3rem;
+    }
+
+    .article-tag {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
+      margin-right: 0.6rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .article-byline {
+      margin-top: 0.3rem;
+    }
+
+    .article-date {
+      margin-top: 0.1rem;
+    }
+
+    .hero-meta {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .hero-meta strong {
+      color: var(--accent-soft);
+      font-weight: 600;
+    }
+
+    .hero-cta {
+      margin-top: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hero-cta button {
+      border: none;
+      padding: 0.8rem 1.4rem;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #f6d56c, #d62032);
+      color: #160202;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .hero-cta button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.7);
+    }
+
+    .hero-cta span {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .hero-right {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .hero-video-shell {
+      aspect-ratio: 16 / 9;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.07);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      position: relative;
+    }
+
+    .hero-video-shell::after {
+      content: "現場示意影片（之後替換）";
+      position: absolute;
+      bottom: 0.6rem;
+      right: 0.9rem;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.7);
+      background: rgba(0,0,0,0.5);
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+    }
+
+    .hero-video-shell video,
+    .hero-video-shell img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-tagline {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .onboarding {
+      background: radial-gradient(circle at top, #301015 0, #050003 48%);
+      padding-top: 4rem;
+      padding-bottom: 5rem;
+    }
+
+    .section-label {
+      font-size: 0.8rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-family: var(--font-title);
+      font-size: 1.7rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-lead {
+      max-width: 40rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+    }
+
+    .thumb-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+
+    .thumb-card {
+      background: radial-gradient(circle at top, #3a171b, #120609);
+      border-radius: 1.3rem;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .thumb-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.8);
+      border-color: rgba(244,194,74,0.9);
+    }
+
+    .thumb-media {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+
+    .thumb-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(1.15);
+      transform: scale(1.02);
+      transition: transform 0.3s ease;
+    }
+
+    .thumb-card:hover .thumb-media img {
+      transform: scale(1.07);
+    }
+
+    .thumb-body {
+      padding: 0.9rem 1rem 1.1rem;
+    }
+
+    .thumb-kicker {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .thumb-title {
+      font-size: 0.95rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .thumb-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .thumb-index {
+      position: absolute;
+      top: 0.6rem;
+      left: 0.8rem;
+      background: rgba(0,0,0,0.7);
+      border-radius: 999px;
+      padding: 0.1rem 0.6rem;
+      font-size: 0.7rem;
+      color: var(--accent-soft);
+    }
+
+    .chapter {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      background: linear-gradient(to bottom, rgba(255,255,255,0.01), rgba(0,0,0,0.85));
+    }
+
+    .chapter-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.2fr);
+      gap: 3rem;
+      align-items: flex-start;
+    }
+
+    .chapter-heading {
+      font-family: var(--font-title);
+      font-size: 1.5rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .chapter-heading span {
+      color: var(--accent-soft);
+    }
+
+    .chapter-tagline {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .chapter-body p {
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      color: #f1e5df;
+    }
+
+    .chapter-body p strong {
+      color: var(--accent-soft);
+      font-weight: 600;
+    }
+
+    .chapter-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 1.2rem;
+      font-size: 0.8rem;
+    }
+
+    .meta-pill {
+      border-radius: 999px;
+      padding: 0.3rem 0.8rem;
+      background: rgba(255,255,255,0.06);
+      color: var(--muted);
+    }
+
+    .chapter-visual {
+      position: sticky;
+      top: 5rem;
+      align-self: flex-start;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .chapter-visual-main {
+      border-radius: 1.5rem;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 18px 45px rgba(0,0,0,0.75);
+      position: relative;
+      background: #000;
+      aspect-ratio: 4 / 3;
+    }
+
+    .chapter-visual-main img,
+    .chapter-visual-main video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .chapter-visual-caption {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .data-band {
+      margin-top: 2rem;
+      padding: 1.2rem 1.2rem;
+      border-radius: 1.2rem;
+      background: radial-gradient(circle at top left, #3a151a, #120407);
+      border: 1px solid rgba(255,255,255,0.06);
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.2rem;
+      font-size: 0.8rem;
+    }
+
+    .data-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .data-label {
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+    }
+
+    .data-number {
+      font-family: var(--font-title);
+      font-size: 1.1rem;
+      color: var(--accent-soft);
+    }
+
+    .data-note {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .singer-grid {
+      margin-top: 1.6rem;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .singer-card {
+      perspective: 1200px;
+      position: relative;
+      height: 180px;
+    }
+
+    .singer-inner {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+      cursor: pointer;
+    }
+
+    .singer-card:hover .singer-inner {
+      transform: rotateY(180deg);
+    }
+
+    .singer-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 1rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 0.9rem 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+    }
+
+    .singer-face.front {
+      background: radial-gradient(circle at top, #4a1d26, #14050a);
+    }
+
+    .singer-face.back {
+      background: radial-gradient(circle at top, #22142a, #050208);
+      transform: rotateY(180deg);
+    }
+
+    .singer-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .singer-role {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .singer-quote {
+      font-size: 0.8rem;
+      color: #f4e7dd;
+    }
+
+    .singer-meta {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    #chapter3 {
+      background: radial-gradient(circle at top, #1a1117 0, #020103 55%, #000 100%);
+    }
+
+    .fade-lines {
+      margin-top: 1.5rem;
+      border-left: 1px solid rgba(255,255,255,0.15);
+      padding-left: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .fade-lines span.highlight {
+      color: #f4e7dd;
+    }
+
+    .audio-shell {
+      margin-top: 1.8rem;
+      padding: 1rem 1.2rem;
+      border-radius: 1rem;
+      background: linear-gradient(90deg, rgba(214,32,50,0.2), rgba(10,2,2,0.9));
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.85rem;
+    }
+
+    .audio-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 2px solid var(--accent-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+
+    .chart-band {
+      margin-top: 2rem;
+      padding: 1.2rem 1.2rem;
+      border-radius: 1.2rem;
+      background: radial-gradient(circle at top left, #2b1318, #0a0204);
+      border: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.8rem;
+    }
+
+    .chart-title {
+      font-size: 0.9rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .chart-row {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .chart-label {
+      color: var(--muted);
+    }
+
+    .chart-bar-wrap {
+      width: 100%;
+      height: 7px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .chart-bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--accent-soft), var(--accent));
+      border-radius: inherit;
+      transition: width 1s ease-out;
+    }
+
+    .outro {
+      padding-top: 3rem;
+      padding-bottom: 3.5rem;
+      background: #050103;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .outro-inner {
+      max-width: 900px;
+    }
+
+    .credit-line {
+      margin-top: 0.4rem;
+    }
+
+    footer {
+      padding: 1rem 8vw 2rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-align: center;
+      background: #050103;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 960px) {
+      header {
+        padding-inline: 5vw;
+      }
+
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 2.2rem;
+      }
+
+      .hero-right {
+        order: -1;
+      }
+
+      .thumb-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .chapter-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .chapter-visual {
+        position: static;
+      }
+
+      .data-band {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      section {
+        padding-inline: 6vw;
+      }
+
+      .thumb-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .data-band {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <header>
+    <div class="logo"><span>紅包場</span> 專題</div>
+    <nav id="topNav">
+      <a href="#hero">開頭</a>
+      <a href="#onboarding">導覽</a>
+      <a href="#chapter1">誕生與繁華</a>
+      <a href="#chapter2">仍在舞台</a>
+      <a href="#chapter3">散場之後</a>
+    </nav>
+  </header>
+
+  <div class="hero-bg" aria-hidden="true"></div>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero-title reveal">
+        <div class="hero-kicker">Song for the Absent</div>
+        <h1><span>唱給不在場的人</span><br />紅包歌手的世代誤解與生存現場</h1>
+
+        <div class="article-meta">
+          <span class="article-tag">文化｜勞動</span>
+          <div class="article-byline">文／XXX　攝影／YYY　剪輯與網頁製作／ZZZ</div>
+          <div class="article-date">2025.01.XX　台北報導</div>
+        </div>
+
+        <p class="hero-subtitle">
+          夜色落在西門町巷口，霓虹仍亮著，但多數人已經不知道，那是一家紅包歌廳。  
+          在台北僅存的紅包場裡，歌手每天站上舞台，對著愈來愈少的觀眾唱歌──
+          她們的工作，既被誤解，也被遺忘。
+        </p>
+
+        <div class="hero-meta">
+          <strong>場景：</strong>西門町金鑽歌廳，台北唯一仍以「紅包場」形式營運的歌廳。<br />
+          <strong>關鍵提問：</strong>當紅包場被視為「老人的娛樂」、城市拆除一間又一間歌廳，  
+          誰還願意在這裡唱？她們，又在堅持什麼？
+        </div>
+
+        <div class="hero-cta">
+          <button type="button" data-scroll="#onboarding">進入報導</button>
+          <span>滑動螢幕，從一晚的進場開始。</span>
+        </div>
+      </div>
+
+      <div class="hero-right reveal">
+        <div class="hero-video-shell">
+          <!-- 之後換成 opening 影片或現場 cut -->
+          <!-- <video src="assets/hongbao-opening.mp4" autoplay muted loop playsinline></video> -->
+          <img src="assets/placeholder-hero-video.jpg" alt="紅包場舞台示意圖" />
+        </div>
+        <p class="hero-tagline">
+          灯光、紅包、酒席與老歌，交織出屬於某一個世代的夜生活場景。  
+          對許多外省老兵與勞工而言，紅包場曾是下班後唯一的娛樂；  
+          對仍站在台上的歌手來說，這裡則是維持生計、也尋找自我價值的地方。
+        </p>
+      </div>
+    </section>
+
+    <!-- ONBOARDING -->
+    <section class="onboarding" id="onboarding">
+      <div class="section-label">Scroll Navigation</div>
+      <h2 class="section-title">從進場到散場，跟著一晚的順序閱讀</h2>
+      <p class="section-lead">
+        報導以一晚的時間順序為骨幹，帶讀者從進場的第一眼，到散場後的最後一道光，  
+        依序看見紅包場的歷史、現場與未來。
+      </p>
+
+      <div class="thumb-grid">
+        <article class="thumb-card" data-scroll="#chapter1">
+          <div class="thumb-index">00</div>
+          <div class="thumb-media">
+            <img src="assets/thumb-live-show.jpg" alt="現場演出縮圖" />
+          </div>
+          <div class="thumb-body">
+            <div class="thumb-kicker">Prologue</div>
+            <div class="thumb-title">進場：第一次走進紅包歌廳的視線</div>
+            <p class="thumb-desc">
+              隨著開場曲，一桌桌上菜、紅包遞出，觀眾與歌手之間的距離，比想像中更近。
+            </p>
+          </div>
+        </article>
+
+        <article class="thumb-card" data-scroll="#chapter1">
+          <div class="thumb-index">01</div>
+          <div class="thumb-media">
+            <img src="assets/thumb-history.jpg" alt="老歌廳海報牆示意圖" />
+          </div>
+          <div class="thumb-body">
+            <div class="thumb-kicker">Chapter 1</div>
+            <div class="thumb-title">燈紅酒綠的年代：紅包場是怎麼誕生的？</div>
+            <p class="thumb-desc">
+              從戰後西門町夜生活到歌廳文化興起，紅包場如何成為庶民娛樂的集散地。
+            </p>
+          </div>
+        </article>
+
+        <article class="thumb-card" data-scroll="#chapter2">
+          <div class="thumb-index">02</div>
+          <div class="thumb-media">
+            <img src="assets/thumb-singer.jpg" alt="帽子姑娘楊雅喬示意圖" />
+          </div>
+          <div class="thumb-body">
+            <div class="thumb-kicker">Chapter 2</div>
+            <div class="thumb-title">仍在舞台的她們：紅包歌手的日常與界線</div>
+            <p class="thumb-desc">
+              「我不是在賣弄，而是在把歌唱好。」紅包歌手如何在偏見之間撐住自己的專業。
+            </p>
+          </div>
+        </article>
+
+        <article class="thumb-card" data-scroll="#chapter3">
+          <div class="thumb-index">03</div>
+          <div class="thumb-media">
+            <img src="assets/thumb-after.jpg" alt="歌廳散場後的座位示意圖" />
+          </div>
+          <div class="thumb-body">
+            <div class="thumb-kicker">Chapter 3</div>
+            <div class="thumb-title">散場之後：城市拆掉的不只是招牌</div>
+            <p class="thumb-desc">
+              當歌廳一間間熄燈，紅包場走入歷史，留下的是誰的記憶？又缺席了誰的紀錄？
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- CHAPTER 1 -->
+    <section class="chapter" id="chapter1">
+      <div class="chapter-grid">
+        <div class="chapter-text reveal">
+          <div class="section-label">Chapter 1</div>
+          <h2 class="chapter-heading"><span>燈紅酒綠的年代</span> — 紅包場的誕生與繁華</h2>
+          <p class="chapter-tagline">
+            戰後的西門町，戲院、卡拉 OK、酒家與歌廳並立。紅包場從這裡長出，  
+            也跟著台灣娛樂產業的變化，一步步走向邊緣。
+          </p>
+
+          <div class="chapter-body">
+            <p>
+              1950 年代開始，西門町逐漸成為台北最熱鬧的夜生活中心。  
+              除了電影與歌舞劇，<strong>歌廳</strong>提供了另一種表演形式：  
+              台上有人唱歌，台下有人喝酒、聊天，觀眾可以拿著紅包走到舞台前，把指定曲目交給歌手。
+            </p>
+            <p>
+              紅包場之所以被稱為「紅包」，正是因為<strong>觀眾用紅包作為點歌與打賞的媒介</strong>。  
+              對外省老兵與勞工而言，這是下班後少數能放鬆的地方；  
+              對歌手來說，則是用一首首老歌換取當晚收入的工作現場。
+            </p>
+            <p>
+              1980 年代以前，台北市區曾有多家紅包歌廳。隨著娛樂型態改變、  
+              KTV 與新型態夜店興起，紅包場的場館數量一路下滑。  
+              訪問與文獻顯示，<strong>到 2025 年，市區只剩西門金鑽歌廳仍以紅包場形式營運</strong>。
+            </p>
+          </div>
+
+          <div class="data-band" id="historyStats">
+            <div class="data-item">
+              <div class="data-label">年代</div>
+              <div class="data-number" data-target="40">1960s–2000s</div>
+              <div class="data-note">
+                紅包場興起、全盛到凋零，橫跨將近四十年，見證台北夜生活的轉變。
+              </div>
+            </div>
+            <div class="data-item">
+              <div class="data-label">歌廳數量</div>
+              <div class="data-number" data-target="1">台北僅存 1 家</div>
+              <div class="data-note">
+                依照受訪者記憶與地方資料整理，過去市區曾有多家紅包歌廳，現僅存西門金鑽。
+                （實際數字可依調查再更新）
+              </div>
+            </div>
+            <div class="data-item">
+              <div class="data-label">觀眾輪廓</div>
+              <div class="data-number" data-target="70">主要 50+ 歲</div>
+              <div class="data-note">
+                現場觀察與訪談顯示，多數客人為中高齡族群，與年輕世代生活圈幾乎沒有交集。
+              </div>
+            </div>
+          </div>
+
+          <div class="chapter-meta">
+            <span class="meta-pill">歷史脈絡</span>
+            <span class="meta-pill">場館興衰</span>
+            <span class="meta-pill">世代斷裂</span>
+          </div>
+        </div>
+
+        <aside class="chapter-visual reveal">
+          <div class="chapter-visual-main">
+            <img src="assets/ch1-posterwall.jpg" alt="紅包場老海報牆示意圖" />
+          </div>
+          <p class="chapter-visual-caption">
+            老照片與節目單，記錄紅包場曾經的熱鬧。今日路過同一條街，多數人只認得連鎖飲料店與新商場。
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- CHAPTER 2 -->
+    <section class="chapter" id="chapter2">
+      <div class="chapter-grid">
+        <div class="chapter-text reveal">
+          <div class="section-label">Chapter 2</div>
+          <h2 class="chapter-heading"><span>唱給剩下的人聽</span> — 仍在舞台的她們與他們</h2>
+          <p class="chapter-tagline">
+            外界常把紅包歌手想成「賣弄、討好客人」的角色。  
+            但在台上，她們更在意的是：怎麼把歌唱好，讓一晚的情緒被接住。
+          </p>
+
+          <div class="chapter-body">
+            <p>
+              每晚八點，楊雅喬戴著招牌帽子走上台。她在這裡被觀眾叫做「帽子姑娘」，  
+              一站就是二十多年。熟客一進門，就會往舞台看，看她在不在場。
+            </p>
+            <p>
+              「我不是在賣弄，而是在把歌唱好，」她說。  
+              在她的理解裡，紅包不是「價碼」，而是一種反應──  
+              客人願意走到台前、願意抬頭看你，代表剛剛那首歌，真的有被聽進去。
+            </p>
+            <p>
+              紅包歌手的工作，遠比外界想像得更長、更不穩定。  
+              她們下午彩排、傍晚梳化，晚間連續幾場演出，中間還得在客人情緒與自身界線之間拿捏。  
+              一名資深主持人說：「<strong>唱歌是一回事，Hold 住場子才是功夫。</strong>」
+            </p>
+          </div>
+
+          <div class="singer-grid">
+            <div class="singer-card">
+              <div class="singer-inner">
+                <div class="singer-face front">
+                  <div class="singer-name">帽子姑娘・楊雅喬</div>
+                  <div class="singer-role">紅包歌手／金鑽歌廳</div>
+                  <p class="singer-quote">
+                    「要記得每一張臉，他們才會記得你。」
+                  </p>
+                </div>
+                <div class="singer-face back">
+                  <div class="singer-meta">
+                    出道｜約 1980 年代末（訪談紀錄）<br />
+                    最常被點的歌｜〈帽子姑娘〉等台語老歌<br />
+                    舞台習慣｜一定戴帽子上台，讓客人一眼認出她。<br />
+                    她說，紅包場讓她學會的，是怎麼在吵雜裡專注唱完一首歌。
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="singer-card">
+              <div class="singer-inner">
+                <div class="singer-face front">
+                  <div class="singer-name">阿宏哥（化名）</div>
+                  <div class="singer-role">主持／跑場工作者</div>
+                  <p class="singer-quote">
+                    「要讓每一桌都覺得自己被看見，才會有人願意留下來。」
+                  </p>
+                </div>
+                <div class="singer-face back">
+                  <div class="singer-meta">
+                    身分｜主持人兼歌手，常在不同歌廳與活動之間跑場。<br />
+                    工作節奏｜下午彩排、傍晚準備，晚上接連進場。<br />
+                    他說，最怕的不是沒紅包，而是整個場子冷掉，
+                    「那代表你跟觀眾之間完全沒有連上線」。
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chapter-meta">
+            <span class="meta-pill">生命故事</span>
+            <span class="meta-pill">勞動條件</span>
+            <span class="meta-pill">刻板印象翻轉</span>
+          </div>
+        </div>
+
+        <aside class="chapter-visual reveal">
+          <div class="chapter-visual-main">
+            <!-- 之後換你們拍的現場演出影片 -->
+            <!-- <video src="assets/singer-stage.mp4" controls></video> -->
+            <img src="assets/ch2-stage-closeup.jpg" alt="舞台特寫示意圖" />
+          </div>
+          <p class="chapter-visual-caption">
+            舞台看起來華麗，休息室卻相對簡陋。歌手在光與影之間進出，  
+            在觀眾面前維持笑容，下台後才有時間處理自己的疲累與擔心。
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- CHAPTER 3 -->
+    <section class="chapter" id="chapter3">
+      <div class="chapter-grid">
+        <div class="chapter-text reveal">
+          <div class="section-label">Chapter 3</div>
+          <h2 class="chapter-heading"><span>散場之後</span> — 文化的消逝與記憶的延續</h2>
+          <p class="chapter-tagline">
+            當城市以「更新」之名拆掉一棟又一棟老歌廳，紅包場退到地圖的邊界。  
+            它沒有被登錄為文化資產，連「消失」這件事，都顯得有些悄無聲息。
+          </p>
+
+          <div class="chapter-body">
+            <p>
+              訪談中，多位歌手提到，過去他們在台北市區有許多可以跑的場。  
+              某一間歌廳改成商旅，另一間變成餐廳，更多則隨著都市更新，被整棟拆除。  
+              殘存的記號，只有老客人口中的店名與路口。
+            </p>
+
+            <div class="fade-lines">
+              <span>一個又一個歌廳改成 KTV、餐廳、旅館。</span>
+              <span>門口招牌拆掉之後，<span class="highlight">很少有人記得，這裡曾有人拿紅包唱歌。</span></span>
+              <span>仍在舞台上的那群人，只能繼續唱，好像什麼都沒有改變。</span>
+            </div>
+
+            <div class="audio-shell">
+              <div class="audio-icon">♪</div>
+              <div>
+                <div><strong>聲音裡的散場：一晚結束後的紅包場</strong></div>
+                <div>觀眾離席、酒杯碰撞聲漸弱，工作人員收拾桌面，歌手在後台卸妝說笑。</div>
+                <!-- <audio src="assets/after-show-ambience.mp3" controls style="margin-top:0.4rem;width:100%;"></audio> -->
+              </div>
+            </div>
+
+            <div class="chart-band" id="venueChart">
+              <div class="chart-title">台北市紅包歌廳數量變化（示意圖，數據可依調查更新）</div>
+
+              <div class="chart-row">
+                <div class="chart-label">1980s 全盛</div>
+                <div class="chart-bar-wrap">
+                  <div class="chart-bar" data-width="95"></div>
+                </div>
+              </div>
+              <div class="chart-row">
+                <div class="chart-label">2000s</div>
+                <div class="chart-bar-wrap">
+                  <div class="chart-bar" data-width="40"></div>
+                </div>
+              </div>
+              <div class="chart-row">
+                <div class="chart-label">2025</div>
+                <div class="chart-bar-wrap">
+                  <div class="chart-bar" data-width="10"></div>
+                </div>
+              </div>
+
+              <p style="margin-top:0.6rem;color:var(--muted);">
+                歷史資料與訪談顯示，紅包歌廳數量在近數十年間明顯下滑。  
+                實際數據與來源，可在正式版中補上註記。
+              </p>
+            </div>
+          </div>
+
+          <div class="chapter-meta">
+            <span class="meta-pill">場館消失</span>
+            <span class="meta-pill">政策與市場</span>
+            <span class="meta-pill">記憶空缺</span>
+          </div>
+        </div>
+
+        <aside class="chapter-visual reveal">
+          <div class="chapter-visual-main">
+            <img src="assets/ch3-empty-hall.jpg" alt="散場後空景示意圖" />
+          </div>
+          <p class="chapter-visual-caption">
+            散場後的空椅子，像是城市裡一塊被抽掉的記憶。  
+            當懷舊復古成為流行美學，紅包場卻沒有等到被好好理解的一天。
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 關於本報導 -->
+    <section class="outro">
+      <div class="outro-inner">
+        <div class="section-label">About</div>
+        <h2 class="section-title">關於本報導</h2>
+        <p class="section-lead">
+          本報導採訪時間為 2024–2025 年，記者多次進入西門町紅包歌廳進行現場觀察，  
+          並訪問紅包歌手、主持人與相關工作人員，輔以歷史文獻與既有報導整理而成。
+        </p>
+        <p class="credit-line">
+          採訪、文字｜XXX<br />
+          攝影、影像剪輯｜YYY<br />
+          網頁敘事與前端製作｜ZZZ
+        </p>
+        <p class="credit-line">
+          部分數據與場館變化為示意呈現，正式出版前將依據實際查證結果調整，並補上資料來源。
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    唱給不在場的人：紅包歌手的世代誤解與生存現場｜數位專題報導 Demo 版
+  </footer>
+
+  <script>
+    const scrollProgress = document.getElementById("scrollProgress");
+    window.addEventListener("scroll", () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      scrollProgress.style.width = progress + "%";
+    });
+
+    function smoothScrollTo(targetSelector) {
+      const el = document.querySelector(targetSelector);
+      if (!el) return;
+      const y = el.getBoundingClientRect().top + window.pageYOffset - 70;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+
+    document.querySelectorAll("[data-scroll]").forEach(el => {
+      el.addEventListener("click", () => {
+        const target = el.getAttribute("data-scroll");
+        smoothScrollTo(target);
+      });
+    });
+
+    const navLinks = document.querySelectorAll("#topNav a");
+    const sections = Array.from(navLinks).map(link => {
+      const id = link.getAttribute("href");
+      return document.querySelector(id);
+    });
+
+    window.addEventListener("scroll", () => {
+      let current = null;
+      const buffer = 120;
+      sections.forEach((sec, idx) => {
+        if (!sec) return;
+        const top = sec.offsetTop - buffer;
+        if (window.scrollY >= top) {
+          current = navLinks[idx];
+        }
+      });
+      navLinks.forEach(link => link.classList.remove("active"));
+      if (current) current.classList.add("active");
+    });
+
+    const reveals = document.querySelectorAll(".reveal");
+    const io = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in-view");
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    reveals.forEach(el => io.observe(el));
+
+    const statNumbers = document.querySelectorAll(".data-number");
+    const statObserver = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            const target = parseInt(el.dataset.target, 10);
+            if (!target || el.dataset.done) return;
+            el.dataset.done = "true";
+            let start = 0;
+            const duration = 1200;
+            const startTime = performance.now();
+            function tick(now) {
+              const progress = Math.min((now - startTime) / duration, 1);
+              const value = Math.floor(start + (target - start) * progress);
+              if (el.dataset.target === "70") {
+                el.textContent = "主要 " + value + "+ 歲";
+              } else if (el.dataset.target === "1") {
+                el.textContent = "台北僅存 " + value + " 家";
+              } else {
+                el.textContent = "1960s–2000s";
+              }
+              if (progress < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+            statObserver.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+    statNumbers.forEach(el => statObserver.observe(el));
+
+    const bars = document.querySelectorAll(".chart-bar");
+    const barObserver = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const bar = entry.target;
+            const width = bar.dataset.width || 0;
+            bar.style.width = width + "%";
+            barObserver.unobserve(bar);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+    bars.forEach(bar => barObserver.observe(bar));
+  </script>
+</body>
+</html>
