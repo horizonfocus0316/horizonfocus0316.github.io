@@ -253,6 +253,120 @@
 </script>
 
 <!-- ====== 第一章結束====== -->
+<!-- =========================
+ 客群剖面｜打破刻板印象
+ 素材標註：
+ - 身份標籤：B-TRANSLATION（概念轉譯，非真實人物）
+ - 無需照片、不可生成
+========================= -->
+
+<section class="chapter" id="chapter-audience">
+
+  <div class="kicker">視角轉換</div>
+  <h2 class="sectionTitle">誰，真的走進紅包場？</h2>
+
+  <p class="lead">
+    紅包場常被想像成只屬於特定族群的空間。
+    但在金鑽，觀眾的組成早已超出刻板印象。
+    點擊下面的身份標籤，看看實際的樣貌。
+  </p>
+
+  <!-- NOTE[B-TRANSLATION]: 身份為概念標籤，非具體人物 -->
+  <div class="audience-wrap">
+
+    <div class="audience-tags">
+      <button class="audience-tag active"
+        data-title="醫生"
+        data-desc="下診後來放鬆，聽歌、坐著，不說話也沒關係。紅包是一種支持表演的方式。">
+        🩺 醫生
+      </button>
+
+      <button class="audience-tag"
+        data-title="科技業工程師"
+        data-desc="長時間面對螢幕後，需要一個節奏不同的空間。這裡的舞台是另一種『系統』。">
+        💻 工程師
+      </button>
+
+      <button class="audience-tag"
+        data-title="保險業務"
+        data-desc="工作結束後，把這裡當作喘息的地方，聽歌、聊天、暫時離開業績與數字。">
+        📄 保險業務
+      </button>
+
+      <button class="audience-tag"
+        data-title="退休老師"
+        data-desc="不只是來聽歌，也是在看一個仍然運作中的舞台文化。">
+        📚 退休老師
+      </button>
+    </div>
+
+    <div class="audience-panel card pad">
+      <div class="kicker">現場觀察</div>
+      <h3 id="audienceTitle">醫生</h3>
+      <p id="audienceDesc" class="lead">
+        下診後來放鬆，聽歌、坐著，不說話也沒關係。紅包是一種支持表演的方式。
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ====== 客群剖面樣式 ====== -->
+<style>
+  .audience-wrap{
+    display:grid;
+    grid-template-columns: .8fr 1.2fr;
+    gap:18px;
+    margin-top:16px;
+  }
+  @media (max-width: 900px){
+    .audience-wrap{ grid-template-columns:1fr; }
+  }
+
+  .audience-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-content:flex-start;
+  }
+
+  .audience-tag{
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.02);
+    color:var(--text);
+    border-radius:999px;
+    padding:8px 12px;
+    cursor:pointer;
+    font-size:14px;
+  }
+  .audience-tag:hover{
+    border-color: var(--accent);
+  }
+  .audience-tag.active{
+    background: rgba(230,195,106,.12);
+    border-color: var(--accent);
+  }
+</style>
+
+<!-- ====== 客群剖面互動（不用看懂） ====== -->
+<script>
+  const tags = document.querySelectorAll(".audience-tag");
+  const titleEl = document.getElementById("audienceTitle");
+  const descEl = document.getElementById("audienceDesc");
+
+  tags.forEach(tag => {
+    tag.addEventListener("click", () => {
+      tags.forEach(t => t.classList.remove("active"));
+      tag.classList.add("active");
+
+      titleEl.textContent = tag.dataset.title;
+      descEl.textContent = tag.dataset.desc;
+    });
+  });
+</script>
+<!-- ====== 客群剖面互動（不用看懂） ====== -->
+    
     <footer class="small">
       © <span id="y"></span> 紅包場融媒體
     </footer>
