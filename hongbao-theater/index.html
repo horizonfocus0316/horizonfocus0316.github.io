@@ -366,6 +366,137 @@
   });
 </script>
 <!-- ====== 客群剖面互動（不用看懂） ====== -->
+
+<!-- =========================
+ 第二章｜綠雷德：文化不是保存，而是翻譯
+ 素材標註：
+ - 誤解文字：B-TRANSLATION（社會標籤轉譯）
+ - 翻譯內容：B-TRANSLATION（觀點轉換）
+ - 無需照片、不可生成
+========================= -->
+
+<section class="chapter" id="chapter-translation">
+
+  <div class="kicker">第二章</div>
+  <h2 class="sectionTitle">文化要被看懂：紅包場如何重新進入理解框架</h2>
+
+  <p class="lead">
+    對多數人而言，對紅包場的排斥感，
+    往往來自既有的想像，而不是實際經驗。
+    點擊下面的卡片，看看理解是如何發生轉換的。
+  </p>
+
+  <!-- NOTE[B-TRANSLATION]: 以下為觀點轉換設計，非紀實 -->
+  <div class="flip-grid">
+
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <h3>煙味</h3>
+          <p>第一印象往往讓人卻步</p>
+        </div>
+        <div class="flip-back">
+          <h3>氣味是門檻</h3>
+          <p>
+            排斥並非道德判斷，而是感官不適。
+            若觀眾一進門就受不了，文化根本沒有被理解的機會。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <h3>情色</h3>
+          <p>被簡化的標籤</p>
+        </div>
+        <div class="flip-back">
+          <h3>表演與互動</h3>
+          <p>
+            多數表演並非情色，而是一套舞台與觀眾之間的互動秩序。
+            標籤往往遮蔽了實際運作的樣貌。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <h3>老派</h3>
+          <p>屬於上一代的文化</p>
+        </div>
+        <div class="flip-back">
+          <h3>仍在變動</h3>
+          <p>
+            紅包場並非停留在過去，
+            而是在不同世代的參與下持續調整節奏與形式。
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="lead">
+    綠雷德形容他們做的不是保存，而是「翻譯」。
+    不是把人硬帶進場域，
+    而是先移除誤解，讓理解有入口。
+  </p>
+
+</section>
+
+<!-- ====== 翻面卡樣式 ====== -->
+<style>
+  .flip-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+    gap:18px;
+    margin-top:18px;
+  }
+
+  .flip-card{
+    perspective:1000px;
+  }
+
+  .flip-inner{
+    position:relative;
+    width:100%;
+    height:220px;
+    transition:transform .7s;
+    transform-style:preserve-3d;
+    cursor:pointer;
+  }
+
+  .flip-card:hover .flip-inner{
+    transform:rotateY(180deg);
+  }
+
+  .flip-front,
+  .flip-back{
+    position:absolute;
+    inset:0;
+    backface-visibility:hidden;
+    border-radius:18px;
+    border:1px solid var(--line);
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    background:var(--card);
+  }
+
+  .flip-front h3{
+    font-size:22px;
+    margin-bottom:6px;
+  }
+
+  .flip-back{
+    transform:rotateY(180deg);
+  }
+</style>
+<!-- ====== 第二章結束====== -->
     
     <footer class="small">
       © <span id="y"></span> 紅包場融媒體
