@@ -56,7 +56,203 @@
     </section>
 
     <hr class="sep" />
+<!-- =========================
+ 第一章｜金小姐：人物是系統的入口
+ 素材標註：
+ - 人物照片：A-REAL（必須真實）
+ - 規則內容：B-TRANSLATION（概念轉譯）
+========================= -->
 
+<section class="chapter" id="chapter-jin">
+
+  <div class="kicker">第一章</div>
+  <h2 class="sectionTitle">舞台還亮著：金小姐守住紅包場的「運作」</h2>
+
+  <div class="jin-grid">
+
+    <!-- 左側：人物卡 -->
+    <article class="card pad">
+      <div class="kicker">人物</div>
+      <h3 class="person-name">金小姐</h3>
+      <p class="small">金鑽歌廳經營者／表藝老師</p>
+
+      <!-- TODO[A-REAL]: 必須換成金小姐本人照片（真實素材） -->
+      <img
+        src="assets/images/placeholder-person.jpg"
+        alt="金小姐（示意）"
+        class="person-img"
+      >
+
+      <p class="quote">
+        「我守住的不是一個被封存在過去的場景，
+        而是一套仍在運作的舞台系統。」
+      </p>
+
+      <p class="lead">
+        金小姐第一次踏進紅包場，是因為爸爸帶她來。
+        那時她還是表藝科學生，來這裡打工，只覺得「可以領現金，很實在」。
+        多年後，她回到金鑽接手經營，成為台北僅存紅包場的守門人。
+      </p>
+    </article>
+
+    <!-- 右側：規則圖卡 -->
+    <aside class="card pad">
+      <div class="kicker">運作規則</div>
+      <p class="small">
+        點擊卡片，理解紅包場如何維持舞台的秩序與節奏。
+      </p>
+
+      <!-- NOTE[B-TRANSLATION]: 以下為文化規則的視覺轉譯，非紀實 -->
+      <div class="rule-list">
+
+        <button class="rule-card" data-title="不能搶客"
+          data-detail="歌手不能以搶客方式破壞場內氣氛，秩序本身就是舞台能持續運作的基礎。">
+          不能搶客
+        </button>
+
+        <button class="rule-card" data-title="舞台要輪番"
+          data-detail="舞台需要有人輪流上場，讓觀眾感覺整晚都有節奏與流動，而不是停滯。">
+          舞台要輪番
+        </button>
+
+        <button class="rule-card" data-title="歌要活"
+          data-detail="她欣賞願意學新歌的歌手，因為舞台活，場才會活，觀眾才會留下來。">
+          歌要活
+        </button>
+
+        <button class="rule-card" data-title="紅包是互動語言"
+          data-detail="紅包不是單純給錢，而是一種回應與肯定，是台下與台上的互動方式。">
+          紅包是互動語言
+        </button>
+
+        <button class="rule-card" data-title="客人要坐得自在"
+          data-detail="即使第一次來、即使年輕，也要能自在坐下，紅包場才能迎來新的觀眾。">
+          客人要坐得自在
+        </button>
+
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- 規則細節展開視窗 -->
+  <div class="rule-modal" id="ruleModal">
+    <div class="rule-modal-inner">
+      <div class="rule-modal-header">
+        <h4 id="ruleTitle"></h4>
+        <button id="ruleClose">✕</button>
+      </div>
+      <p id="ruleDetail" class="lead"></p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ====== 第一章樣式（只影響這一段） ====== -->
+<style>
+  .chapter{ margin-top:32px; }
+  .jin-grid{
+    display:grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap:18px;
+    margin-top:16px;
+  }
+  @media (max-width: 900px){
+    .jin-grid{ grid-template-columns:1fr; }
+  }
+  .person-name{ font-size:20px; margin:6px 0 4px; }
+  .person-img{
+    width:100%;
+    border-radius:16px;
+    margin:14px 0;
+    border:1px solid var(--line);
+  }
+  .quote{
+    font-size:15px;
+    line-height:1.7;
+    margin:12px 0;
+    color:var(--text);
+  }
+  .rule-list{
+    display:grid;
+    gap:10px;
+    margin-top:12px;
+  }
+  .rule-card{
+    text-align:left;
+    padding:14px;
+    border-radius:14px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.02);
+    color:var(--text);
+    cursor:pointer;
+  }
+  .rule-card:hover{
+    border-color: var(--accent);
+  }
+
+  .rule-modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:999;
+  }
+  .rule-modal.show{ display:flex; }
+  .rule-modal-inner{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:18px;
+    width:min(720px,100%);
+    box-shadow:var(--shadow);
+  }
+  .rule-modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+  }
+  #ruleClose{
+    background:none;
+    border:1px solid var(--line);
+    color:var(--text);
+    border-radius:10px;
+    padding:6px 10px;
+    cursor:pointer;
+  }
+</style>
+
+<!-- ====== 第一章互動（不用看懂） ====== -->
+<script>
+  const modal = document.getElementById("ruleModal");
+  const title = document.getElementById("ruleTitle");
+  const detail = document.getElementById("ruleDetail");
+  const closeBtn = document.getElementById("ruleClose");
+
+  document.querySelectorAll(".rule-card").forEach(btn => {
+    btn.addEventListener("click", () => {
+      title.textContent = btn.dataset.title;
+      detail.textContent = btn.dataset.detail;
+      modal.classList.add("show");
+    });
+  });
+
+  closeBtn.addEventListener("click", () => {
+    modal.classList.remove("show");
+  });
+
+  modal.addEventListener("click", (e) => {
+    if(e.target === modal){
+      modal.classList.remove("show");
+    }
+  });
+</script>
+
+<!-- ====== 第一章結束====== -->
     <footer class="small">
       © <span id="y"></span> 紅包場融媒體
     </footer>
