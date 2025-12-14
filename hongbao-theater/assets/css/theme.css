@@ -1,1 +1,673 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>台北僅存的紅包場：它如何被留下，又如何被改寫</title>
+
+  <!-- 主題樣式：全站視覺唯一來源 -->
+  <link rel="stylesheet" href="assets/css/theme.css">
+
+  <!-- （只留結構，不留顏色） -->
+  <style>
+    *{ box-sizing:border-box; }
+  </style>
+</head>
+  
+<body>
+  <header class="hero">
+    <div class="container">
+      <div class="kicker">紅包場融媒體</div>
+      <h1 class="h1">台北僅存的紅包場：它如何被留下，又如何被改寫</h1>
+      <p class="lead">在金鑽歌廳，我們看見文化並非走向終章，而是重新調整姿態。</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card pad" style="margin-top:22px">
+      <div class="kicker">開場</div>
+      <h2 class="sectionTitle">場景</h2>
+      <p class="lead">午後的金鑽歌廳，燈光昏黃而繁複，沿著天花板和牆邊流動。
+霓虹燈反射在斑駁的天花板上，旋轉舞台緩緩轉著；四散的煙味混著水果盤的甜味，在空氣裡堆出一種濃度。
+這樣的味道會讓不熟悉的人本能地往後縮一步。
+但也在這個場域裡，我們看見一種文化並非走向終章，而是重新調整姿態。</p>
+    </section>
+
+    <hr class="sep" />
+<!-- =========================
+ 第一章｜金小姐：人物是系統的入口
+ 素材標註：
+ - 人物照片：A-REAL（必須真實）
+ - 規則內容：B-TRANSLATION（概念轉譯）
+========================= -->
+
+<section class="chapter" id="chapter-jin">
+
+  <div class="kicker">第一章</div>
+  <h2 class="sectionTitle">舞台還亮著：金小姐守住紅包場的「運作」</h2>
+
+  <div class="jin-grid">
+
+    <!-- 左側：人物卡 -->
+    <article class="card pad">
+      <div class="kicker">人物</div>
+      <h3 class="person-name">金小姐</h3>
+      <p class="small">金鑽歌廳經營者／表藝老師</p>
+
+      <!-- TODO[A-REAL]: 必須換成金小姐本人照片（真實素材） -->
+      <img
+        src="assets/images/placeholder-person.jpg"
+        alt="金小姐（示意）"
+        class="person-img"
+      >
+
+      <p class="quote">
+        「我守住的不是一個被封存在過去的場景，
+        而是一套仍在運作的舞台系統。」
+      </p>
+
+      <p class="lead">
+        金小姐第一次踏進紅包場，是因為爸爸帶她來。
+        那時她還是表藝科學生，來這裡打工，只覺得「可以領現金，很實在」。
+        多年後，她回到金鑽接手經營，成為台北僅存紅包場的守門人。
+      </p>
+    </article>
+
+    <!-- 右側：規則圖卡 -->
+    <aside class="card pad">
+      <div class="kicker">運作規則</div>
+      <p class="small">
+        點擊卡片，理解紅包場如何維持舞台的秩序與節奏。
+      </p>
+
+      <!-- NOTE[B-TRANSLATION]: 以下為文化規則的視覺轉譯，非紀實 -->
+      <div class="rule-list">
+
+        <button class="rule-card" data-title="不能搶客"
+          data-detail="歌手不能以搶客方式破壞場內氣氛，秩序本身就是舞台能持續運作的基礎。">
+          不能搶客
+        </button>
+
+        <button class="rule-card" data-title="舞台要輪番"
+          data-detail="舞台需要有人輪流上場，讓觀眾感覺整晚都有節奏與流動，而不是停滯。">
+          舞台要輪番
+        </button>
+
+        <button class="rule-card" data-title="歌要活"
+          data-detail="她欣賞願意學新歌的歌手，因為舞台活，場才會活，觀眾才會留下來。">
+          歌要活
+        </button>
+
+        <button class="rule-card" data-title="紅包是互動語言"
+          data-detail="紅包不是單純給錢，而是一種回應與肯定，是台下與台上的互動方式。">
+          紅包是互動語言
+        </button>
+
+        <button class="rule-card" data-title="客人要坐得自在"
+          data-detail="即使第一次來、即使年輕，也要能自在坐下，紅包場才能迎來新的觀眾。">
+          客人要坐得自在
+        </button>
+
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- 規則細節展開視窗 -->
+  <div class="rule-modal" id="ruleModal">
+    <div class="rule-modal-inner">
+      <div class="rule-modal-header">
+        <h4 id="ruleTitle"></h4>
+        <button id="ruleClose">✕</button>
+      </div>
+      <p id="ruleDetail" class="lead"></p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ====== 第一章樣式（只影響這一段） ====== -->
+<style>
+  .chapter{ margin-top:32px; }
+  .jin-grid{
+    display:grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap:18px;
+    margin-top:16px;
+  }
+  @media (max-width: 900px){
+    .jin-grid{ grid-template-columns:1fr; }
+  }
+  .person-name{ font-size:20px; margin:6px 0 4px; }
+  .person-img{
+    width:100%;
+    border-radius:16px;
+    margin:14px 0;
+    border:1px solid var(--line);
+  }
+  .quote{
+    font-size:15px;
+    line-height:1.7;
+    margin:12px 0;
+    color:var(--text);
+  }
+  .rule-list{
+    display:grid;
+    gap:10px;
+    margin-top:12px;
+  }
+  .rule-card{
+    text-align:left;
+    padding:14px;
+    border-radius:14px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.02);
+    color:var(--text);
+    cursor:pointer;
+  }
+  .rule-card:hover{
+    border-color: var(--accent);
+  }
+
+  .rule-modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:999;
+  }
+  .rule-modal.show{ display:flex; }
+  .rule-modal-inner{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:18px;
+    width:min(720px,100%);
+    box-shadow:var(--shadow);
+  }
+  .rule-modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+  }
+  #ruleClose{
+    background:none;
+    border:1px solid var(--line);
+    color:var(--text);
+    border-radius:10px;
+    padding:6px 10px;
+    cursor:pointer;
+  }
+</style>
+
+<!-- ====== 第一章互動（不用看懂） ====== -->
+<script>
+  const modal = document.getElementById("ruleModal");
+  const title = document.getElementById("ruleTitle");
+  const detail = document.getElementById("ruleDetail");
+  const closeBtn = document.getElementById("ruleClose");
+
+  document.querySelectorAll(".rule-card").forEach(btn => {
+    btn.addEventListener("click", () => {
+      title.textContent = btn.dataset.title;
+      detail.textContent = btn.dataset.detail;
+      modal.classList.add("show");
+    });
+  });
+
+  closeBtn.addEventListener("click", () => {
+    modal.classList.remove("show");
+  });
+
+  modal.addEventListener("click", (e) => {
+    if(e.target === modal){
+      modal.classList.remove("show");
+    }
+  });
+</script>
+
+<!-- ====== 第一章結束====== -->
+<!-- =========================
+ 客群剖面｜打破刻板印象
+ 素材標註：
+ - 身份標籤：B-TRANSLATION（概念轉譯，非真實人物）
+ - 無需照片、不可生成
+========================= -->
+
+<section class="chapter" id="chapter-audience">
+
+  <div class="kicker">視角轉換</div>
+  <h2 class="sectionTitle">誰，真的走進紅包場？</h2>
+
+  <p class="lead">
+    紅包場常被想像成只屬於特定族群的空間。
+    但在金鑽，觀眾的組成早已超出刻板印象。
+    點擊下面的身份標籤，看看實際的樣貌。
+  </p>
+
+  <!-- NOTE[B-TRANSLATION]: 身份為概念標籤，非具體人物 -->
+  <div class="audience-wrap">
+
+    <div class="audience-tags">
+      <button class="audience-tag active"
+        data-title="醫生"
+        data-desc="下診後來放鬆，聽歌、坐著，不說話也沒關係。紅包是一種支持表演的方式。">
+        🩺 醫生
+      </button>
+
+      <button class="audience-tag"
+        data-title="科技業工程師"
+        data-desc="長時間面對螢幕後，需要一個節奏不同的空間。這裡的舞台是另一種『系統』。">
+        💻 工程師
+      </button>
+
+      <button class="audience-tag"
+        data-title="保險業務"
+        data-desc="工作結束後，把這裡當作喘息的地方，聽歌、聊天、暫時離開業績與數字。">
+        📄 保險業務
+      </button>
+
+      <button class="audience-tag"
+        data-title="退休老師"
+        data-desc="不只是來聽歌，也是在看一個仍然運作中的舞台文化。">
+        📚 退休老師
+      </button>
+    </div>
+
+    <div class="audience-panel card pad">
+      <div class="kicker">現場觀察</div>
+      <h3 id="audienceTitle">醫生</h3>
+      <p id="audienceDesc" class="lead">
+        下診後來放鬆，聽歌、坐著，不說話也沒關係。紅包是一種支持表演的方式。
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ====== 客群剖面樣式 ====== -->
+<style>
+  .audience-wrap{
+    display:grid;
+    grid-template-columns: .8fr 1.2fr;
+    gap:18px;
+    margin-top:16px;
+  }
+  @media (max-width: 900px){
+    .audience-wrap{ grid-template-columns:1fr; }
+  }
+
+  .audience-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-content:flex-start;
+  }
+
+  .audience-tag{
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.02);
+    color:var(--text);
+    border-radius:999px;
+    padding:8px 12px;
+    cursor:pointer;
+    font-size:14px;
+  }
+  .audience-tag:hover{
+    border-color: var(--accent);
+  }
+  .audience-tag.active{
+    background: rgba(230,195,106,.12);
+    border-color: var(--accent);
+  }
+</style>
+
+<!-- ====== 客群剖面互動（不用看懂） ====== -->
+<script>
+  const tags = document.querySelectorAll(".audience-tag");
+  const titleEl = document.getElementById("audienceTitle");
+  const descEl = document.getElementById("audienceDesc");
+
+  tags.forEach(tag => {
+    tag.addEventListener("click", () => {
+      tags.forEach(t => t.classList.remove("active"));
+      tag.classList.add("active");
+
+      titleEl.textContent = tag.dataset.title;
+      descEl.textContent = tag.dataset.desc;
+    });
+  });
+</script>
+<!-- ====== 客群剖面互動（不用看懂） ====== -->
+
+<!-- =========================
+ 第二章｜綠雷德：文化不是保存，而是翻譯
+ 素材標註：
+ - 誤解文字：B-TRANSLATION（社會標籤轉譯）
+ - 翻譯內容：B-TRANSLATION（觀點轉換）
+ - 無需照片、不可生成
+========================= -->
+
+<section class="chapter" id="chapter-translation">
+
+  <div class="kicker">第二章</div>
+  <h2 class="sectionTitle">文化要被看懂：紅包場如何重新進入理解框架</h2>
+
+  <p class="lead">
+    對多數人而言，對紅包場的排斥感，
+    往往來自既有的想像，而不是實際經驗。
+    點擊下面的卡片，看看理解是如何發生轉換的。
+  </p>
+
+  <!-- NOTE[B-TRANSLATION]: 以下為觀點轉換設計，非紀實 -->
+  <div class="flip-grid">
+
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <h3>煙味</h3>
+          <p>第一印象往往讓人卻步</p>
+        </div>
+        <div class="flip-back">
+          <h3>氣味是門檻</h3>
+          <p>
+            排斥並非道德判斷，而是感官不適。
+            若觀眾一進門就受不了，文化根本沒有被理解的機會。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <h3>情色</h3>
+          <p>被簡化的標籤</p>
+        </div>
+        <div class="flip-back">
+          <h3>表演與互動</h3>
+          <p>
+            多數表演並非情色，而是一套舞台與觀眾之間的互動秩序。
+            標籤往往遮蔽了實際運作的樣貌。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <h3>老派</h3>
+          <p>屬於上一代的文化</p>
+        </div>
+        <div class="flip-back">
+          <h3>仍在變動</h3>
+          <p>
+            紅包場並非停留在過去，
+            而是在不同世代的參與下持續調整節奏與形式。
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="lead">
+    綠雷德形容他們做的不是保存，而是「翻譯」。
+    不是把人硬帶進場域，
+    而是先移除誤解，讓理解有入口。
+  </p>
+
+</section>
+
+<!-- ====== 翻面卡樣式 ====== -->
+<style>
+  .flip-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+    gap:18px;
+    margin-top:18px;
+  }
+
+  .flip-card{
+    perspective:1000px;
+  }
+
+  .flip-inner{
+    position:relative;
+    width:100%;
+    height:220px;
+    transition:transform .7s;
+    transform-style:preserve-3d;
+    cursor:pointer;
+  }
+
+  .flip-card:hover .flip-inner{
+    transform:rotateY(180deg);
+  }
+
+  .flip-front,
+  .flip-back{
+    position:absolute;
+    inset:0;
+    backface-visibility:hidden;
+    border-radius:18px;
+    border:1px solid var(--line);
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    background:var(--card);
+  }
+
+  .flip-front h3{
+    font-size:22px;
+    margin-bottom:6px;
+  }
+
+  .flip-back{
+    transform:rotateY(180deg);
+  }
+</style>
+<!-- ====== 第二章結束====== -->
+<!-- =========================
+ 第三章｜城市與政策：為什麼是現在？
+ 素材標註：
+ - 事件內容：A-REAL（事實事件，需可查證）
+ - 視覺呈現：B-TRANSLATION（時間軸轉譯）
+ - 不使用生成圖
+========================= -->
+
+<section class="chapter" id="chapter-timeline">
+
+  <div class="kicker">第三章</div>
+  <h2 class="sectionTitle">城市讓它重生：紅包場如何回到公共視野</h2>
+
+  <p class="lead">
+    當場域仍在運作、文化被重新理解後，
+    第三條線索由城市文化政策補上。
+    以下事件，讓紅包場從邊緣回到公共討論。
+  </p>
+
+  <!-- NOTE[B-TRANSLATION]: 以下為事件時間軸的視覺轉譯 -->
+  <div class="timeline">
+
+    <!-- TODO[A-REAL]: 事件內容需確認年份與正式名稱 -->
+    <div class="timeline-item">
+      <span class="time">2023</span>
+      <div class="timeline-content card pad">
+        <h3>《萬華時光・再現與新生》計畫啟動</h3>
+        <p>
+          北市文化局以戲劇、走讀、市集等形式，
+          將長期被忽視的生活文化重新帶入公共視野。
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <span class="time">2024</span>
+      <div class="timeline-content card pad">
+        <h3>沉浸式劇場進駐金鑽歌廳</h3>
+        <p>
+          劇場直接在紅包場內演出，
+          觀眾坐在原本的座位，體驗舞台、音樂與場域交織的敘事。
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <span class="time">2024</span>
+      <div class="timeline-content card pad">
+        <h3>跨世代演唱會於西門紅樓前廣場舉行</h3>
+        <p>
+          紅包場元素被搬到戶外公共空間，
+          家庭、年輕觀眾與原有客群首次在同一場域相遇。
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="lead">
+    從城市陰影，到公共視野；
+    從特定世代的娛樂，到文化討論的一環。
+    這正是「再現與新生」的意義所在。
+  </p>
+
+</section>
+
+<!-- ====== 時間軸樣式 ====== -->
+<style>
+  .timeline{
+    margin-top:22px;
+    border-left:2px solid var(--line);
+    padding-left:18px;
+    display:grid;
+    gap:22px;
+  }
+
+  .timeline-item{
+    position:relative;
+    opacity:0;
+    transform:translateY(20px);
+    transition:all .6s ease;
+  }
+
+  .timeline-item.show{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  .timeline-item::before{
+    content:"";
+    position:absolute;
+    left:-11px;
+    top:6px;
+    width:10px;
+    height:10px;
+    background:var(--accent);
+    border-radius:50%;
+  }
+
+  .time{
+    font-size:14px;
+    color:var(--accent);
+    display:block;
+    margin-bottom:6px;
+  }
+</style>
+
+<!-- ====== 時間軸滾動顯示（不用看懂） ====== -->
+<script>
+  const items = document.querySelectorAll(".timeline-item");
+
+  const revealOnScroll = () => {
+    const triggerBottom = window.innerHeight * 0.85;
+    items.forEach(item => {
+      const rect = item.getBoundingClientRect().top;
+      if(rect < triggerBottom){
+        item.classList.add("show");
+      }
+    });
+  };
+
+  window.addEventListener("scroll", revealOnScroll);
+  revealOnScroll();
+</script>
+<!-- ====== 時間軸滾動顯示（不用看懂） ====== -->
+<!-- =========================
+ 結語｜不是謝幕，而是轉身
+ 素材標註：
+ - 全為文字敘事
+ - 不使用圖片、不使用生成
+========================= -->
+
+<section class="chapter" id="chapter-ending">
+
+  <h2 class="sectionTitle">不是告別，而是另一種形式的延續</h2>
+
+  <p class="lead">
+    金小姐讓我們看到紅包場的現在進行式；
+    綠雷德讓我們理解它的語言；
+    城市文化政策，則讓它重新被看見。
+  </p>
+
+  <p class="lead">
+    當這三條線交會，我們也重新理解了「文化」本身。
+    文化不是被完整保存下來的樣子，
+    也不會停在某一個時代。
+    它會隨著生活方式與城市節奏改變，
+    不斷調整姿態，長出新的面貌。
+  </p>
+
+  <p class="lead">
+    我們第一次給紅包時，感受到一種衝突——
+    在亞洲文化裡，很少這樣直接用金錢回應表演。
+    但也正是在那一刻，我們理解：
+    紅包在這裡不是交易，
+    而是一種社交語言，
+    是台下對舞台的回應方式。
+  </p>
+
+  <p class="lead">
+    紅包場或許不再是上一代記憶中的樣子，
+    但它仍然活著——
+    在舞台上、在語言裡、
+    也在新的觀眾之中，
+    以它自己的節奏，
+    持續在城市裡運作。
+  </p>
+
+  <p class="lead">
+    這不是謝幕，
+    而是轉身。
+  </p>
+
+</section>
+
+<!-- ====== 結語樣式（簡單留白） ====== -->
+<style>
+  #chapter-ending{
+    margin-top:48px;
+    padding-bottom:80px;
+  }
+</style>
+<!-- ====== 結語樣式（簡單留白） ====== -->
+    
+    <footer class="small">
+      © <span id="y"></span> 紅包場融媒體
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
+
 
