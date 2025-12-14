@@ -497,6 +497,131 @@
   }
 </style>
 <!-- ====== 第二章結束====== -->
+<!-- =========================
+ 第三章｜城市與政策：為什麼是現在？
+ 素材標註：
+ - 事件內容：A-REAL（事實事件，需可查證）
+ - 視覺呈現：B-TRANSLATION（時間軸轉譯）
+ - 不使用生成圖
+========================= -->
+
+<section class="chapter" id="chapter-timeline">
+
+  <div class="kicker">第三章</div>
+  <h2 class="sectionTitle">城市讓它重生：紅包場如何回到公共視野</h2>
+
+  <p class="lead">
+    當場域仍在運作、文化被重新理解後，
+    第三條線索由城市文化政策補上。
+    以下事件，讓紅包場從邊緣回到公共討論。
+  </p>
+
+  <!-- NOTE[B-TRANSLATION]: 以下為事件時間軸的視覺轉譯 -->
+  <div class="timeline">
+
+    <!-- TODO[A-REAL]: 事件內容需確認年份與正式名稱 -->
+    <div class="timeline-item">
+      <span class="time">2023</span>
+      <div class="timeline-content card pad">
+        <h3>《萬華時光・再現與新生》計畫啟動</h3>
+        <p>
+          北市文化局以戲劇、走讀、市集等形式，
+          將長期被忽視的生活文化重新帶入公共視野。
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <span class="time">2024</span>
+      <div class="timeline-content card pad">
+        <h3>沉浸式劇場進駐金鑽歌廳</h3>
+        <p>
+          劇場直接在紅包場內演出，
+          觀眾坐在原本的座位，體驗舞台、音樂與場域交織的敘事。
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <span class="time">2024</span>
+      <div class="timeline-content card pad">
+        <h3>跨世代演唱會於西門紅樓前廣場舉行</h3>
+        <p>
+          紅包場元素被搬到戶外公共空間，
+          家庭、年輕觀眾與原有客群首次在同一場域相遇。
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="lead">
+    從城市陰影，到公共視野；
+    從特定世代的娛樂，到文化討論的一環。
+    這正是「再現與新生」的意義所在。
+  </p>
+
+</section>
+
+<!-- ====== 時間軸樣式 ====== -->
+<style>
+  .timeline{
+    margin-top:22px;
+    border-left:2px solid var(--line);
+    padding-left:18px;
+    display:grid;
+    gap:22px;
+  }
+
+  .timeline-item{
+    position:relative;
+    opacity:0;
+    transform:translateY(20px);
+    transition:all .6s ease;
+  }
+
+  .timeline-item.show{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  .timeline-item::before{
+    content:"";
+    position:absolute;
+    left:-11px;
+    top:6px;
+    width:10px;
+    height:10px;
+    background:var(--accent);
+    border-radius:50%;
+  }
+
+  .time{
+    font-size:14px;
+    color:var(--accent);
+    display:block;
+    margin-bottom:6px;
+  }
+</style>
+
+<!-- ====== 時間軸滾動顯示（不用看懂） ====== -->
+<script>
+  const items = document.querySelectorAll(".timeline-item");
+
+  const revealOnScroll = () => {
+    const triggerBottom = window.innerHeight * 0.85;
+    items.forEach(item => {
+      const rect = item.getBoundingClientRect().top;
+      if(rect < triggerBottom){
+        item.classList.add("show");
+      }
+    });
+  };
+
+  window.addEventListener("scroll", revealOnScroll);
+  revealOnScroll();
+</script>
+<!-- ====== 時間軸滾動顯示（不用看懂） ====== -->
     
     <footer class="small">
       © <span id="y"></span> 紅包場融媒體
