@@ -1,14 +1,64 @@
 /* ==================================================
-   Media Polish｜讓畫面「活起來」的補強（CSS only）
-   安全覆蓋，不影響原本結構
+   紅包場融媒體｜最終穩定版 Theme + Media Polish
+   ✔ 安全
+   ✔ 媒體感
+   ✔ 不使用危險 z-index
 ================================================== */
 
-/* ---------- 1️⃣ 開場畫面：加一點深度與呼吸 ---------- */
+/* ---------- 全站變數 ---------- */
+:root{
+  --bg:#0b0b0c;
+  --card:#141418;
+  --text:#f4f4f5;
+  --muted:#b6b6be;
+  --line:#2a2a31;
+  --accent:#e6c36a;
+  --shadow: 0 12px 30px rgba(0,0,0,.35);
+}
+
+/* ---------- Reset / 基礎 ---------- */
+*{
+  box-sizing:border-box;
+}
+
+html, body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Noto Sans TC",
+    "PingFang TC",
+    "Microsoft JhengHei",
+    sans-serif;
+}
+
+/* ---------- 版型 ---------- */
+.container{
+  width:min(1080px, calc(100% - 40px));
+  margin:0 auto;
+}
+
+/* ==================================================
+   Immersive Opening｜走進金鑽歌廳
+================================================== */
+
 .immersive-hero{
-  isolation:isolate;
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .immersive-bg{
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(.45);
+  transform: scale(1.05);
   animation: slowZoom 18s ease-in-out infinite alternate;
 }
 
@@ -17,45 +67,132 @@
   to{ transform:scale(1.12); }
 }
 
-/* 讓開場文字更有「浮在空氣裡」的感覺 */
-.immersive-text{
-  text-shadow: 0 8px 30px rgba(0,0,0,.45);
-}
-
-/* ---------- 2️⃣ 章節之間的節奏（很重要） ---------- */
-.chapter{
-  padding-top:48px;
-  margin-top:48px;
-  border-top:1px solid var(--line);
-}
-
-/* 第一個章節不要有切線 */
-.chapter:first-of-type{
-  border-top:none;
-  margin-top:0;
-}
-
-/* ---------- 3️⃣ 讓整個頁面「層次更明顯」 ---------- */
-main.container{
-  position:relative;
-}
-
-main.container::before{
+.immersive-hero::after{
   content:"";
   position:absolute;
   inset:0;
   background:
-    radial-gradient(
-      800px 400px at 80% 10%,
-      rgba(230,195,106,.06),
-      transparent 60%
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,.85) 0%,
+      rgba(0,0,0,.55) 40%,
+      rgba(0,0,0,.85) 100%
     );
-  pointer-events:none;
-  z-index:-1;
 }
 
-/* ---------- 4️⃣ 卡片 hover 微反應（媒體感關鍵） ---------- */
+.immersive-text{
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: max(8vw, 40px);
+  max-width: 720px;
+  text-shadow: 0 8px 30px rgba(0,0,0,.45);
+}
+
+.immersive-text .line{
+  opacity: 0;
+  transform: translateY(10px);
+  font-size: clamp(18px, 2.4vw, 26px);
+  line-height: 1.6;
+  color: var(--text);
+  margin: 0 0 18px;
+  animation: fadeUp 1.2s ease forwards;
+}
+
+.immersive-text .line:nth-child(1){ animation-delay: .3s; }
+.immersive-text .line:nth-child(2){ animation-delay: 1.2s; }
+.immersive-text .line:nth-child(3){ animation-delay: 2.1s; }
+
+@keyframes fadeUp{
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 開場後第一段 ---------- */
+.opening-scene{
+  padding: 80px 0 120px;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,0) 0%,
+      rgba(0,0,0,.35) 40%,
+      rgba(0,0,0,.6) 100%
+    );
+}
+
+.scene-card{
+  max-width: 760px;
+  margin: 0 auto;
+  backdrop-filter: blur(2px);
+}
+
+/* ==================================================
+   Hero / 標題區
+================================================== */
+
+.hero{
+  padding:56px 0 30px;
+  background:
+    radial-gradient(
+      900px 420px at 20% 0%,
+      rgba(230,195,106,.12),
+      transparent 60%
+    );
+  border-bottom:1px solid var(--line);
+}
+
+/* ==================================================
+   文字系統
+================================================== */
+
+.kicker{
+  color:var(--accent);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-size:12px;
+}
+
+.h1{
+  font-size:clamp(34px, 5vw, 56px);
+  line-height:1.06;
+  margin:10px 0 0;
+}
+
+.sectionTitle{
+  font-size:22px;
+  margin:0 0 14px;
+  letter-spacing:.02em;
+}
+
+.lead{
+  color:var(--muted);
+  font-size:18px;
+  line-height:1.75;
+  margin:16px 0 0;
+  max-width:46em;
+  white-space:pre-line;
+}
+
+.small{
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.6;
+}
+
+/* ==================================================
+   卡片系統
+================================================== */
+
 .card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:var(--shadow);
   transition: transform .4s ease, box-shadow .4s ease;
 }
 
@@ -64,7 +201,29 @@ main.container::before{
   box-shadow: 0 18px 40px rgba(0,0,0,.45);
 }
 
-/* ---------- 5️⃣ 第一章右側規則卡：Sticky（只在桌機） ---------- */
+.pad{
+  padding:18px;
+}
+
+/* ==================================================
+   章節節奏（媒體感關鍵）
+================================================== */
+
+.chapter{
+  padding-top:48px;
+  margin-top:48px;
+  border-top:1px solid var(--line);
+}
+
+.chapter:first-of-type{
+  border-top:none;
+  margin-top:0;
+}
+
+/* ==================================================
+   第一章｜金小姐（Sticky 規則卡）
+================================================== */
+
 @media (min-width: 900px){
   #chapter-jin aside.card{
     position: sticky;
@@ -73,16 +232,18 @@ main.container::before{
   }
 }
 
-/* ---------- 6️⃣ 文字閱讀舒適度微調 ---------- */
-.lead{
-  max-width: 46em;
+/* ==================================================
+   分隔線 / Footer
+================================================== */
+
+hr.sep{
+  border:0;
+  border-top:1px solid var(--line);
+  margin:48px 0;
 }
 
-.sectionTitle{
-  letter-spacing:.02em;
-}
-
-/* ---------- 7️⃣ Footer 不要太快結束 ---------- */
 footer{
+  padding:50px 0 30px;
+  opacity:.85;
   margin-top:80px;
 }
