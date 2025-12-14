@@ -1,6 +1,69 @@
 /* ===============================
    Opening Scene｜開場鏡頭
 =============================== */
+/* ===============================
+   Immersive Opening｜走進金鑽歌廳
+=============================== */
+
+.immersive-hero{
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.immersive-bg{
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(.45);
+  transform: scale(1.05);
+}
+
+.immersive-hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,.85) 0%,
+      rgba(0,0,0,.55) 40%,
+      rgba(0,0,0,.85) 100%
+    );
+}
+
+.immersive-text{
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: max(8vw, 40px);
+  max-width: 720px;
+}
+
+.immersive-text .line{
+  opacity: 0;
+  transform: translateY(10px);
+  font-size: clamp(18px, 2.4vw, 26px);
+  line-height: 1.6;
+  color: var(--text);
+  margin: 0 0 18px;
+  animation: fadeUp 1.2s ease forwards;
+}
+
+.immersive-text .line:nth-child(1){ animation-delay: .3s; }
+.immersive-text .line:nth-child(2){ animation-delay: 1.2s; }
+.immersive-text .line:nth-child(3){ animation-delay: 2.1s; }
+
+@keyframes fadeUp{
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 .opening-scene{
   padding: 80px 0 120px;
