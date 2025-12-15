@@ -123,24 +123,54 @@
     /* =========================================
        4. 第一章 Sticky (金小姐)
     ========================================= */
-    .sticky-chapter { margin-top: 0; border-top: none; }
-    .sticky-container { display: flex; gap: 40px; position: relative; margin-top: 40px; }
-    .sticky-visual {
-      width: 45%; height: 80vh;
-      position: sticky; top: 100px;
-      display: flex; flex-direction: column;
-    }
-    .jin-portrait {
-      width: 100%; height: 100%; object-fit: cover;
-      border-radius: 12px; box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); border: 1px solid var(--line);
-    }
-    .visual-caption { margin-top: 10px; color: var(--accent); font-size: 14px; text-align: right; }
-    .scroll-content { width: 55%; padding-bottom: 50px; }
-    .story-block {
-      min-height: 60vh; display: flex; flex-direction: column; justify-content: center;
-      padding: 30px; margin-bottom: 20px;
-      border-left: 1px solid var(--line); padding-left: 40px;
-    }
+  /* 金小姐替代圖樣式：黑金質感的剪影 */
+.jin-portrait-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #141418 0%, #0b0b0c 100%);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 加一點金色的光暈裝飾 */
+.jin-portrait-placeholder::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(230, 195, 106, 0.1) 0%, transparent 60%);
+  animation: rotateLight 10s linear infinite;
+}
+
+.silhouette-icon {
+  font-size: 80px;
+  filter: grayscale(1) opacity(0.5);
+  z-index: 1;
+}
+
+.placeholder-text {
+  margin-top: 10px;
+  color: var(--accent);
+  font-size: 14px;
+  letter-spacing: 2px;
+  opacity: 0.8;
+  z-index: 1;
+  text-transform: uppercase;
+}
+
+@keyframes rotateLight {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 
     /* =========================================
        5. 第二章 互動卡片 + Singer Video
@@ -207,21 +237,25 @@
 
 <body>
 
-  <section class="video-hero">
-    <div class="video-container">
-      <video autoplay muted loop playsinline class="bg-video">
-        <source src="assets/videos/bg.mp4" type="video/mp4">
-      </video>
-      <div class="video-overlay"></div>
-    </div>
+<section class="video-hero">
+  <div class="video-container">
+    <video autoplay muted loop playsinline class="bg-video">
+      <source src="https://videos.pexels.com/video-files/3192305/3192305-hd_1920_1080_25fps.mp4" type="video/mp4">
+      <img src="assets/images/placeholder-bg.jpg" style="width:100%; height:100%; object-fit:cover;">
+    </video>
+    <div class="video-overlay"></div>
+  </div>
 
-    <div class="hero-content">
-      <div class="immersive-text">
-        <p class="line">午後的金鑽歌廳。</p>
-        <p class="line">燈光昏黃，沿著天花板與牆邊流動。</p>
-        <p class="line">在這個場域裡，文化沒有消失，只是重新調整姿態。</p>
-      </div>
+  <div class="hero-content">
+    <div class="immersive-text">
+      <p class="line">午後的金鑽歌廳。</p>
+      <p class="line">燈光昏黃，沿著天花板與牆邊流動。</p>
+      <p class="line">在這個場域裡，文化沒有消失，只是重新調整姿態。</p>
     </div>
+  </div>
+  
+  <div class="scroll-hint">↓ 請捲動進入場域</div>
+</section>
     
     <div class="scroll-hint">↓ 請捲動進入場域</div>
   </section>
@@ -253,12 +287,15 @@
     <section class="sticky-chapter" id="chapter-jin">
       <div class="kicker">第一章：守門人</div>
       
-      <div class="sticky-container">
-        <div class="sticky-visual">
-          <img src="assets/images/placeholder-person.jpg" alt="金小姐" class="jin-portrait">
-          <div class="visual-caption">金小姐 / 金鑽歌廳經營者</div>
-        </div>
+     <div class="sticky-visual">
+  
+  <div class="jin-portrait-placeholder">
+    <div class="silhouette-icon">👤</div>
+    <div class="placeholder-text">守門人</div>
+  </div>
 
+  <div class="visual-caption">金小姐 / 金鑽歌廳經營者</div>
+  </div>
         <div class="scroll-content">
           <div class="story-block">
             <h2>舞台還亮著</h2>
@@ -379,7 +416,14 @@
       <p class="lead">紅包場或許不再是上一代記憶中的樣子，但它仍然活著——在舞台上、在語言裡、也在新的觀眾之中，以它自己的節奏，持續在城市裡運作。</p>
       <p class="lead" style="color:var(--accent); margin-top:30px;">這不是謝幕，而是轉身。</p>
     </section>
-
+<section style="margin-top: 80px; margin-bottom: 40px; text-align: center;">
+  <div class="card pad" style="max-width: 600px; margin: 0 auto; display: inline-block;">
+    <img src="assets/images/IMG_1795.jpg" alt="採訪團隊合影" style="width: 100%; border-radius: 8px; filter: grayscale(0.3);">
+    <p class="small" style="margin-top: 10px;">
+      採訪後記：製作團隊於金鑽歌廳。在這個場域裡，我們看見的不只是秀場文化，更是人與人之間真實的溫度。
+    </p>
+  </div>
+</section>
     <footer class="small" style="padding-bottom: 40px; text-align: center; opacity: 0.6;">
       © <span id="y"></span> 紅包場融媒體專題
     </footer>
