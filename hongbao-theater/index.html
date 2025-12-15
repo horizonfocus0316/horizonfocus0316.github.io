@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>台北僅存的紅包場：它如何被留下，又如何被改寫</title>
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<style>
+    .leaflet-container { background: #141418; }
+    .leaflet-bar a { background-color: #2a2a31; color: #e6c36a; border-bottom: 1px solid #141418; }
+    .leaflet-bar a:hover { background-color: #e6c36a; color: #141418; }
+    .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: #141418; color: #f4f4f5; border: 1px solid #e6c36a; }
+</style>
+  
   <!-- 主題樣式：全站視覺唯一來源 -->
   <link rel="stylesheet" href="assets/css/theme.css?v=20251214">
 
@@ -92,6 +102,16 @@
           但也在這個場域裡，我們看見一種文化並非走向終章，而是重新調整姿態。
         </p>
       </div>
+    </section>
+
+    <section class="map-section container" style="margin-top: 60px; margin-bottom: 60px;">
+    <div class="kicker">空間定位</div>
+    <h2 class="sectionTitle">隱身在都市叢林中的舞台</h2>
+    <p class="lead" style="margin-bottom: 24px;">
+        如今僅存的紅包場，多數隱身於西門町漢中街、峨眉街一帶的老舊大樓內。外頭是熱鬧的潮流商圈，推開門卻是另一個時空。
+    </p>
+    
+    <div id="map" style="height: 450px; width: 100%; border-radius: 18px; border: 1px solid var(--accent); z-index: 1;"></div>
     </section>
 
   </main>
@@ -730,6 +750,39 @@
 
   <script>
     document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+    // 初始化地圖，中心點設在西門町鬧區 (大約位置)
+    // zoomSnap: 0.5 允許更細緻的縮放層級
+    var map = L.map('map', {
+        center: [25.0435, 121.5075], 
+        zoom: 16.5,
+        scrollWheelZoom: false, // 防止讀者滑網頁時卡住地圖
+        zoomControl: true
+    });
+
+    // 加入黑色系底圖 (CartoDB Dark Matter) - 這超級適合你的主題！
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+    }).addTo(map);
+
+    // 建立一個自定義的金色圖標
+    var goldIcon = L.divIcon({
+        className: 'custom-div-icon',
+        html: "<div style='background-color:#e6c36a; width: 16px; height: 16px; border-radius: 50%; border: 3px solid rgba(230, 195, 106, 0.4); box-shadow: 0 0 15px #e6c36a;'></div>",
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
+    });
+
+    // 加入標記 (Marker) - 這裡標示的是金鑽大約的位置 (漢中街42號附近)
+    // 你可以根據實際位置微調座標
+    L.marker([25.04426, 121.50735], {icon: goldIcon}).addTo(map)
+        .bindPopup('<b>金鑽歌廳</b><br>隱身於大樓中的演藝舞台。')
+        .openPopup();
+
   </script>
 </body>
 </html>
