@@ -15,27 +15,38 @@
        1. 全站變數 (Variables)
     ========================================= */
     :root {
-      --bg: #0b0b0c;
-      --card: #141418;
+      /* 注意：這裡的背景變數只備用，主要背景由 body 設定覆蓋 */
+      --bg: #3a0000; 
+      --card: #2a0a0a; /* 卡片也改成深紅色 */
       --text: #f4f4f5;
-      --muted: #b6b6be;
-      --line: #2a2a31;
-      --accent: #e6c36a; /* 金色 */
-      --shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      --muted: #dcdcdc; /* 文字調亮一點，因為背景變紅了 */
+      --line: #5a1a1a; /* 分隔線改成暗紅色 */
+      --accent: #e6c36a; /* 金色維持不變 */
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
     }
 
     * { box-sizing: border-box; }
 
+    /* === 🔴 紅色質地背景設定區 === */
     html, body {
       margin: 0; padding: 0;
-      background: var(--bg);
+      /* 1. 底色深紅 */
+      background-color: #3a0000;
+      /* 2. 載入材質圖 (請確認檔案存在) */
+      background-image: url('texture.png');
+      /* 3. 材質重複鋪滿 */
+      background-repeat: repeat;
+      background-size: 300px;
+      /* 4. 混合模式：讓紅色變深沈有質感 */
+      background-blend-mode: multiply;
+      
       color: var(--text);
       font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans TC", sans-serif;
       overflow-x: hidden;
     }
 
     /* =========================================
-       2. 影片開場區 (Video Hero) - 強制修復版
+       2. 影片開場區 (Video Hero)
     ========================================= */
     .video-hero {
       position: relative;
@@ -45,12 +56,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #000; /* 預防影片跑不出來時的底色 */
+      background-color: #000; 
     }
 
     .video-container {
-      position: absolute; inset: 0; z-index: 0; 
-      background: #000;
+      position: absolute; inset: 0; z-index: 0; background: #000;
     }
 
     .bg-video {
@@ -62,7 +72,7 @@
     .video-overlay {
       position: absolute; inset: 0;
       background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8));
-      z-index: 1; /* 確保遮罩在影片上 */
+      z-index: 1;
     }
 
     .hero-content {
@@ -101,20 +111,25 @@
     @keyframes bounce { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 10px); } }
 
     /* =========================================
-       3. 通用版型
+       3. 通用版型 & 卡片 (配合紅色背景微調)
     ========================================= */
     .container { width: min(1080px, calc(100% - 40px)); margin: 0 auto; }
     
     .card {
-      background: var(--card); border: 1px solid var(--line);
-      border-radius: 18px; box-shadow: var(--shadow); padding: 18px;
+      /* 讓卡片也有微微的深紅質感，與背景融合 */
+      background-color: rgba(20, 20, 24, 0.85); 
+      border: 1px solid var(--line);
+      border-radius: 18px; 
+      box-shadow: var(--shadow); 
+      padding: 18px;
       transition: transform 0.4s ease, box-shadow 0.4s ease;
+      backdrop-filter: blur(10px); /* 毛玻璃效果 */
     }
-    .card:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45); }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45); border-color: var(--accent); }
     .pad { padding: 18px; }
 
     .kicker { color: var(--accent); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; display: block;}
-    .sectionTitle { font-size: 26px; margin: 10px 0 20px; color: white; letter-spacing: 0.05em; }
+    .sectionTitle { font-size: 26px; margin: 10px 0 20px; color: white; letter-spacing: 0.05em; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
     .lead { color: var(--muted); font-size: 18px; line-height: 1.8; margin-top: 0; }
     .small { font-size: 14px; color: var(--muted); line-height: 1.6; }
 
@@ -132,10 +147,9 @@
       display: flex; flex-direction: column;
     }
     
-    /* 金小姐替代圖 */
     .jin-portrait-placeholder {
       width: 100%; height: 100%;
-      background: linear-gradient(135deg, #141418 0%, #0b0b0c 100%);
+      background: linear-gradient(135deg, #141418 0%, #3a0000 100%); /* 改成黑紅漸層 */
       border: 1px solid var(--line); border-radius: 12px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); position: relative; overflow: hidden;
@@ -185,7 +199,7 @@
       display: flex; flex-direction: column; justify-content: center; background: var(--card);
     }
     .flip-front h3 { font-size: 22px; margin-bottom: 6px; color: #fff; }
-    .flip-back { transform: rotateY(180deg); background: #1a1a20; }
+    .flip-back { transform: rotateY(180deg); background: #3a0000; /* 翻轉後變成深紅 */ }
 
     /* =========================================
        6. Timeline & Map
@@ -442,7 +456,6 @@
       .openPopup();
 
   // 3. W12 動態圖表 (30家 vs 1家)
-  // 將 Script 放在最後面，確保 canvas 元素已經生成
   const ctx = document.getElementById('myChart').getContext('2d');
   new Chart(ctx, {
     type: 'bar',
