@@ -16,18 +16,56 @@
 
 <body>
 
-  <!-- Immersive Opening：先感受場域 -->
-  <section class="immersive-hero">
-    <div class="immersive-bg"
-      style="background-image:url('https://images.unsplash.com/photo-1604909052743-94e838986d24?auto=format&fit=crop&w=1600&q=80');">
-    </div>
+<section class="video-hero">
+  <div class="video-container">
+    <video autoplay muted loop playsinline class="bg-video">
+      <source src="https://videos.pexels.com/video-files/3195640/3195640-uhd_2560_1440_25fps.mp4" type="video/mp4">
+      <img src="https://images.unsplash.com/photo-1604909052743-94e838986d24?auto=format&fit=crop&w=1600&q=80">
+    </video>
+    <div class="video-overlay"></div>
+  </div>
 
-    <div class="immersive-text">
-      <p class="line">午後的金鑽歌廳。</p>
-      <p class="line">燈光昏黃，沿著天花板與牆邊流動。</p>
-      <p class="line">在這個場域裡，文化沒有消失，只是重新調整姿態。</p>
-    </div>
-  </section>
+  <div class="hero-content">
+    <h1 class="main-title">台北僅存的紅包場</h1>
+    <p class="sub-title">它如何被留下，又如何被改寫</p>
+    <div class="scroll-hint">↓ 請捲動進入場域</div>
+  </div>
+</section>
+
+<main class="container">
+    <section class="chapter sticky-chapter" id="chapter-jin">
+      <div class="kicker">第一章：守門人</div>
+      
+      <div class="sticky-container">
+        <div class="sticky-visual">
+          <img src="assets/images/placeholder-person.jpg" alt="金小姐" class="jin-portrait">
+          <div class="visual-caption">金小姐 / 金鑽歌廳經營者</div>
+        </div>
+
+        <div class="scroll-content">
+          <div class="story-block">
+            <h2>舞台還亮著</h2>
+            <p class="lead">「我守住的不是一個被封存在過去的場景，而是一套仍在運作的舞台系統。」</p>
+            <p>金小姐第一次踏進紅包場，是因為爸爸帶她來。那時她還是表藝科學生，來這裡打工，只覺得「可以領現金，很實在」。</p>
+          </div>
+
+          <div class="story-block">
+            <h3>規則一：不能搶客</h3>
+            <p>歌手不能以搶客方式破壞場內氣氛，秩序本身就是舞台能持續運作的基礎。這不是關於錢，是關於尊重。</p>
+          </div>
+
+          <div class="story-block">
+            <h3>規則二：舞台要輪番</h3>
+            <p>舞台需要有人輪流上場，讓觀眾感覺整晚都有節奏與流動，而不是停滯。就像一場接力賽，棒子不能掉。</p>
+          </div>
+
+          <div class="story-block">
+            <h3>規則三：紅包是語言</h3>
+            <p>在這裡，紅包不是單純給錢，而是一種回應與肯定。它是台下與台上唯一的溝通橋樑。</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
   <!-- 主標題（進場後才看到） -->
   <header class="hero">
