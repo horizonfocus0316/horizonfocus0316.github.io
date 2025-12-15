@@ -3,61 +3,101 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>唱給不在場的人｜紅包場融媒體專題</title>
+  <title>台北僅存的紅包場｜它如何被留下，又如何被改寫</title>
 
   <style>
-    body{
-      margin:0;
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:#0e0e0e;
-      color:#fff;
-      font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC",system-ui,sans-serif;
+    * {
+      box-sizing: border-box;
     }
-    .wrap{
-      max-width:720px;
-      padding:40px 24px;
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #0e0e0e;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC",
+                   system-ui, sans-serif;
     }
-    h1{
-      font-size:32px;
-      margin-bottom:20px;
-      letter-spacing:0.08em;
+
+    .wrap {
+      max-width: 760px;
+      padding: 48px 28px;
     }
-    p{
-      color:rgba(255,255,255,.7);
-      line-height:1.8;
-      margin-bottom:40px;
+
+    h1 {
+      font-size: 34px;
+      line-height: 1.4;
+      margin-bottom: 24px;
+      letter-spacing: 0.08em;
     }
-    a{
-      display:block;
-      padding:18px 20px;
-      margin-bottom:16px;
-      border:1px solid rgba(255,255,255,.2);
-      text-decoration:none;
-      color:#fff;
-      font-size:18px;
-      letter-spacing:0.05em;
+
+    .subtitle {
+      display: block;
+      margin-top: 12px;
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      opacity: 0.85;
     }
-    a:hover{
-      background:rgba(255,255,255,.08);
+
+    p {
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.8;
+      margin-bottom: 48px;
+      font-size: 16px;
+    }
+
+    .nav a {
+      display: block;
+      padding: 18px 22px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 18px;
+      letter-spacing: 0.05em;
+      transition: background 0.25s ease, border-color 0.25s ease;
+    }
+
+    .nav a:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    footer {
+      margin-top: 60px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.45);
+      text-align: center;
     }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <h1>唱給不在場的人</h1>
+  <main class="wrap">
+    <h1>
+      台北僅存的紅包場
+      <span class="subtitle">它如何被留下，又如何被改寫</span>
+    </h1>
+
     <p>
-      這是一個關於紅包場的融媒體專題。<br>
-      透過不同章節，帶你走進這個仍在運作的舞台。
+      這是一個關於紅包場的融媒體新聞專題。<br>
+      在城市變遷與文化轉型之下，我們嘗試理解：<br>
+      一個仍在運作的舞台，如何被留下，又如何被重新理解。
     </p>
 
-    <a href="chapter1/index.html">第一章｜紅包場的誕生與現場</a>
-    <a href="chapter2/index.html">第二章｜紅包歌手的世代誤解</a>
-    <a href="chapter3/index.html">第三章｜最後的紅包場</a>
-  </div>
+    <nav class="nav">
+      <a href="chapter1/index.html">第一章｜紅包場的現場與守門人</a>
+      <a href="chapter2/index.html">第二章｜紅包歌手的世代誤解與生存現場</a>
+      <a href="chapter3/index.html">第三章｜最後的紅包場，如何繼續存在</a>
+    </nav>
+
+    <footer>
+      © 2025 紅包場融媒體新聞專題
+    </footer>
+  </main>
 </body>
 </html>
-
