@@ -19,15 +19,14 @@
        1. 全站變數 (Styles from Reference)
     ========================================= */
     :root {
-      /* ★ 參考範例的色票 */
       --bg: #050505;           /* 極致深黑 */
-      --primary-red: #970C10;  /* 參考範例的「紅包紅」 */
-      --primary-gold: #FFE87A; /* 參考範例的「亮金色」 */
+      --primary-red: #970C10;  /* 紅包紅 */
+      --primary-gold: #FFE87A; /* 亮金色 */
       
-      --card-bg: rgba(20, 0, 0, 0.7); /* 卡片背景帶一點點紅 */
+      --card-bg: rgba(20, 0, 0, 0.7);
       --text-main: #ffffff;
       --text-muted: #cccccc;
-      --line-color: rgba(151, 12, 16, 0.4); /* 紅色分隔線 */
+      --line-color: rgba(151, 12, 16, 0.4);
     }
 
     * { box-sizing: border-box; }
@@ -36,13 +35,12 @@
       margin: 0; padding: 0;
       background-color: var(--bg);
       color: var(--text-main);
-      /* ★ 字體：統一使用思源宋體 */
       font-family: "Noto Serif TC", serif;
       overflow-x: hidden;
-      line-height: 1.8; /* 增加行距，增加文學感 */
+      line-height: 1.8;
     }
 
-    /* ★ 噪點質感 (Noise Texture) - 模擬參考範例的 grain.png */
+    /* 噪點質感 (Noise Texture) */
     body::before {
       content: "";
       position: absolute;
@@ -50,7 +48,7 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.07'/%3E%3C/svg%3E");
       pointer-events: none;
       z-index: 9999;
-      position: fixed; /* 讓噪點固定在螢幕上 */
+      position: fixed;
     }
 
     /* =========================================
@@ -74,14 +72,12 @@
       height: 100%; 
       object-fit: cover; 
       opacity: 0.5;
-      /* 濾鏡調整：讓影片稍微偏紅、對比度高一點，配合整體風格 */
       filter: contrast(1.2) sepia(0.2) saturate(1.1); 
     }
     
     .video-overlay { 
       position: absolute; 
       inset: 0; 
-      /* 漸層改為從深紅到黑 */
       background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(10,0,0,0.9)); 
       z-index: 1; 
     }
@@ -99,12 +95,12 @@
       font-size: clamp(20px, 3vw, 28px);
       color: #fff;
       margin-bottom: 24px;
-      text-shadow: 0 0 20px rgba(255, 232, 122, 0.2); /* 微微金光 */
+      text-shadow: 0 0 20px rgba(255, 232, 122, 0.2);
       font-weight: 600;
       opacity: 0;
       transform: translateY(20px);
       animation: fadeUp 1.2s ease forwards;
-      letter-spacing: 0.1em; /* 增加字距 */
+      letter-spacing: 0.1em;
     }
 
     .immersive-text .line:nth-child(1) { animation-delay: 0.5s; }
@@ -123,15 +119,14 @@
     @keyframes bounce { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 10px); } }
 
     /* =========================================
-       3. 通用版型 & 卡片設計 (Style Update)
+       3. 通用版型 & 卡片設計
     ========================================= */
     .container { width: min(1080px, calc(100% - 40px)); margin: 0 auto; }
     
     .card {
       background-color: var(--card-bg); 
-      /* 邊框改為極細的紅色 */
       border: 1px solid rgba(151, 12, 16, 0.3);
-      border-radius: 4px; /* 直角一點，比較復古 */
+      border-radius: 4px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.8);
       padding: 40px;
       transition: all 0.5s ease;
@@ -139,7 +134,7 @@
     }
     .card:hover { 
       transform: translateY(-5px); 
-      border-color: var(--primary-gold); /* 懸停變金色 */
+      border-color: var(--primary-gold);
       box-shadow: 0 20px 60px rgba(151, 12, 16, 0.15); 
     }
     .pad { padding: 40px; }
@@ -152,7 +147,6 @@
       margin-bottom: 20px; 
       display: block;
       font-weight: 700;
-      /* 改為置中或側邊線條 */
       border-left: 2px solid var(--primary-red);
       padding-left: 15px;
     }
@@ -186,7 +180,6 @@
     
     .jin-portrait-placeholder {
       width: 100%; height: 100%;
-      /* 漸層改為紅黑調 */
       background: linear-gradient(135deg, #000 0%, #2a0505 100%);
       border: 1px solid var(--primary-red); 
       display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -262,13 +255,12 @@
       position: absolute; inset: 0; backface-visibility: hidden;
       border: 1px solid rgba(255,255,255,0.1); padding: 30px;
       display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
-      background: #111; /* 深色背景 */
+      background: #111;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
     .flip-front h3 { font-size: 24px; margin-bottom: 15px; color: #fff; font-weight: 600; }
     .flip-back { 
       transform: rotateY(180deg); 
-      /* 背面改為參考範例的紅 */
       background: linear-gradient(135deg, #000 0%, var(--primary-red) 120%);
       border-color: var(--primary-gold);
     }
@@ -285,11 +277,7 @@
       width: 12px; height: 12px; background: #000; border: 2px solid var(--primary-gold); border-radius: 50%;
       box-shadow: 0 0 15px var(--primary-gold);
     }
-    .time { font-size: 18px; color: var(--primary-gold); display: block; margin-bottom: 15px; font-weight: 700; letter-spacing: 0.1em; font-family: "Noto Serif TC", serif; }
-
-    /* Map Customization */
-    .leaflet-container { background: #000; font-family: inherit; border: 1px solid var(--primary-red); filter: grayscale(100%) contrast(1.2); }
-    .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: #111; color: #fff; border: 1px solid var(--primary-gold); }
+    .time { font-size: 18px; color: var(--primary-gold); display: block; margin-bottom: 15px; font-weight: 700; letter-spacing: 0.1em; }
 
     /* RWD */
     @media (max-width: 768px) {
@@ -298,7 +286,6 @@
       .sticky-visual { position: relative; width: 100%; height: 350px; top: 0; margin-bottom: 30px; }
       .scroll-content { width: 100%; }
       .rules-grid { grid-template-columns: 1fr; }
-      .flip-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -312,7 +299,7 @@
 <section class="video-hero">
   <div class="video-container">
     <video autoplay muted loop playsinline class="bg-video">
-      <source src="videos/bg.mp4" type="video/mp4">
+      <source src="bg.mp4" type="video/mp4">
     </video>
     <div class="video-overlay"></div>
   </div>
@@ -405,7 +392,7 @@
 
     <div class="video-showcase">
       <video autoplay muted loop playsinline class="content-video">
-        <source src="videos/singer.mp4" type="video/mp4">
+        <source src="singer.mp4" type="video/mp4">
       </video>
       <div class="caption-tag">舞台現場：服裝是為了回應燈光</div>
     </div>
