@@ -15,30 +15,25 @@
        1. 全站變數 (Variables)
     ========================================= */
     :root {
-      /* 注意：這裡的背景變數只備用，主要背景由 body 設定覆蓋 */
       --bg: #3a0000; 
-      --card: #2a0a0a; /* 卡片也改成深紅色 */
+      --card: #2a0a0a; 
       --text: #f4f4f5;
-      --muted: #dcdcdc; /* 文字調亮一點，因為背景變紅了 */
-      --line: #5a1a1a; /* 分隔線改成暗紅色 */
-      --accent: #e6c36a; /* 金色維持不變 */
+      --muted: #dcdcdc;
+      --line: #5a1a1a; 
+      --accent: #e6c36a; /* 金色 */
       --shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
     }
 
     * { box-sizing: border-box; }
 
-    /* === 🔴 紅色質地背景設定區 === */
+    /* === 🔴 紅色質地背景設定 === */
     html, body {
       margin: 0; padding: 0;
-      /* 1. 底色深紅 */
       background-color: #3a0000;
-      /* 2. 載入材質圖 (請確認檔案存在) */
-      background-image: url('texture.png');
-      /* 3. 材質重複鋪滿 */
+      background-image: url('texture.png'); /* 請確認這張圖存在 */
       background-repeat: repeat;
       background-size: 300px;
-      /* 4. 混合模式：讓紅色變深沈有質感 */
-      background-blend-mode: multiply;
+      background-blend-mode: multiply; /* 混合模式創造深沈質感 */
       
       color: var(--text);
       font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans TC", sans-serif;
@@ -79,13 +74,13 @@
       position: relative;
       z-index: 2;
       width: 100%;
-      max-width: 800px;
+      max-width: 900px; /* 加寬一點給詩意的文字 */
       padding: 20px;
       text-align: center;
     }
 
     .immersive-text .line {
-      font-size: clamp(22px, 3vw, 32px);
+      font-size: clamp(20px, 3vw, 28px);
       line-height: 1.8;
       color: #fff;
       margin-bottom: 24px;
@@ -111,19 +106,18 @@
     @keyframes bounce { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 10px); } }
 
     /* =========================================
-       3. 通用版型 & 卡片 (配合紅色背景微調)
+       3. 通用版型 & 卡片
     ========================================= */
     .container { width: min(1080px, calc(100% - 40px)); margin: 0 auto; }
     
     .card {
-      /* 讓卡片也有微微的深紅質感，與背景融合 */
       background-color: rgba(20, 20, 24, 0.85); 
       border: 1px solid var(--line);
       border-radius: 18px; 
       box-shadow: var(--shadow); 
       padding: 18px;
       transition: transform 0.4s ease, box-shadow 0.4s ease;
-      backdrop-filter: blur(10px); /* 毛玻璃效果 */
+      backdrop-filter: blur(10px);
     }
     .card:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45); border-color: var(--accent); }
     .pad { padding: 18px; }
@@ -149,7 +143,7 @@
     
     .jin-portrait-placeholder {
       width: 100%; height: 100%;
-      background: linear-gradient(135deg, #141418 0%, #3a0000 100%); /* 改成黑紅漸層 */
+      background: linear-gradient(135deg, #141418 0%, #3a0000 100%);
       border: 1px solid var(--line); border-radius: 12px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); position: relative; overflow: hidden;
@@ -199,7 +193,7 @@
       display: flex; flex-direction: column; justify-content: center; background: var(--card);
     }
     .flip-front h3 { font-size: 22px; margin-bottom: 6px; color: #fff; }
-    .flip-back { transform: rotateY(180deg); background: #3a0000; /* 翻轉後變成深紅 */ }
+    .flip-back { transform: rotateY(180deg); background: #3a0000; }
 
     /* =========================================
        6. Timeline & Map
@@ -246,8 +240,8 @@
 
   <div class="hero-content">
     <div class="immersive-text">
-      <p class="line">午後的金鑽歌廳。</p>
-      <p class="line">燈光昏黃，沿著天花板與牆邊流動。</p>
+      <p class="line">午後的金鑽歌廳，燈光昏黃而繁複，沿著天花板流動。</p>
+      <p class="line">四散的煙味混著水果盤的甜味，在空氣裡堆出一種濃度。</p>
       <p class="line">在這個場域裡，文化沒有消失，只是重新調整姿態。</p>
     </div>
   </div>
@@ -296,6 +290,12 @@
           <p class="lead">「我守住的不是一個被封存在過去的場景，而是一套仍在運作的舞台系統。」</p>
           <p>金小姐第一次踏進紅包場，是因為爸爸帶她來。那時她還是表藝科學生，只覺得「可以領現金，很實在」。多年後，她回到金鑽接手經營，成為台北僅存紅包場的守門人。</p>
         </div>
+        
+        <div class="story-block">
+          <h3>不只是懷舊，更是 Live House</h3>
+          <p>比起維持現狀，她更在想未來。身為表藝老師，她希望金鑽能成為學生的真實舞台。她想像紅包場可以像 Live House 一樣分時段演出，也能和觀光合作、與劇場交流，新舊共存。</p>
+        </div>
+
         <div class="story-block">
           <h3>規則一：不能搶客</h3>
           <p>歌手不能以搶客方式破壞場內氣氛，秩序本身就是舞台能持續運作的基礎。這不是關於錢，是關於尊重。</p>
@@ -324,7 +324,9 @@
     </div>
 
     <p class="lead">
-      對多數人而言，對紅包場的排斥感往往來自既有的想像。綠雷德形容他們做的不是保存，而是「翻譯」。
+      對多數人而言，對紅包場的排斥感往往來自既有的想像。
+      綠雷德團隊形容他們做的不是保存，而是<strong>「翻譯」</strong>。
+      不是把人硬帶進場域，而是先移除誤解，讓不同世代能看懂這個場域的語言。
     </p>
 
     <div class="flip-grid">
@@ -401,8 +403,8 @@
         <div class="timeline-content card pad">
           <h3>西門紅樓：跨世代紅包場演唱會</h3>
           <p>
-            於西門紅樓北廣場舉辦，邀請「一代女皇」金佩姍與新聲代歌手林吟蔚等人登台。
-            這場演出打破了歌廳的圍牆，將紅包場搬到戶外廣場，讓不同世代的民眾共同感受懷舊歌舞的魅力。
+            邀請「一代女皇」金佩姍與新聲代歌手林吟蔚等人登台。
+            這場演出讓家庭帶著孩子參與，這讓綠雷德十分感動——「原來只要翻譯得好，文化是能跨過年齡的。」
           </p>
         </div>
       </div>
@@ -422,8 +424,12 @@
 
   <section class="chapter" id="chapter-ending" style="border:none; padding-bottom:100px;">
     <h2 class="sectionTitle">不是告別，而是轉身</h2>
-    <p class="lead">紅包場或許不再是上一代記憶中的樣子，但它仍然活著——在舞台上、在政府的推廣計畫裡、也在新的觀眾之中。</p>
-    <p class="lead">當它從封閉的歌廳走向開放的紅樓廣場，這不再是謝幕，而是一次華麗的轉身。</p>
+    <p class="lead">
+      紅包場或許不再是上一代記憶中的樣子，但它仍然活著——在舞台、在語言、在新的觀眾裡，以它自己的節奏，持續在城市裡運作。
+    </p>
+    <p class="lead">
+      當我們第一次給紅包時，感受到那種「在亞洲文化裡很少直接給錢」的衝突；但也從那一刻理解：紅包在這裡是一種社交語言，是對舞台的回應方式。
+    </p>
     <p class="lead" style="color:var(--accent); margin-top:30px;">這不是謝幕，而是轉身。</p>
   </section>
 
