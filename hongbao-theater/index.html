@@ -9,308 +9,274 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600;700;900&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
     /* =========================================
-       1. 全域變數與重置 (Design System)
-       以第一位作者風格為主，融合第三位的玻璃質感
+       1. 視覺系統：沉浸、復古、紅金配色
     ========================================= */
     :root {
-      /* Author 1 的核心色 */
       --red-deep: #5a0a0c;
       --red-vivid: #970C10;
       --black: #050505;
       --gold: #FFE87A;
-      --white: #f4f4f5;
-      
-      /* Author 3 的材質感變數 */
-      --glass-bg: rgba(20, 20, 24, 0.65);
-      --glass-border: rgba(255, 232, 122, 0.15);
-      --shadow-glow: 0 0 15px rgba(230, 195, 106, 0.2);
+      --white: #e0e0e0;
+      --glass-bg: rgba(20, 20, 20, 0.75);
+      --glass-border: rgba(255, 232, 122, 0.2);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
-
+    
     body {
-      font-family: "Noto Serif TC", serif; /* 強制統字體 */
+      font-family: "Noto Serif TC", serif;
       background: var(--black);
       color: var(--white);
+      line-height: 2;
       overflow-x: hidden;
-      line-height: 1.8;
     }
 
-    /* 全域噪點濾鏡 (Grain Overlay) */
+    /* 全域噪點濾鏡 (氛圍關鍵) */
     .grain-overlay {
-      position: fixed;
-      inset: 0;
-      background: url("assets/grain.png") repeat; /* 請確保有這張圖，或移除此行 */
-      opacity: 0.15;
-      pointer-events: none;
-      z-index: 999;
+      position: fixed; inset: 0; 
+      background: url("assets/grain.png") repeat; /* 務必放入圖片 */
+      opacity: 0.12; pointer-events: none; z-index: 9999;
     }
 
-    /* 進度條 (Author 3 Feature) */
-    #progress-container {
-      position: fixed; top: 0; left: 0; width: 100%; height: 4px; z-index: 1000;
-    }
-    #progress-bar {
-      height: 100%; width: 0%; background: var(--gold); transition: width 0.1s;
-      box-shadow: 0 0 10px var(--gold);
-    }
+    /* 閱讀進度條 */
+    #progress-container { position: fixed; top: 0; left: 0; width: 100%; height: 4px; z-index: 1000; }
+    #progress-bar { height: 100%; width: 0%; background: var(--gold); transition: width 0.1s; box-shadow: 0 0 10px var(--gold); }
 
-    /* 通用工具類 */
+    /* 通用容器 */
     .container { width: min(1000px, 90vw); margin: 0 auto; position: relative; z-index: 2; }
-    .text-center { text-align: center; }
-    .gold-text { color: var(--gold); }
+    .narrow-container { width: min(800px, 90vw); margin: 0 auto; }
     
-    /* 玻璃卡片風格 (整合 Author 3 風格) */
-    .glass-card {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      padding: 2rem;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-      transition: transform 0.3s ease, border-color 0.3s ease;
-    }
-    .glass-card:hover {
-      border-color: var(--gold);
-      transform: translateY(-5px);
-    }
+    /* 文字樣式 */
+    .kicker { color: var(--gold); font-size: 0.85rem; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 1.5rem; display: block; border-left: 3px solid var(--gold); padding-left: 1rem; }
+    .section-title { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 900; margin-bottom: 2.5rem; color: #fff; line-height: 1.3; }
+    .text-body { font-size: 1.15rem; color: rgba(255,255,255,0.85); margin-bottom: 1.5rem; text-align: justify; }
+    .highlight { color: var(--gold); font-weight: 700; border-bottom: 1px dashed var(--gold); }
+
+    /* 章節間距 */
+    section { padding: 6rem 0; border-top: 1px solid rgba(255,255,255,0.08); }
+    section:first-of-type { border-top: none; }
 
     /* =========================================
-       2. 開場與 Hero (Section 1 - Author 1)
+       2. Hero & Intro (Author 1 Style)
     ========================================= */
-    .landing-video {
-      position: relative; width: 100%; height: 100vh; overflow: hidden;
-    }
-    .landing-video video {
-      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.7;
-    }
+    .landing-video { position: relative; width: 100%; height: 100vh; overflow: hidden; }
+    .landing-video video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
     
     .hero {
       position: relative; min-height: 100vh; background: var(--red-vivid);
-      display: flex; align-items: center; padding: 0 8vw; gap: 5vw;
-      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 5vw; overflow: hidden;
     }
     .hero::before {
       content: ""; position: absolute; inset: 0;
-      background: radial-gradient(circle at center, transparent 0%, #000 90%);
-      opacity: 0.6; pointer-events: none;
+      background: radial-gradient(circle at center, transparent 0%, #000 90%); opacity: 0.7;
     }
-    .hero-content { position: relative; z-index: 10; flex: 1; }
-    .hero h1 { font-size: clamp(3rem, 6vw, 5rem); font-weight: 900; color: var(--gold); margin-bottom: 0.5rem; letter-spacing: 0.05em; line-height: 1.1; }
-    .hero h2 { font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 700; margin-bottom: 1.5rem; opacity: 0.9; }
-    .hero-image { flex: 1; display: flex; justify-content: flex-end; z-index: 5; opacity: 0.8; }
-    .hero-image img { max-width: 100%; height: auto; mix-blend-mode: luminosity; }
-    
-    /* 打字機特效 */
-    .typewriter-line::after {
-      content: "|"; animation: blink 1s infinite; color: var(--gold);
-    }
-    @keyframes blink { 50% { opacity: 0; } }
+    .hero-content { position: relative; z-index: 10; text-align: left; max-width: 800px; }
+    .hero h1 { font-size: clamp(3.5rem, 7vw, 6rem); font-weight: 900; color: var(--gold); margin-bottom: 0.5rem; letter-spacing: 0.05em; line-height: 1.1; }
+    .hero h2 { font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 400; color: #fff; letter-spacing: 0.1em; opacity: 0.9; }
 
-    .scroll-hint {
-      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
-      color: var(--gold); font-size: 0.9rem; letter-spacing: 0.2em;
-      animation: bounce 2s infinite;
-    }
+    .scroll-hint { position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%); color: var(--gold); font-size: 0.8rem; letter-spacing: 0.3em; animation: bounce 2s infinite; }
     @keyframes bounce { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 10px); } }
 
-    /* =========================================
-       3. 導覽列與轉場 (Section 2 - Author 2)
-    ========================================= */
-    .mini-nav {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding: 0.8rem 0; overflow-x: auto;
-    }
-    .mini-nav-inner {
-      display: flex; justify-content: center; gap: 1.5rem; padding: 0 2rem;
-      min-width: max-content;
-    }
-    .mini-nav a {
-      color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.9rem;
-      letter-spacing: 0.1em; transition: 0.3s; padding: 0.4rem 0.8rem; border-radius: 50px;
-    }
-    .mini-nav a:hover, .mini-nav a.active {
-      color: var(--black); background: var(--gold);
-    }
-
-    .immersive-section {
-      min-height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-      text-align: center; padding: 4rem 1rem;
-    }
-    .immersive-copy h5 {
-      font-size: clamp(1.2rem, 2vw, 1.6rem); font-weight: 400; margin: 1rem 0; opacity: 0; transform: translateY(20px); transition: 1s;
-    }
-    .immersive-copy h5.visible { opacity: 1; transform: translateY(0); }
+    /* 沉浸式前言 */
+    .immersive-intro { padding: 8rem 1rem; text-align: center; min-height: 80vh; display: flex; flex-direction: column; justify-content: center; }
+    .immersive-text { font-size: clamp(1.2rem, 2.5vw, 1.6rem); line-height: 2.2; color: #fff; opacity: 0.9; max-width: 700px; margin: 0 auto; }
+    .fade-in-text { opacity: 0; transform: translateY(20px); transition: 1s ease-out; }
+    .fade-in-text.visible { opacity: 1; transform: translateY(0); }
 
     /* =========================================
-       4. 內容章節 (Unified Chapters)
+       3. Flip Cards (誤解與比較)
     ========================================= */
-    .chapter { padding: 6rem 0; border-top: 1px solid rgba(255,255,255,0.1); }
-    .kicker { color: var(--gold); font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1rem; display: block; }
-    .section-title { font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; margin-bottom: 2rem; color: var(--white); }
-    
-    .text-body { font-size: 1.1rem; line-height: 2; margin-bottom: 2rem; color: rgba(255,255,255,0.9); text-align: justify; }
-
-    /* 翻轉卡片 (Author 3 Feature applied to Author 2 Content) */
-    .flip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin: 3rem 0; }
-    .flip-card { perspective: 1000px; height: 280px; cursor: pointer; }
+    .flip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 3rem; }
+    .flip-card { perspective: 1000px; height: 320px; cursor: pointer; }
     .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d; }
     .flip-card:hover .flip-inner { transform: rotateY(180deg); }
+    
     .flip-front, .flip-back {
       position: absolute; inset: 0; backface-visibility: hidden;
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      padding: 2rem; border-radius: 12px; border: 1px solid var(--glass-border);
-      background: rgba(30, 0, 0, 0.6); backdrop-filter: blur(5px);
+      display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem;
+      border-radius: 12px; border: 1px solid var(--glass-border);
+      background: var(--glass-bg); backdrop-filter: blur(8px);
     }
-    .flip-front h3 { font-size: 1.8rem; color: var(--gold); margin-bottom: 1rem; }
-    .flip-back { transform: rotateY(180deg); background: var(--red-vivid); border-color: var(--gold); }
-    .flip-back p { font-size: 1.1rem; line-height: 1.6; }
+    .flip-front h3 { font-size: 1.8rem; color: var(--gold); margin-bottom: 0.5rem; }
+    .flip-front p { font-size: 1rem; opacity: 0.7; letter-spacing: 0.1em; }
+    
+    .flip-back { transform: rotateY(180deg); background: var(--red-deep); border-color: var(--gold); text-align: center; }
+    .flip-back h3 { color: #fff; font-size: 1.4rem; margin-bottom: 1rem; }
+    .flip-back p { font-size: 1.05rem; line-height: 1.6; color: #eee; }
 
-    /* 六大元素 (Elements Grid) */
-    .elements-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; margin-top: 3rem; }
+    /* =========================================
+       4. Elements Grid (六大元素)
+    ========================================= */
+    .elements-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
     .element-card {
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 2rem;
-      cursor: pointer; transition: 0.3s;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 2rem;
+      transition: 0.3s; cursor: pointer; position: relative; overflow: hidden;
     }
-    .element-card:hover { background: rgba(255,232,122,0.1); border-color: var(--gold); }
-    .element-card h3 { color: var(--gold); font-size: 1.4rem; margin-bottom: 0.5rem; }
-    .element-card .tag { font-size: 0.8rem; letter-spacing: 0.1em; opacity: 0.7; text-transform: uppercase; }
+    .element-card:hover { background: rgba(151, 12, 16, 0.2); border-color: var(--gold); transform: translateY(-5px); }
+    .element-card h3 { color: var(--gold); font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .element-card .tag { font-size: 0.8rem; letter-spacing: 0.1em; opacity: 0.6; text-transform: uppercase; margin-bottom: 1rem; display: block; }
 
-    /* 彈出視窗 (Modal) */
+    /* =========================================
+       5. Sticky Section (守門人金小姐)
+    ========================================= */
+    .sticky-wrapper { display: flex; flex-wrap: wrap; gap: 3rem; align-items: flex-start; }
+    .sticky-visual { flex: 1; position: sticky; top: 100px; min-width: 300px; }
+    .sticky-content { flex: 1.5; min-width: 300px; }
+    
+    .portrait-card {
+      background: linear-gradient(135deg, #222, #000); border: 1px solid var(--gold);
+      border-radius: 12px; padding: 2rem; text-align: center;
+      box-shadow: 0 0 30px rgba(151, 12, 16, 0.3);
+    }
+    .rule-box {
+      border-left: 4px solid var(--gold); background: rgba(255,255,255,0.05); padding: 1.5rem; margin: 2rem 0;
+    }
+    .rule-title { color: var(--gold); font-weight: bold; font-size: 1.2rem; display: block; margin-bottom: 0.5rem; }
+
+    /* =========================================
+       6. Timeline (歷史與未來)
+    ========================================= */
+    .timeline { border-left: 2px solid var(--gold); padding-left: 2rem; margin: 3rem 0; }
+    .timeline-item { position: relative; margin-bottom: 3rem; opacity: 0; transform: translateY(20px); transition: 0.6s; }
+    .timeline-item.visible { opacity: 1; transform: translateY(0); }
+    .timeline-item::before {
+      content: ""; position: absolute; left: -2.6rem; top: 0.5rem; width: 1rem; height: 1rem;
+      background: var(--black); border: 2px solid var(--gold); border-radius: 50%;
+    }
+    .timeline-year { color: var(--gold); font-weight: 900; font-size: 1.2rem; display: block; margin-bottom: 0.5rem; }
+
+    /* =========================================
+       7. Video Grid (訪談)
+    ========================================= */
+    .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem; }
+    .video-card video { width: 100%; border-radius: 8px; border: 1px solid #333; }
+    .quote-box { margin-bottom: 1rem; font-style: italic; color: #ddd; font-size: 1.1rem; }
+    .quote-author { color: var(--gold); font-size: 0.9rem; display: block; margin-top: 0.5rem; font-style: normal; }
+
+    /* Modal */
     .modal-backdrop {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000;
       display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s;
     }
     .modal-backdrop.open { opacity: 1; pointer-events: all; }
-    .modal {
-      width: min(800px, 90%); max-height: 85vh; overflow-y: auto;
-      background: #111; border: 1px solid var(--gold); border-radius: 16px; padding: 3rem;
-      position: relative;
-    }
-    .modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: 1px solid #555; color: #fff; padding: 0.5rem 1rem; cursor: pointer; border-radius: 50px; }
-    .modal-close:hover { background: var(--gold); color: #000; }
+    .modal { width: min(800px, 90%); max-height: 80vh; overflow-y: auto; background: #111; border: 1px solid var(--gold); padding: 3rem; border-radius: 12px; position: relative; }
+    .modal-close { position: absolute; top: 1rem; right: 1rem; color: #fff; background: transparent; border: 1px solid #555; padding: 0.5rem 1rem; cursor: pointer; border-radius: 50px; }
 
-    /* 地圖與圖表區塊 */
-    .map-container, .chart-container {
-      height: 450px; width: 100%; border-radius: 16px; overflow: hidden;
-      border: 1px solid var(--glass-border); margin: 2rem 0;
-    }
-
-    /* 訪談影片 */
-    .interview-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; margin-top: 3rem; }
-    .interview-block video { width: 100%; border-radius: 12px; border: 1px solid #333; margin-bottom: 1rem; }
-    .quote { border-left: 3px solid var(--gold); padding-left: 1.5rem; font-size: 1.2rem; font-style: italic; color: rgba(255,255,255,0.9); }
-    .quote-author { font-size: 0.9rem; color: var(--gold); margin-top: 0.5rem; font-style: normal; display: block; }
-
-    /* 手機版調整 */
+    /* 手機優化 */
     @media (max-width: 768px) {
-      .hero { flex-direction: column; padding: 6rem 1.5rem; text-align: center; justify-content: center; }
-      .hero-image { display: none; } /* 手機版隱藏大圖以免擋字 */
+      .hero { text-align: center; }
       .section-title { font-size: 2rem; }
-      .flip-card { height: 220px; }
+      .sticky-visual { position: relative; top: 0; width: 100%; margin-bottom: 2rem; }
     }
   </style>
 </head>
 
 <body>
   <div class="grain-overlay"></div>
-
   <div id="progress-container"><div id="progress-bar"></div></div>
 
   <section class="landing-video">
     <video autoplay muted loop playsinline>
       <source src="assets/stage.mp4" type="video/mp4">
     </video>
-    <div style="position:absolute; inset:0; background:rgba(0,0,0,0.4);"></div>
   </section>
 
-  <section class="hero" id="top">
+  <section class="hero">
     <div class="hero-content">
-      <h1 class="typewriter-line" data-text="唱給不在場的人"></h1>
-      <h2 class="typewriter-line" data-text="紅包歌手的世代誤解與生存現場" style="font-size: 1.5rem; color:#fff; font-weight:400;"></h2>
-      <div style="margin-top: 2rem; font-size: 0.9rem; letter-spacing: 0.1em; opacity: 0.7;">
+      <h1>唱給不在場的人</h1>
+      <h2>紅包歌手的世代誤解與生存現場</h2>
+      <div style="margin-top: 2rem; border-top: 1px solid var(--gold); display: inline-block; padding-top: 1rem; color: rgba(255,255,255,0.7);">
         梁朝勛、彭賀琳、莊馨予 ｜ 融媒體專題
       </div>
-    </div>
-    <div class="hero-image">
-      <img src="assets/hero_cover.png" alt="Singer Portrait">
     </div>
     <div class="scroll-hint">SCROLL ↓</div>
   </section>
 
-  <nav class="mini-nav">
-    <div class="mini-nav-inner">
-      <a href="#intro">誤解</a>
-      <a href="#location">空間</a>
-      <a href="#elements">元素</a>
-      <a href="#data">數據</a>
-      <a href="#voices">聲音</a>
-    </div>
-  </nav>
-
-  <section class="immersive-section">
-    <div class="container immersive-copy">
-      <h5>夜晚的西門町總帶著一種說不出的濕氣。</h5>
-      <h5>對多數年輕人來說，紅包場可能是陌生、甚至帶點神祕色彩的存在。</h5>
-      <h5>但在台灣的某段歷史裡，它曾是上萬個孤單靈魂的歸屬。</h5>
+  <section class="immersive-intro">
+    <div class="narrow-container">
+      <div class="immersive-text">
+        <p class="fade-in-text">夜晚的西門町總帶著一種說不出的濕氣。</p>
+        <p class="fade-in-text">對多數年輕人來說，紅包場可能是陌生、甚至帶點神祕色彩的存在。</p>
+        <p class="fade-in-text">但在台灣的某段歷史裡，它曾是上萬個孤單靈魂的歸屬；</p>
+        <p class="fade-in-text"><span class="highlight">是一座用歌聲聚起的庶民劇院。</span></p>
+      </div>
     </div>
   </section>
 
-  <section class="chapter" id="intro">
+  <section id="history">
     <div class="container">
       <span class="kicker">CHAPTER 01</span>
-      <h2 class="section-title">紅包場，和你想的不一樣</h2>
-      <p class="text-body">
-        紅包場經常被誤會。但它真正的樣貌，往往只在你坐下來之後，才慢慢顯現。
-        <br>這裡不是牛肉場，也不是單純的卡拉OK。這裡有一套獨特的生存秩序。
-      </p>
+      <h2 class="section-title">燈紅酒綠的年代<br>與那些孤單的人</h2>
+      <div class="text-body">
+        當你步出西門町六號出口的喧囂，轉身踏入一棟舊式商辦大樓，六樓的門一開，整個世界彷彿瞬間被按下了倒轉鍵。
+        對於民國三、四十年隨軍來台的單身男性而言，娛樂不只是消遣，而是一種維繫生活平衡的必要條件。
+      </div>
 
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="timeline-year">1950s</span>
+          <p>國民政府遷臺，大量單身軍人湧入。對於不屬於本地的人來說，歌廳是讓自己不那麼孤單的地方。</p>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-year">1961</span>
+          <p>「國之賓大歌廳」創立，被視為日後紅包場文化的重要源頭。</p>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-year">1990s</span>
+          <p>電視綜藝、KTV 興起。西門町曾有二十多家歌廳，如今一間間歇業，紅包場退居為小眾文化。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="misconception">
+    <div class="container">
+      <span class="kicker">CHAPTER 02</span>
+      <h2 class="section-title">紅包場，和你想的不一樣</h2>
+      <p class="text-body">紅包場經常被誤會。不同於你的想像，這裡有一套獨特的生存秩序。</p>
+      
       <div class="flip-grid">
         <div class="flip-card">
           <div class="flip-inner">
             <div class="flip-front">
-              <h3>情色？</h3>
-              <p>這裡賣的是身體嗎？</p>
+              <h3>不像牛肉場</h3>
+              <p>這裡不賣弄色情</p>
             </div>
             <div class="flip-back">
-              <h3>不是交易</h3>
-              <p>紅包場不以清涼為賣點。紅包並非對身體的購買，而是對表演的支持與長期的關係。</p>
+              <h3>不以清涼為賣點</h3>
+              <p>不同於牛肉場，紅包場不賣弄色情；紅包並非對身體的購買，而是對表演的支持與長期關係的建立。</p>
             </div>
           </div>
         </div>
-
         <div class="flip-card">
           <div class="flip-inner">
             <div class="flip-front">
-              <h3>KTV？</h3>
-              <p>可以上去唱歌嗎？</p>
+              <h3>不像 KTV</h3>
+              <p>我可以上去唱嗎？</p>
             </div>
             <div class="flip-back">
-              <h3>觀眾聽歌</h3>
-              <p>不同於卡拉OK，這裡觀眾不上台。這是專業歌手的舞台，歌手需穿著正式禮服登台。</p>
+              <h3>觀眾不上台</h3>
+              <p>這裡是專業歌手的舞台，歌手需穿著禮服登台。觀眾是來聽歌、點歌的，不是來唱歌的。</p>
             </div>
           </div>
         </div>
-
         <div class="flip-card">
           <div class="flip-inner">
             <div class="flip-front">
-              <h3>老派？</h3>
-              <p>只有老人會去？</p>
+              <h3>不像流水席</h3>
+              <p>是為了吃飯嗎？</p>
             </div>
             <div class="flip-back">
-              <h3>老少皆宜</h3>
-              <p>這裡曾是庶民劇院。雖然客群老化，但本質是老少皆宜的場所，近年也有年輕人開始踏入。</p>
+              <h3>特地來聽歌</h3>
+              <p>雖然有茶水餐點，但這裡的觀眾是特地來聽歌的。這是一座用歌聲聚起的庶民劇院。</p>
             </div>
           </div>
         </div>
@@ -318,196 +284,161 @@
     </div>
   </section>
 
-  <section class="chapter" id="location">
-    <div class="container">
-      <span class="kicker">CHAPTER 02</span>
-      <h2 class="section-title">隱身在都市叢林中的舞台</h2>
-      <p class="text-body">
-        如今僅存的紅包場，多數隱身於西門町漢中街一帶的老舊大樓內。外頭是熱鬧的潮流商圈，推開門卻是另一個時空。
-      </p>
-      <div id="map" class="map-container"></div>
-    </div>
-  </section>
-
-  <section class="chapter" id="elements">
+  <section id="elements">
     <div class="container">
       <span class="kicker">CHAPTER 03</span>
-      <h2 class="section-title">撐起紅包場的人與物</h2>
-      <p class="text-body">紅包場不是單一角色構成的舞台。它由歌星、樂團老師、小妹、服裝、餐飲與紅包，一起撐起一個仍在運作的日常系統。</p>
+      <h2 class="section-title">撐起紅包場的六大支柱</h2>
+      <p class="text-body">這不是單一角色構成的舞台。它由歌星、樂團、小妹、服裝、餐飲與紅包，撐起一個仍在運作的生態系。</p>
       
       <div class="elements-grid">
-        <article class="element-card" data-title="歌星" data-body="歌星輪番登台，每人約兩至三首歌。跑馬燈穿過個人稱號，禮服盛裝登場；演出期間嚴守在台上，不走到台下。">
-          <h3>歌星</h3><div class="tag">THE SINGER</div>
-        </article>
-        <article class="element-card" data-title="樂團老師" data-body="樂團老師全天候在舞台後方，熟悉鼓、效果器與新舊歌曲；有時也加入合音，為每場演唱增添層次。">
-          <h3>樂團老師</h3><div class="tag">THE BAND</div>
-        </article>
-        <article class="element-card" data-title="小妹" data-body="小妹在場內穿梭，擔任服務生角色。她們是連結歌手與客人的重要媒介，傳遞茶水也傳遞紅包。">
-          <h3>小妹</h3><div class="tag">THE CONNECTOR</div>
-        </article>
-        <article class="element-card" data-title="服裝" data-body="每件禮服背後都有特製、手工製作或早期訂製的故事。顏色與配件也與個人風格相關。">
-          <h3>服裝</h3><div class="tag">THE COSTUME</div>
-        </article>
-        <article class="element-card" data-title="餐飲" data-body="茶水、水果盤、熱炒與啤酒。在獨特的「茶單制」裡，餐飲也是人情往來的日常語言。">
-          <h3>餐飲</h3><div class="tag">THE TABLE</div>
-        </article>
-        <article class="element-card" data-title="紅包" data-body="紅包場最經典的畫面。金額隨心隨緣，這不是交易，而是對表演的支持與面子。">
-          <h3>紅包</h3><div class="tag">THE RED ENVELOPE</div>
-        </article>
+        <div class="element-card" data-title="歌星" data-body="輪番登台，每人2-3首歌。跑馬燈穿過稱號，禮服盛裝登場。在全盛時期，一天可能要連跑好幾場。">
+          <h3>歌星</h3><span class="tag">THE SINGER</span>
+        </div>
+        <div class="element-card" data-title="樂團老師" data-body="全天候在舞台後方，熟悉各式新舊歌曲。一到兩位老師，就能撐起現場音場，讓人穿梭時空。">
+          <h3>樂團老師</h3><span class="tag">THE BAND</span>
+        </div>
+        <div class="element-card" data-title="小妹" data-body="穿梭場內的服務生。除了端茶倒水，她們是連結歌手與客人的重要媒介，傳遞紅包也傳遞人情。">
+          <h3>小妹</h3><span class="tag">THE CONNECTOR</span>
+        </div>
+        <div class="element-card" data-title="服裝" data-body="登場前必先換裝。每件禮服背後都有訂製的故事，顏色與首飾搭配都有學問，彰顯對舞台的重視。">
+          <h3>服裝</h3><span class="tag">THE COSTUME</span>
+        </div>
+        <div class="element-card" data-title="餐飲" data-body="茶單制：歌星承擔賓客的飲食消費。桌上常見瓜子、水果盤或熱茶，是人情往來的日常語言。">
+          <h3>餐飲</h3><span class="tag">THE TABLE</span>
+        </div>
+        <div class="element-card" data-title="紅包" data-body="最經典的畫面。賓客包出高於消費的金額給歌星，這不是小費，而是歌星的主要收入，也是「紅包場」名稱由來。">
+          <h3>紅包</h3><span class="tag">THE RED ENVELOPE</span>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="chapter" id="data">
+  <section id="voices">
     <div class="container">
       <span class="kicker">CHAPTER 04</span>
-      <h2 class="section-title">從 30 到 1 的消逝</h2>
-      <p class="text-body">全盛時期西門町曾有多達 30 家歌廳，如今「金鑽」成為僅存的最後一家。這不只是數字的減少，是一個時代娛樂形式的變遷。</p>
-      <div class="chart-container glass-card" style="padding: 1rem;">
-        <canvas id="myChart"></canvas>
-      </div>
-    </div>
-  </section>
-
-  <section class="chapter" id="voices">
-    <div class="container">
-      <span class="kicker">CHAPTER 05</span>
-      <h2 class="section-title">他們怎麼說</h2>
+      <h2 class="section-title">她們的聲音</h2>
       
-      <div class="interview-grid">
-        <div class="interview-block">
-          <div class="quote">「臺上臺下，我是不一樣的人。」</div>
-          <span class="quote-author">— 楊雅喬</span>
-          <video controls poster="assets/poster/c0662.jpg" style="margin-top:1rem;">
-            <source src="assets/video/c0662.mp4" type="video/mp4">
-          </video>
-        </div>
-
-        <div class="interview-block">
-          <div class="quote">「歌廳假如沒有了，其他地方也沒有我們生存的空間了……」</div>
-          <span class="quote-author">— 翟曼芳</span>
-          <video controls poster="assets/poster/c0621.jpg" style="margin-top:1rem;">
+      <div class="video-grid">
+        <div class="video-card">
+          <div class="quote-box">「歌廳假如沒有了，其他地方也沒有我們生存的空間了……」</div>
+          <span class="quote-author">— 翟曼芳 (歌齡近50年)</span>
+          <video controls poster="assets/poster/c0621.jpg">
             <source src="assets/video/c0621.mp4" type="video/mp4">
           </video>
         </div>
+        <div class="video-card">
+          <div class="quote-box">「臺上臺下，我是不一樣的人。不會唱，就學啊，我就這樣找到我喜歡的工作了。」</div>
+          <span class="quote-author">— 楊雅喬 (帽子姑娘)</span>
+          <video controls poster="assets/poster/c0662.jpg">
+            <source src="assets/video/c0662.mp4" type="video/mp4">
+          </video>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="chapter text-center" style="border:none; padding-bottom: 8rem;">
+  <section id="gatekeeper">
     <div class="container">
-      <h2 class="section-title" style="color: var(--gold);">不是告別，而是轉身</h2>
-      <p class="text-body" style="text-align: center; max-width: 600px; margin: 0 auto;">
-        紅包場或許不再是上一代記憶中的樣子，但它仍然活著——在舞台、在語言、在新的觀眾裡，以它自己的節奏，持續在城市裡運作。<br><br>
-        這不是謝幕，而是轉身。
-      </p>
+      <span class="kicker">CHAPTER 05</span>
+      <h2 class="section-title">最後的守門人</h2>
+      
+      <div class="sticky-wrapper">
+        <div class="sticky-visual">
+          <div class="portrait-card">
+            <img src="assets/hero_cover.png" style="width:100%; filter: grayscale(1);" alt="金小姐">
+            <h3 style="color:var(--gold); margin-top:1rem;">金小娟</h3>
+            <p style="font-size:0.9rem; color:#aaa;">金鑽歌廳經營者</p>
+          </div>
+        </div>
+        
+        <div class="sticky-content">
+          <div class="text-body">
+            金小娟第一次踏進紅包場，是因為爸爸帶她來。那時她還是表藝科學生，只覺得「可以領現金，很實在」。
+            多年後，她接手金鑽，成為台北僅存紅包場的守門人。
+          </div>
+          <div class="text-body">
+            <span class="highlight">「我守住的不是一個被封存在過去的場景，而是一套仍在運作的舞台系統。」</span>
+          </div>
+
+          <div class="rule-box">
+            <span class="rule-title">01. 秩序</span>
+            <p>歌手不能搶客、不能破壞場內氣氛，這是尊重的底線。</p>
+          </div>
+          <div class="rule-box">
+            <span class="rule-title">02. 節奏</span>
+            <p>舞台要有人輪番上陣，歌不能太死板，棒子不能掉。</p>
+          </div>
+          <div class="rule-box">
+            <span class="rule-title">03. 語言</span>
+            <p>紅包不是給錢，而是一種回應與肯定，是唯一的溝通橋樑。</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
+  <section id="future">
+    <div class="container">
+      <span class="kicker">CHAPTER 06</span>
+      <h2 class="section-title">不是告別，而是轉身</h2>
+      
+      <div class="text-body">
+        綠雷德團隊形容他們做的不是保存，而是「翻譯」。
+        文化政策也開始介入，試圖將紅包場帶回公共視野。沉浸式劇場、戶外演唱會，讓年輕人與孩子也能看懂這個場域。
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="timeline-year">2023</span>
+          <p>文化局推動《萬華時光》，將紅包場視為常民文化核心。</p>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-year">2024.11</span>
+          <p>西門紅樓跨世代紅包場演唱會，家庭與孩子一同參與。</p>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-year">Future</span>
+          <p>計畫導入沉浸式戲劇體驗，展現紅包場的「再現與新生」。</p>
+        </div>
+      </div>
+
+      <div id="map" style="height: 400px; width: 100%; border: 1px solid var(--gold); border-radius: 12px; margin-top: 2rem;"></div>
+      
+      <div style="height: 300px; width: 100%; margin-top: 3rem; background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px;">
+        <canvas id="myChart"></canvas>
+      </div>
+
+      <div class="text-body" style="margin-top: 4rem; text-align: center;">
+        <p>紅包場或許不再是上一代記憶中的樣子，但它仍然活著。<br>這不是謝幕，而是轉身。</p>
+      </div>
+    </div>
+  </section>
+
+  <footer style="text-align: center; padding: 4rem 0; color: #666; font-size: 0.9rem;">
+    © 2025 紅包場融媒體專題
+  </footer>
+
   <div class="modal-backdrop" id="modal-backdrop">
     <div class="modal">
-      <button class="modal-close" id="modal-close">✕ 關閉</button>
-      <h2 id="modal-title" style="color: var(--gold); margin-bottom: 1rem;">標題</h2>
-      <p id="modal-body" style="font-size: 1.1rem; line-height: 1.8; color: #ddd;"></p>
+      <button class="modal-close" id="modal-close">✕</button>
+      <h2 id="modal-title" style="color: var(--gold); margin-bottom: 1rem;"></h2>
+      <p id="modal-body" style="line-height: 1.8; color: #ddd;"></p>
     </div>
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       
-      // 1. 打字機特效 (Author 1)
-      const typeWriters = document.querySelectorAll(".typewriter-line");
-      const typeText = (el, speed = 100) => {
-        return new Promise(resolve => {
-          const text = el.dataset.text;
-          el.textContent = "";
-          let i = 0;
-          function type() {
-            if (i < text.length) {
-              el.textContent += text.charAt(i);
-              i++;
-              setTimeout(type, speed);
-            } else {
-              resolve();
-            }
-          }
-          type();
-        });
-      };
-      
-      const startIntro = async () => {
-        for (const el of typeWriters) {
-          await typeText(el);
-        }
-      };
-      // 簡單觸發：頁面載入後 0.5 秒開始打字
-      setTimeout(startIntro, 500);
-
-      // 2. 捲動文字浮現 (Author 1 + 2)
+      // 1. 文字浮現特效
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-          }
+          if (entry.isIntersecting) entry.target.classList.add("visible");
         });
       }, { threshold: 0.2 });
+      
+      document.querySelectorAll(".fade-in-text, .timeline-item").forEach(el => observer.observe(el));
 
-      document.querySelectorAll(".immersive-copy h5").forEach(el => observer.observe(el));
-
-      // 3. 進度條 (Author 3)
-      window.addEventListener('scroll', () => {
-        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const scrolled = (winScroll / height) * 100;
-        document.getElementById("progress-bar").style.width = scrolled + "%";
-      });
-
-      // 4. Leaflet 地圖 (Author 3)
-      if(document.getElementById('map')) {
-        var map = L.map('map', {
-            center: [25.04426, 121.50735], 
-            zoom: 16,
-            scrollWheelZoom: false 
-        });
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap &copy; CARTO'
-        }).addTo(map);
-        
-        var goldIcon = L.divIcon({
-            className: 'custom-div-icon',
-            html: "<div style='background-color:#FFE87A; width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 10px #FFE87A;'></div>",
-            iconSize: [12, 12], iconAnchor: [6, 6]
-        });
-        L.marker([25.04426, 121.50735], {icon: goldIcon}).addTo(map).bindPopup("<b>金鑽歌廳</b><br>台北市最後的紅包場");
-      }
-
-      // 5. Chart.js 圖表 (Author 3)
-      if(document.getElementById('myChart')) {
-        const ctx = document.getElementById('myChart').getContext('2d');
-        new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: ['1980s 全盛期', '2025 現今'],
-            datasets: [{
-              label: '西門町歌廳數量',
-              data: [30, 1],
-              backgroundColor: ['rgba(255, 255, 255, 0.2)', 'rgba(255, 232, 122, 0.9)'],
-              borderColor: 'transparent',
-              barThickness: 50
-            }]
-          },
-          options: {
-            responsive: true, maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-              y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#888' } },
-              x: { grid: { display: false }, ticks: { color: '#fff', font: { size: 14 } } }
-            }
-          }
-        });
-      }
-
-      // 6. Modal 邏輯 (Author 2)
+      // 2. Modal 邏輯
       const modal = document.getElementById("modal-backdrop");
       const modalTitle = document.getElementById("modal-title");
       const modalBody = document.getElementById("modal-body");
@@ -518,7 +449,7 @@
           modalTitle.textContent = card.dataset.title;
           modalBody.textContent = card.dataset.body;
           modal.classList.add("open");
-          document.body.style.overflow = "hidden"; // 禁止背景捲動
+          document.body.style.overflow = "hidden";
         });
       });
 
@@ -526,32 +457,39 @@
         modal.classList.remove("open");
         document.body.style.overflow = "";
       };
-
       closeBtn.addEventListener("click", closeModal);
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) closeModal();
-      });
-      
-      // 7. 導覽列 Active 狀態
-      const sections = document.querySelectorAll("section");
-      const navLinks = document.querySelectorAll(".mini-nav a");
-      
-      window.addEventListener("scroll", () => {
-        let current = "";
-        sections.forEach(section => {
-          const sectionTop = section.offsetTop;
-          if (pageYOffset >= sectionTop - 150) {
-            current = section.getAttribute("id");
-          }
-        });
-        navLinks.forEach(link => {
-          link.classList.remove("active");
-          if (link.getAttribute("href").includes(current)) {
-            link.classList.add("active");
-          }
-        });
+      modal.addEventListener("click", (e) => { if(e.target === modal) closeModal(); });
+
+      // 3. 進度條
+      window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        document.getElementById("progress-bar").style.width = (winScroll / height) * 100 + "%";
       });
 
+      // 4. Map & Chart (防呆機制)
+      if(document.getElementById('map')) {
+        try {
+          var map = L.map('map', { center: [25.04426, 121.50735], zoom: 16, scrollWheelZoom: false });
+          L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; CARTO' }).addTo(map);
+          var goldIcon = L.divIcon({ className: 'custom-div-icon', html: "<div style='background:#FFE87A; width:12px; height:12px; border-radius:50%; box-shadow:0 0 10px #FFE87A;'></div>", iconSize: [12, 12] });
+          L.marker([25.04426, 121.50735], {icon: goldIcon}).addTo(map).bindPopup("<b>金鑽歌廳</b><br>台北市最後的紅包場");
+        } catch(e) { console.log("Map error:", e); }
+      }
+
+      if(document.getElementById('myChart')) {
+        try {
+          const ctx = document.getElementById('myChart').getContext('2d');
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: ['全盛期 (30家)', '現今 (1家)'],
+              datasets: [{ label: '西門町歌廳數量', data: [30, 1], backgroundColor: ['rgba(255,255,255,0.2)', '#FFE87A'] }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#fff' }, grid: { display: false } }, y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.1)' } } } }
+          });
+        } catch(e) { console.log("Chart error:", e); }
+      }
     });
   </script>
 </body>
