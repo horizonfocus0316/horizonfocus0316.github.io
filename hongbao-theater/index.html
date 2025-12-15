@@ -35,32 +35,34 @@
     }
 
     /* =========================================
-       2. 影片開場區 (Video Hero)
+       2. 影片開場區 (Video Hero) - 強制修復版
     ========================================= */
     .video-hero {
       position: relative;
       width: 100%;
-      height: 100vh; /* 強制全螢幕 */
+      height: 100vh;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
+      background-color: #000; /* 預防影片跑不出來時的底色 */
     }
 
     .video-container {
-      position: absolute; inset: 0; z-index: -1; background: #000;
+      position: absolute; inset: 0; z-index: 0; 
+      background: #000;
     }
 
     .bg-video {
       width: 100%; height: 100%; object-fit: cover;
       opacity: 0.6;
-      filter: contrast(1.1) brightness(0.8) sepia(0.2); /* 紅包場濾鏡 */
+      filter: contrast(1.1) brightness(0.8) sepia(0.2);
     }
 
     .video-overlay {
       position: absolute; inset: 0;
       background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8));
-      z-index: 0;
+      z-index: 1; /* 確保遮罩在影片上 */
     }
 
     .hero-content {
@@ -84,7 +86,6 @@
       animation: fadeUp 1.2s ease forwards;
     }
 
-    /* 文字逐行浮現動畫 */
     .immersive-text .line:nth-child(1) { animation-delay: 0.5s; }
     .immersive-text .line:nth-child(2) { animation-delay: 2.5s; }
     .immersive-text .line:nth-child(3) { animation-delay: 4.5s; }
@@ -131,7 +132,7 @@
       display: flex; flex-direction: column;
     }
     
-    /* 金小姐替代圖：剪影風格 */
+    /* 金小姐替代圖 */
     .jin-portrait-placeholder {
       width: 100%; height: 100%;
       background: linear-gradient(135deg, #141418 0%, #0b0b0c 100%);
@@ -220,21 +221,20 @@
   <div id="progress-bar" style="height: 100%; width: 0%; background: var(--accent); transition: width 0.1s;"></div>
 </div>
 
-<section class="video-hero" style="position: relative; width: 100%; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-  
-  <div class="video-container" style="position: absolute; inset: 0; z-index: -1;">
-    <video autoplay muted loop playsinline class="bg-video" style="width: 100%; height: 100%; object-fit: cover;">
+<section class="video-hero">
+  <div class="video-container">
+    <video autoplay muted loop playsinline class="bg-video">
+      <source src="bg.mp4" type="video/mp4">
       <source src="assets/videos/bg.mp4" type="video/mp4">
-      <img src="https://images.unsplash.com/photo-1604909052743-94e838986d24?auto=format&fit=crop&w=1600&q=80">
     </video>
     <div class="video-overlay"></div>
   </div>
 
-  <div class="hero-content" style="position: relative; z-index: 2; text-align: center; width: 100%;">
+  <div class="hero-content">
     <div class="immersive-text">
-      <p class="line" style="color: white; font-size: 24px; text-shadow: 0 4px 10px black;">午後的金鑽歌廳。</p>
-      <p class="line" style="color: white; font-size: 24px; text-shadow: 0 4px 10px black;">燈光昏黃，沿著天花板與牆邊流動。</p>
-      <p class="line" style="color: white; font-size: 24px; text-shadow: 0 4px 10px black;">在這個場域裡，文化沒有消失，只是重新調整姿態。</p>
+      <p class="line">午後的金鑽歌廳。</p>
+      <p class="line">燈光昏黃，沿著天花板與牆邊流動。</p>
+      <p class="line">在這個場域裡，文化沒有消失，只是重新調整姿態。</p>
     </div>
   </div>
   
@@ -368,44 +368,49 @@
   <section class="chapter" id="chapter-timeline">
     <div class="kicker">第三章：城市重生</div>
     <h2 class="sectionTitle">紅包場如何回到公共視野</h2>
+    <p class="lead" style="margin-bottom:30px;">
+      不只是民間的堅持，台北市文化局近年也推動「萬華時光」計畫，將紅包場視為常民文化的核心，透過跨界合作，讓這門藝術重新被看見。
+    </p>
+
     <div class="timeline">
+      
       <div class="timeline-item">
         <span class="time">2023</span>
         <div class="timeline-content card pad">
-          <h3>《萬華時光・再現與新生》計畫啟動</h3>
-          <p>北市文化局以戲劇、走讀、市集等形式，將長期被忽視的生活文化重新帶入公共視野。</p>
+          <h3>推動「在地特色」文化推廣計畫</h3>
+          <p>文化局以「茶室」、「紅包場」為核心，邀請藝術創作者與在地居民共創，透過多元形式翻轉萬華的既定印象。</p>
         </div>
       </div>
+
       <div class="timeline-item">
-        <span class="time">2024</span>
+        <span class="time">2024.11.15</span>
         <div class="timeline-content card pad">
-          <h3>沉浸式劇場進駐金鑽歌廳</h3>
-          <p>劇場直接在紅包場內演出，觀眾坐在原本的座位，體驗舞台、音樂與場域交織的敘事。</p>
+          <h3>西門紅樓：跨世代紅包場演唱會</h3>
+          <p>
+            於西門紅樓北廣場舉辦，邀請「一代女皇」金佩姍與新聲代歌手林吟蔚等人登台。
+            這場演出打破了歌廳的圍牆，將紅包場搬到戶外廣場，讓不同世代的民眾共同感受懷舊歌舞的魅力。
+          </p>
         </div>
       </div>
+
       <div class="timeline-item">
-        <span class="time">2024</span>
+        <span class="time">2025</span>
         <div class="timeline-content card pad">
-          <h3>跨世代演唱會於西門紅樓前廣場舉行</h3>
-          <p>紅包場元素被搬到戶外公共空間，家庭、年輕觀眾與原有客群首次在同一場域相遇。</p>
+          <h3>計畫導入沉浸式戲劇體驗</h3>
+          <p>
+            未來將規劃主題故事路線，結合劇場演出，帶領觀眾深度走入萬華的文化內涵，展現紅包場的「再現與新生」。
+          </p>
         </div>
       </div>
+
     </div>
   </section>
 
   <section class="chapter" id="chapter-ending" style="border:none; padding-bottom:100px;">
     <h2 class="sectionTitle">不是告別，而是轉身</h2>
-    <p class="lead">紅包場或許不再是上一代記憶中的樣子，但它仍然活著——在舞台上、在語言裡、也在新的觀眾之中，以它自己的節奏，持續在城市裡運作。</p>
+    <p class="lead">紅包場或許不再是上一代記憶中的樣子，但它仍然活著——在舞台上、在政府的推廣計畫裡、也在新的觀眾之中。</p>
+    <p class="lead">當它從封閉的歌廳走向開放的紅樓廣場，這不再是謝幕，而是一次華麗的轉身。</p>
     <p class="lead" style="color:var(--accent); margin-top:30px;">這不是謝幕，而是轉身。</p>
-  </section>
-
-  <section style="margin-top: 80px; margin-bottom: 40px; text-align: center;">
-    <div class="card pad" style="max-width: 600px; margin: 0 auto; display: inline-block;">
-      <img src="assets/images/IMG_1795.JPG" alt="採訪團隊合影" style="width: 100%; border-radius: 8px; filter: grayscale(0.3);">
-      <p class="small" style="margin-top: 10px;">
-        採訪後記：製作團隊於金鑽歌廳。在這個場域裡，我們看見的不只是秀場文化，更是人與人之間真實的溫度。
-      </p>
-    </div>
   </section>
 
   <footer class="small" style="padding-bottom: 40px; text-align: center; opacity: 0.6;">
@@ -436,15 +441,16 @@
       .bindPopup('<b>金鑽歌廳</b><br>隱身於大樓中的演藝舞台。')
       .openPopup();
 
-  [cite_start]// 3. W12 動態圖表 (30家 vs 1家) [cite: 34]
+  // 3. W12 動態圖表 (30家 vs 1家)
+  // 將 Script 放在最後面，確保 canvas 元素已經生成
   const ctx = document.getElementById('myChart').getContext('2d');
   new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['全盛時期', '2025 現今'],
+      labels: ['1980s 全盛期', '2025 現今'],
       datasets: [{
-        label: '歌廳數量',
-        data: [30, 1], // 這裡更新為 30 對 1
+        label: '西門町歌廳數量',
+        data: [30, 1], 
         backgroundColor: ['rgba(255, 255, 255, 0.2)', 'rgba(230, 195, 106, 0.8)'],
         borderColor: ['rgba(255, 255, 255, 0.5)', 'rgba(230, 195, 106, 1)'],
         borderWidth: 1
