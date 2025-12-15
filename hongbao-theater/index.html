@@ -1,3 +1,16 @@
+</section> <div class="hero-content"> ... </div> <div class="scroll-hint"> ... </div>
+</section> ```
+
+### 🚨 錯誤 2：影片路徑混合
+我看到你的程式碼裡，影片路徑是寫 `assets/videos/bg.mp4`，但照片路徑你剛剛改成了 `assets/images/IMG_1795.JPG`（大寫）。
+**請務必確認你的資料夾結構。**
+
+---
+
+### ✅ 這是完全修復後的程式碼
+請直接**全選複製**下面這整段，覆蓋掉你原本的檔案。我幫你把 HTML 結構修整齊了，並且加上了強制高度設定，確保影片一定會被撐開。
+
+```html
 <!doctype html>
 <html lang="zh-Hant">
 <head>
@@ -34,7 +47,7 @@
 
     /* =========================================
        2. 影片開場區 (Video Hero)
-    ======================================== */
+    ========================================= */
     .video-hero {
       position: relative;
       width: 100%;
@@ -130,7 +143,6 @@
       display: flex; flex-direction: column;
     }
     
-    /* 金小姐替代圖：剪影 */
     .jin-portrait-placeholder {
       width: 100%; height: 100%;
       background: linear-gradient(135deg, #141418 0%, #0b0b0c 100%);
@@ -229,22 +241,14 @@
     >
       <source src="assets/videos/bg.mp4" type="video/mp4">
     </video>
+    <div class="video-overlay"></div>
   </div>
 
   <div class="hero-content" style="position: relative; z-index: 2; text-align: center; width: 100%;">
     <div class="immersive-text">
       <p class="line" style="color: white; font-size: 24px; text-shadow: 0 4px 10px black;">午後的金鑽歌廳。</p>
       <p class="line" style="color: white; font-size: 24px; text-shadow: 0 4px 10px black;">燈光昏黃，沿著天花板與牆邊流動。</p>
-    </div>
-  </div>
-
-</section>
-
-  <div class="hero-content">
-    <div class="immersive-text">
-      <p class="line">午後的金鑽歌廳。</p>
-      <p class="line">燈光昏黃，沿著天花板與牆邊流動。</p>
-      <p class="line">在這個場域裡，文化沒有消失，只是重新調整姿態。</p>
+      <p class="line" style="color: white; font-size: 24px; text-shadow: 0 4px 10px black;">在這個場域裡，文化沒有消失，只是重新調整姿態。</p>
     </div>
   </div>
   
