@@ -1,103 +1,237 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>台北僅存的紅包場｜它如何被留下，又如何被改寫</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>台北僅存的紅包場｜融媒體專題</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;500;700&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --bg-color: #0e0e0e;
+      --text-main: #e0e0e0;
+      --text-dim: #888;
+      --accent-red: #b91c1c;
+      --hover-gold: #d4af37;
+    }
+
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
-      min-height: 100vh;
-      background: #0e0e0e;
-      color: #ffffff;
+      font-family: "Noto Serif TC", serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      height: 100vh;
+      overflow: hidden; /* 固定視窗，做成全螢幕入口 */
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: center;
-      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC",
-                   system-ui, sans-serif;
+      position: relative;
+    }
+
+    /* 背景噪點質感 (參考自你的範例) */
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url('https://grainy-gradients.vercel.app/noise.svg'); /* 使用線上噪點資源 */
+      opacity: 0.05;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* 動態背景層 */
+    .bg-layer {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transition: opacity 0.8s ease-in-out, transform 8s ease;
+      opacity: 0;
+      z-index: 1;
+      filter: brightness(0.4) grayscale(0.5); /* 讓背景暗一點，文字才清楚 */
+    }
+    
+    /* 預設背景 (當沒有 hover 時) */
+    .bg-default {
+      background-image: url('https://images.unsplash.com/photo-1514306191717-452ec28c7f42?q=80&w=2070&auto=format&fit=crop'); /* 替換成你的紅包場空景照 */
+      opacity: 1;
+      transform: scale(1.05);
     }
 
     .wrap {
-      max-width: 760px;
-      padding: 48px 28px;
+      position: relative;
+      z-index: 20;
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
     }
 
-    h1 {
-      font-size: 34px;
-      line-height: 1.4;
-      margin-bottom: 24px;
-      letter-spacing: 0.08em;
-    }
-
-    .subtitle {
-      display: block;
-      margin-top: 12px;
-      font-size: 20px;
-      font-weight: 400;
-      letter-spacing: 0.08em;
-      opacity: 0.85;
-    }
-
-    p {
-      color: rgba(255, 255, 255, 0.7);
-      line-height: 1.8;
-      margin-bottom: 48px;
-      font-size: 16px;
-    }
-
-    .nav a {
-      display: block;
-      padding: 18px 22px;
-      margin-bottom: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 18px;
+    /* 左側：標題區 */
+    .header-group h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1.2;
+      font-weight: 700;
       letter-spacing: 0.05em;
-      transition: background 0.25s ease, border-color 0.25s ease;
+      margin-bottom: 24px;
+      text-shadow: 0 0 20px rgba(0,0,0,0.8);
     }
 
-    .nav a:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.4);
+    .header-group .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-dim);
+      line-height: 1.8;
+      border-left: 2px solid var(--accent-red);
+      padding-left: 20px;
+      max-width: 400px;
     }
 
+    /* 右側：導航區 */
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .nav-item {
+      text-decoration: none;
+      color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      padding: 24px 0;
+      transition: all 0.4s ease;
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .nav-item:hover {
+      border-color: var(--hover-gold);
+      padding-left: 15px; /* 懸停時向右滑動 */
+    }
+
+    .chapter-num {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--hover-gold);
+      margin-right: 16px;
+      letter-spacing: 0.1em;
+    }
+
+    .chapter-title {
+      font-size: 1.5rem;
+      font-weight: 500;
+    }
+
+    /* 手機版適配 */
+    @media (max-width: 768px) {
+      .wrap {
+        grid-template-columns: 1fr;
+        padding: 24px;
+        gap: 40px;
+      }
+      
+      .header-group h1 {
+        font-size: 2.2rem;
+      }
+      
+      .chapter-title {
+        font-size: 1.25rem;
+      }
+    }
+
+    /* 頁尾 */
     footer {
-      margin-top: 60px;
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.45);
-      text-align: center;
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      font-size: 0.8rem;
+      opacity: 0.5;
+      letter-spacing: 0.1em;
     }
   </style>
 </head>
 
 <body>
+
+  <div class="bg-layer bg-default" id="bg-0"></div>
+  <div class="bg-layer" id="bg-1" style="background-image: url('https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?q=80&w=2070');"></div>
+  <div class="bg-layer" id="bg-2" style="background-image: url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=2070');"></div>
+  <div class="bg-layer" id="bg-3" style="background-image: url('https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070');"></div>
+
   <main class="wrap">
-    <h1>
-      台北僅存的紅包場
-      <span class="subtitle">它如何被留下，又如何被改寫</span>
-    </h1>
+    <div class="header-group">
+      <h1>台北僅存的<br>紅包場</h1>
+      <p class="subtitle">
+        在城市變遷與文化轉型之下，<br>
+        一個仍在運作的舞台，<br>
+        如何被留下，又如何被重新理解。
+      </p>
+    </div>
 
-    <p>
-      這是一個關於紅包場的融媒體新聞專題。<br>
-      在城市變遷與文化轉型之下，我們嘗試理解：<br>
-      一個仍在運作的舞台，如何被留下，又如何被重新理解。
-    </p>
-
-    <nav class="nav">
-      <a href="chapter1/index.html">第一章｜紅包場的現場與守門人</a>
-      <a href="chapter2/index.html">第二章｜紅包歌手的世代誤解與生存現場</a>
-      <a href="chapter3/index.html">第三章｜最後的紅包場，如何繼續存在</a>
+    <nav class="nav-list">
+      <a href="chapter1/index.html" class="nav-item" data-bg="bg-1">
+        <span class="chapter-num">CHAPTER 01</span>
+        <span class="chapter-title">現場與守門人</span>
+      </a>
+      
+      <a href="chapter2/index.html" class="nav-item" data-bg="bg-2">
+        <span class="chapter-num">CHAPTER 02</span>
+        <span class="chapter-title">世代誤解與生存</span>
+      </a>
+      
+      <a href="chapter3/index.html" class="nav-item" data-bg="bg-3">
+        <span class="chapter-num">CHAPTER 03</span>
+        <span class="chapter-title">最後的紅包場</span>
+      </a>
     </nav>
-
-    <footer>
-      © 2025 紅包場融媒體新聞專題
-    </footer>
   </main>
+
+  <footer>
+    © 2025 紅包場融媒體新聞專題
+  </footer>
+
+  <script>
+    const navItems = document.querySelectorAll('.nav-item');
+    const bgLayers = document.querySelectorAll('.bg-layer');
+    const defaultBg = document.getElementById('bg-0');
+
+    navItems.forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        // 隱藏所有背景
+        bgLayers.forEach(bg => bg.style.opacity = '0');
+        bgLayers.forEach(bg => bg.style.transform = 'scale(1)');
+        
+        // 顯示對應背景
+        const targetId = item.getAttribute('data-bg');
+        const targetBg = document.getElementById(targetId);
+        if (targetBg) {
+          targetBg.style.opacity = '1';
+          targetBg.style.transform = 'scale(1.05)'; // 微微放大效果
+        }
+      });
+
+      // 滑鼠移出時，恢復預設背景（或者你可以選擇保留最後一張）
+      item.addEventListener('mouseleave', () => {
+        bgLayers.forEach(bg => bg.style.opacity = '0');
+        defaultBg.style.opacity = '1';
+        defaultBg.style.transform = 'scale(1.05)';
+      });
+    });
+  </script>
 </body>
 </html>
