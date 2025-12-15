@@ -7,14 +7,14 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;500;700;900&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-color: #0e0e0e;
-      --text-main: #e0e0e0;
-      --text-dim: #888;
-      --accent-red: #b91c1c;
+      --bg-color: #0a0a0a;
+      --text-main: #f0f0f0;
+      --text-dim: #999;
+      --accent-red: #c02828;
       --hover-gold: #d4af37;
     }
 
@@ -29,39 +29,43 @@
       background-color: var(--bg-color);
       color: var(--text-main);
       height: 100vh;
-      overflow: hidden; /* 固定視窗，做成全螢幕入口 */
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: center;
       position: relative;
     }
 
-    /* 背景噪點質感 (參考自你的範例) */
+    /* 噪點層 */
     body::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: url('https://grainy-gradients.vercel.app/noise.svg'); /* 使用線上噪點資源 */
-      opacity: 0.05;
+      background: url('https://grainy-gradients.vercel.app/noise.svg');
+      opacity: 0.06;
       pointer-events: none;
       z-index: 10;
     }
 
-    /* 動態背景層 */
+    /* 背景圖層容器 */
+    .bg-container {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: #000;
+    }
+
     .bg-layer {
       position: absolute;
       inset: 0;
       background-size: cover;
       background-position: center;
-      transition: opacity 0.8s ease-in-out, transform 8s ease;
       opacity: 0;
-      z-index: 1;
-      filter: brightness(0.4) grayscale(0.5); /* 讓背景暗一點，文字才清楚 */
+      transition: opacity 0.8s ease-in-out, transform 8s ease-out;
+      filter: brightness(0.4) grayscale(0.1);
     }
     
-    /* 預設背景 (當沒有 hover 時) */
-    .bg-default {
-      background-image: url('https://images.unsplash.com/photo-1514306191717-452ec28c7f42?q=80&w=2070&auto=format&fit=crop'); /* 替換成你的紅包場空景照 */
+    .bg-layer.active {
       opacity: 1;
       transform: scale(1.05);
     }
@@ -70,139 +74,236 @@
       position: relative;
       z-index: 20;
       width: 100%;
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 40px;
+      padding: 0 5vw;
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1.2fr 0.8fr;
       gap: 60px;
       align-items: center;
+      height: 80vh;
     }
 
-    /* 左側：標題區 */
+    .header-group {
+      animation: fadeIn 1s ease-out;
+    }
+
     .header-group h1 {
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      line-height: 1.2;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      margin-bottom: 24px;
-      text-shadow: 0 0 20px rgba(0,0,0,0.8);
+      font-size: clamp(2.5rem, 4.5vw, 4.5rem);
+      line-height: 1.1;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      margin-bottom: 32px;
+      color: #fff;
+      text-shadow: 0 0 30px rgba(185, 28, 28, 0.4);
     }
 
     .header-group .subtitle {
-      font-size: 1.1rem;
-      color: var(--text-dim);
+      font-size: clamp(1rem, 1.2vw, 1.25rem);
+      color: #fff;
       line-height: 1.8;
-      border-left: 2px solid var(--accent-red);
-      padding-left: 20px;
-      max-width: 400px;
+      font-weight: 300;
+      border-left: 1px solid var(--accent-red);
+      padding-left: 24px;
+      margin-bottom: 40px;
+      max-width: 520px;
+      text-align: justify;
     }
 
-    /* 右側：導航區 */
+    .header-group .intro-highlight {
+      color: var(--hover-gold);
+      font-weight: 500;
+      display: block;
+      margin-top: 12px;
+      font-size: 1.1em;
+    }
+
     .nav-list {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      justify-content: center;
+      border-left: 1px solid rgba(255,255,255,0.1);
     }
 
     .nav-item {
       text-decoration: none;
-      color: #fff;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
-      padding: 24px 0;
-      transition: all 0.4s ease;
+      color: rgba(255,255,255,0.5);
+      padding: 30px 40px;
+      transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
       position: relative;
       display: flex;
-      justify-content: space-between;
-      align-items: baseline;
+      flex-direction: column;
+      cursor: pointer;
     }
 
-    .nav-item:hover {
-      border-color: var(--hover-gold);
-      padding-left: 15px; /* 懸停時向右滑動 */
+    .nav-item::before {
+      content: "";
+      position: absolute;
+      left: -1px;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--accent-red);
+      transform: scaleY(0);
+      transition: transform 0.4s ease;
+    }
+
+    .nav-item:hover, .nav-item.active-link {
+      color: #fff;
+      background: linear-gradient(90deg, rgba(255,255,255,0.03), transparent);
+      padding-left: 50px;
+    }
+
+    .nav-item:hover::before {
+      transform: scaleY(1);
     }
 
     .chapter-num {
-      font-size: 0.9rem;
-      font-weight: 300;
-      color: var(--hover-gold);
-      margin-right: 16px;
-      letter-spacing: 0.1em;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-red);
+      margin-bottom: 8px;
+      font-weight: 700;
     }
 
     .chapter-title {
-      font-size: 1.5rem;
+      font-size: clamp(1.4rem, 2vw, 1.8rem);
       font-weight: 500;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
     }
 
-    /* 手機版適配 */
+    .chapter-desc {
+      font-size: 0.9rem;
+      color: #bbb;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.4s ease;
+      height: 0;
+      overflow: hidden;
+      line-height: 1.6;
+    }
+
+    .nav-item:hover .chapter-desc {
+      opacity: 1;
+      transform: translateY(0);
+      height: auto;
+      margin-top: 8px;
+    }
+
     @media (max-width: 768px) {
       .wrap {
         grid-template-columns: 1fr;
-        padding: 24px;
+        height: auto;
+        padding: 80px 24px;
         gap: 40px;
       }
       
-      .header-group h1 {
-        font-size: 2.2rem;
+      body {
+        height: auto;
+        overflow-y: auto;
       }
       
-      .chapter-title {
-        font-size: 1.25rem;
+      .header-group h1 {
+        font-size: 2.8rem;
+      }
+
+      .nav-list {
+        border-left: none;
+        border-top: 1px solid rgba(255,255,255,0.1);
+      }
+
+      .nav-item {
+        padding: 24px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+
+      .nav-item:hover {
+        padding-left: 0;
+        background: none;
+      }
+
+      .nav-item::before {
+        display: none;
+      }
+
+      .chapter-desc {
+        opacity: 1;
+        height: auto;
+        transform: none;
+        margin-top: 8px;
       }
     }
 
-    /* 頁尾 */
     footer {
-      position: absolute;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 20;
-      font-size: 0.8rem;
-      opacity: 0.5;
+      position: fixed;
+      bottom: 24px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      z-index: 30;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.3);
       letter-spacing: 0.1em;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="bg-layer bg-default" id="bg-0"></div>
-  <div class="bg-layer" id="bg-1" style="background-image: url('https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?q=80&w=2070');"></div>
-  <div class="bg-layer" id="bg-2" style="background-image: url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=2070');"></div>
-  <div class="bg-layer" id="bg-3" style="background-image: url('https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070');"></div>
+  <div class="bg-container">
+    <div class="bg-layer active" id="bg-0" style="background-image: url('assets/bg-cover.png');"></div>
+    
+    <div class="bg-layer" id="bg-1" style="background-image: url('assets/bg-ch1..png');"></div>
+    
+    <div class="bg-layer" id="bg-2" style="background-image: url('assets/bg-ch2.png');"></div>
+    
+    <div class="bg-layer" id="bg-3" style="background-image: url('assets/bg-ch3.png');"></div>
+  </div>
 
   <main class="wrap">
     <div class="header-group">
       <h1>台北僅存的<br>紅包場</h1>
-      <p class="subtitle">
-        在城市變遷與文化轉型之下，<br>
-        一個仍在運作的舞台，<br>
-        如何被留下，又如何被重新理解。
-      </p>
+      <div class="subtitle">
+        不同於牛肉場的清涼，不同於Livehouse的狂歡。<br>
+        這裡沒有清涼秀，只有穿著華麗禮服的歌手，<br>
+        與特地來聽歌、包紅包的老聽眾。<br><br>
+        一首歌、一個眼神、一個紅包，<br>
+        <span class="intro-highlight">構成那個年代最真誠的交流。</span>
+      </div>
     </div>
 
     <nav class="nav-list">
+      
       <a href="chapter1/index.html" class="nav-item" data-bg="bg-1">
-        <span class="chapter-num">CHAPTER 01</span>
-        <span class="chapter-title">現場與守門人</span>
+        <div class="chapter-num">CHAPTER 01</div>
+        <div class="chapter-title">燈紅酒綠的年代</div>
+        <div class="chapter-desc">紅包場的誕生與繁華，為何它能成為那個時代最溫暖的避風港？</div>
       </a>
       
       <a href="chapter2/index.html" class="nav-item" data-bg="bg-2">
-        <span class="chapter-num">CHAPTER 02</span>
-        <span class="chapter-title">世代誤解與生存</span>
+        <div class="chapter-num">CHAPTER 02</div>
+        <div class="chapter-title">霓虹燈下的組成</div>
+        <div class="chapter-desc">紅包不是交易，它是那個年代的一種社交語言。拆解歌手、樂手與小妹的人情結構。</div>
       </a>
       
       <a href="chapter3/index.html" class="nav-item" data-bg="bg-3">
-        <span class="chapter-num">CHAPTER 03</span>
-        <span class="chapter-title">最後的紅包場</span>
+        <div class="chapter-num">CHAPTER 03</div>
+        <div class="chapter-title">最後的紅包場</div>
+        <div class="chapter-desc">「這不是謝幕，而是轉身。」<br>從金鑽歌廳的堅持到綠雷德的翻譯，看文化如何被改寫與新生。</div>
       </a>
+
     </nav>
   </main>
 
   <footer>
-    © 2025 紅包場融媒體新聞專題
+    © 2025 台北紅包場融媒體新聞專題
   </footer>
 
   <script>
@@ -212,24 +313,19 @@
 
     navItems.forEach(item => {
       item.addEventListener('mouseenter', () => {
-        // 隱藏所有背景
-        bgLayers.forEach(bg => bg.style.opacity = '0');
-        bgLayers.forEach(bg => bg.style.transform = 'scale(1)');
-        
-        // 顯示對應背景
+        bgLayers.forEach(bg => bg.classList.remove('active'));
         const targetId = item.getAttribute('data-bg');
         const targetBg = document.getElementById(targetId);
         if (targetBg) {
-          targetBg.style.opacity = '1';
-          targetBg.style.transform = 'scale(1.05)'; // 微微放大效果
+          targetBg.classList.add('active');
         }
       });
 
-      // 滑鼠移出時，恢復預設背景（或者你可以選擇保留最後一張）
       item.addEventListener('mouseleave', () => {
-        bgLayers.forEach(bg => bg.style.opacity = '0');
-        defaultBg.style.opacity = '1';
-        defaultBg.style.transform = 'scale(1.05)';
+        bgLayers.forEach(bg => bg.classList.remove('active'));
+        if (defaultBg) {
+          defaultBg.classList.add('active');
+        }
       });
     });
   </script>
