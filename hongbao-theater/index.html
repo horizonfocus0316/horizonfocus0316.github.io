@@ -1,6 +1,3 @@
-</section> <div class="hero-content"> ... </div> <div class="scroll-hint"> ... </div>
-</section> ```
-
 <!doctype html>
 <html lang="zh-Hant">
 <head>
@@ -218,27 +215,20 @@
 
 <body>
 
-<section class="video-hero" style="position: relative; width: 100%; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-  
-  <div class="video-container" style="position: absolute; inset: 0; z-index: -1;">
-    <video 
-      autoplay 
-      muted 
-      loop 
-      playsinline 
-      class="bg-video" 
-      style="width: 100%; height: 100%; object-fit: cover;"
-    >
+<section class="video-hero">
+  <div class="video-container">
+    <video autoplay muted loop playsinline class="bg-video">
       <source src="assets/videos/bg.mp4" type="video/mp4">
+      <img src="https://images.unsplash.com/photo-1604909052743-94e838986d24?auto=format&fit=crop&w=1600&q=80" style="width:100%;height:100%;object-fit:cover;">
     </video>
     <div class="video-overlay"></div>
   </div>
 
-  <div class="hero-content" style="position: relative; z-index: 2; text-align: center; width: 100%;">
+  <div class="hero-content">
     <div class="immersive-text">
-      <p class="line" style="color: white; font-size: 24px; text-shadow: 0 4px 10px black;">午後的金鑽歌廳。</p>
-      <p class="line" style="color: white; font-size: 24px; text-shadow: 0 4px 10px black;">燈光昏黃，沿著天花板與牆邊流動。</p>
-      <p class="line" style="color: white; font-size: 24px; text-shadow: 0 4px 10px black;">在這個場域裡，文化沒有消失，只是重新調整姿態。</p>
+      <p class="line">午後的金鑽歌廳。</p>
+      <p class="line">燈光昏黃，沿著天花板與牆邊流動。</p>
+      <p class="line">在這個場域裡，文化沒有消失，只是重新調整姿態。</p>
     </div>
   </div>
   
