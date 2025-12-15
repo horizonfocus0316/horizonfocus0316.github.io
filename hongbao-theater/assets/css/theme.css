@@ -1,9 +1,139 @@
-/* ==================================================
-   紅包場融媒體｜最終穩定版 Theme + Media Polish
-   ✔ 安全
-   ✔ 媒體感
-   ✔ 不使用危險 z-index
-================================================== */
+/* --- Video Hero --- */
+.video-hero {
+  position: relative;
+  height: 100vh; /* 佔滿全螢幕 */
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.bg-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 讓影片填滿不變形 */
+  opacity: 0.6; /* 調整影片亮度 */
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(11,11,12,1)); /* 底部漸層接合 */
+}
+
+.hero-content {
+  text-align: center;
+  z-index: 1;
+  padding: 20px;
+}
+
+.main-title {
+  font-size: clamp(40px, 6vw, 80px);
+  font-weight: 700;
+  text-shadow: 0 0 20px rgba(230, 195, 106, 0.5); /* 金色光暈 */
+  margin-bottom: 10px;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.5s forwards;
+}
+
+.sub-title {
+  font-size: clamp(18px, 2.5vw, 24px);
+  color: var(--muted);
+  opacity: 0;
+  animation: fadeUp 1s ease 1s forwards;
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--accent);
+  font-size: 14px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, 10px); }
+}
+
+/* --- Sticky Chapter (Key Skill!) --- */
+.sticky-container {
+  display: flex;
+  gap: 40px;
+  position: relative;
+  margin-top: 40px;
+}
+
+.sticky-visual {
+  width: 45%;
+  height: 80vh; /* 高度設高一點 */
+  position: sticky; /* 關鍵語法 */
+  top: 100px; /* 黏在距離頂部 100px 的位置 */
+  display: flex;
+  flex-direction: column;
+}
+
+.jin-portrait {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.5);
+}
+
+.scroll-content {
+  width: 55%;
+  padding-bottom: 100px; /* 給最後一點空間 */
+}
+
+.story-block {
+  min-height: 60vh; /* 每個區塊至少佔 60% 螢幕高，強迫捲動 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  border-left: 1px solid var(--line); /* 視覺引導線 */
+  margin-left: 20px;
+  padding-left: 40px;
+  transition: opacity 0.5s;
+}
+
+/* 手機版適配 (RWD) */
+@media (max-width: 768px) {
+  .sticky-container {
+    flex-direction: column;
+  }
+  .sticky-visual {
+    position: relative;
+    width: 100%;
+    height: auto;
+    top: 0;
+  }
+  .scroll-content {
+    width: 100%;
+  }
+  .story-block {
+    min-height: auto;
+    margin-bottom: 40px;
+    border-left: none;
+    padding-left: 0;
+  }
+}
 
 /* ---------- 全站變數 ---------- */
 :root{
