@@ -152,4 +152,413 @@
       <div id="map"></div>
     </div>
   </section>
-  
+  <style>
+    /* 翻轉卡片特效細節 */
+    .flip-card { perspective: 1000px; height: 360px; cursor: pointer; }
+    .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
+    .flip-card:hover .flip-inner { transform: rotateY(180deg); }
+    .flip-front, .flip-back {
+      position: absolute; inset: 0; backface-visibility: hidden;
+      display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2.5rem;
+      border-radius: 12px; border: 1px solid var(--glass-border);
+      background: var(--glass); text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .flip-front h3 { font-size: 1.8rem; color: var(--gold); margin-bottom: 0.8rem; font-weight: 900; }
+    .flip-front p { font-size: 1rem; color: var(--text-muted); letter-spacing: 0.1em; }
+    
+    .flip-back { transform: rotateY(180deg); background: var(--red-deep); border-color: var(--gold); }
+    .flip-back h3 { color: #fff; margin-bottom: 1rem; font-size: 1.5rem; }
+    .flip-back p { font-size: 1.05rem; line-height: 1.8; color: #eee; text-align: justify; }
+
+    /* Sticky 區塊優化 */
+    .sticky-wrapper { display: flex; flex-wrap: wrap; gap: 4rem; align-items: flex-start; margin-top: 4rem; position: relative; }
+    .sticky-visual { flex: 1; position: sticky; top: 120px; min-width: 320px; transition: 0.3s; }
+    .sticky-content { flex: 1.5; min-width: 320px; padding-bottom: 4rem; }
+    
+    .portrait-card {
+      background: linear-gradient(135deg, #1a0505 0%, #000 100%); 
+      border: 1px solid var(--gold); border-radius: 12px; padding: 1.5rem; text-align: center;
+      box-shadow: 0 20px 50px rgba(151, 12, 16, 0.2);
+    }
+    .portrait-card img { width: 100%; border-radius: 8px; filter: grayscale(1) contrast(1.2); transition: 0.5s; }
+    .portrait-card:hover img { filter: grayscale(0) contrast(1); }
+
+    .rule-box {
+      border-left: 4px solid var(--gold); background: rgba(255,255,255,0.03); 
+      padding: 2rem; margin: 2rem 0; border-radius: 0 8px 8px 0;
+      transition: 0.3s;
+    }
+    .rule-box:hover { background: rgba(255, 232, 122, 0.05); transform: translateX(10px); }
+    .rule-title { color: var(--gold); font-weight: 900; font-size: 1.3rem; display: block; margin-bottom: 0.8rem; letter-spacing: 0.1em; }
+    
+    /* 訪談影片牆 */
+    .video-card { background: rgba(255,255,255,0.02); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+    .video-card video { width: 100%; border-radius: 8px; margin-top: 1rem; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+    .quote-box { font-size: 1.2rem; line-height: 1.8; color: #e0e0e0; font-style: italic; margin-bottom: 1rem; }
+    .quote-author { display: block; text-align: right; color: var(--gold); font-size: 0.95rem; margin-top: 1rem; font-style: normal; font-weight: bold; letter-spacing: 0.1em; }
+  </style>
+
+  <section id="chapter2">
+    <div class="container">
+      <span class="kicker">CHAPTER 02</span>
+      <h2 class="section-title">誤解與秩序：<br>紅包場，和你想的不一樣</h2>
+      <div class="text-body">
+        紅包場經常被誤會。但它真正的樣貌，往往只在你坐下來之後，才慢慢顯現。
+        <span class="highlight">這裡不是牛肉場，也不是單純的卡拉OK。</span>
+        這裡有一套獨特的生存秩序，建立在人情的流動之上。
+      </div>
+
+      <div class="flip-grid">
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <h3>不像牛肉場</h3>
+              <p>這裡賣的是身體嗎？</p>
+              <span style="font-size:2rem; margin-top:1rem; opacity:0.5;">↺</span>
+            </div>
+            <div class="flip-back">
+              <h3>不是交易</h3>
+              <p>不同於牛肉場，紅包場不以「清涼」或「火辣」為賣點。紅包並非對身體的購買，而是對表演的支持；觀眾來聽歌、點歌、聊天，建立的是長時間累積的人情關係。</p>
+            </div>
+          </div>
+        </div>
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <h3>不像 KTV</h3>
+              <p>可以上去唱歌嗎？</p>
+              <span style="font-size:2rem; margin-top:1rem; opacity:0.5;">↺</span>
+            </div>
+            <div class="flip-back">
+              <h3>觀眾聽歌</h3>
+              <p>不同於卡拉OK，紅包場觀眾不會上台唱歌。這裡是專業歌手的舞台，歌手需穿著正式禮服登台，舞台規範更像傳統「秀場」的節奏。</p>
+            </div>
+          </div>
+        </div>
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <h3>不像流水席</h3>
+              <p>是為了吃飯嗎？</p>
+              <span style="font-size:2rem; margin-top:1rem; opacity:0.5;">↺</span>
+            </div>
+            <div class="flip-back">
+              <h3>特地來聽歌</h3>
+              <p>雖然有茶水、水果盤與熱炒，但紅包場的觀眾是特地來聽歌的。這是一座用歌聲聚起的庶民劇院，也是動盪年代裡最溫暖的避風港。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 6rem; color: var(--gold); text-align: center; font-size: 2rem; margin-bottom: 2rem;">撐起紅包場的六大支柱</h3>
+      <p class="text-body" style="text-align: center; margin-bottom: 3rem;">紅包場不是單一角色構成的舞台。它由以下六個元素，一起撐起一個仍在運作的日常系統。</p>
+      
+      <div class="elements-grid">
+        <div class="element-card" 
+             data-title="歌星：舞台的主人" 
+             data-body="歌星輪番登台，每人約兩至三首歌。跑馬燈穿過個人稱號，禮服盛裝登場；演出期間嚴守在台上，不走到台下。在歌廳盛行年代可能一晚連跑多場，紅包場曾捧紅不少電視新星。">
+          <h3>歌星</h3><span style="opacity:0.6; letter-spacing:0.1em;">THE SINGER</span>
+        </div>
+        <div class="element-card" 
+             data-title="樂團老師：時空的魔術師" 
+             data-body="樂團老師全天候在舞台後方，熟悉鼓、效果器與各式新舊歌曲；有時也加入合音，為每場演唱增添層次。通常 1–2 位老師，就能撐起現場音場，讓觀眾像穿梭時空般感受情調。">
+          <h3>樂團老師</h3><span style="opacity:0.6; letter-spacing:0.1em;">THE BAND</span>
+        </div>
+        <div class="element-card" 
+             data-title="小妹：人情的連結者" 
+             data-body="小妹在場內穿梭、擔任服務生角色。命名由來是當年老兵在桌內的親切喊聲。她們除了端茶倒水，也是歌星維繫業績與建立關係的重要搭檔。">
+          <h3>小妹</h3><span style="opacity:0.6; letter-spacing:0.1em;">THE CONNECTOR</span>
+        </div>
+        <div class="element-card" 
+             data-title="服裝：對舞台的尊重" 
+             data-body="歌星登場前會到舞台旁的服裝間換衣。每件禮服與表演服裝背後都有特製、手工製作或早期訂製的故事。顏色與首飾搭配都有學問，彰顯每次歌唱呈現背後的用心累積。">
+          <h3>服裝</h3><span style="opacity:0.6; letter-spacing:0.1em;">THE COSTUME</span>
+        </div>
+        <div class="element-card" 
+             data-title="餐飲：茶單制的默契" 
+             data-body="桌面常見瓜子、水果盤，茶品如普洱、烏龍。點餐與結帳以『茶單制』進行：歌星承擔所屬桌位的飲食消費，這也是一種變相的請客文化。">
+          <h3>餐飲</h3><span style="opacity:0.6; letter-spacing:0.1em;">THE TABLE</span>
+        </div>
+        <div class="element-card" 
+             data-title="紅包：關係的證明" 
+             data-body="紅包場最經典的畫面。賓客包出高於消費金額的紅包交給歌星，這不是小費，而是歌星的主要收入。金額隨心隨緣，若要『做面子』會露出大鈔。這是對表演的支持，也是長期關係的證明。">
+          <h3>紅包</h3><span style="opacity:0.6; letter-spacing:0.1em;">THE RED ENVELOPE</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="people">
+    <div class="container">
+      <span class="kicker">CHAPTER 03</span>
+      <h2 class="section-title">舞台還亮著：<br>最後的守門人</h2>
+
+      <div class="sticky-wrapper">
+        <div class="sticky-visual">
+          <div class="portrait-card">
+            <img src="assets/hero_cover.png" alt="金小娟經營者">
+            <h3 style="color:var(--gold); margin-top:1.5rem; font-size:1.8rem;">金小娟</h3>
+            <p style="font-size:1rem; color:#aaa; margin-top:0.5rem;">金鑽歌廳經營者</p>
+          </div>
+        </div>
+        
+        <div class="sticky-content">
+          <div class="text-body">
+            <p>金小娟第一次踏進紅包場是跟著爸爸來的。那時她還是表藝科學生，只覺得「可以領現金，很實在」。</p>
+            <p>在那個紅包場最盛的年代，萬華曾有二、三十家，她一天能跑十二家。對年輕的她而言，紅包場不是文化，而是一個能靠自己站穩的地方——一個真實的舞台。</p>
+            <p>多年後，她回到金鑽接手經營。台北市如今只剩這一間紅包場歌廳。</p>
+          </div>
+          
+          <div class="quote" style="text-align: left; font-size: 1.3rem; border-left: none; color: #fff; margin: 3rem 0;">
+            「我守住的不是一個被封存在過去的場景，<br>
+            而是一套仍在運作的 <span class="highlight">舞台系統</span>。」
+          </div>
+
+          <p class="text-body">在她的管理下，場內仍維持一套長年運作的秩序：</p>
+
+          <div class="rule-box">
+            <span class="rule-title">01. 秩序 (Order)</span>
+            <p style="color:#ddd;">歌手不能搶客、不能破壞場內氣氛，這是尊重的底線。任何多餘的動作，在這種近距離的場域裡都顯得突兀。</p>
+          </div>
+          <div class="rule-box">
+            <span class="rule-title">02. 節奏 (Rhythm)</span>
+            <p style="color:#ddd;">舞台要有人輪番上陣，歌不能太死板，棒子不能掉。她最欣賞的歌手，是願意學新歌、讓舞台維持活力的人。</p>
+          </div>
+          <div class="rule-box">
+            <span class="rule-title">03. 語言 (Language)</span>
+            <p style="color:#ddd;">紅包不是單純給錢，而是一種回應與肯定。這是一套讓舞台能繼續亮著的規矩。</p>
+          </div>
+          
+          <div class="text-body" style="margin-top:3rem;">
+            比起維持現狀，她更在想未來。身為表藝老師，她希望金鑽能成為學生的真實舞台。她想像紅包場可以像 Live House 一樣分時段演出，也能和觀光合作、與劇場交流，新舊共存。
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 6rem; color: var(--gold); font-size: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">她們的聲音</h3>
+      <p class="text-body" style="margin-bottom: 3rem;">除了經營者，還有站在舞台上幾十年的她們。這些對話，記錄了她們對這個舞台的依戀。</p>
+      
+      <div class="video-grid">
+        <div class="video-card">
+          <div class="quote-box">
+            「歌廳假如沒有了，其他地方也沒有我們生存的空間了……我希望我們歌廳永續經營，我還要來作客、我要來發紅包。」
+          </div>
+          <span class="quote-author">— 翟曼芳 (歌齡近50年)</span>
+          <video controls poster="assets/poster/c0621.jpg" preload="none">
+            <source src="assets/video/c0621.mp4" type="video/mp4">
+          </video>
+        </div>
+        
+        <div class="video-card">
+          <div class="quote-box">
+            「臺上臺下，我是不一樣的人。不會唱，就學啊，我就這樣找到我喜歡的工作了。要接觸不同的人，衍發出不同話題，是很不容易的。」
+          </div>
+          <span class="quote-author">— 楊雅喬 (帽子姑娘)</span>
+          <video controls poster="assets/poster/c0662.jpg" preload="none">
+            <source src="assets/video/c0662.mp4" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="video-card">
+          <div class="quote-box">
+            「你們只要喜歡我的歌就好，不一定要知道我的人。年輕人對老歌應該沒有興趣，只有到這個地方還能聽到一點。」
+          </div>
+          <span class="quote-author">— 翟曼芳 (現場演唱)</span>
+          <video controls poster="assets/poster/c0623.jpg" preload="none">
+            <source src="assets/video/c0623.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+    </div>
+  </section>
+  <section id="future">
+    <div class="container">
+      <span class="kicker">CHAPTER 04</span>
+      <h2 class="section-title">轉身與新生：<br>城市的翻譯者</h2>
+      
+      <div class="text-body">
+        <p>當場域維持運作、守門人堅持秩序後，外部的力量也開始加入。</p>
+        <p><strong>綠雷德團隊</strong>形容他們做的不是保存，而是「翻譯」。他們坦言並非天生熟悉紅包場，直到踏入後才發現排斥源於不了解。因此，他們致力於移除誤解，建立理解的入口。</p>
+        <p>與此同時，<strong>台北市文化局</strong>推動《萬華時光・再現與新生》計畫，首次以戲劇、市場導覽、戶外演唱會等形式，把紅包場帶回公共場景。</p>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="timeline-year">2023 - 翻譯</span>
+          <p>文化局推動《萬華時光》，將紅包場視為常民文化的核心。沉浸式劇場直接在金鑽演出，觀眾坐在紅包場的座位裡，體驗傳統的瓜果茶水。</p>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-year">2024.11 - 跨界</span>
+          <p>西門紅樓跨世代紅包場演唱會。家庭與孩子一同參與，這讓綠雷德團隊十分感動——「原來只要翻譯得好，文化是能跨過年齡的。」</p>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-year">2025 - 新生</span>
+          <p>計畫導入更深度的體驗設計，讓紅包場從「個人的記憶」變成「城市的共同語彙」。</p>
+        </div>
+      </div>
+
+      <div style="margin-top: 8rem; text-align: center; max-width: 750px; margin-left: auto; margin-right: auto;">
+        <h3 style="color: var(--gold); font-size: 2.5rem; margin-bottom: 2.5rem; font-weight: 900;">這不是謝幕，而是轉身</h3>
+        
+        <p class="text-body" style="text-align: center; margin-bottom: 2rem;">
+          我們第一次給紅包時，感受到那種「在亞洲文化裡很少直接給錢」的衝突；<br>
+          但也從那一刻理解：紅包在這裡是一種社交語言，是對舞台的回應方式。
+        </p>
+        
+        <p class="text-body" style="text-align: center; font-size: 1.2rem; color: #fff;">
+          紅包場或許不再是上一代記憶中的樣子，但它仍然活著——<br>
+          在舞台、在語言、在新的觀眾裡，以它自己的節奏，持續在城市裡運作。
+        </p>
+
+        <div style="margin-top: 3rem; opacity: 0.5; font-size: 0.9rem; letter-spacing: 0.2em;">
+          END OF STORY
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="text-align: center; padding: 4rem 0; color: #666; font-size: 0.9rem; border-top: 1px solid #111; background: #000;">
+    <p style="margin-bottom: 0.5rem;">國立臺灣大學新聞研究所 114學年度 網頁敘事專題</p>
+    <p>© 2025 梁朝勛、彭賀琳、莊馨予. All Rights Reserved.</p>
+  </footer>
+
+  <div class="modal-backdrop" id="modal-backdrop">
+    <div class="modal">
+      <button class="modal-close" id="modal-close">✕</button>
+      <h2 id="modal-title" style="color: var(--gold); margin-bottom: 1rem; font-size: 1.8rem;"></h2>
+      <p id="modal-body" style="line-height: 1.8; color: #ddd; font-size: 1.1rem; text-align: justify;"></p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      
+      // 1. 浮現動畫 (Scroll Animation)
+      // 當元素進入畫面時，加上 .visible class
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add("visible");
+        });
+      }, { threshold: 0.15 }); // 只要出現 15% 就觸發
+
+      document.querySelectorAll(".timeline-item, .element-card, .video-card").forEach(el => observer.observe(el));
+
+      // 2. Chart.js 圖表初始化 (Author 3 技術)
+      // 顯示 30家 vs 1家 的長條圖
+      if(document.getElementById('myChart')) {
+        const ctx = document.getElementById('myChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['全盛期 (30家)', '現今 (1家)'],
+            datasets: [{
+              label: '西門町歌廳數量',
+              data: [30, 1],
+              backgroundColor: ['rgba(255, 255, 255, 0.2)', '#FFE87A'],
+              borderColor: ['transparent', '#FFE87A'],
+              borderWidth: 1,
+              barThickness: 60
+            }]
+          },
+          options: {
+            responsive: true, 
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { 
+                ticks: { color: '#fff', font: {size: 14, family: "'Noto Serif TC', serif"} }, 
+                grid: { display: false } 
+              },
+              y: { 
+                ticks: { color: '#888' }, 
+                grid: { color: 'rgba(255,255,255,0.1)' } 
+              }
+            },
+            animation: { duration: 2000, easing: 'easeOutQuart' } // 慢速動畫增加質感
+          }
+        });
+      }
+
+      // 3. Leaflet 地圖初始化 (Author 3 技術)
+      // 定位在金鑽歌廳 (西門町)
+      if(document.getElementById('map')) {
+        var map = L.map('map', { 
+          center: [25.04426, 121.50735], 
+          zoom: 16, 
+          scrollWheelZoom: false, // 禁止滾輪縮放以免干擾網頁捲動
+          zoomControl: false 
+        });
+        
+        // 使用深色底圖 (CartoDB Dark Matter)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { 
+          attribution: '&copy; CARTO' 
+        }).addTo(map);
+        
+        // 自定義金色標點
+        var goldIcon = L.divIcon({ 
+          className: 'custom-div-icon', 
+          html: "<div style='background:#FFE87A; width:16px; height:16px; border-radius:50%; box-shadow:0 0 15px #FFE87A; border: 2px solid #fff;'></div>", 
+          iconSize: [16, 16],
+          iconAnchor: [8, 8]
+        });
+        
+        L.marker([25.04426, 121.50735], {icon: goldIcon})
+          .addTo(map)
+          .bindPopup("<b style='color:#333'>金鑽歌廳</b><br><span style='color:#666'>台北市漢中街42號</span>")
+          .openPopup();
+      }
+
+      // 4. Modal 彈窗邏輯 (Author 2 內容 + Author 3 互動)
+      // 點擊六大元素的卡片時觸發
+      const modal = document.getElementById("modal-backdrop");
+      const modalTitle = document.getElementById("modal-title");
+      const modalBody = document.getElementById("modal-body");
+      const closeBtn = document.getElementById("modal-close");
+
+      document.querySelectorAll(".element-card").forEach(card => {
+        card.addEventListener("click", () => {
+          modalTitle.textContent = card.dataset.title.split("：")[0]; // 只取標題
+          // 如果有副標題，可以再優化，這裡直接放內容
+          modalBody.innerHTML = `
+            <strong style="color:var(--gold); display:block; margin-bottom:10px;">${card.dataset.title.split("：")[1] || ''}</strong>
+            ${card.dataset.body}
+          `;
+          modal.classList.add("open");
+          document.body.style.overflow = "hidden"; // 禁止背景捲動
+        });
+      });
+
+      const closeModal = () => { modal.classList.remove("open"); document.body.style.overflow = ""; };
+      closeBtn.addEventListener("click", closeModal);
+      modal.addEventListener("click", (e) => { if(e.target === modal) closeModal(); });
+      // 按 ESC 關閉
+      document.addEventListener("keydown", (e) => { if(e.key === "Escape" && modal.classList.contains("open")) closeModal(); });
+
+      // 5. 導覽列 Active 狀態與進度條
+      const sections = document.querySelectorAll("section");
+      const navLinks = document.querySelectorAll(".nav-bar a");
+      
+      window.addEventListener('scroll', () => {
+        // 進度條計算
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById("progress-bar").style.width = scrolled + "%";
+
+        // 偵測目前在看哪一章
+        let current = "";
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          if (pageYOffset >= sectionTop - 300) { current = section.getAttribute("id"); }
+        });
+        navLinks.forEach(link => {
+          link.classList.remove("active");
+          if (link.getAttribute("href").includes(current)) { link.classList.add("active"); }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
