@@ -1,1 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>唱給不在場的人</title>
+
+
+ <!-- 思源宋體（網頁等價） -->
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+
+ <style>
+   :root {
+     --red: #970C10;
+   }
+
+
+   * {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+   }
+
+
+   body {
+     font-family: "Noto Serif TC", serif;
+     background: #000;
+     color: #fff;
+     overflow-x: hidden;
+   }
+
+
+   /* =========================
+      Section 1｜Full-screen Video
+   ========================== */
+   .landing-video {
+     position: relative;
+     width: 100%;
+     height: 100vh;
+     overflow: hidden;
+   }
+
+
+   .landing-video video {
+     position: absolute;
+     inset: 0;
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+   }
+
+
+   /* 可微調暗度，讓影片不刺眼 */
+   .landing-video::after {
+     content: "";
+     position: absolute;
+     inset: 0;
+     background: rgba(0,0,0,0.25);
+     z-index: 1;
+   }
+
+
+   /* =========================
+      Section 2｜Buffer Zone
+   ========================== */
+   .buffer {
+     position: relative;
+     height: 60vh;
+     background: var(--red);
+     overflow: hidden;
+   }
+
+
+   .buffer::after {
+     content: "";
+     position: absolute;
+     inset: 0;
+     background: url("assets/grain.png") repeat;
+     opacity: 0.25;
+     pointer-events: none;
+   }
+
+
+   /* =========================
+      Section 3｜Hero Section
+   ========================== */
+   .hero {
+     position: relative;
+     height: 100vh;
+     min-height: 100vh;
+     background: var(--red);
+     overflow: visible;
+     display: flex;
+     align-items: center;
+     padding: 0 7vw;
+     gap: min(6vw, 64px);
+   }
+
+
+   /* 顆粒層 */
+   .hero::before {
+     content: "";
+     position: absolute;
+     inset: 0;
+     background: url("assets/grain.png") repeat;
+     opacity: 0.3;
+     z-index: 1;
+   }
+
+
+   /* 人物圖層 */
+   .hero-image {
+     position: absolute;
+     right: 0;
+     bottom: 0;
+     display: flex;
+     justify-content: flex-end;
+     align-items: flex-end;
+     z-index: 2;
+     pointer-events: none;
+   }
+
+
+   .hero-image img {
+     width: clamp(420px, 60vw, 920px);
+     max-height: 92vh;
+     height: auto;
+     object-fit: contain;
+   }
+
+
+   /* 文字內容 */
+   .hero-content {
+     position: relative;
+     z-index: 3;
+     flex: 0 1 48%;
+     max-width: 640px;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     min-height: 100%;
+   }
+
+
+   .hero h1 {
+     font-size: clamp(2.5rem, 5vw, 4rem);
+     font-weight: 900;
+     color: #FFE87A;
+     margin-bottom: 1rem;
+     letter-spacing: 0.05em;
+   }
+
+
+   .hero h2 {
+     font-size: clamp(1.4rem, 3vw, 2.2rem);
+     font-weight: 700;
+     color: #FFE87A;
+     margin-bottom: 1.5rem;
+   }
+
+
+   .hero h3 {
+     font-size: clamp(1rem, 2.2vw, 1.3rem);
+     font-weight: 600;
+     color: #fff;
+     letter-spacing: 0.08em;
+     margin-bottom: 2rem;
+   }
+
+
+   .hero-author-line {
+     opacity: 0;
+     transform: translateY(18px);
+     transition: opacity 0.9s ease-out, transform 0.9s ease-out;
+   }
+
+
+   .hero-author-line.revealed {
+     opacity: 1;
+     transform: translateY(0);
+   }
+
+
+   /* Desktop keeps Chinese titles on a single line */
+   .hero h1,
+   .hero h2 {
+     white-space: nowrap;
+   }
+
+
+   .hero .en {
+     font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+     font-weight: 700;
+     line-height: 1.45;
+     color: rgba(255,255,255,0.9);
+     max-width: 28ch;            /* 你可以在 26–34ch 微調 */
+     text-wrap: balance;         /* 支援的瀏覽器會自動平衡每行長度 */
+     overflow-wrap: anywhere;    /* 保底：避免奇怪溢出 */
+   }
+
+
+   .typewriter-line {
+     display: inline-block;
+     position: relative;
+     min-height: 1em;
+     overflow: hidden;
+   }
+
+
+   .typewriter-line.typing::after {
+     content: "";
+     position: absolute;
+     right: -0.1em;
+     top: 50%;
+     transform: translateY(-50%);
+     height: 1.2em;
+     width: 2px;
+     background: #FFE87A;
+     animation: caret-blink 0.8s steps(1) infinite;
+   }
+
+
+   .typewriter-line.done::after {
+     animation: none;
+     opacity: 0;
+   }
+
+
+   .hero-entrance {
+     opacity: 0;
+     transform: translateY(20px);
+     transition: opacity 0.9s ease-out, transform 0.9s ease-out;
+     transition-delay: var(--delay, 0ms);
+   }
+
+
+   .hero-entrance.is-visible {
+     opacity: 1;
+     transform: translateY(0);
+   }
+
+
+   .scroll-hint {
+     position: absolute;
+     bottom: 3rem;
+     left: 50%;
+     transform: translate(-50%, 0.5rem);
+     font-size: 0.9rem;
+     letter-spacing: 0.3em;
+     text-transform: uppercase;
+     color: rgba(255,255,255,0.85);
+     opacity: 0;
+     transition: opacity 0.6s ease, transform 0.6s ease;
+     pointer-events: none;
+   }
+
+
+   .scroll-hint.visible {
+     opacity: 1;
+     transform: translate(-50%, 0);
+     animation: hint-float 2s ease-in-out infinite;
+   }
+
+
+   @keyframes caret-blink {
+     0%, 49% { opacity: 1; }
+     50%, 100% { opacity: 0; }
+   }
+
+
+   @keyframes hint-float {
+     0% { transform: translate(-50%, 0); }
+     50% { transform: translate(-50%, -8px); }
+     100% { transform: translate(-50%, 0); }
+   }
+
+
+   .immersive-section {
+     background: #000;
+     min-height: 150vh;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     padding: 10vh 1.5rem;
+     position: relative;
+     overflow: hidden;
+   }
+
+
+   .immersive-inner {
+     max-width: 680px;
+     text-align: center;
+     color: #fff;
+     line-height: 1.8;
+     font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+     letter-spacing: 0.03em;
+   }
+
+
+   .immersive-copy {
+     display: flex;
+     flex-direction: column;
+     gap: 1.5rem;
+   }
+
+
+   .immersive-copy h5 {
+     font-size: clamp(1.1rem, 2vw, 1.5rem);
+     font-weight: 600;
+     color: #fff;
+     letter-spacing: 0.04em;
+     margin: 0;
+     opacity: 0;
+     transform: translateY(24px);
+     transition: opacity 1s ease-out, transform 1s ease-out;
+   }
+
+
+   .immersive-copy h5.visible {
+     opacity: 1;
+     transform: translateY(0);
+   }
+
+
+   .transition-spacer {
+     position: relative;
+     min-height: 120vh;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding: 0 6vw;
+     background: #000;
+     color: rgba(255,255,255,0.6);
+     letter-spacing: 0.05em;
+     text-transform: uppercase;
+     font-size: 0.85rem;
+   }
+
+
+   .chapter-intro {
+     position: relative;
+     min-height: 100vh;
+     background: #111;
+     overflow: hidden;
+   }
+
+
+   .chapter-intro img {
+     position: absolute;
+     inset: 0;
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+   }
+
+
+   .chapter-intro::before {
+     content: "";
+     position: absolute;
+     inset: 0;
+     background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.25) 18%, transparent 50%);
+     filter: blur(16px);
+     pointer-events: none;
+   }
+
+
+   .chapter-overlay {
+     position: absolute;
+     inset: 0;
+     background: linear-gradient(180deg, rgba(8,8,8,0.1) 0%, rgba(8,8,8,0.55) 90%);
+   }
+
+
+   .chapter-title {
+     position: absolute;
+     left: 5vw;
+     bottom: 4vw;
+     color: #fff;
+     font-size: clamp(1rem, 2.2vw, 1.8rem);
+     font-weight: 600;
+     letter-spacing: 0.08em;
+     max-width: 520px;
+     line-height: 1.4;
+     white-space: nowrap;
+   }
+
+
+   /* 手機版調整 */
+   @media (max-width: 768px) {
+     .hero {
+       padding: 4vh 8vw;
+     }
+
+
+     .hero-content {
+       flex: 1 1 auto;
+       min-height: auto;
+     }
+
+
+     .hero-image {
+       right: -5vw;
+       bottom: 1rem;
+       opacity: 0.6;
+     }
+
+
+     .hero-image img {
+       width: min(78vw, 420px);
+       max-height: 60vh;
+     }
+
+
+     /* Let mobile wrap naturally to avoid overflow */
+     .hero h1,
+     .hero h2 {
+       white-space: normal;
+     }
+
+
+     .chapter-title {
+       white-space: normal;
+     }
+
+
+     .scroll-hint {
+       letter-spacing: 0.2em;
+       bottom: 2rem;
+     }
+   }
+ </style>
+</head>
+
+
+<body>
+
+
+ <!-- Section 1：滿版影片 -->
+ <section class="landing-video">
+   <video
+     id="landing-video"
+     src="assets/stage.mp4"
+     autoplay
+     muted
+     loop
+     playsinline
+     preload="auto">
+   </video>
+ </section>
+
+
+ <!-- Section 2：過渡緩衝區 -->
+ <section class="buffer"></section>
+
+
+ <!-- Section 3：Hero -->
+ <section class="hero">
+   <div class="hero-content">
+     <h1 id="hero-title" class="typewriter-line hero-entrance" data-text="唱給不在場的人" style="--delay: 0ms;"></h1>
+     <h2 id="hero-subtitle" class="typewriter-line hero-entrance" data-text="紅包歌手的世代誤解與生存現場" style="--delay: 150ms;"></h2>
+     <h3 id="hero-author" class="hero-author-line">梁朝勛、彭賀琳、莊馨予</h3>
+   </div>
+
+
+   <div class="hero-image hero-entrance" style="--delay: 0ms;">
+     <img src="assets/hero_cover.png" alt="紅包場歌手英姿">
+   </div>
+
+
+   <div id="scroll-hint" class="scroll-hint">SCROLL ↓</div>
+ </section>
+
+
+ <section class="immersive-section">
+   <div class="immersive-inner">
+     <div class="immersive-copy">
+       <h5>夜晚的西門町總帶著一種說不出的濕氣。</h5>
+       <h5>對多數年輕人來說，</h5>
+       <h5>紅包場可能是陌生、甚至帶點神祕色彩的存在。</h5>
+       <h5>但在台灣的某段歷史裡，它曾是上萬個孤單靈魂的歸屬；</h5>
+       <h5>是一座用歌聲聚起的庶民劇院；</h5>
+       <h5>也是一個動盪年代裡最溫暖的避風港。</h5>
+     </div>
+   </div>
+ </section>
+
+
+ <section class="transition-spacer">
+   <span>scroll to reveal</span>
+ </section>
+
+
+ <section class="transition-spacer">
+   <span>the light slowly returns</span>
+ </section>
+
+
+ <section class="chapter-intro">
+   <img src="assets/red-envelope-theater.jpg" alt="紅包場場景">
+   <div class="chapter-overlay"></div>
+   <div class="chapter-title">➀ 燈紅酒綠的年代 — 紅包場的誕生與繁華</div>
+ </section>
+
+
+ <script>
+   document.addEventListener("DOMContentLoaded", () => {
+     const hero = document.querySelector(".hero");
+     const titleEl = document.getElementById("hero-title");
+     const subtitleEl = document.getElementById("hero-subtitle");
+     const authorEl = document.getElementById("hero-author");
+     const scrollHint = document.getElementById("scroll-hint");
+     const landingVideo = document.getElementById("landing-video");
+     const typeTargets = [titleEl, subtitleEl];
+     const heroEntrances = document.querySelectorAll(".hero-entrance");
+     const narrativeLines = document.querySelectorAll(".immersive-copy h5");
+     let hasRun = false;
+     let audioActivated = false;
+
+
+     typeTargets.forEach((el) => {
+       const text = el.dataset.text || el.textContent.trim();
+       el.dataset.text = text;
+       el.textContent = "";
+     });
+
+
+     const typeText = (el, speed = 90) =>
+       new Promise((resolve) => {
+         const text = el.dataset.text || "";
+         let index = 0;
+         el.classList.add("typing");
+         const tick = () => {
+           el.textContent += text.charAt(index);
+           index += 1;
+           if (index < text.length) {
+             setTimeout(tick, speed);
+           } else {
+             el.classList.remove("typing");
+             el.classList.add("done");
+             resolve();
+           }
+         };
+         tick();
+       });
+
+
+     const startSequence = async () => {
+       if (hasRun) return;
+       hasRun = true;
+       heroEntrances.forEach((item) => item.classList.add("is-visible"));
+       for (const el of typeTargets) {
+         await typeText(el);
+       }
+       if (authorEl) {
+         requestAnimationFrame(() => authorEl.classList.add("revealed"));
+       }
+       requestAnimationFrame(() => {
+         setTimeout(() => {
+           scrollHint.classList.add("visible");
+         }, 400);
+       });
+     };
+
+
+     if ("IntersectionObserver" in window && hero) {
+       const heroObserver = new IntersectionObserver(
+         (entries) => {
+           entries.forEach((entry) => {
+             if (entry.isIntersecting) {
+               startSequence();
+               heroObserver.disconnect();
+             }
+           });
+         },
+         { threshold: 0.35 }
+       );
+       heroObserver.observe(hero);
+     } else {
+       startSequence();
+     }
+
+
+     if (landingVideo) {
+       const userEvents = ["click", "touchstart"];
+
+
+       const attemptPlay = () => {
+         const playPromise = landingVideo.play();
+         if (playPromise && typeof playPromise.then === "function") {
+           playPromise.catch(() => {});
+         }
+       };
+
+
+       const detachListeners = () => {
+         userEvents.forEach((evt) => document.removeEventListener(evt, handleUserAction));
+       };
+
+
+       const activateAudio = () => {
+         if (audioActivated) return;
+         audioActivated = true;
+         landingVideo.muted = false;
+         attemptPlay();
+       };
+
+
+       const handleUserAction = () => {
+         activateAudio();
+         detachListeners();
+       };
+
+
+       attemptPlay();
+       userEvents.forEach((evt) => document.addEventListener(evt, handleUserAction, { passive: true }));
+     }
+
+
+     if (narrativeLines.length) {
+       const narrativeObserver = new IntersectionObserver(
+         (entries) => {
+           entries.forEach((entry) => {
+             if (entry.isIntersecting) {
+               narrativeLines.forEach((line, idx) => {
+                 line.style.transitionDelay = `${idx * 130}ms`;
+                 requestAnimationFrame(() => line.classList.add("visible"));
+               });
+               narrativeObserver.disconnect();
+             }
+           });
+         },
+         { threshold: 0.2 }
+       );
+       narrativeObserver.observe(narrativeLines[0]);
+     }
+   });
+ </script>
+</body>
+</html>
 
