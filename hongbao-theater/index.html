@@ -13,7 +13,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="assets/css/theme.css">
 </head>
 
 <body>
@@ -25,9 +25,9 @@
       <source src="assets/stage.mp4" type="video/mp4">
     </video>
     <div class="hero-content">
-      <h1 class="fade-up delay-1">台北僅存的紅包場</h1>
-      <h2 class="fade-up delay-2">它如何被留下，又如何被改寫</h2>
-      <div class="fade-up delay-3" style="margin-top: 2rem; opacity: 0.9; letter-spacing: 0.1em; color: var(--gold);">
+      <h1 class="fade-up delay-1" style="font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 900; color: var(--gold); margin-bottom: 1rem; text-shadow: 0 0 20px rgba(0,0,0,0.8);">台北僅存的紅包場</h1>
+      <h2 class="fade-up delay-2" style="font-size: clamp(1.2rem, 2.5vw, 1.8rem); font-weight: 400; color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.8);">它如何被留下，又如何被改寫</h2>
+      <div class="fade-up delay-2" style="margin-top: 2rem; opacity: 0.9; letter-spacing: 0.1em; color: var(--gold);">
         梁朝勛、彭賀琳、莊馨予 ｜ 融媒體專題
       </div>
     </div>
@@ -51,13 +51,14 @@
         <p>全盛時期，西門町曾有多達 30 家歌廳，那是上萬個孤單靈魂的歸屬。<br>
         如今，「金鑽」成為僅存的最後一家。</p>
       </div>
+      
       <div class="chart-wrapper">
         <canvas id="myChart"></canvas>
       </div>
 
       <div class="text-body" style="margin-top: 5rem;">
         <p>夜晚的西門町總帶著一種說不出的濕氣。</p>
-        <p>當你步出西門町六號出口的喧囂，轉身踏入一棟舊式商辦大樓，六樓的門一開，整個世界彷彿瞬間被按下了倒轉鍵。</p>
+        <p>當你步出西門町六號出口的喧囂，轉身踏入一棟舊式商辦大樓，搭上那部略顯陳舊的電梯，六樓的門一開，整個世界彷彿瞬間被按下了倒轉鍵。</p>
         <p>對於民國三、四十年隨軍來台的單身男性而言，他們離開原鄉，長期居住在簡陋的臨時宿舍。娛樂不只是消遣，而是一種維繫生活平衡的必要條件。</p>
       </div>
 
@@ -115,7 +116,7 @@
             </div>
             <div class="flip-back">
               <h3>觀眾聽歌</h3>
-              <p>這裡觀眾不會上台唱歌。這是專業歌手的舞台，歌手需穿著禮服登台，舞台規範更像傳統「秀場」。</p>
+              <p>不同於卡拉OK，紅包場觀眾不會上台唱歌。這裡是專業歌手的舞台，歌手需穿著正式禮服登台，舞台規範更像傳統「秀場」。</p>
             </div>
           </div>
         </div>
@@ -128,7 +129,7 @@
             </div>
             <div class="flip-back">
               <h3>特地來聽歌</h3>
-              <p>雖然有茶水、水果盤，但觀眾是特地來聽歌的。這是一座用歌聲聚起的庶民劇院，也是避風港。</p>
+              <p>雖然有茶水、水果盤與熱炒，但紅包場的觀眾是特地來聽歌的。這是一座用歌聲聚起的庶民劇院，也是動盪年代裡最溫暖的避風港。</p>
             </div>
           </div>
         </div>
@@ -137,9 +138,9 @@
       <h3 style="margin-top: 6rem; color: var(--gold); text-align: center; font-size: 2rem; margin-bottom: 2rem;">撐起紅包場的六大支柱</h3>
       <div class="elements-grid">
         <div class="element-card" data-title="歌星：舞台的主人" data-body="歌星輪番登台，每人約兩至三首歌。跑馬燈穿過個人稱號，禮服盛裝登場。在歌廳盛行年代可能一晚連跑多場。"><h3>歌星</h3><span style="opacity:0.6; letter-spacing:0.1em;">THE SINGER</span></div>
-        <div class="element-card" data-title="樂團老師：時空的魔術師" data-body="樂團老師全天候在舞台後方，熟悉鼓、效果器與各式新舊歌曲。一到兩位老師，就能撐起現場音場。"><h3>樂團老師</h3><span style="opacity:0.6; letter-spacing:0.1em;">THE BAND</span></div>
+        <div class="element-card" data-title="樂團老師：時空的魔術師" data-body="樂團老師全天候在舞台後方，熟悉鼓、效果器與各式新舊歌曲。一到兩位老師，就能撐起現場音場，讓觀眾像穿梭時空般感受情調。"><h3>樂團老師</h3><span style="opacity:0.6; letter-spacing:0.1em;">THE BAND</span></div>
         <div class="element-card" data-title="小妹：人情的連結者" data-body="小妹在場內穿梭、擔任服務生。她們除了端茶倒水，也是歌星維繫業績與建立關係的重要搭檔。"><h3>小妹</h3><span style="opacity:0.6; letter-spacing:0.1em;">THE CONNECTOR</span></div>
-        <div class="element-card" data-title="服裝：對舞台的尊重" data-body="歌星登場前會到舞台旁的服裝間換衣。每件禮服都有訂製的故事，顏色與首飾搭配都有學問。"><h3>服裝</h3><span style="opacity:0.6; letter-spacing:0.1em;">THE COSTUME</span></div>
+        <div class="element-card" data-title="服裝：對舞台的尊重" data-body="歌星登場前會到舞台旁的服裝間換衣。每件禮服背後都有訂製的故事。顏色與首飾搭配都有學問，彰顯對舞台的重視。"><h3>服裝</h3><span style="opacity:0.6; letter-spacing:0.1em;">THE COSTUME</span></div>
         <div class="element-card" data-title="餐飲：茶單制的默契" data-body="點餐與結帳以『茶單制』進行：歌星承擔所屬桌位的飲食消費，這也是一種變相的請客文化。"><h3>餐飲</h3><span style="opacity:0.6; letter-spacing:0.1em;">THE TABLE</span></div>
         <div class="element-card" data-title="紅包：關係的證明" data-body="紅包場最經典的畫面。賓客包出高於消費金額的紅包交給歌星，這不是小費，而是支持與長期關係的證明。"><h3>紅包</h3><span style="opacity:0.6; letter-spacing:0.1em;">THE RED ENVELOPE</span></div>
       </div>
@@ -163,7 +164,7 @@
         <div class="sticky-content">
           <div class="text-body">
             <p>金小娟第一次踏進紅包場是跟著爸爸來的。那時她還是表藝科學生，只覺得「可以領現金，很實在」。</p>
-            <p>在那個紅包場最盛的年代，萬華曾有二、三十家，她一天能跑十二家。</p>
+            <p>在那個紅包場最盛的年代，萬華曾有二、三十家，她一天能跑十二家。對年輕的她而言，紅包場不是文化，而是一個能靠自己站穩的地方。</p>
             <p>多年後，她回到金鑽接手經營。台北市如今只剩這一間紅包場歌廳。</p>
           </div>
           
@@ -220,7 +221,7 @@
       
       <div class="text-body">
         <p>當場域維持運作、守門人堅持秩序後，外部的力量也開始加入。</p>
-        <p><strong>綠雷德團隊</strong>形容他們做的不是保存，而是「翻譯」。他們致力於移除誤解，建立理解的入口。</p>
+        <p><strong>綠雷德團隊</strong>形容他們做的不是保存，而是「翻譯」。他們坦言並非天生熟悉紅包場，直到踏入後才發現排斥源於不了解。因此，他們致力於移除誤解，建立理解的入口。</p>
         <p>與此同時，<strong>台北市文化局</strong>推動《萬華時光》，首次以戲劇、市場導覽、戶外演唱會等形式，把紅包場帶回公共場景。</p>
       </div>
 
@@ -269,6 +270,6 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="assets/js/script.js"></script>
 </body>
 </html>
