@@ -11,6 +11,7 @@
     --red: #5e0a0a; 
     --gold: #cba35c;
     --bg: #080202;
+    --white: #ffffff; /* 新增白色變數 */
 }
 
 /* === 基礎設定 === */
@@ -32,36 +33,45 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     filter: sepia(0.2); mix-blend-mode: overlay;
 }
 
-/* === 0. 開場：層層壓迫 (Sticky Stacking) === */
+/* === 0. 開場：層層壓迫 (修復版) === */
 .stack-container {
+    position: relative;
     background: var(--bg);
     padding-bottom: 10vh;
 }
+.intro-bg-fixed {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+    z-index: 0;
+    opacity: 0.4; filter: brightness(0.5) contrast(1.2); 
+}
+.intro-bg-fixed img { width: 100%; height: 100%; object-fit: cover; }
+
 .stack-card {
     position: sticky; top: 0;
     height: 100vh;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     text-align: center;
-    background: linear-gradient(180deg, #0f0505 0%, #3a0505 100%);
+    /* 修正：改為純背景色，移除複雜漸層，避免疊圖怪影 */
+    background: var(--bg); 
     box-shadow: 0 -20px 50px rgba(0,0,0,0.8);
     border-top: 1px solid rgba(255,255,255,0.05);
     overflow: hidden;
 }
-.stack-bg {
-    position: absolute; inset: 0; opacity: 0.3; 
-    filter: grayscale(1) contrast(1.2); z-index: 0;
-    object-fit: cover; width: 100%; height: 100%;
-}
-.stack-content {
-    position: relative; z-index: 10; padding: 2rem; max-width: 900px;
-}
+
 .stack-text {
     font-size: clamp(2.5rem, 6vw, 4.5rem);
     font-weight: 900;
-    color: #fff;
+    color: var(--gold); /* 讓字體顏色更突出 */
     line-height: 1.4;
-    text-shadow: 0 10px 30px rgba(0,0,0,0.9);
+    text-shadow: 0 0 10px rgba(0,0,0,0.8);
+    transition: transform 0.3s ease;
 }
+
+/* 讓當前 active 的文字稍微放大，增加互動感 */
+.stack-card.active .stack-text {
+    transform: scale(1.05);
+}
+
 .scroll-hint {
     margin-top: 3rem; font-size: 0.9rem; color: var(--gold); letter-spacing: 0.3em;
     animation: bounce 2s infinite; opacity: 0.8;
@@ -79,9 +89,10 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     animation: slowZoom 20s infinite alternate;
 }
 @keyframes slowZoom { from{transform:scale(1);} to{transform:scale(1.1);} }
+
 .quote-overlay {
     position: absolute; inset: 0;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0,0,0,0.4);
     display: flex; align-items: center; justify-content: center;
     flex-direction: column; text-align: center;
 }
@@ -125,42 +136,48 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 .h-card p{font-size:1rem; line-height:1.7; color:#ccc;}
 .h-number{font-size:5rem; font-weight:900; color:rgba(203, 163, 92, 0.1); position:absolute; top:-30px; left:-20px; z-index:-1;}
 
-/* === 3. 茶單制 (能量動畫) === */
-.metaphor-section {
+
+/* === 3. 茶單制 (行為翻譯機 - 最終版) === */
+.translator-section {
     background: var(--bg); padding: 20vh 5vw; position: relative; z-index: 40;
     overflow: hidden;
 }
-.metaphor-title { text-align: center; margin-bottom: 4rem; color: var(--gold); font-size: 2rem; font-weight: bold; }
-.energy-container {
-    display: flex; align-items: center; justify-content: center; gap: 5vw;
-    max-width: 1000px; margin: 0 auto;
+.translator-title { text-align: center; margin-bottom: 4rem; color: var(--gold); font-size: 2rem; font-weight: bold; }
+
+.translator-box {
+    display: flex; align-items: center; justify-content: center; gap: 8vw; /* 增加間距 */
+    max-width: 900px; margin: 0 auto;
 }
-.energy-node {
-    width: 250px; height: 250px; border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.2);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    text-align: center; position: relative; background: rgba(255,255,255,0.05); transition: 0.5s;
+
+.t-item {
+    flex: 1; text-align: center; padding: 2rem;
+    position: relative;
+    transition: 0.5s;
 }
-.energy-node h4 { font-size: 1rem; color: #888; margin-bottom: 0.5rem; letter-spacing: 0.1em; }
-.energy-node .icon { font-size: 4rem; margin-bottom: 0.5rem; filter: grayscale(1); transition: 0.5s; }
-.energy-node .label { font-size: 1.5rem; font-weight: bold; color: #fff; opacity: 0.5; transition: 0.5s; }
-.energy-pipe { flex: 1; height: 4px; background: #333; position: relative; border-radius: 4px; }
-.energy-flow {
+
+.t-meaning .icon { font-size: 4rem; color: var(--red); transition: 0.5s; }
+.t-action .icon { font-size: 4rem; color: var(--gold); transition: 0.5s; }
+
+.t-item h4 { font-size: 1.2rem; color: #888; margin-bottom: 1rem; letter-spacing: 0.2em; }
+.t-item .big-text { font-size: 2rem; font-weight: 900; color: #fff; line-height: 1.2; }
+
+/* 連結線路 (只在電腦版顯示) */
+.t-pipe {
+    width: 100px; height: 3px; background: #333; position: relative;
+}
+.t-flow {
     position: absolute; left: 0; top: 0; height: 100%; width: 0%;
-    background: var(--gold); box-shadow: 0 0 15px var(--gold);
-    border-radius: 4px; transition: width 1.5s ease-out;
+    background: var(--gold); box-shadow: 0 0 10px var(--gold);
+    transition: width 1.5s ease-out;
 }
-.metaphor-section.active .energy-node.left { border-color: var(--gold); box-shadow: 0 0 30px rgba(203, 163, 92, 0.2); }
-.metaphor-section.active .energy-node.left .icon { filter: grayscale(0); transform: scale(1.1); }
-.metaphor-section.active .energy-node.left .label { opacity: 1; }
-.metaphor-section.active .energy-flow { width: 100%; }
-.metaphor-section.active .energy-node.right { 
-    border-color: var(--red); background: rgba(94, 10, 10, 0.2);
-    box-shadow: 0 0 50px rgba(94, 10, 10, 0.6); transition-delay: 1s; 
-}
-.metaphor-section.active .energy-node.right .icon { filter: grayscale(0); transform: scale(1.2); transition-delay: 1s; }
-.metaphor-section.active .energy-node.right .label { opacity: 1; color: var(--gold); transition-delay: 1s; }
+
+/* 觸發狀態 */
+.translator-box.active .t-flow { width: 100%; }
+.translator-box.active .t-action .icon { transform: scale(1.2); }
+.translator-box.active .t-meaning .icon { color: var(--gold); transform: scale(1.2); transition-delay: 1s; }
+
 .metaphor-desc { text-align: center; max-width: 600px; margin: 4rem auto 0; font-size: 1.1rem; color: #aaa; line-height: 1.8; }
+
 
 /* === 4. 訪談導讀 === */
 .intertitle-screen {
@@ -187,46 +204,33 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     position:absolute; bottom:20vh; left:10vw; max-width:600px;
     opacity:0; transform:translateY(30px); transition:0.8s;
     background: linear-gradient(to right, rgba(0,0,0,0.9), rgba(0,0,0,0.4));
-    padding:3rem; border-left:6px solid var(--gold); pointer-events: none;
+    padding:3rem; border-left:6px solid var(--gold);
+    pointer-events: none;
 }
 .video-overlay-text.show{opacity:1; transform:translateY(0);}
 .video-overlay-text h3{color:var(--gold); font-size:1.8rem; margin-bottom:1rem;}
 .video-overlay-text p{font-size:1.2rem; line-height:1.8;}
 
-/* === 6. 底部轉場按鈕 === */
+/* === 6. Footer (新增) === */
 .next-chapter-section {
   padding: 100px 20px 140px;
   text-align: center;
   background: linear-gradient(to bottom, #000, var(--red));
   position: relative; z-index: 60;
 }
-.next-label {
-  font-size: 0.9rem; color: #aaa; letter-spacing: 0.2em;
-  margin-bottom: 30px; display: block; text-transform: uppercase;
-}
-.nav-buttons-container {
-  display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;
-}
 .nav-btn {
-  text-decoration: none;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 15px 40px; color: #fff;
-  font-size: 1rem; letter-spacing: 0.1em;
-  transition: all 0.4s ease; min-width: 200px;
+  text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 15px 40px; color: #fff; font-size: 1rem;
+  letter-spacing: 0.1em; transition: all 0.4s ease; min-width: 200px;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
-.nav-btn span {
-  font-size: 0.7em; color: #888; margin-top: 5px; font-weight: 300;
+.nav-btn:hover { background: rgba(74, 5, 5, 0.5); }
+.final-footer {
+    padding: 30px 20px; background: #000; color: #444; font-size: 0.8rem; text-align: center;
+    border-top: 1px solid #111;
 }
-.btn-home:hover {
-  border-color: #fff; background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-}
-.btn-next { background: rgba(0, 0, 0, 0.6); }
-.btn-next:hover {
-  border-color: var(--gold); background: rgba(74, 5, 5, 0.5);
-  letter-spacing: 0.15em; box-shadow: 0 0 30px rgba(203, 163, 92, 0.4); color: var(--gold);
-}
+.final-footer p { margin: 5px 0; }
+
 
 /* RWD */
 @media(max-width: 768px){
@@ -235,10 +239,9 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     .hscroll-sticky{position:relative; height:auto; display:block; padding:15vh 5vw;}
     .hscroll-track{flex-direction:column; height:auto; padding:0; margin-top:2rem; transform:none !important;}
     .h-card{width:100%; max-width:100%; margin-bottom:4rem; margin-right:0;}
-    .energy-container{flex-direction: column; gap: 2rem;}
-    .energy-pipe{width: 4px; height: 100px;}
-    .energy-flow{width: 100%; height: 0%; top: 0; left: 0; transition: height 1.5s ease-out;}
-    .metaphor-section.active .energy-flow { height: 100%; width: 100%; }
+    .translator-box{flex-direction: column; gap: 2rem;}
+    .t-pipe{display:none;}
+    .full-screen-image img{animation: none; transform: scale(1.2);}
 }
 </style>
 </head>
@@ -375,7 +378,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 <section class="intertitle-screen">
     <div class="intertitle-line"></div>
     <h2 class="intertitle-h2">生存與夢想的對話</h2>
-    <p class="intertitle-p">紅包場不只是歷史的遺跡，它是這些歌星賴以生存的現在進行式。<br>從年輕唱到現在，這裡不僅是工作場所，更是她們的「家」。</p>
+    <p class="intertitle-p">紅包場不只是歷史的遺跡，它是這些歌星賴以生存的現在進行式。<br>從在<span style="color:var(--gold);">紡織廠</span>打工，到找到自己的舞台，這裡不僅是工作場所，更是她們的「家」。</p>
 </section>
 
 <section class="video-scrolled-section">
@@ -417,12 +420,27 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
   </div>
 </div>
 
-<footer style="padding:10vh 0; text-align:center; background:#080202; color:#666; font-size:0.8rem; border-top:1px solid #222;">
-    2025 唱給不在場的人專題製作組
+<footer class="final-footer">
+    <p>2025 唱給不在場的人專題製作組</p>
+    <p>梁朝勛、彭賀琳、莊馨予</p>
 </footer>
 
 <script>
-// 1. Horizontal Scroll
+// 1. Stack Animation
+const stackCards = document.querySelectorAll('.js-stack-card');
+const stackObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(e => {
+        // 當卡片到達頂端附近時，標記為 active (文字浮現)
+        if(e.isIntersecting && e.boundingClientRect.top < 100) {
+            e.target.classList.add('active');
+        } else {
+            e.target.classList.remove('active');
+        }
+    });
+}, {threshold: 0.5});
+stackCards.forEach(c => stackObserver.observe(c));
+
+// 2. Horizontal Scroll
 const hContainer = document.querySelector('.hscroll-container');
 const hTrack = document.getElementById('hTrack');
 window.addEventListener('scroll', () => {
@@ -436,14 +454,14 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// 2. Metaphor Trigger (Energy Flow)
+// 3. Metaphor Trigger (Energy Flow)
 const metaphorSection = document.querySelector('.js-metaphor-trigger');
 const metaphorObserver = new IntersectionObserver((entries)=>{
     if(entries[0].isIntersecting) metaphorSection.classList.add('active');
-}, {threshold: 0.5});
+}, {threshold: 0.6});
 metaphorObserver.observe(metaphorSection);
 
-// 3. Video Logic
+// 4. Video Logic
 const vidTexts = document.querySelectorAll('.js-vid-text');
 const vidSection = document.querySelector('.video-scrolled-section');
 const mainVideo = document.getElementById('main-video');
