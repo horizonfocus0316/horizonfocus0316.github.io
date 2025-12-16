@@ -32,7 +32,6 @@
       background: var(--bg-dark);
       color: #fff;
       overflow-x: hidden;
-      /* 頁面載入時的淡入效果 */
       animation: fadeInPage 1.5s ease-out;
     }
 
@@ -52,6 +51,13 @@
       margin: 0;
       color: inherit;
     }
+    
+    /* 輔助類別：使段落換行更明顯 */
+    .text-break {
+        display: block;
+        height: 1.5em; /* 行距高度 */
+        content: "";
+    }
 
     /* =========================================
        2. 第一幕：靜態主視覺 (Static Hero)
@@ -67,6 +73,7 @@
       overflow: hidden;
     }
 
+    /* 背景疊層 */
     .hero-static::before {
       content: "";
       position: absolute;
@@ -79,7 +86,6 @@
       );
       z-index: 1;
     }
-
     .hero-static::after {
       content: "";
       position: absolute;
@@ -90,10 +96,31 @@
       pointer-events: none;
       z-index: 2;
     }
+    
+    /* 疊在背景上的去背人物圖層 (新增) */
+    .hero-image-overlay {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        z-index: 3;
+        pointer-events: none;
+        max-height: 95vh;
+        width: clamp(400px, 60vw, 920px);
+        opacity: 1;
+        transition: opacity 1.5s ease;
+    }
+
+    .hero-image-overlay img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: contain;
+    }
+
 
     .hero-content {
       position: relative;
-      z-index: 3;
+      z-index: 4;
       max-width: 720px;
       display: flex;
       flex-direction: column;
@@ -175,11 +202,11 @@
       100% { transform: translate(-50%, 0); }
     }
     
-    /* === 新增：主視覺區塊的轉場按鈕樣式 === */
+    /* 主視覺區塊的轉場按鈕樣式 (新增) */
     .transition-cta {
       position: relative;
       z-index: 5; 
-      margin-top: 2rem; /* 調整間距 */
+      margin-top: 2rem;
       padding: 1rem 3rem;
       background: transparent;
       border: 1px solid var(--gold);
@@ -192,7 +219,7 @@
       cursor: pointer;
       transition: all 0.4s ease;
       display: inline-block;
-      opacity: 0; /* 預設隱藏，等打字機跑完再顯示 */
+      opacity: 0;
     }
 
     .transition-cta:hover {
@@ -204,7 +231,7 @@
     .transition-cta.visible {
       opacity: 1;
       transform: translateY(0);
-      transition-delay: 1s; /* 讓它在打字機跑完後再出現 */
+      transition-delay: 1s;
     }
 
     /* =========================================
@@ -327,11 +354,9 @@
     }
     
     /* =========================================
-       5. 章節一封面與內文 (Chapter 1 Intro & Body)
+       5. Chapter 1 & 2 Intro & Body (黑膠、紅底、橫捲 A/B)
        ========================================= */
-    .chapter-stack {
-      position: relative;
-    }
+    .chapter-stack { position: relative; }
 
     .chapter-intro {
       position: sticky;
@@ -384,7 +409,7 @@
       text-shadow: 0 4px 10px rgba(0,0,0,0.5);
       z-index: 5;
     }
-
+    
     .chapter-body {
       position: relative;
       background: var(--red);
@@ -445,95 +470,181 @@
       align-items: center;
       justify-content: center;
     }
-
-    .vinyl-player {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2rem;
-    }
-
+    .vinyl-player { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
     .vinyl-disc {
-      width: clamp(200px, 28vw, 320px);
-      height: clamp(200px, 28vw, 320px);
-      border-radius: 50%;
-      background: radial-gradient(circle at center, #1f1f1f 0%, #050505 60%, #000 100%);
-      border: 8px solid #222;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-      animation: vinyl-spin 8s linear infinite;
-      animation-play-state: paused;
-      cursor: pointer;
-      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      width: clamp(200px, 28vw, 320px); height: clamp(200px, 28vw, 320px);
+      border-radius: 50%; background: radial-gradient(circle at center, #1f1f1f 0%, #050505 60%, #000 100%);
+      border: 8px solid #222; position: relative; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.5); animation: vinyl-spin 8s linear infinite; animation-play-state: paused;
+      cursor: pointer; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-
-    .vinyl-disc:hover {
-      transform: scale(1.02);
-      border-color: #333;
+    .vinyl-disc:hover { transform: scale(1.02); border-color: #333; }
+    .vinyl-disc::before, .vinyl-disc::after {
+      content: ""; position: absolute; border-radius: 50%; border: 1px solid rgba(255,255,255,0.08);
     }
-
-    .vinyl-disc::before,
-    .vinyl-disc::after {
-      content: "";
-      position: absolute;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
     .vinyl-disc::before { inset: 15%; }
     .vinyl-disc::after { inset: 35%; }
-
     .vinyl-label {
-      width: 35%;
-      height: 35%;
-      border-radius: 50%;
+      width: 35%; height: 35%; border-radius: 50%;
       background: radial-gradient(circle, #b91c1c 0%, #741010 80%);
-      border: 4px solid var(--gold);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      text-align: center;
-      letter-spacing: 0.1em;
-      color: #ffe7a0;
-      font-weight: 700;
+      border: 4px solid var(--gold); display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-size: 0.75rem; text-align: center; letter-spacing: 0.1em; color: #ffe7a0; font-weight: 700;
       box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
     }
-
-    .vinyl-disc.is-playing {
-      animation-play-state: running;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-    }
-
+    .vinyl-disc.is-playing { animation-play-state: running; box-shadow: 0 20px 50px rgba(0,0,0,0.7); }
     .vinyl-cta {
-      border: 1px solid rgba(255,255,255,0.4);
-      background: transparent;
-      color: var(--gold);
-      padding: 12px 28px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-family: inherit;
+      border: 1px solid rgba(255,255,255,0.4); background: transparent; color: var(--gold);
+      padding: 12px 28px; letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.8rem;
+      cursor: pointer; transition: all 0.3s ease; font-family: inherit;
     }
-
-    .vinyl-cta:hover {
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border-color: #fff;
-    }
-
-    @keyframes vinyl-spin {
-      to { transform: rotate(360deg); }
-    }
+    .vinyl-cta:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: #fff; }
+    @keyframes vinyl-spin { to { transform: rotate(360deg); } }
 
     /* =========================================
-       6. 黑色過場與引言 (Finale & Quote)
+       6. Chapter 3: 產業經濟學段落 (新增)
+       ========================================= */
+    .data-section {
+        background: var(--bg-dark);
+        color: #fff;
+        padding: clamp(60px, 12vh, 120px) clamp(6vw, 10vw, 12vw);
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    .data-section h3 {
+        color: var(--gold);
+        font-size: clamp(1.8rem, 4vw, 3rem);
+        margin-bottom: 2.5rem;
+        text-align: center;
+        letter-spacing: 0.1em;
+    }
+
+    .data-section h4 {
+        color: #fff;
+        font-size: clamp(1.3rem, 2.5vw, 2rem);
+        margin-top: 3rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+    }
+    
+    .data-text-paragraph {
+        line-height: 2;
+        font-size: var(--body-text-size);
+        color: rgba(255, 255, 255, 0.85);
+        margin-bottom: 1.5rem;
+    }
+
+    /* 表格樣式 */
+    .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 2rem 0;
+        font-size: clamp(0.8rem, 1.2vw, 1rem);
+        text-align: left;
+    }
+    
+    .styled-table caption {
+        font-size: 1.2em;
+        font-weight: 600;
+        color: var(--gold);
+        margin-bottom: 1em;
+        caption-side: top;
+    }
+
+    .styled-table th, .styled-table td {
+        padding: 15px 18px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .styled-table thead th {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: var(--gold);
+        font-weight: 700;
+        letter-spacing: 0.1em;
+    }
+
+    .styled-table tbody tr {
+        transition: background-color 0.3s ease;
+    }
+
+    .styled-table tbody tr:hover {
+        background-color: rgba(151, 12, 16, 0.1);
+    }
+    
+    .styled-table tbody td {
+        color: rgba(255, 255, 255, 0.85);
+    }
+    
+    /* 引用強調文字 */
+    .source-citation {
+        font-size: 0.8em;
+        color: #888;
+        font-style: italic;
+        margin-left: 5px;
+    }
+
+
+    /* =========================================
+       7. Chapter 4: 社會學段落 (新增)
+       ========================================= */
+    .social-analysis {
+        background: #111;
+        padding: clamp(60px, 12vh, 120px) clamp(6vw, 10vw, 12vw);
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    .social-analysis h3 {
+        color: var(--gold);
+        font-size: clamp(1.8rem, 4vw, 3rem);
+        margin-bottom: 2.5rem;
+        text-align: center;
+        letter-spacing: 0.1em;
+    }
+
+    .social-analysis h4 {
+        color: #fff;
+        font-size: clamp(1.3rem, 2.5vw, 2rem);
+        margin-top: 3rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+    }
+    
+    .social-text-paragraph {
+        line-height: 2;
+        font-size: var(--body-text-size);
+        color: rgba(255, 255, 255, 0.85);
+        margin-bottom: 1.5rem;
+    }
+
+    /* 列表樣式 */
+    .pseudo-kinship-list {
+        list-style: none;
+        padding-left: 0;
+        margin-top: 1.5rem;
+    }
+
+    .pseudo-kinship-list li {
+        margin-bottom: 1.5rem;
+        padding-left: 20px;
+        position: relative;
+        line-height: 1.8;
+        font-size: var(--body-text-size);
+        color: rgba(255, 255, 255, 0.95);
+    }
+
+    .pseudo-kinship-list li::before {
+        content: "—";
+        color: var(--gold);
+        font-weight: 700;
+        position: absolute;
+        left: 0;
+    }
+    
+    /* =========================================
+       8. 黑色過場與引言 (Finale & Quote)
        ========================================= */
     .black-finale {
       background: #000;
@@ -619,11 +730,10 @@
     }
 
     /* =========================================
-       7. 橫向捲動區塊 A (Horizontal Scroll - Scene)
+       9. 橫向捲動區塊 (Horizontal Scrolls)
        ========================================= */
     .horizontal-scroll {
       position: relative;
-      /* 設定滾動長度：3個面板 * 100vh */
       --panel-count: 3;
       height: calc(var(--panel-count) * 100vh);
       background: #000;
@@ -652,19 +762,10 @@
       position: relative;
     }
 
-    .panel-guobin {
-      background: url("assets/oldmanhappy.jpg") center center / cover no-repeat;
-    }
-    .panel-boom {
-      background: url("assets/theaters_boom.jpg") center center / cover no-repeat;
-    }
-    .panel-interior {
-      background: url("assets/singing_hall_interior.jpg") center center / cover no-repeat;
-    }
+    .panel-guobin { background: url("assets/oldmanhappy.jpg") center center / cover no-repeat; }
+    .panel-boom { background: url("assets/theaters_boom.jpg") center center / cover no-repeat; }
+    .panel-interior { background: url("assets/singing_hall_interior.jpg") center center / cover no-repeat; }
 
-    /* =========================================
-       8. 橫向捲動區塊 B (Story Horizontal - Narrative)
-       ========================================= */
     .story-horizontal {
       position: relative;
       --panel-count: 6;
@@ -699,7 +800,6 @@
       overflow: hidden;
     }
 
-    /* 統一的背景處理 */
     .story-panel::before {
       content: "";
       position: absolute;
@@ -711,9 +811,7 @@
       transition: transform 10s ease;
     }
 
-    .story-panel.is-active::before {
-      transform: scale(1.0);
-    }
+    .story-panel.is-active::before { transform: scale(1.0); }
 
     .story-panel::after {
       content: "";
@@ -762,7 +860,7 @@
     }
 
     /* =========================================
-       9. 結尾過場 (Finale Sequence)
+       10. 結尾過場 (Finale Sequence)
        ========================================= */
     .chapter-finale {
       position: relative;
@@ -787,14 +885,8 @@
       transition: opacity 1.6s ease, transform 1.6s ease;
     }
 
-    .chapter-finale.is-visible p {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .chapter-finale.slow p {
-      transition-duration: 2.5s;
-    }
+    .chapter-finale.is-visible p { opacity: 1; transform: translateY(0); }
+    .chapter-finale.slow p { transition-duration: 2.5s; }
 
     .finale-image-block {
       position: relative;
@@ -803,18 +895,16 @@
       width: 100%;
     }
 
+    /* 結尾圖片動畫 (往下滑會放大) */
     .finale-image-block img {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 1.5s ease-out;
-      transform: scale(1.1);
-    }
-
-    .finale-image-block.is-visible img {
-      transform: scale(1);
+      transform: scale(1.0); /* 初始縮放設為 1.0 */
+      transition: transform 0.1s linear; /* 讓 JS 控制的滾動更順暢 */
+      will-change: transform;
     }
 
     .finale-image-block::after {
@@ -825,7 +915,7 @@
     }
 
     /* =========================================
-       10. 底部導覽 (Footer Navigation)
+       11. 底部導覽 (Footer Navigation)
        ========================================= */
     .next-chapter-section {
       padding: 120px 20px 160px;
@@ -898,7 +988,7 @@
     }
 
     /* =========================================
-       11. 響應式設計 (Responsive Design)
+       12. 響應式設計 (Responsive Design)
        ========================================= */
     @media (max-width: 1024px) {
       .black-finale { grid-template-columns: 1fr; }
@@ -911,16 +1001,26 @@
       .chapter-body { padding: 80px 5vw; }
       .chapter-body-inner { flex-direction: column; text-align: center; }
       .chapter-text-block { text-align: center; }
-      .chapter-text-block h5 { text-align: left; }
+      /* 內文維持靠左閱讀較佳 */
+      .chapter-text-block h5, .social-text-paragraph, .pseudo-kinship-list li { text-align: left; }
       .vinyl-column { width: 100%; margin-top: 2rem; }
       .nav-buttons-container { gap: 20px; }
       .nav-btn { width: 100%; }
+      .styled-table { font-size: 0.85rem; }
     }
 
     @media (max-width: 768px) {
       .hero-static { padding: 0 6vw; }
       .hero-static h1 { font-size: 2.8rem; margin-bottom: 1rem; }
       .hero-static h2 { font-size: 1.2rem; margin-bottom: 1.5rem; }
+      
+      .hero-image-overlay {
+        width: 78vw;
+        max-height: 60vh;
+        right: -5vw;
+        bottom: 1rem;
+        opacity: 0.7;
+      }
       
       .video-control-btn {
         bottom: 5rem;
@@ -949,6 +1049,8 @@
           padding: 0.8rem 2rem;
           font-size: 1rem;
       }
+      
+      .styled-table th, .styled-table td { padding: 10px; }
     }
   </style>
   <body>
@@ -962,15 +1064,19 @@
         開始深入閱讀 &darr;
       </a>
     </div>
+    
+    <div class="hero-image-overlay">
+      <img src="assets/hero_cover.png" alt="紅包場歌手英姿">
+    </div>
+    
     <div id="scroll-hint" class="scroll-hint">SCROLL ↓</div>
   </section>
 
   <section class="immersive-section" id="immersive-start">
     <div class="immersive-inner">
       <div class="immersive-copy">
-        <h5>夜晚的西門町總帶著一種說不出的濕氣。</h5>
-        <h5>對多數年輕人來說，</h5>
-        <h5>紅包場可能是陌生、甚至帶點神祕色彩的存在。</h5>
+        <h5>夜晚的西門町總帶著一種說不出的濕氣。<br/></h5>
+        <h5>對多數年輕人來說，<br/>紅包場可能是陌生、甚至帶點神祕色彩的存在。</h5>
         <h5>但在台灣的某段歷史裡，它曾是上萬個孤單靈魂的歸屬；</h5>
         <h5>是一座用歌聲聚起的庶民劇院；</h5>
         <h5>也是一個動盪年代裡最溫暖的避風港。</h5>
@@ -1103,12 +1209,190 @@
       </div>
     </div>
   </section>
+  
+  <div class="chapter-stack">
+      <section class="chapter-intro">
+        <img src="assets/red-envelope-theater.jpg" alt="Chapter 3 Cover">
+        <div class="chapter-overlay"></div>
+        <div class="chapter-title">➂ 全盛時期的產業經濟學：數據與生態</div>
+      </section>
+  </div>
+  
+  <section class="data-section">
+    <h3>全盛時期的產業經濟學：數據與生態</h3>
+    
+    <h4>3.1 空間分佈與數量規模</h4>
+    <div class="data-text-paragraph">
+        1980年代是紅包場的黃金時期。根據資深業者與文史工作者的回憶及報導統計，當時西門町漢中街、武昌街一帶，歌廳林立。
+    </div>
+    
+    <table class="styled-table">
+        <caption>表 1：西門町紅包場產業全盛時期與現況對比</caption>
+        <thead>
+            <tr>
+                <th>統計指標</th>
+                <th>全盛時期 (約 1980s-1990s)</th>
+                <th>衰退時期 (2019-2024)</th>
+                <th>資料來源</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>歌廳數量</td>
+                <td>約 30 家</td>
+                <td>僅存 2-3 家 (如金鑽、鳳凰)</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>從業歌手</td>
+                <td>單日超過 100 位 (需頻繁趕場)</td>
+                <td>數量銳減，多為資深歌手</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>主要分佈區</td>
+                <td>漢中街、武昌街、獅子林大樓</td>
+                <td>零星散佈於舊大樓內</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>經濟產值</td>
+                <td>支撐周邊禮服、美容、花店產業</td>
+                <td>僅能維持基本營運，甚至虧損</td>
+                <td>4</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="data-text-paragraph">
+        在全盛時期，一家歌廳一天可能有數十位歌手輪番登台，紅牌歌手甚至需要在不同歌廳間「趕場」。西門町的「紅包場經濟圈」養活了大量的周邊產業。例如，為了展現排場，歌迷會在歌手生日或週年慶時，訂購巨大的花籃與花圈，甚至搭起「花門」，沿著樓梯一路擺放至舞台，形成壯觀的「花海隧道」<span class="source-citation">4</span>。此外，歌手對華麗禮服的需求，也帶動了周邊旗袍店與珠寶銀樓的生意 <span class="source-citation">2</span>。
+    </div>
+
+    <h4>3.2 紅包經濟學：從打賞到生計</h4>
+    <div class="data-text-paragraph">
+        紅包場的經濟邏輯建立在「非強制性消費」上。門票或茶資通常低廉（約200-300元），歌手甚至沒有底薪，完全依賴觀眾的紅包 <span class="source-citation">1</span>。
+    </div>
+
+    <table class="styled-table">
+        <caption>表 2：紅包場消費與收入結構分析</caption>
+        <thead>
+            <tr>
+                <th>項目</th>
+                <th>內容描述</th>
+                <th>備註</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>基本消費</td>
+                <td>茶資/門票約 NT$300</td>
+                <td>包含茶水、瓜果，這部分歸店家所有</td>
+            </tr>
+            <tr>
+                <td>紅包機制</td>
+                <td>觀眾自願給予，金額不定</td>
+                <td>歌手主要收入來源，需與店家拆帳</td>
+            </tr>
+            <tr>
+                <td>全盛期收入</td>
+                <td>紅牌歌手日收可達 NT$40,000 - 50,000</td>
+                <td>特別是在農曆春節期間 <span class="source-citation">5</span></td>
+            </tr>
+            <tr>
+                <td>衰退期收入</td>
+                <td>視觀眾多寡而定，紅包變薄</td>
+                <td>受老兵凋零與兩岸開放影響</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="data-text-paragraph">
+        這種經濟模式極度依賴歌手與觀眾之間的私人關係。為了獲得紅包，歌手必須在舞台下進行大量的社交勞動（Social Labor），記住客人的喜好、家鄉、生日，甚至在台下陪伴聊天。
+    </div>
+  </section>
+  <div class="chapter-stack">
+      <section class="chapter-intro">
+        <img src="assets/red-envelope-theater.jpg" alt="Chapter 4 Cover">
+        <div class="chapter-overlay"></div>
+        <div class="chapter-title">➃ 社會學分析：榮民、擬親屬關係與情感結構</div>
+      </section>
+  </div>
+
+  <section class="social-analysis">
+    <h3>社會學分析：榮民、擬親屬關係與情感結構</h3>
+    
+    <h4>4.1 榮民人口結構與「孤獨經濟」</h4>
+    <div class="social-text-paragraph">
+        紅包場的主要消費者是所謂的「老兵」或「榮民」。這群人在年輕時隨軍來台，受限於早期的「禁婚令」或經濟條件，許多人終身未婚，或將妻兒留在了大陸 <span class="source-citation">10</span>。
+        <br/>
+        根據內政部與退輔會的資料，萬華區因有「空南三村」、「新和新村」等眷村，聚集了大量榮民人口。然而，隨著時間推移，這群人口正快速凋零。
+    </div>
+    
+    <table class="styled-table">
+        <caption>表 3：萬華區人口變遷與榮民結構之關聯</caption>
+        <thead>
+            <tr>
+                <th>年份</th>
+                <th>萬華區總人口</th>
+                <th>趨勢解讀</th>
+                <th>對紅包場之影響</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1991</td>
+                <td>230,801</td>
+                <td>基準點</td>
+                <td>紅包場仍處於活躍期</td>
+            </tr>
+            <tr>
+                <td>2001</td>
+                <td>204,024</td>
+                <td>下滑 (-3.3%)</td>
+                <td>觀眾基數開始萎縮</td>
+            </tr>
+            <tr>
+                <td>2011</td>
+                <td>190,855</td>
+                <td>下滑 (-2.1%)</td>
+                <td>產業進入整併期</td>
+            </tr>
+            <tr>
+                <td>2021</td>
+                <td>176,617</td>
+                <td>顯著下滑 (-8.7%)</td>
+                <td>核心客群極度匱乏 <span class="source-citation">12</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="social-text-paragraph">
+        對於這群生活在眷村或單身宿舍的老兵而言，紅包場不僅是娛樂場所，更是「情感的避風港」。他們在這裡花費退休金，購買的不僅是歌曲，更是「尊嚴」與「親情」<span class="source-citation">3</span>。
+    </div>
+    
+    <h4>4.2 「乾爹」與「女兒」：擬親屬關係的建立</h4>
+    <div class="social-text-paragraph">
+        紅包場最獨特的社會學現象，是歌手與觀眾之間發展出的「擬親屬關係」（Pseudo-kinship）。許多老兵將年輕的女歌手認作「乾女兒」（乾爹-乾女兒關係）。
+    </div>
+    
+    <ul class="pseudo-kinship-list">
+        <li>**情感投射：** 對於無子嗣或子女不在身邊的老兵，歌手填補了「女兒」的角色空缺。</li>
+        <li>**相互依存：** 長期捧場下，雙方關係超越了買賣，變得像老友甚至親人。有歌手會照顧生病的老客人，老客人則將歌手視為精神寄託 <span class="source-citation">3</span>。</li>
+        <li>**權力展演：** 透過贈送紅包，社會地位邊緣的老兵得以在歌廳這個封閉空間內，展現「施予者」的權力與慷慨，獲得短暫的社會肯定。</li>
+    </ul>
+    
+    <h4>4.3 兩岸開放的結構性衝擊</h4>
+    <div class="social-text-paragraph">
+        1987年兩岸開放探親，是紅包場走向衰落的關鍵轉折點。在此之前，老兵們認為歸鄉無望，便將積蓄毫無保留地投入紅包場，尋求心靈慰藉。開放探親後，老兵們得以聯繫上大陸的真親屬，資金流向隨之改變，紅包金額大幅縮水，從數千元降至一兩百元 <span class="source-citation">3</span>。這證明了紅包場的繁榮實則是建立在「離散」（Diaspora）與「封閉」的特殊歷史情境之上。
+    </div>
+  </section>
+
   <section class="chapter-finale" data-finale="intro">
-    <p>然而，進入 1990 年代，娛樂形式快速轉變。<br>紅包場，逐漸被推向城市邊緣。<br>紅包場不再屬於夜生活的主流，<br>也逐漸淡出大眾視野。</p>
+    <p>紅包場不只是過去的遺跡，<br>而是一面映照時代變遷的鏡子。</p>
   </section>
 
   <section class="finale-image-block" data-finale="image-decline">
-    <img src="assets/ch1-06-closed-songhall-night.jpg" alt="closed songhall night">
+    <img id="finale-img-1" src="assets/ch1-06-closed-songhall-night.jpg" alt="closed songhall night">
   </section>
 
   <section class="chapter-finale" data-finale="middle">
@@ -1116,11 +1400,11 @@
   </section>
 
   <section class="finale-image-block" data-finale="image-warm">
-    <img src="assets/ch1-07-jinzuan-stage-empty.jpg" alt="jinzuan stage empty">
+    <img id="finale-img-2" src="assets/ch1-07-jinzuan-stage-empty.jpg" alt="jinzuan stage empty">
   </section>
 
   <section class="chapter-finale slow" data-finale="closing">
-    <p>紅包場不只是過去的遺跡，<br>而是一面映照時代變遷的鏡子。</p>
+    <p>歌手與觀眾間的情感，超越了時代與地域。<br>無論舞台是否熄燈，他們都曾是彼此生命中，最溫暖的聽眾。</p>
   </section>
 
   <div class="next-chapter-section">
@@ -1147,14 +1431,12 @@
       const transitionCta = document.getElementById("transition-cta");
       const typeTargets = [titleEl, subtitleEl];
 
-      // 初始化：清空文字並讀取 data-text
       typeTargets.forEach((el) => {
         const text = el.dataset.text || el.textContent.trim();
         el.dataset.text = text;
         el.textContent = "";
       });
 
-      // 打字函式
       const typeText = (el, speed = 100) =>
         new Promise((resolve) => {
           const text = el.dataset.text || "";
@@ -1174,7 +1456,6 @@
           tick();
         });
 
-      // 啟動序列
       const startSequence = async () => {
         
         await new Promise(r => setTimeout(r, 600));
@@ -1183,13 +1464,11 @@
           await typeText(el);
         }
         
-        // 顯示 Scroll Hint 和 新增的 CTA 按鈕
         requestAnimationFrame(() => {
           if (scrollHint) scrollHint.classList.add("visible");
           if (transitionCta) transitionCta.classList.add("visible");
         });
         
-        // 點擊按鈕實現平滑滾動
         if(transitionCta) {
           transitionCta.addEventListener('click', (e) => {
             e.preventDefault();
@@ -1314,7 +1593,7 @@
         finaleSections.forEach((section) => finaleObserver.observe(section));
       }
 
-      // === 7. 橫向捲動 A (Horizontal Scroll - Scene) & B (Story Horizontal - Narrative) ===
+      // === 7. 橫向捲動 A & B 邏輯 (Horizontal Scroll) ===
       const horizontalScroll = document.getElementById("horizontal-scroll");
       const storyHorizontal = document.getElementById("story-horizontal");
 
@@ -1339,7 +1618,6 @@
             const translate = -progress * (panels - 1) * 100;
             panelsWrapper.style.transform = `translateX(${translate}vw)`;
             
-            // 故事橫捲的 Active Class 邏輯
             if (element.id === "story-horizontal") {
               const panelsArray = Array.from(element.querySelectorAll(".story-panel"));
               const activeIndex = Math.round(progress * (panels - 1));
@@ -1357,6 +1635,35 @@
       
       setupHorizontalScroll(horizontalScroll);
       setupHorizontalScroll(storyHorizontal);
+      
+      // === 8. 結尾圖片滾動放大特效 (Scroll Zoom) ===
+      const finaleImages = [
+        { el: document.getElementById('finale-img-1'), container: document.querySelector('.finale-image-block[data-finale="image-decline"]') },
+        { el: document.getElementById('finale-img-2'), container: document.querySelector('.finale-image-block[data-finale="image-warm"]') }
+      ];
+
+      const handleImageZoom = () => {
+        finaleImages.forEach(({ el, container }) => {
+          if (!el || !container) return;
+          
+          const containerRect = container.getBoundingClientRect();
+          const viewHeight = window.innerHeight;
+          
+          // 圖片進入視口時開始計算
+          if (containerRect.top < viewHeight && containerRect.bottom > 0) {
+            // 滾動進度：從 0 (頂部進入) 到 1 (底部離開)
+            const progress = 1 - (containerRect.bottom / (container.offsetHeight + viewHeight));
+            // 縮放比例：從 1.0 放大到 1.15，並在中間段落達成
+            // 範圍 (0-1) -> 範圍 (1.0-1.15)
+            const scale = 1.0 + (progress * 0.15); 
+            
+            el.style.transform = `scale(${Math.min(scale, 1.15)})`;
+          }
+        });
+        requestAnimationFrame(handleImageZoom);
+      };
+      
+      handleImageZoom();
 
     });
   </script>
