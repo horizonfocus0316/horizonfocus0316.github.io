@@ -1,1152 +1,995 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
- <meta charset="UTF-8" />
- <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <title>唱給不在場的人</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#970C10" />
+<title>唱給不在場的人</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&display=swap" rel="stylesheet" />
+<style>
+:root{
+--red:#970C10;
+--gold:#FFE87A;
+--ink:#000;
+--card:rgba(255,255,255,0.06);
+--card-border:rgba(255,255,255,0.14);
+--text:rgba(255,255,255,0.92);
+--muted:rgba(255,255,255,0.70);
+--focus:rgba(255,232,122,0.95);
+--navH: 92px;
+}
 
 
- <!-- 思源宋體（網頁等價） -->
- <link rel="preconnect" href="https://fonts.googleapis.com">
- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&display=swap" rel="stylesheet">
+*{margin:0;padding:0;box-sizing:border-box;}
+html{
+scroll-behavior:smooth;
+text-rendering:optimizeLegibility;
+-webkit-font-smoothing:antialiased;
+-moz-osx-font-smoothing:grayscale;
+}
+body{
+font-family:"Noto Serif TC", serif;
+background:#000;
+color:#fff;
+overflow-x:hidden;
+}
+a{color:inherit;}
+a:focus-visible, button:focus-visible{
+outline:2px solid var(--focus);
+outline-offset:3px;
+border-radius:10px;
+}
 
 
- <style>
-   :root {
-     --red: #970C10;
-     --gold: #FFE87A;
-     --ink: #000;
-     --card: rgba(255,255,255,0.06);
-     --card-border: rgba(255,255,255,0.14);
-     --text: rgba(255,255,255,0.92);
-     --muted: rgba(255,255,255,0.70);
-   }
+.skip-link{
+position:absolute;
+left:-999px;
+top:10px;
+z-index:9999;
+background:rgba(0,0,0,0.85);
+border:1px solid rgba(255,255,255,0.20);
+color:#fff;
+padding:10px 12px;
+border-radius:12px;
+letter-spacing:0.08em;
+}
+.skip-link:focus{left:10px;}
 
 
-   * { margin: 0; padding: 0; box-sizing: border-box; }
-   body {
-     font-family: "Noto Serif TC", serif;
-     background: #000;
-     color: #fff;
-     overflow-x: hidden;
-   }
+/* ===== CSS grain (no external file) ===== */
+.grainy::before{
+content:"";
+position:absolute;
+inset:0;
+pointer-events:none;
+opacity:0.22;
+mix-blend-mode:overlay;
+background:
+repeating-linear-gradient(0deg, rgba(255,255,255,0.06), rgba(255,255,255,0.06) 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 3px),
+repeating-linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.05) 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 4px);
+filter: blur(0.2px);
+}
 
 
-   /* =========================
-      Section 1｜Full-screen Video
-   ========================== */
-   .landing-video {
-     position: relative;
-     width: 100%;
-     height: 100vh;
-     overflow: hidden;
-   }
-   .landing-video video {
-     position: absolute;
-     inset: 0;
-     width: 100%;
-     height: 100%;
-     object-fit: cover;
-   }
-   .landing-video::after {
-     content: "";
-     position: absolute;
-     inset: 0;
-     background: rgba(0,0,0,0.25);
-     z-index: 1;
-   }
+/* =========================
+Atmosphere: fog / smoke
+========================== */
+.fog-layer{
+position:fixed;
+inset:-30vh -20vw -30vh -20vw;
+pointer-events:none;
+z-index:20;
+opacity:0.22;
+mix-blend-mode:screen;
+filter: blur(8px) contrast(110%);
+background:
+radial-gradient(closest-side at 20% 30%, rgba(255,255,255,0.16), rgba(255,255,255,0) 70%),
+radial-gradient(closest-side at 70% 55%, rgba(255,232,122,0.12), rgba(255,255,255,0) 72%),
+radial-gradient(closest-side at 35% 80%, rgba(255,255,255,0.14), rgba(255,255,255,0) 72%);
+animation:fog-drift 18s ease-in-out infinite;
+}
+.fog-layer::before,
+.fog-layer::after{
+content:"";
+position:absolute;
+inset:0;
+background:
+radial-gradient(closest-side at 55% 25%, rgba(255,255,255,0.10), rgba(255,255,255,0) 70%),
+radial-gradient(closest-side at 85% 75%, rgba(255,255,255,0.10), rgba(255,255,255,0) 70%),
+radial-gradient(closest-side at 10% 65%, rgba(255,255,255,0.08), rgba(255,255,255,0) 70%);
+animation:fog-drift-2 24s ease-in-out infinite;
+opacity:0.85;
+transform:translate3d(0,0,0);
+}
+.fog-layer::after{
+animation:fog-drift-3 30s ease-in-out infinite;
+opacity:0.55;
+filter: blur(12px);
+}
+@keyframes fog-drift{
+0%{transform:translate3d(-2vw, -1vh, 0) scale(1.02);}
+50%{transform:translate3d(2vw, 1.2vh, 0) scale(1.05);}
+100%{transform:translate3d(-2vw, -1vh, 0) scale(1.02);}
+}
+@keyframes fog-drift-2{
+0%{transform:translate3d(2vw, 0, 0) rotate(0.001deg);}
+50%{transform:translate3d(-2vw, 1vh, 0) rotate(0.001deg);}
+100%{transform:translate3d(2vw, 0, 0) rotate(0.001deg);}
+}
+@keyframes fog-drift-3{
+0%{transform:translate3d(0, 1vh, 0) scale(1.06);}
+50%{transform:translate3d(1.5vw, -1vh, 0) scale(1.02);}
+100%{transform:translate3d(0, 1vh, 0) scale(1.06);}
+}
 
 
-   /* =========================
-      Section 2｜Buffer Zone
-   ========================== */
-   .buffer {
-     position: relative;
-     height: 60vh;
-     background: var(--red);
-     overflow: hidden;
-   }
-   .buffer::after {
-     content: "";
-     position: absolute;
-     inset: 0;
-     background: url("assets/grain.png") repeat;
-     opacity: 0.25;
-     pointer-events: none;
-   }
+/* =========================
+Section 1｜Full-screen Video
+========================== */
+.landing-video{
+position:relative;
+width:100%;
+height:100vh;
+overflow:hidden;
+background:#000;
+}
+.landing-video video{
+position:absolute;
+inset:0;
+width:100%;
+height:100%;
+object-fit:cover;
+}
+.landing-video::after{
+content:"";
+position:absolute;
+inset:0;
+background:rgba(0,0,0,0.28);
+z-index:1;
+}
 
 
-   /* =========================
-      Section 3｜Hero Section
-   ========================== */
-   .hero {
-     position: relative;
-     height: 100vh;
-     min-height: 100vh;
-     background: var(--red);
-     overflow: visible;
-     display: flex;
-     align-items: center;
-     padding: 0 7vw;
-     gap: min(6vw, 64px);
-   }
-   .hero::before {
-     content: "";
-     position: absolute;
-     inset: 0;
-     background: url("assets/grain.png") repeat;
-     opacity: 0.3;
-     z-index: 1;
-   }
-   .hero-image {
-     position: absolute;
-     right: 0;
-     bottom: 0;
-     display: flex;
-     justify-content: flex-end;
-     align-items: flex-end;
-     z-index: 2;
-     pointer-events: none;
-   }
-   .hero-image img {
-     width: clamp(420px, 60vw, 920px);
-     max-height: 92vh;
-     height: auto;
-     object-fit: contain;
-   }
+/* =========================
+Section 2｜Buffer Zone
+========================== */
+.buffer{
+position:relative;
+height:60vh;
+background:var(--red);
+overflow:hidden;
+}
+.buffer.grainy{position:relative;}
 
 
-   .hero-content {
-     position: relative;
-     z-index: 3;
-     flex: 0 1 48%;
-     max-width: 640px;
-     display: flex;
-     flex-direction: column;
-     justify-content: center;
-     min-height: 100%;
-   }
-   .hero h1 {
-     font-size: clamp(2.5rem, 5vw, 4rem);
-     font-weight: 900;
-     color: var(--gold);
-     margin-bottom: 1rem;
-     letter-spacing: 0.05em;
-   }
-   .hero h2 {
-     font-size: clamp(1.4rem, 3vw, 2.2rem);
-     font-weight: 700;
-     color: var(--gold);
-     margin-bottom: 1.5rem;
-   }
-   .hero h3 {
-     font-size: clamp(1rem, 2.2vw, 1.3rem);
-     font-weight: 600;
-     color: #fff;
-     letter-spacing: 0.08em;
-     margin-bottom: 2rem;
-   }
-   .hero h1, .hero h2 { white-space: nowrap; }
+/* =========================
+Section 3｜Hero
+========================== */
+.hero{
+position:relative;
+height:100vh;
+min-height:100vh;
+background:var(--red);
+overflow:visible;
+display:flex;
+align-items:center;
+padding:0 7vw;
+gap:min(6vw,64px);
+isolation:isolate;
+}
+.hero.grainy{position:relative;}
 
 
-   .typewriter-line {
-     display: inline-block;
-     position: relative;
-     min-height: 1em;
-     overflow: hidden;
-   }
-   .typewriter-line.typing::after {
-     content: "";
-     position: absolute;
-     right: -0.1em;
-     top: 50%;
-     transform: translateY(-50%);
-     height: 1.2em;
-     width: 2px;
-     background: var(--gold);
-     animation: caret-blink 0.8s steps(1) infinite;
-   }
-   .typewriter-line.done::after { animation: none; opacity: 0; }
+.hero-image{
+position:absolute;
+right:0;
+bottom:0;
+display:flex;
+justify-content:flex-end;
+align-items:flex-end;
+z-index:2;
+pointer-events:none;
+filter:saturate(1.02) contrast(1.02);
+}
+.hero-image img{
+width:clamp(420px,60vw,920px);
+max-height:92vh;
+height:auto;
+object-fit:cover;
+border-top-left-radius:28px;
+box-shadow:0 30px 90px rgba(0,0,0,0.55);
+}
+.hero-content{
+position:relative;
+z-index:3;
+flex:0 1 48%;
+max-width:640px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+min-height:100%;
+}
+.hero h1{
+font-size:clamp(2.5rem,5vw,4rem);
+font-weight:900;
+color:var(--gold);
+margin-bottom:1rem;
+letter-spacing:0.05em;
+}
+.hero h2{
+font-size:clamp(1.4rem,3vw,2.2rem);
+font-weight:700;
+color:var(--gold);
+margin-bottom:1.5rem;
+}
+.hero h3{
+font-size:clamp(1rem,2.2vw,1.3rem);
+font-weight:600;
+color:#fff;
+letter-spacing:0.08em;
+margin-bottom:2rem;
+}
+.hero h1, .hero h2{white-space:nowrap;}
 
 
-   .hero-entrance {
-     opacity: 0;
-     transform: translateY(20px);
-     transition: opacity 0.9s ease-out, transform 0.9s ease-out;
-     transition-delay: var(--delay, 0ms);
-   }
-   .hero-entrance.is-visible { opacity: 1; transform: translateY(0); }
+.typewriter-line{
+display:inline-block;
+position:relative;
+min-height:1em;
+overflow:hidden;
+}
+.typewriter-line.typing::after{
+content:"";
+position:absolute;
+right:-0.1em;
+top:50%;
+transform:translateY(-50%);
+height:1.2em;
+width:2px;
+background:var(--gold);
+animation:caret-blink 0.8s steps(1) infinite;
+}
+.typewriter-line.done::after{animation:none;opacity:0;}
 
 
-   .scroll-hint {
-     position: absolute;
-     bottom: 3rem;
-     left: 50%;
-     transform: translate(-50%, 0.5rem);
-     font-size: 0.9rem;
-     letter-spacing: 0.3em;
-     text-transform: uppercase;
-     color: rgba(255,255,255,0.85);
-     opacity: 0;
-     transition: opacity 0.6s ease, transform 0.6s ease;
-     pointer-events: none;
-   }
-   .scroll-hint.visible {
-     opacity: 1;
-     transform: translate(-50%, 0);
-     animation: hint-float 2s ease-in-out infinite;
-   }
+.hero-entrance{
+opacity:0;
+transform:translateY(20px);
+transition:opacity 0.9s ease-out, transform 0.9s ease-out;
+transition-delay:var(--delay,0ms);
+}
+.hero-entrance.is-visible{opacity:1;transform:translateY(0);}
 
 
-   @keyframes caret-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
-   @keyframes hint-float { 0% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -8px); } 100% { transform: translate(-50%, 0); } }
+.scroll-hint{
+position:absolute;
+bottom:3rem;
+left:50%;
+transform:translate(-50%,0.5rem);
+font-size:0.9rem;
+letter-spacing:0.3em;
+text-transform:uppercase;
+color:rgba(255,255,255,0.85);
+opacity:0;
+transition:opacity 0.6s ease, transform 0.6s ease;
+pointer-events:none;
+z-index:4;
+}
+.scroll-hint.visible{
+opacity:1;
+transform:translate(-50%,0);
+animation:hint-float 2s ease-in-out infinite;
+}
 
 
-   /* =========================
-      Sticky Mini Nav
-   ========================== */
-   .mini-nav {
-     position: sticky;
-     top: 0;
-     z-index: 50;
-     backdrop-filter: blur(10px);
-     background: rgba(0,0,0,0.55);
-     border-bottom: 1px solid rgba(255,255,255,0.10);
-   }
-   .mini-nav-inner {
-     display: flex;
-     align-items: center;
-     gap: 1rem;
-     padding: 0.75rem 6vw;
-     overflow-x: auto;
-     scrollbar-width: none;
-   }
-   .mini-nav-inner::-webkit-scrollbar { display: none; }
-   .mini-nav a {
-     color: rgba(255,255,255,0.78);
-     text-decoration: none;
-     font-size: 0.9rem;
-     letter-spacing: 0.12em;
-     white-space: nowrap;
-     padding: 0.35rem 0.65rem;
-     border-radius: 999px;
-     border: 1px solid rgba(255,255,255,0.12);
-     transition: 0.25s ease;
-   }
-   .mini-nav a:hover { color: #fff; border-color: rgba(255,255,255,0.24); }
-   .mini-nav a.active { color: #000; background: var(--gold); border-color: transparent; }
+@keyframes caret-blink{0%,49%{opacity:1;}50%,100%{opacity:0;}}
+@keyframes hint-float{0%{transform:translate(-50%,0);}50%{transform:translate(-50%,-8px);}100%{transform:translate(-50%,0);}}
 
 
-   /* =========================
-      Chapters Base
-   ========================== */
-   .chapter {
-     background: #000;
-     padding: 14vh 8vw;
-     position: relative;
-   }
-   .chapter-inner { max-width: 900px; margin: 0 auto; }
-   .kicker {
-     color: rgba(255,255,255,0.7);
-     letter-spacing: 0.18em;
-     font-size: 0.9rem;
-     margin-bottom: 1.2rem;
-     text-transform: uppercase;
-   }
-   .chapter h2 {
-     font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-     font-weight: 900;
-     letter-spacing: 0.06em;
-     margin-bottom: 1.1rem;
-     color: var(--gold);
-   }
-   .chapter p {
-     font-size: clamp(1.05rem, 1.6vw, 1.2rem);
-     line-height: 1.95;
-     color: var(--text);
-     margin: 0.9rem 0;
-   }
-   .chapter strong { color: rgba(255,255,255,0.98); }
-   .note {
-     color: rgba(255,255,255,0.72);
-     font-size: 0.98rem;
-     line-height: 1.85;
-   }
-   .hr {
-     height: 1px;
-     background: rgba(255,255,255,0.12);
-     margin: 2.2rem 0;
-   }
+/* =========================
+Sticky Mini Nav + Progress
+========================== */
+.mini-nav{
+position:sticky;
+top:0;
+z-index:60;
+backdrop-filter:blur(10px);
+background:rgba(0,0,0,0.55);
+border-bottom:1px solid rgba(255,255,255,0.10);
+}
+.mini-nav-inner{
+display:flex;
+align-items:center;
+gap:1rem;
+padding:0.75rem 6vw 0.65rem;
+overflow-x:auto;
+scrollbar-width:none;
+}
+.mini-nav-inner::-webkit-scrollbar{display:none;}
+.mini-nav a{
+color:rgba(255,255,255,0.78);
+text-decoration:none;
+font-size:0.9rem;
+letter-spacing:0.12em;
+white-space:nowrap;
+padding:0.35rem 0.65rem;
+border-radius:999px;
+border:1px solid rgba(255,255,255,0.12);
+transition:0.25s ease;
+}
+.mini-nav a:hover{color:#fff;border-color:rgba(255,255,255,0.24);}
+.mini-nav a.active{color:#000;background:var(--gold);border-color:transparent;}
 
 
-   /* reveal */
-   .reveal {
-     opacity: 0;
-     transform: translateY(14px);
-     transition: opacity 0.8s ease, transform 0.8s ease;
-   }
-   .reveal.is-visible { opacity: 1; transform: translateY(0); }
+.progressbar{
+height:3px;
+background:rgba(255,255,255,0.10);
+margin:0 6vw 0.65rem;
+border-radius:999px;
+overflow:hidden;
+}
+.progressbar > div{
+height:100%;
+width:0%;
+background:var(--gold);
+border-radius:999px;
+transition:width 0.1s linear;
+}
 
 
-   /* =========================
-      Compare list + tooltip
-   ========================== */
-   .compare {
-     margin: 1.2rem 0 0.2rem;
-     padding: 1rem 1.2rem;
-     border-radius: 18px;
-     background: rgba(255,255,255,0.06);
-     border: 1px solid rgba(255,255,255,0.12);
-   }
-   .compare li { margin: 0.65rem 0; line-height: 1.9; color: var(--text); }
+/* =========================
+Chapters Base
+========================== */
+main{display:block;}
+.chapter{
+background:#000;
+padding:14vh 8vw;
+position:relative;
+isolation:isolate;
+}
+.chapter-inner{max-width:980px;margin:0 auto;}
+.kicker{
+color:rgba(255,255,255,0.7);
+letter-spacing:0.18em;
+font-size:0.9rem;
+margin-bottom:1.2rem;
+text-transform:uppercase;
+}
+.chapter h2{
+font-size:clamp(1.8rem,3.5vw,2.8rem);
+font-weight:900;
+letter-spacing:0.06em;
+margin-bottom:1.1rem;
+color:var(--gold);
+}
+.chapter p{
+font-size:clamp(1.05rem,1.6vw,1.2rem);
+line-height:1.95;
+color:var(--text);
+margin:0.9rem 0;
+}
+.chapter strong{color:rgba(255,255,255,0.98);}
+.note{
+color:rgba(255,255,255,0.72);
+font-size:0.98rem;
+line-height:1.85;
+}
+.hr{
+height:1px;
+background:rgba(255,255,255,0.12);
+margin:2.2rem 0;
+}
 
 
-   .tip {
-     position: relative;
-     border-bottom: 1px dashed rgba(255,255,255,0.55);
-     cursor: help;
-   }
-   .tip:hover::after{
-     content: attr(data-tip);
-     position: absolute;
-     left: 0;
-     top: 1.7em;
-     width: min(320px, 70vw);
-     padding: 10px 12px;
-     background: rgba(0,0,0,.90);
-     color: #fff;
-     border: 1px solid rgba(255,255,255,0.15);
-     border-radius: 14px;
-     font-size: 0.95rem;
-     line-height: 1.5;
-     z-index: 20;
-   }
+.reveal{
+opacity:0;
+transform:translateY(14px);
+transition:opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.is-visible{opacity:1;transform:translateY(0);}
 
 
-   /* =========================
-      Media blocks
-   ========================== */
-   figure.media-block { margin: 1.8rem 0 2.2rem; }
-   .media-block video, .media-block img {
-     width: 100%;
-     border-radius: 18px;
-     display: block;
-     border: 1px solid rgba(255,255,255,0.10);
-     background: rgba(255,255,255,0.03);
-   }
-   .media-block figcaption {
-     margin-top: 0.7rem;
-     color: rgba(255,255,255,0.72);
-     font-size: 0.95rem;
-     line-height: 1.6;
-   }
+/* =========================
+Sticky Compare / Sticky Narrative
+========================== */
+.sticky-section{
+background:var(--red);
+padding:0;
+overflow:hidden;
+position:relative;
+}
+.sticky-section.grainy{position:relative;}
 
 
-   /* =========================
-      Quote
-   ========================== */
-   .quote {
-     border-left: 3px solid rgba(255,232,122,0.85);
-     padding: 0.15rem 0 0.15rem 1rem;
-     margin: 1.2rem 0;
-     color: rgba(255,255,255,0.96);
-   }
-   .quote .who {
-     margin-top: 0.6rem;
-     color: rgba(255,255,255,0.65);
-     font-size: 0.95rem;
-     line-height: 1.6;
-   }
+.sticky-wrap{
+position:relative;
+z-index:1;
+display:grid;
+grid-template-columns: 1.05fr 0.95fr;
+gap:min(5vw,60px);
+padding:12vh 8vw;
+align-items:start;
+}
+.sticky-media{
+position:sticky;
+top:calc(var(--navH) + 8px);
+border-radius:22px;
+overflow:hidden;
+border:1px solid rgba(255,255,255,0.14);
+background:rgba(0,0,0,0.25);
+box-shadow:0 30px 80px rgba(0,0,0,0.45);
+isolation:isolate;
+}
+.sticky-media img, .sticky-media video{
+width:100%;
+height:min(72vh,720px);
+object-fit:cover;
+display:block;
+}
+.sticky-media::after{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(to bottom, rgba(0,0,0,0.14), rgba(0,0,0,0.38));
+pointer-events:none;
+z-index:2;
+}
 
 
-   /* =========================
-      Chapter 03: "dark to light" stage
-   ========================== */
-   .order-stage {
-     border-radius: 24px;
-     padding: 1.4rem 1.4rem 1.2rem;
-     border: 1px solid rgba(255,255,255,0.12);
-     background: rgba(255,255,255,0.03);
-     transition: background 1s ease, border-color 1s ease;
-   }
-   .order-stage.is-lit {
-     background: rgba(255,255,255,0.08);
-     border-color: rgba(255,255,255,0.18);
-   }
+.sticky-text{padding-bottom:20vh;}
+.sticky-text .lead{
+color:rgba(255,255,255,0.88);
+font-size:clamp(1.1rem,1.8vw,1.25rem);
+line-height:1.95;
+margin:0.8rem 0 1.2rem;
+}
+.sticky-step{
+margin:0;
+padding:1.1rem 1.1rem;
+border-radius:18px;
+border:1px solid rgba(255,255,255,0.12);
+background:rgba(0,0,0,0.18);
+transition:background 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
+transform:translateY(0);
+}
+.sticky-step + .sticky-step{margin-top:1rem;}
+.sticky-step .label{
+display:block;
+letter-spacing:0.18em;
+text-transform:uppercase;
+font-size:0.82rem;
+color:rgba(255,255,255,0.70);
+margin-bottom:0.35rem;
+}
+.sticky-step.is-active{
+background:rgba(0,0,0,0.34);
+border-color:rgba(255,255,255,0.20);
+transform:translateY(-2px);
+}
+.sticky-step.is-active .label{color:rgba(255,232,122,0.85);}
+.sticky-step.is-active .text{color:rgba(255,255,255,0.98);}
+.sticky-step .text{
+color:rgba(255,255,255,0.86);
+font-size:clamp(1.05rem,1.7vw,1.2rem);
+line-height:1.95;
+}
 
 
-   /* =========================
-      Chapter 05｜Elements Grid Cards + Modal
-   ========================== */
-   .elements-grid {
-     display: grid;
-     grid-template-columns: repeat(3, 1fr);
-     gap: 2rem;
-     margin-top: 3rem;
-   }
+.tip{
+position:relative;
+border-bottom:1px dashed rgba(255,255,255,0.55);
+cursor:help;
+}
+.tip:hover::after{
+content:attr(data-tip);
+position:absolute;
+left:0;
+top:1.7em;
+width:min(320px,70vw);
+padding:10px 12px;
+background:rgba(0,0,0,.90);
+color:#fff;
+border:1px solid rgba(255,255,255,0.15);
+border-radius:14px;
+font-size:0.95rem;
+line-height:1.5;
+z-index:20;
+}
 
 
-   .element-card {
-     position: relative;
-     background: var(--card);
-     border: 1px solid var(--card-border);
-     border-radius: 22px;
-     padding: 1.6rem 1.6rem 1.8rem;
-     transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
-     cursor: pointer;
-     outline: none;
-   }
-   .element-card:hover {
-     transform: translateY(-6px);
-     box-shadow: 0 20px 40px rgba(0,0,0,0.45);
-     border-color: rgba(255,255,255,0.22);
-   }
-   .element-card:focus-visible {
-     box-shadow: 0 0 0 3px rgba(255,232,122,0.45);
-   }
-   .element-card h3 {
-     font-size: 1.35rem;
-     font-weight: 900;
-     letter-spacing: 0.12em;
-     margin-bottom: 0.55rem;
-     color: var(--gold);
-   }
-   .element-card .tagline {
-     font-size: 0.92rem;
-     letter-spacing: 0.22em;
-     color: rgba(255,255,255,0.62);
-     margin-bottom: 1rem;
-     text-transform: uppercase;
-   }
-   .element-card p { margin: 0; }
+/* =========================
+Chapter 03: order stage (scroll-lit)
+========================== */
+.order-stage{
+border-radius:24px;
+padding:1.4rem 1.4rem 1.2rem;
+border:1px solid rgba(255,255,255,0.12);
+background:rgba(0,0,0,0.22);
+transition:background 0.8s ease, border-color 0.8s ease, filter 0.8s ease;
+filter:brightness(0.6) saturate(0.95);
+}
+.order-stage.is-lit{
+background:rgba(0,0,0,0.34);
+border-color:rgba(255,255,255,0.22);
+filter:brightness(1) saturate(1);
+}
+.order-stage p{margin:0.75rem 0;}
 
 
-   .card-cta {
-     display: inline-flex;
-     align-items: center;
-     gap: 0.55rem;
-     margin-top: 1.1rem;
-     font-size: 0.95rem;
-     letter-spacing: 0.12em;
-     color: rgba(255,255,255,0.80);
-     user-select: none;
-   }
-   .card-cta span {
-     width: 28px; height: 28px;
-     border-radius: 999px;
-     display: inline-flex;
-     align-items: center;
-     justify-content: center;
-     border: 1px solid rgba(255,255,255,0.22);
-     color: rgba(255,255,255,0.9);
-   }
+/* =========================
+Horizontal Exhibit (Chapter 04)
+========================== */
+.hscroll{
+padding:0;
+background:var(--red);
+position:relative;
+overflow:hidden;
+}
+.hscroll.grainy{position:relative;}
 
 
-   @media (max-width: 900px) {
-     .elements-grid { grid-template-columns: 1fr; gap: 1.6rem; }
-   }
+.hscroll-head{
+position:relative;
+z-index:2;
+padding:12vh 8vw 4vh;
+max-width:980px;
+margin:0 auto;
+}
+.hscroll-head .note{color:rgba(255,255,255,0.74);}
+.hscroll-pin{
+position:sticky;
+top:var(--navH);
+height:calc(100vh - var(--navH));
+overflow:hidden;
+z-index:2;
+border-top:1px solid rgba(255,255,255,0.10);
+border-bottom:1px solid rgba(255,255,255,0.10);
+background:rgba(0,0,0,0.12);
+}
+.hscroll-track{
+height:100%;
+display:flex;
+width:600vw;
+transform:translateX(0px);
+will-change:transform;
+}
+.panel{
+width:100vw;
+height:100%;
+padding:8vh 8vw;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:min(5vw,60px);
+align-items:center;
+}
+.panel .panel-media{
+border-radius:22px;
+overflow:hidden;
+border:1px solid rgba(255,255,255,0.14);
+background:rgba(0,0,0,0.25);
+box-shadow:0 30px 80px rgba(0,0,0,0.45);
+position:relative;
+isolation:isolate;
+}
+.panel .panel-media img,
+.panel .panel-media video{
+width:100%;
+height:min(60vh,620px);
+object-fit:cover;
+display:block;
+background:#000;
+}
+.panel .panel-media::after{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(to bottom, rgba(0,0,0,0.12), rgba(0,0,0,0.35));
+pointer-events:none;
+z-index:2;
+}
+.panel h3{
+font-size:clamp(1.8rem,3vw,2.4rem);
+font-weight:900;
+letter-spacing:0.12em;
+color:var(--gold);
+margin-bottom:0.55rem;
+}
+.panel .tagline{
+font-size:0.92rem;
+letter-spacing:0.22em;
+color:rgba(255,255,255,0.66);
+margin-bottom:1.0rem;
+text-transform:uppercase;
+}
+.panel .desc{
+color:rgba(255,255,255,0.90);
+font-size:clamp(1.05rem,1.6vw,1.2rem);
+line-height:1.95;
+margin:0.6rem 0 1.1rem;
+}
+.panel .cta{
+display:inline-flex;
+align-items:center;
+gap:0.55rem;
+font-size:0.95rem;
+letter-spacing:0.12em;
+color:rgba(255,255,255,0.88);
+user-select:none;
+cursor:pointer;
+border:1px solid rgba(255,255,255,0.20);
+background:rgba(0,0,0,0.16);
+padding:0.55rem 0.85rem;
+border-radius:999px;
+transition:0.25s ease;
+}
+.panel .cta:hover{
+border-color:rgba(255,255,255,0.32);
+background:rgba(0,0,0,0.26);
+}
+.hscroll-spacer{
+height:520vh;
+background:var(--red);
+position:relative;
+z-index:1;
+}
 
 
-   /* Modal */
-   .modal-backdrop {
-     position: fixed;
-     inset: 0;
-     background: rgba(0,0,0,0.72);
-     z-index: 100;
-     display: none;
-     align-items: center;
-     justify-content: center;
-     padding: 6vh 6vw;
-   }
-   .modal-backdrop.open { display: flex; }
+/* =========================
+Scrolled Video (Chapter 05)
+========================== */
+.sv-wrap{
+display:grid;
+grid-template-columns: 1.05fr 0.95fr;
+gap:min(5vw,60px);
+align-items:start;
+margin-top:2.0rem;
+}
+.sv-video{
+position:sticky;
+top:calc(var(--navH) + 8px);
+border-radius:22px;
+overflow:hidden;
+border:1px solid rgba(255,255,255,0.12);
+background:rgba(255,255,255,0.03);
+box-shadow:0 30px 80px rgba(0,0,0,0.45);
+}
+.sv-video video{
+width:100%;
+height:min(72vh,720px);
+object-fit:cover;
+display:block;
+background:#000;
+}
+.sv-lines{padding-bottom:30vh;}
+.sv-line{
+border-radius:18px;
+border:1px solid rgba(255,255,255,0.10);
+background:rgba(255,255,255,0.04);
+padding:1.1rem 1.1rem;
+margin:0 0 1rem;
+transition:background 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
+}
+.sv-line .who{
+margin-top:0.55rem;
+color:rgba(255,255,255,0.65);
+font-size:0.95rem;
+letter-spacing:0.08em;
+}
+.sv-line.is-active{
+background:rgba(255,255,255,0.08);
+border-color:rgba(255,255,255,0.18);
+transform:translateY(-2px);
+}
+.sv-line.is-active .quoteText{color:rgba(255,255,255,0.98);}
+.sv-line .quoteText{
+color:rgba(255,255,255,0.84);
+font-size:clamp(1.05rem,1.6vw,1.2rem);
+line-height:1.95;
+}
 
 
-   .modal {
-     width: min(960px, 100%);
-     max-height: 86vh;
-     overflow: auto;
-     background: rgba(10,10,10,0.96);
-     border: 1px solid rgba(255,255,255,0.16);
-     border-radius: 24px;
-     padding: 1.4rem 1.4rem 1.2rem;
-     box-shadow: 0 30px 80px rgba(0,0,0,0.6);
-   }
-   .modal-header {
-     display: flex;
-     align-items: flex-start;
-     justify-content: space-between;
-     gap: 1rem;
-     margin-bottom: 0.8rem;
-   }
-   .modal-title {
-     font-size: 1.6rem;
-     font-weight: 900;
-     letter-spacing: 0.10em;
-     color: var(--gold);
-   }
-   .modal-close {
-     appearance: none;
-     border: 1px solid rgba(255,255,255,0.20);
-     background: rgba(255,255,255,0.06);
-     color: rgba(255,255,255,0.92);
-     border-radius: 999px;
-     padding: 0.55rem 0.85rem;
-     cursor: pointer;
-     font-size: 0.95rem;
-     letter-spacing: 0.12em;
-   }
-   .modal-close:hover { border-color: rgba(255,255,255,0.28); }
+/* =========================
+Modal
+========================== */
+.modal-backdrop{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.72);
+z-index:120;
+display:none;
+align-items:center;
+justify-content:center;
+padding:6vh 6vw;
+}
+.modal-backdrop.open{display:flex;}
+.modal{
+width:min(980px,100%);
+max-height:86vh;
+overflow:auto;
+background:rgba(10,10,10,0.96);
+border:1px solid rgba(255,255,255,0.16);
+border-radius:24px;
+padding:1.4rem 1.4rem 1.2rem;
+box-shadow:0 30px 80px rgba(0,0,0,0.6);
+}
+.modal-header{
+display:flex;
+align-items:flex-start;
+justify-content:space-between;
+gap:1rem;
+margin-bottom:0.8rem;
+}
+.modal-title{
+font-size:1.6rem;
+font-weight:900;
+letter-spacing:0.10em;
+color:var(--gold);
+}
+.modal-close{
+appearance:none;
+border:1px solid rgba(255,255,255,0.20);
+background:rgba(255,255,255,0.06);
+color:rgba(255,255,255,0.92);
+border-radius:999px;
+padding:0.55rem 0.85rem;
+cursor:pointer;
+font-size:0.95rem;
+letter-spacing:0.12em;
+}
+.modal-close:hover{border-color:rgba(255,255,255,0.28);}
+.modal-body p{margin:0.8rem 0;}
+.modal-media{margin-top:1rem;}
+.modal-media video, .modal-media img{
+width:100%;
+border-radius:18px;
+display:block;
+border:1px solid rgba(255,255,255,0.10);
+background:rgba(255,255,255,0.03);
+}
+.modal-caption{
+margin-top:0.7rem;
+color:rgba(255,255,255,0.72);
+font-size:0.95rem;
+line-height:1.6;
+}
 
 
-   .modal-body p { margin: 0.8rem 0; }
-   .modal-media {
-     margin-top: 1rem;
-   }
-   .modal-media video, .modal-media img {
-     width: 100%;
-     border-radius: 18px;
-     display: block;
-     border: 1px solid rgba(255,255,255,0.10);
-     background: rgba(255,255,255,0.03);
-   }
-   .modal-caption {
-     margin-top: 0.7rem;
-     color: rgba(255,255,255,0.72);
-     font-size: 0.95rem;
-     line-height: 1.6;
-   }
+@media (prefers-reduced-motion: reduce){
+html{scroll-behavior:auto !important;}
+*{scroll-behavior:auto !important;}
+.hero-entrance,.reveal{transition:none !important;transform:none !important;}
+.scroll-hint{animation:none !important;}
+.typewriter-line.typing::after{animation:none !important;}
+.fog-layer{animation:none !important;}
+.fog-layer::before,.fog-layer::after{animation:none !important;}
+}
 
 
-   /* =========================
-      Reduced Motion
-   ========================== */
-   @media (prefers-reduced-motion: reduce) {
-     * { scroll-behavior: auto !important; }
-     .hero-entrance, .reveal { transition: none !important; transform: none !important; }
-     .scroll-hint { animation: none !important; }
-     .typewriter-line.typing::after { animation: none !important; }
-   }
-
-
-   /* =========================
-      Mobile Hero tweaks
-   ========================== */
-   @media (max-width: 768px) {
-     .hero { padding: 4vh 8vw; }
-     .hero-content { flex: 1 1 auto; min-height: auto; }
-     .hero-image { right: -5vw; bottom: 1rem; opacity: 0.6; }
-     .hero-image img { width: min(78vw, 420px); max-height: 60vh; }
-     .hero h1, .hero h2 { white-space: normal; }
-     .scroll-hint { letter-spacing: 0.2em; bottom: 2rem; }
-   }
- </style>
+@media (max-width: 900px){
+:root{ --navH: 86px; }
+.sticky-wrap, .sv-wrap{grid-template-columns:1fr;}
+.sticky-media, .sv-video{top:calc(var(--navH) + 8px);}
+.sticky-media img, .sticky-media video, .sv-video video{height:56vh;}
+.panel{
+grid-template-columns:1fr;
+align-content:start;
+padding:6vh 8vw;
+}
+.panel .panel-media img, .panel .panel-media video{height:40vh;}
+}
+@media (max-width: 768px){
+.hero{padding:4vh 8vw;}
+.hero-content{flex:1 1 auto;min-height:auto;}
+.hero-image{right:-5vw;bottom:1rem;opacity:0.62;}
+.hero-image img{width:min(78vw,420px);max-height:60vh;}
+.hero h1,.hero h2{white-space:normal;}
+.scroll-hint{letter-spacing:0.2em;bottom:2rem;}
+.mini-nav-inner{padding:0.65rem 6vw 0.55rem;}
+.progressbar{margin:0 6vw 0.55rem;}
+}
+</style>
 </head>
 
 
 <body>
+<a class="skip-link" href="#main">跳到正文</a>
+<div class="fog-layer" aria-hidden="true"></div>
+
+
+<section class="landing-video" aria-label="開場舞台影片">
+<video
+id="landing-video"
+src="video/stage.mp4"
+autoplay
+muted
+loop
+playsinline
+preload="auto"
+></video>
+</section>
+
+
+<section class="buffer grainy" aria-hidden="true"></section>
+
+
+<section class="hero grainy" aria-label="專題標題">
+<div class="hero-content">
+<h1 id="hero-title" class="typewriter-line hero-entrance" data-text="唱給不在場的人" style="--delay:0ms;"></h1>
+<h2 id="hero-subtitle" class="typewriter-line hero-entrance" data-text="紅包歌手的世代誤解與生存現場" style="--delay:150ms;"></h2>
+<h3 id="hero-author" class="hero-author hero-entrance" style="--delay:300ms;">梁朝勛、彭賀琳、莊馨予</h3>
+</div>
+<div class="hero-image hero-entrance" style="--delay:0ms;">
+<img
+src="photo/yang-yaqiao.jpg"
+alt="紅包場歌手楊雅喬"
+decoding="async"
+loading="eager"
+fetchpriority="high"
+/>
+</div>
+<div id="scroll-hint" class="scroll-hint">SCROLL ↓</div>
+</section>
+
 
+<nav class="mini-nav" aria-label="章節導覽">
+<div class="mini-nav-inner" role="navigation">
+<a href="#chapter-hook" data-section="chapter-hook">01 HOOK</a>
+<a href="#chapter-redpacket" data-section="chapter-redpacket">02 紅包</a>
+<a href="#chapter-order" data-section="chapter-order">03 秩序</a>
+<a href="#chapter-elements" data-section="chapter-elements">04 六大元素</a>
+<a href="#chapter-interviews" data-section="chapter-interviews">05 訪談</a>
+</div>
+<div class="progressbar" aria-hidden="true"><div id="progress-fill"></div></div>
+</nav>
 
- <!-- Section 1：滿版影片 -->
- <section class="landing-video" aria-label="開場舞台影片">
-   <video
-     id="landing-video"
-     src="assets/stage.mp4"
-     autoplay
-     muted
-     loop
-     playsinline
-     preload="auto">
-   </video>
- </section>
 
+<main id="main">
+<section class="chapter sticky-section grainy" id="chapter-hook" aria-label="章節一：紅包場與刻板印象">
+<div class="sticky-wrap">
+<div class="sticky-media" aria-hidden="true">
+<img
+id="compare-media"
+src="photo/DSC04754.jpg"
+alt="紅包場內景"
+loading="eager"
+decoding="async"
+/>
+</div>
 
- <!-- Section 2：過渡緩衝區 -->
- <section class="buffer" aria-hidden="true"></section>
 
+<div class="sticky-text">
+<div class="kicker reveal">CHAPTER 01</div>
+<h2 class="reveal">紅包場，和你想的不一樣</h2>
+<p class="lead reveal">把它誤會成「某種刺激消費」很容易；但真正的樣貌，往往只在你坐下來之後，才慢慢浮現。</p>
 
- <!-- Section 3：Hero -->
- <section class="hero" aria-label="專題標題">
-   <div class="hero-content">
-     <h1 id="hero-title" class="typewriter-line hero-entrance" data-text="唱給不在場的人" style="--delay: 0ms;"></h1>
-     <h2 id="hero-subtitle" class="typewriter-line hero-entrance" data-text="紅包歌手的世代誤解與生存現場" style="--delay: 150ms;"></h2>
-     <h3 id="hero-author" class="hero-author hero-entrance" style="--delay: 300ms;">梁朝勛、彭賀琳、莊馨予</h3>
-   </div>
 
+<div class="sticky-step reveal js-sticky-step is-active" data-media="photo/DSC04754.jpg">
+<span class="label">COMPARE 01</span>
+<div class="text">它常被拿來和 <span class="tip" data-tip="紅包場不以「清涼」或「火辣」為賣點">牛肉場</span>混為一談，但紅包場的核心是「聽歌」：觀眾把注意力給表演，歌手把完整的演出給舞台。</div>
+</div>
 
-   <div class="hero-image hero-entrance" style="--delay: 0ms;">
-     <img src="assets/hero_cover.png" alt="紅包場歌手英姿">
-   </div>
 
+<div class="sticky-step reveal js-sticky-step" data-media="photo/singer.jpg">
+<span class="label">COMPARE 02</span>
+<div class="text">它也不等同 <span class="tip" data-tip="紅包場是老少宜的場所">舞廳</span>。紅包場裡，主角始終在台上，秩序與默契反而更像一套「固定座位的劇場」。</div>
+</div>
 
-   <div id="scroll-hint" class="scroll-hint">SCROLL ↓</div>
- </section>
 
+<div class="sticky-step reveal js-sticky-step" data-media="photo/DSC04900.jpg">
+<span class="label">COMPARE 03</span>
+<div class="text">你可以把它和 <span class="tip" data-tip="紅包場觀眾不會上台唱歌">卡拉OK</span>區分開來：紅包場觀眾多半不登台，點歌、聽歌、聊天，維持的是「台上台下」的距離。</div>
+</div>
 
- <!-- Sticky mini nav (starts after hero) -->
- <nav class="mini-nav" aria-label="章節導覽">
-   <div class="mini-nav-inner">
-     <a href="#chapter-hook" data-section="chapter-hook">01 HOOK</a>
-     <a href="#chapter-redpacket" data-section="chapter-redpacket">02 紅包</a>
-     <a href="#chapter-order" data-section="chapter-order">03 秩序</a>
-     <a href="#chapter-elements" data-section="chapter-elements">04 六大元素</a>
-     <a href="#chapter-interviews" data-section="chapter-interviews">05 訪談</a>
-   </div>
- </nav>
 
+<div class="sticky-step reveal js-sticky-step" data-media="photo/DSC09319.jpg">
+<span class="label">COMPARE 04</span>
+<div class="text">它也不同於 <span class="tip" data-tip="紅包場歌手需要穿著「禮服」上台">Livehouse</span>。紅包場的舞台更像「秀場」：禮服、燈光、稱號、流程，構成一種職業規範。</div>
+</div>
 
- <!-- =========================
-      Chapter 01｜Hook
- ========================== -->
- <section class="chapter" id="chapter-hook" aria-label="章節一：紅包場與刻板印象">
-   <div class="chapter-inner">
-     <div class="kicker reveal">CHAPTER 01</div>
-     <h2 class="reveal">紅包場，和你想的不一樣</h2>
 
+<div class="sticky-step reveal js-sticky-step" data-media="photo/DSC09375.jpg">
+<span class="label">COMPARE 05</span>
+<div class="text">更別說 <span class="tip" data-tip="紅包場的觀眾是特地來聽歌的">流水席</span>：紅包場的觀眾是為了歌而來，餐飲只是把時間留在現場的方式。</div>
+</div>
+</div>
+</div>
+</section>
 
-     <p class="reveal">紅包場經常被誤會。但它真正的樣貌，往往只在你坐下來之後，才慢慢顯現。</p>
 
+<section class="chapter sticky-section grainy" id="chapter-redpacket" aria-label="章節二：紅包的意義">
+<div class="sticky-wrap">
+<div class="sticky-media">
+<video id="redpacket-loop" muted loop playsinline preload="metadata" poster="photo/DSC09375.jpg">
+<source src="video/c0621.mp4" type="video/mp4" />
+</video>
+</div>
 
-     <ul class="compare reveal">
-       <li>不同於 <span class="tip" data-tip="依你提供的描述：紅包場不以清涼或火辣為賣點">牛肉場</span>，紅包場不以「清涼」或「火辣」為賣點；</li>
-       <li>不同於 <span class="tip" data-tip="依你提供的描述：紅包場是老少皆宜的場所">舞廳</span>，紅包場是老少皆宜的場所；</li>
-       <li>不同於 <span class="tip" data-tip="依你提供的描述：觀眾不會上台唱歌，而是聽歌、點歌、聊天">卡拉OK</span>，紅包場觀眾不會上台唱歌；</li>
-       <li>不同於 <span class="tip" data-tip="依你提供的描述：歌手需穿著禮服登台，舞台規範更像『秀場』節奏">Livehouse</span>，紅包場歌手需要穿著「禮服」上台；</li>
-       <li>不同於 <span class="tip" data-tip="依你提供的描述：觀眾是特地來聽歌的">流水席</span>，紅包場的觀眾是特地來聽歌的。</li>
-     </ul>
 
+<div class="sticky-text">
+<div class="kicker reveal">CHAPTER 02</div>
+<h2 class="reveal">紅包的意義：支持表演，而不是購買身體</h2>
 
-     <div class="hr reveal"></div>
 
+<p class="lead reveal">把「紅包」理解成交易，很快；但在現場，它更像一種回應：喜歡、尊重、面子、人情，最後都落在一個小小的信封裡。</p>
 
-     <p class="note reveal">註：以上比較用語完全依你提供的文本整理；若你們後續要加入更嚴謹的歷史脈絡與定義，建議在網頁另設「背景註解」並附來源。</p>
-   </div>
- </section>
 
+<div class="sticky-step reveal js-sticky-step-2 is-active" data-media="photo/DSC04754.jpg" data-kind="img">
+<span class="label">POINT 01</span>
+<div class="text">紅包場是歌手、表演者與觀眾最直接互動的地方。觀眾用紅包表達喜歡，歌手用表演回應掌聲。</div>
+</div>
 
- <!-- =========================
-      Chapter 02｜紅包：不是交易，是關係
- ========================== -->
- <section class="chapter" id="chapter-redpacket" aria-label="章節二：紅包的意義">
-   <div class="chapter-inner">
-     <div class="kicker reveal">CHAPTER 02</div>
-     <h2 class="reveal">紅包的意義：支持表演，而不是購買身體</h2>
 
+<div class="sticky-step reveal js-sticky-step-2" data-media="photo/redpacket.jpg" data-kind="img">
+<span class="label">POINT 02</span>
+<div class="text">紅包不是對身體的購買，而是對「表演」的支持；觀眾來聽歌、點歌、聊天，建立的是長時間的人情關係。</div>
+</div>
 
-     <p class="reveal">紅包場是歌手、表演者與觀眾最直接互動的地方。觀眾用紅包表達喜歡，歌手用表演回應掌聲。一首歌、一個眼神、一個紅包，構成那個年代最真誠的交流。</p>
 
+<div class="sticky-step reveal js-sticky-step-2" data-media="photo/DSC09375.jpg" data-kind="img">
+<span class="label">POINT 03</span>
+<div class="text">紅包場的文化內涵，來自「茶單」制度：歌星承擔賓客的飲食消費，賓客則包高出消費金額的紅包交給所捧場的歌星。</div>
+</div>
 
-     <p class="reveal">你在資料裡強調：紅包並非對身體的購買，而是對表演的支持；觀眾來聽歌、點歌、聊天，建立的是長時間累積的人情關係，而非一次性的刺激消費。</p>
 
+<div class="sticky-step reveal js-sticky-step-2" data-media="photo/assistant.jpg" data-kind="img">
+<span class="label">POINT 04</span>
+<div class="text">多出來的金額成為鼓勵，也讓「紅包」成為關係的可見形式：不是一次性的刺激消費，而是累積的信任與照顧。</div>
+</div>
+</div>
+</div>
+</section>
 
-     <div class="hr reveal"></div>
 
+<section class="chapter" id="chapter-order" aria-label="章節三：仍在運作的秩序">
+<div class="chapter-inner">
+<div class="kicker reveal">CHAPTER 03</div>
+<h2 class="reveal">一個仍在運作的秩序</h2>
 
-     <p class="reveal">你也提到場內常見的運作：桌上茶水、水果盤與餐飲以「茶單制」進行；歌星承擔所屬桌位的飲食消費，賓客再以高於消費金額的紅包交給所捧場的歌星，多出的金額成為鼓勵——這也被你用來說明「紅包場」名稱的由來。</p>
-   </div>
- </section>
 
+<div class="order-stage reveal" id="order-stage">
+<p class="js-order-line">坐進觀眾席後，紅包場的日常很快展開。茶水與水果盤被送上桌，「小妹」在場內來回穿梭，確認每一桌的狀態。</p>
+<p class="js-order-line">對第一次進場的人來說，這套秩序未必容易理解：座位距離近，舞台與觀眾幾乎沒有明確分界；任何多餘的動作，都顯得突兀。</p>
+<p class="js-order-line">這種不自在，並非來自危險或衝突，而是來自——<strong>不知道自己該如何被放進這個空間</strong>。</p>
+</div>
 
- <!-- =========================
-      Chapter 03｜仍在運作的秩序（暗到亮）
- ========================== -->
- <section class="chapter" id="chapter-order" aria-label="章節三：仍在運作的秩序">
-   <div class="chapter-inner">
-     <div class="kicker reveal">CHAPTER 03</div>
-     <h2 class="reveal">一個仍在運作的秩序</h2>
-
-
-     <div class="order-stage reveal" id="order-stage">
-       <p>坐進觀眾席後，紅包場的日常很快展開。茶水與水果盤被送上桌，「小妹」在場內來回穿梭，確認每一桌的狀態。</p>
-       <p>對第一次進場的人來說，這套秩序未必容易理解：座位距離近，舞台與觀眾幾乎沒有明確分界；任何多餘的動作，都顯得突兀。</p>
-       <p>這種不自在，並非來自危險或衝突，而是來自——<strong>不知道自己該如何被放進這個空間</strong>。</p>
-     </div>
-
-
-     <div class="hr reveal"></div>
-
-
-     <p class="reveal">在現場，新面孔很少被直接問「覺得好不好」。更常出現的，是另一個問題：<strong>「怎麼會來這裡？」</strong></p>
-     <p class="note reveal">依你提供的觀察：對長年出入紅包場的人而言，年輕人的出現往往被理解成「帶著目的」（作業、報導、拍攝、找題材）。紅包場因此在面對新世代時，同時帶著開放與防備。</p>
-   </div>
- </section>
-
-
- <!-- =========================
-      Chapter 04｜六大元素卡片 grid（點卡片→展開）
- ========================== -->
- <section class="chapter" id="chapter-elements" aria-label="章節四：六大元素">
-   <div class="chapter-inner">
-     <div class="kicker reveal">CHAPTER 04</div>
-     <h2 class="reveal">撐起紅包場的人與物</h2>
-
-
-     <p class="reveal">紅包場不是單一角色構成的舞台。它由歌星、樂團老師、小妹、服裝、餐飲與紅包，一起撐起一個仍在運作的日常系統。</p>
-
-
-     <div class="elements-grid">
-
-
-       <!-- 1｜歌星 -->
-       <article class="element-card reveal" tabindex="0"
-         data-title="歌星"
-         data-subtitle="THE SINGER"
-         data-body="歌星輪番登台，每人約兩至三首歌。跑馬燈穿過個人稱號，禮服盛裝登場；演出期間嚴守在台上，不走到台下。你也提到：在歌廳盛行年代可能一晚連跑多場，紅包場曾捧紅不少電視新星。"
-         data-media-type="video"
-         data-media-src="assets/video/c0662.mp4"
-         data-media-poster="assets/poster/c0662.jpg"
-         data-media-caption="影片片段｜C0662.MP4（建議加：時間碼＋一句話摘要）"
-       >
-         <h3>歌星</h3>
-         <div class="tagline">THE SINGER</div>
-         <p>輪番登台、禮服盛裝。二到三首歌的時間，是一輩子累積的職業身段。</p>
-         <div class="card-cta"><span>+</span> 展開更多</div>
-       </article>
-
-
-       <!-- 2｜樂團老師 -->
-       <article class="element-card reveal" tabindex="0"
-         data-title="樂團老師"
-         data-subtitle="THE BAND"
-         data-body="你描述：樂團老師全天候在舞台後方，熟悉鼓、效果器與新舊歌曲；有時也加入合音，為每場演唱增添層次。通常 1–2 位老師，就能撐起現場音場，讓觀眾像穿梭時空般感受情調。"
-         data-media-type="img"
-         data-media-src="assets/img/band.jpg"
-         data-media-caption="建議素材｜舞台後方、鼓組／效果器／合音的位置（可用照片或插畫示意）"
-       >
-         <h3>樂團老師</h3>
-         <div class="tagline">THE BAND</div>
-         <p>一到兩位老師撐起全場音場。鼓點與合音，讓情緒在年代之間流動。</p>
-         <div class="card-cta"><span>+</span> 展開更多</div>
-       </article>
-
-
-       <!-- 3｜小妹 -->
-       <article class="element-card reveal" tabindex="0"
-         data-title="小妹"
-         data-subtitle="THE CONNECTOR"
-         data-body="你描述：小妹在場內穿梭、擔任服務生角色，包含端茶倒水、引導客人、協助包紅包方式等；也可能成為歌星維繫業績與建立關係的重要搭檔。場內亦有規定與默契，例如禁止搶客，否則容易遭人側目。"
-         data-media-type="img"
-         data-media-src="assets/img/assistant.jpg"
-         data-media-caption="建議素材｜服務動線（送茶／引位／紅包交付）或場內走動的背影"
-       >
-         <h3>小妹</h3>
-         <div class="tagline">THE CONNECTOR</div>
-         <p>穿梭場內、送茶引位、協助包紅包。她是秩序的流動節點，也是關係的媒介。</p>
-         <div class="card-cta"><span>+</span> 展開更多</div>
-       </article>
-
-
-       <!-- 4｜服裝 -->
-       <article class="element-card reveal" tabindex="0"
-         data-title="服裝"
-         data-subtitle="THE COSTUME"
-         data-body="你描述：歌星登場前會到舞台旁的服裝間換衣。每件禮服與表演服裝背後都有特製、手工製作或早期訂製的故事；顏色與配件也與個人風格相關（如黑色沉穩、亮綠活潑，帽子、首飾搭配各有學問），呈現長期的用心累積。"
-         data-media-type="video"
-         data-media-src="assets/video/c0620.mp4"
-         data-media-poster="assets/poster/c0620.jpg"
-         data-media-caption="影片片段｜C0620.MP4（你提供：喜歡自己做的衣服、逛街看到料子就會有想法）"
-       >
-         <h3>服裝</h3>
-         <div class="tagline">THE COSTUME</div>
-         <p>手作或訂製的禮服，是歌唱之外的另一種創作：把年代、性格與舞台放在身上。</p>
-         <div class="card-cta"><span>+</span> 展開更多</div>
-       </article>
-
-
-       <!-- 5｜餐飲 -->
-       <article class="element-card reveal" tabindex="0"
-         data-title="餐飲"
-         data-subtitle="THE TABLE"
-         data-body="你描述：桌面常見瓜子、水果盤，茶品如普洱、烏龍、清茶；也可能因經營策略提供熱炒、啤酒。歌星有時會推薦或贈送炒花生、果醬等增進情感。點餐與結帳以『茶單制』進行，多在舞台開放空間用餐，包廂較少。"
-         data-media-type="img"
-         data-media-src="assets/img/food.jpg"
-         data-media-caption="建議素材｜水果盤／茶壺／瓜子／茶單（可拍近景當質感圖）"
-       >
-         <h3>餐飲</h3>
-         <div class="tagline">THE TABLE</div>
-         <p>茶水、水果盤、熱炒與啤酒。在茶單制裡，餐飲也是人情往來的日常語言。</p>
-         <div class="card-cta"><span>+</span> 展開更多</div>
-       </article>
-
-
-       <!-- 6｜紅包 -->
-       <article class="element-card reveal" tabindex="0"
-         data-title="紅包"
-         data-subtitle="THE RED ENVELOPE"
-         data-body="你描述：紅包場最經典的畫面，是歌星演唱時紅包從台下交付到歌星手裡。金額可能 100、300、1000 元皆隨心隨緣；過去若要『做面子』會露出大鈔，甚至出現爭相包紅包的景象。你也指出：紅包是對表演的支持、是長期關係的證明。"
-         data-media-type="video"
-         data-media-src="assets/video/c0621.mp4"
-         data-media-poster="assets/poster/c0621.jpg"
-         data-media-caption="影片片段｜C0621.MP4（你提供：盼歌廳永續經營、仍要來作客／發紅包）"
-       >
-         <h3>紅包</h3>
-         <div class="tagline">THE RED ENVELOPE</div>
-         <p>紅包不是交易，而是支持與面子、人情、記憶的可見形式。</p>
-         <div class="card-cta"><span>+</span> 展開更多</div>
-       </article>
-
-
-     </div>
-
-
-     <div class="hr reveal"></div>
-     <p class="note reveal">提示：你把每支 MP4 的「時間碼＋一句話摘要」補上來，評審會把你們的影音視為證據，而不是裝飾。</p>
-   </div>
- </section>
-
-
- <!-- =========================
-      Chapter 05｜訪談精華
- ========================== -->
- <section class="chapter" id="chapter-interviews" aria-label="章節五：訪談精華">
-   <div class="chapter-inner">
-     <div class="kicker reveal">CHAPTER 05</div>
-     <h2 class="reveal">他們怎麼說：台上台下、衣服、與生存空間</h2>
-
-
-     <div class="quote reveal">
-       「臺上臺下，我是不一樣的人。」
-       <div class="who">— 楊雅喬（你提供的訪談片段摘要）</div>
-     </div>
-
-
-     <figure class="media-block reveal">
-       <video controls preload="metadata" playsinline poster="assets/poster/c0662.jpg">
-         <source src="assets/video/c0662.mp4" type="video/mp4" />
-         你的瀏覽器不支援影片播放。
-       </video>
-       <figcaption>影片片段｜C0662.MP4（建議加：00:00–00:18 一句話摘要）</figcaption>
-     </figure>
-
-
-     <div class="quote reveal">
-       「這些對我們來講是很普通的事情，但對你們來說很感動。」
-       <div class="who">— 翟曼芳</div>
-     </div>
-
-
-     <figure class="media-block reveal">
-       <video controls preload="metadata" playsinline poster="assets/poster/c0626.jpg">
-         <source src="assets/video/c0626.mp4" type="video/mp4" />
-       </video>
-       <figcaption>影片片段｜C0626.MP4</figcaption>
-     </figure>
-
-
-     <div class="quote reveal">
-       「歌廳假如沒有了，其他地方也沒有我們生存的空間了……」
-       <div class="who">— 翟曼芳（你提供的逐字內容重點）</div>
-     </div>
-
-
-     <figure class="media-block reveal">
-       <video controls preload="metadata" playsinline poster="assets/poster/c0621.jpg">
-         <source src="assets/video/c0621.mp4" type="video/mp4" />
-       </video>
-       <figcaption>影片片段｜C0621.MP4</figcaption>
-     </figure>
-
-
-     <div class="hr reveal"></div>
-
-
-     <p class="reveal note">如果你願意，我也可以把「每支影片對應哪段文字」做成一個可點的時間碼清單（點一下就跳到該段落），會再更像完整的數位敘事專題。</p>
-   </div>
- </section>
-
-
- <!-- Modal container -->
- <div class="modal-backdrop" id="modal-backdrop" aria-hidden="true">
-   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-     <div class="modal-header">
-       <div>
-         <div class="modal-title" id="modal-title">標題</div>
-         <div class="note" id="modal-subtitle" style="margin-top:.35rem;">SUBTITLE</div>
-       </div>
-       <button class="modal-close" id="modal-close" type="button" aria-label="關閉視窗">關閉</button>
-     </div>
-
-
-     <div class="modal-body" id="modal-body"></div>
-
-
-     <div class="modal-media" id="modal-media"></div>
-     <div class="modal-caption" id="modal-caption"></div>
-   </div>
- </div>
-
-
- <script>
-   document.addEventListener("DOMContentLoaded", () => {
-     /* =========================
-        HERO: typewriter + entrance
-     ========================== */
-     const hero = document.querySelector(".hero");
-     const titleEl = document.getElementById("hero-title");
-     const subtitleEl = document.getElementById("hero-subtitle");
-     const scrollHint = document.getElementById("scroll-hint");
-     const landingVideo = document.getElementById("landing-video");
-     const typeTargets = [titleEl, subtitleEl];
-     const heroEntrances = document.querySelectorAll(".hero-entrance");
-     let hasRun = false;
-     let audioActivated = false;
-
-
-     typeTargets.forEach((el) => {
-       const text = el.dataset.text || el.textContent.trim();
-       el.dataset.text = text;
-       el.textContent = "";
-     });
-
-
-     const typeText = (el, speed = 90) =>
-       new Promise((resolve) => {
-         const text = el.dataset.text || "";
-         let index = 0;
-         el.classList.add("typing");
-         const tick = () => {
-           el.textContent += text.charAt(index);
-           index += 1;
-           if (index < text.length) setTimeout(tick, speed);
-           else {
-             el.classList.remove("typing");
-             el.classList.add("done");
-             resolve();
-           }
-         };
-         tick();
-       });
-
-
-     const startSequence = async () => {
-       if (hasRun) return;
-       hasRun = true;
-       heroEntrances.forEach((item) => item.classList.add("is-visible"));
-       for (const el of typeTargets) await typeText(el);
-       requestAnimationFrame(() => setTimeout(() => scrollHint.classList.add("visible"), 400));
-     };
-
-
-     if ("IntersectionObserver" in window) {
-       const observer = new IntersectionObserver((entries) => {
-         entries.forEach((entry) => {
-           if (entry.isIntersecting) {
-             startSequence();
-             observer.disconnect();
-           }
-         });
-       }, { threshold: 0.35 });
-       observer.observe(hero);
-     } else {
-       startSequence();
-     }
-
-
-     /* =========================
-        Landing video: ensure play (keep muted unless user acts)
-        NOTE: You currently unmute on user action. Keep this as-is.
-     ========================== */
-     if (landingVideo) {
-       const userEvents = ["click", "touchstart"];
-       const attemptPlay = () => {
-         const playPromise = landingVideo.play();
-         if (playPromise && typeof playPromise.then === "function") playPromise.catch(() => {});
-       };
-       const detachListeners = () => userEvents.forEach((evt) => document.removeEventListener(evt, handleUserAction));
-       const activateAudio = () => {
-         if (audioActivated) return;
-         audioActivated = true;
-         landingVideo.muted = false;
-         attemptPlay();
-       };
-       const handleUserAction = () => {
-         activateAudio();
-         detachListeners();
-       };
-       attemptPlay();
-       userEvents.forEach((evt) => document.addEventListener(evt, handleUserAction, { passive: true }));
-     }
-
-
-     /* =========================
-        Reveal on scroll
-     ========================== */
-     const revealEls = document.querySelectorAll(".reveal");
-     const revealObs = ("IntersectionObserver" in window) ? new IntersectionObserver((entries) => {
-       entries.forEach((e) => {
-         if (e.isIntersecting) e.target.classList.add("is-visible");
-       });
-     }, { threshold: 0.18 }) : null;
-
-
-     revealEls.forEach((el) => {
-       if (revealObs) revealObs.observe(el);
-       else el.classList.add("is-visible");
-     });
-
-
-     /* =========================
-        Chapter 03: dark -> light
-     ========================== */
-     const orderStage = document.getElementById("order-stage");
-     if (orderStage && "IntersectionObserver" in window) {
-       const stageObs = new IntersectionObserver((entries) => {
-         entries.forEach((e) => {
-           if (e.isIntersecting) orderStage.classList.add("is-lit");
-         });
-       }, { threshold: 0.35 });
-       stageObs.observe(orderStage);
-     } else if (orderStage) {
-       orderStage.classList.add("is-lit");
-     }
-
-
-     /* =========================
-        Sticky mini nav active state
-     ========================== */
-     const navLinks = Array.from(document.querySelectorAll(".mini-nav a[data-section]"));
-     const sections = navLinks.map(a => document.getElementById(a.dataset.section)).filter(Boolean);
-
-
-     const setActive = (id) => {
-       navLinks.forEach(a => a.classList.toggle("active", a.dataset.section === id));
-     };
-
-
-     if ("IntersectionObserver" in window) {
-       const secObs = new IntersectionObserver((entries) => {
-         // Choose the most visible one
-         const visible = entries
-           .filter(e => e.isIntersecting)
-           .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
-         if (visible) setActive(visible.target.id);
-       }, { threshold: [0.22, 0.35, 0.5, 0.65] });
-
-
-       sections.forEach(s => secObs.observe(s));
-     }
-
-
-     /* =========================
-        Modal for element cards
-     ========================== */
-     const backdrop = document.getElementById("modal-backdrop");
-     const btnClose = document.getElementById("modal-close");
-     const elTitle = document.getElementById("modal-title");
-     const elSubtitle = document.getElementById("modal-subtitle");
-     const elBody = document.getElementById("modal-body");
-     const elMedia = document.getElementById("modal-media");
-     const elCaption = document.getElementById("modal-caption");
-
-
-     let lastFocus = null;
-
-
-     const openModal = (card) => {
-       lastFocus = document.activeElement;
-
-
-       const title = card.dataset.title || "";
-       const subtitle = card.dataset.subtitle || "";
-       const body = card.dataset.body || "";
-
-
-       const mediaType = card.dataset.mediaType || "";
-       const mediaSrc = card.dataset.mediaSrc || "";
-       const mediaPoster = card.dataset.mediaPoster || "";
-       const mediaCaption = card.dataset.mediaCaption || "";
-
-
-       elTitle.textContent = title;
-       elSubtitle.textContent = subtitle;
-       elBody.innerHTML = `<p>${escapeHtml(body).replace(/\n/g, "<br>")}</p>`;
-
-
-       // Media
-       elMedia.innerHTML = "";
-       elCaption.textContent = mediaCaption;
-
-
-       if (mediaType === "video" && mediaSrc) {
-         const v = document.createElement("video");
-         v.controls = true;
-         v.playsInline = true;
-         v.preload = "metadata";
-         if (mediaPoster) v.poster = mediaPoster;
-
-
-         const s = document.createElement("source");
-         s.src = mediaSrc;
-         s.type = "video/mp4";
-         v.appendChild(s);
-
-
-         elMedia.appendChild(v);
-       } else if (mediaType === "img" && mediaSrc) {
-         const img = document.createElement("img");
-         img.src = mediaSrc;
-         img.alt = `${title} 相關圖片`;
-         img.loading = "lazy";
-         elMedia.appendChild(img);
-       } else {
-         elCaption.textContent = mediaCaption || "";
-       }
-
-
-       backdrop.classList.add("open");
-       backdrop.setAttribute("aria-hidden", "false");
-       btnClose.focus();
-       document.body.style.overflow = "hidden";
-     };
-
-
-     const closeModal = () => {
-       backdrop.classList.remove("open");
-       backdrop.setAttribute("aria-hidden", "true");
-       elMedia.innerHTML = "";
-       elBody.innerHTML = "";
-       elCaption.textContent = "";
-       document.body.style.overflow = "";
-       if (lastFocus) lastFocus.focus();
-     };
-
-
-     const escapeHtml = (str) => {
-       return String(str)
-         .replaceAll("&", "&amp;")
-         .replaceAll("<", "&lt;")
-         .replaceAll(">", "&gt;")
-         .replaceAll('"', "&quot;")
-         .replaceAll("'", "&#039;");
-     };
-
-
-     document.querySelectorAll(".element-card").forEach((card) => {
-       card.addEventListener("click", () => openModal(card));
-       card.addEventListener("keydown", (e) => {
-         if (e.key === "Enter" || e.key === " ") {
-           e.preventDefault();
-           openModal(card);
-         }
-       });
-     });
-
-
-     btnClose.addEventListener("click", closeModal);
-     backdrop.addEventListener("click", (e) => {
-       if (e.target === backdrop) closeModal();
-     });
-     document.addEventListener("keydown", (e) => {
-       if (e.key === "Escape" && backdrop.classList.contains("open")) closeModal();
-     });
-
-
-     // Smooth scroll
-     document.documentElement.style.scrollBehavior = "smooth";
-   });
- </script>
-</body>
-</html>
+
+<div class="hr reveal"></div>
+
+
+<p class="reveal js-order-line">在現場，新面孔很少被直接問「覺得好不好」。更常出現的，是另一個問題：<strong>「怎麼會來這裡？」</strong></p>
+<p class="note reveal js-order-line">年輕人的出現往往被理解成「帶著目的」：作業、報導、拍攝、找題材。於是紅包場面對新世代時，常同時帶著開放與防備。</p>
+</div>
+</section>
+
+
+<section class="chapter hscroll grainy" id="chapter-elements" aria-label="章節四：六大元素">
+<div class="hscroll-head">
+<div class="kicker reveal">CHAPTER 04</div>
+<h2 class="reveal">撐起紅包場的人與物</h2>
+<p class="reveal">把六大元素做成走廊式展覽：你不是讀清單，而是被帶著走進場內，逐一看見系統如何運作。</p>
+<p class="note reveal">操作：慢慢往下捲（這段會橫向推進）。點「展開更多」可打開深度素材。</p>
+</div>
+
+
+<div class="hscroll-pin" aria-hidden="false">
+<div class="hscroll-track" id="hscroll-track">
+<section class="panel" data-title="歌星" data-subtitle="THE SINGER" data-body="歌星輪番登台，每人2-3首歌曲的時間，跑馬燈穿過個人稱號，歌星穿著禮服盛裝登場，帶來經典好歌，除了手工製作演唱服裝，更拜師學歌藝精益求精，透過舞台展現自信與對歌唱的喜愛，演出期間嚴守在台上不會走到台下，在歌廳盛行的年代，還要連跑好幾場，盛況空前，紅包場也捧紅眾多電視新星。" data-media-type="img" data-media-src="photo/singer.jpg" data-media-caption="舞台上的歌星 (photo/singer.jpg)">
+<div>
+<h3>歌星</h3>
+<div class="tagline">THE SINGER</div>
+<div class="desc">輪番登台、禮服盛裝。二到三首歌的時間，是一輩子累積的職業身段。</div>
+<button class="cta js-open-modal" type="button">＋ 展開更多</button>
+</div>
+<div class="panel-media">
+<img src="photo/singer.jpg" alt="歌星｜舞台畫面" loading="lazy" decoding="async">
+</div>
+</section>
+
+
+<section class="panel" data-title="樂團老師" data-subtitle="THE BA
+
+
 
 
 
