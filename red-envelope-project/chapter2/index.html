@@ -8,10 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&display=swap" rel="stylesheet" />
 <style>
 :root{
-    /* 改為更深沉、復古的胭脂紅 */
     --red: #5e0a0a; 
-    --gold: #cba35c; /* 金色也調暗一點配合復古感 */
-    --bg: #080202;   /* 接近純黑的深紅底色 */
+    --gold: #cba35c;
+    --bg: #080202;
 }
 
 /* === 基礎設定 === */
@@ -25,25 +24,24 @@ body{
 }
 img, video{width:100%; height:auto; display:block; object-fit:cover;}
 
-/* === 強化的電影感躁點濾鏡 === */
+/* === 電影感濾鏡 === */
 .grain-overlay{
     position:fixed; inset:0; pointer-events:none; z-index:999;
-    opacity:0.15; /* 提高不透明度讓躁點更明顯 */
+    opacity:0.15;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    filter: sepia(0.4); /* 加入一點懷舊色調 */
+    filter: sepia(0.4);
     mix-blend-mode: overlay;
 }
 
-/* === 0. 全新開場：聚光燈效果 (Spotlight Intro) === */
+/* === 0. 開場：聚光燈效果 (速度與效果更新) === */
 .intro-container{
     position:relative;
     background:var(--bg);
 }
-/* 固定在背後的舞台照片 */
 .intro-bg-fixed{
     position:fixed; top:0; left:0; width:100%; height:100vh;
     z-index:0;
-    opacity:0; /* 一開始是全黑的 */
+    opacity:0;
     transition: opacity 0.8s ease;
     filter: contrast(1.2) brightness(0.8);
 }
@@ -51,24 +49,26 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 
 .hook-block{
     position:relative; z-index:10;
-    min-height:100vh; /* 拉長高度，讓聚光燈效果更明顯 */
+    min-height:100vh;
     display:flex; flex-direction:column; justify-content:center; align-items:center;
     text-align:center; padding:2rem;
-    /* 製造聚光燈效果的關鍵：徑向漸層遮罩 */
     background: radial-gradient(circle at center, transparent 20%, var(--bg) 60%);
-    opacity:0.4; transition:all 1s ease;
+    
+    /* 🌟 更新點：速度變快 (0.5s)，加入 translateY 向上滑入效果 */
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, background 1s ease;
+    opacity:0.1; 
+    transform: translateY(40px) scale(0.95); /* 初始狀態：位置偏下、稍微縮小 */
 }
-/* 當區塊進入視線中央時的「打光」狀態 */
 .hook-block.active{
     opacity:1;
     background: radial-gradient(circle at center, transparent 30%, var(--bg) 70%);
+    /* 🌟 更新點：回到原位並放大 */
+    transform: translateY(0) scale(1);
 }
 .hook-text{
     font-size:clamp(2rem, 5vw, 4rem); font-weight:900; line-height:1.4;
     color:var(--gold); text-shadow: 0 0 20px rgba(203, 163, 92, 0.3);
-    transform: translateY(30px); transition: transform 1s ease;
 }
-.hook-block.active .hook-text{transform: translateY(0);}
 
 .scroll-hint{
     position:absolute; bottom:5vh;
@@ -77,13 +77,12 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 }
 @keyframes pulse { 0%,100%{opacity:0.4;} 50%{opacity:1;} }
 
-
 /* === 1. 轉場金句 === */
 .statement-section{padding:20vh 10vw; background:var(--red); position:relative; z-index:20; text-align:center;}
 .statement-text{font-size:clamp(1.2rem, 2.5vw, 2rem); line-height:2; font-weight:700; color:var(--gold);}
 .statement-img{margin:8vh auto; max-width:900px; box-shadow:0 30px 60px rgba(0,0,0,0.8); border:1px solid rgba(203, 163, 92, 0.2);}
 
-/* === 2. 六大元素 (純圖文橫向捲動) === */
+/* === 2. 六大元素 (橫向捲動) === */
 .hscroll-container{position:relative; height:500vh; z-index:30; background:#0a0a0a;}
 .hscroll-sticky{position:sticky; top:0; height:100vh; overflow:hidden; display:flex; align-items:center;}
 .hscroll-header{position:absolute; top:8vh; left:8vw; z-index:5;}
@@ -100,56 +99,33 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 .h-card p{font-size:1rem; line-height:1.7; color:#ccc;}
 .h-number{font-size:5rem; font-weight:900; color:rgba(203, 163, 92, 0.1); position:absolute; top:-30px; left:-20px; z-index:-1;}
 
-
-/* === 3. 重構：茶單制與紅包文化 (隱喻互動動畫) === */
-.metaphor-section{
-    background:var(--bg); padding:20vh 5vw; position:relative; z-index:40;
-}
-.metaphor-container{
-    max-width:1000px; margin:0 auto; display:flex; align-items:center; justify-content:center; gap:5vw;
-}
-/* 左側：心意選單 */
-.menu-side{
-    flex:1; text-align:right;
-    display:flex; flex-direction:column; gap:2rem;
-}
-.menu-item{
-    font-size:1.5rem; color:#888; transition:0.5s; cursor:default;
-}
-/* 右側：紅包 */
-.packet-side{
-    flex:1; display:flex; justify-content:flex-start;
-}
+/* === 3. 重構：茶單制 (隱喻動畫) === */
+.metaphor-section{background:var(--bg); padding:20vh 5vw; position:relative; z-index:40;}
+.metaphor-container{max-width:1000px; margin:0 auto; display:flex; align-items:center; justify-content:center; gap:5vw;}
+.menu-side{flex:1; text-align:right; display:flex; flex-direction:column; gap:2rem;}
+.menu-item{font-size:1.5rem; color:#888; transition:0.5s; cursor:default;}
+.packet-side{flex:1; display:flex; justify-content:flex-start;}
 .packet-visual{
     width:200px; height:280px; 
-    /* 這裡使用紅包圖片，但保持一點透明度與邊框，製造圖層感 */
     background: url('photos/redpacket.png') no-repeat center center / cover;
     border:2px solid var(--gold); box-shadow:0 0 30px rgba(203, 163, 92, 0.2);
     display:flex; align-items:center; justify-content:center;
     transform: scale(0.9); opacity:0.5; transition:0.8s;
 }
-
-/* W7 Trigger Animation: 連結線條與啟動狀態 */
 .connection-line{
     position:absolute; top:50%; left:50%; width:0; height:2px; background:var(--gold);
     transform: translate(-50%, -50%); transition: width 1s ease-in-out;
     box-shadow: 0 0 10px var(--gold); opacity:0;
 }
-/* 當觸發動畫時 */
+/* Animation Trigger */
 .metaphor-container.animate .connection-line{width:15vw; opacity:1;}
 .metaphor-container.animate .menu-item.highlight{color:var(--gold); text-shadow:0 0 10px var(--gold);}
 .metaphor-container.animate .packet-visual{transform: scale(1); opacity:1; box-shadow:0 0 50px rgba(203, 163, 92, 0.6);}
+.metaphor-text{text-align:center; max-width:700px; margin:5rem auto 0; font-size:1.2rem; line-height:1.8; color:#ccc;}
 
-.metaphor-text{
-    text-align:center; max-width:700px; margin:5rem auto 0;
-    font-size:1.2rem; line-height:1.8; color:#ccc;
-}
-
-
-/* === 4. 訪談 (三段式影片 + 聲音按鈕) === */
+/* === 4. 訪談 (三段式影片) === */
 .video-scrolled-section{position:relative; height:450vh; z-index:50; background:#000;}
 .video-sticky{position:sticky; top:0; width:100%; height:100vh; overflow:hidden;}
-/* 聲音按鈕優化 */
 .sound-toggle-btn{
     position:absolute; top:40px; right:40px; z-index:100;
     background:rgba(0,0,0,0.5); border:1px solid var(--gold); color:var(--gold);
@@ -158,7 +134,6 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     display:flex; align-items:center; gap:10px; text-transform: uppercase;
 }
 .sound-toggle-btn:hover{background:var(--gold); color:#000;}
-
 .video-overlay-text{
     position:absolute; bottom:20vh; left:10vw; max-width:600px;
     opacity:0; transform:translateY(30px); transition:0.8s;
@@ -179,7 +154,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     .h-card{width:100%; max-width:100%; margin-bottom:4rem; margin-right:0;}
     .metaphor-container{flex-direction:column; gap:2rem;}
     .menu-side{text-align:center;}
-    .connection-line{display:none;} /* 手機版隱藏連線動畫 */
+    .connection-line{display:none;}
 }
 </style>
 </head>
@@ -215,7 +190,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 <section class="statement-section">
     <p class="statement-text">一首歌、一個眼神、一個紅包，<br>構成那個年代最真誠的交流。</p>
     <div class="statement-img">
-        <img src="photos/jin-ziyan.png" alt="紅包場歌手">
+        <img src="photos/red.jpg" alt="紅包場歌手">
     </div>
     <p class="statement-text" style="font-size:1.1rem; opacity:0.8; margin-top:3rem; color:#fff;">紅包並非對身體的購買，而是對表演的支持。<br>建立的是長時間累積的人情關係。</p>
 </section>
@@ -242,12 +217,12 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
                 <div class="h-card-img"><img src="photos/assistant.png" alt="小妹"></div>
                 <div class="h-card-content"><h3>小妹</h3><p>在場內穿梭的服務生。端茶、倒水、引導客人包紅包，建立關係的重要搭擋。</p></div>
             </div>
-            <div class="h-card">
+             <div class="h-card">
                 <div class="h-number">04</div>
                 <div class="h-card-img"><img src="photos/costume.png" alt="服裝"></div>
                 <div class="h-card-content"><h3>服裝</h3><p>每件禮服背後都有手工特製的故事。顏色、帽子、首飾搭配都有學問。</p></div>
             </div>
-            <div class="h-card">
+             <div class="h-card">
                 <div class="h-number">05</div>
                 <div class="h-card-img"><img src="photos/food.png" alt="餐飲"></div>
                 <div class="h-card-content"><h3>餐飲</h3><p>瓜子、水果盤、熱茶。茶單制進行，有時歌星會贈送炒花生增進情感。</p></div>
@@ -264,17 +239,15 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 <section class="metaphor-section">
     <div class="metaphor-container js-trigger-anim">
         <div class="connection-line"></div>
-        
         <div class="menu-side">
             <div class="menu-item">點一首 <span style="color:var(--gold);">喜愛的歌</span></div>
             <div class="menu-item highlight">點一份 <span style="font-size:2rem;">支持與陪伴</span></div>
             <div class="menu-item">點一次 <span style="color:var(--gold);">真誠互動</span></div>
         </div>
-
         <div class="packet-side">
-            <div class="packet-visual"></div> </div>
+            <div class="packet-visual"></div> 
+        </div>
     </div>
-
     <div class="metaphor-text">
         <h3 style="font-size:1.8rem; color:var(--gold); margin-bottom:1rem;">這就是「茶單制」</h3>
         <p>它不是真的點餐，而是一種互動的隱喻。客人透過紅包，像點歌一樣「點播」對歌手的支持。這是一種鼓勵的機制，讓歌手得到實質支持，也讓客人有了參與感。</p>
@@ -283,10 +256,8 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 
 <section class="video-scrolled-section">
     <div class="video-sticky">
-        
         <button id="sound-btn" class="sound-toggle-btn">
-            <span id="sound-icon">🔇</span>
-            <span id="sound-text">點擊開啟聲音</span>
+            <span id="sound-icon">🔇</span> <span id="sound-text">點擊開啟聲音</span>
         </button>
 
         <video id="main-video" src="video/workpassion1.mp4" muted loop playsinline style="width:100%; height:100%; object-fit:cover; opacity:0.7; transition:opacity 0.5s; filter: contrast(1.1) saturate(0.8);"></video>
@@ -313,7 +284,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 </footer>
 
 <script>
-// 1. Intro Spotlight Animation & Background Trigger
+// 1. Hook Animation (速度變快 + 滑入效果)
 const hookBlocks = document.querySelectorAll('.js-hook-block');
 const introBg = document.querySelector('.intro-bg-fixed');
 const introTrigger = document.querySelector('.js-intro-trigger');
@@ -323,16 +294,14 @@ const hookObserver = new IntersectionObserver((entries)=>{
         if(entry.isIntersecting) entry.target.classList.add('active');
         else entry.target.classList.remove('active');
     });
-}, {threshold: 0.6}); // 提高閾值，讓聚光燈效果更集中
+}, {threshold: 0.6});
 hookBlocks.forEach(b => hookObserver.observe(b));
 
-// 獨立偵測第一個區塊，用來打開背景圖
 const bgObserver = new IntersectionObserver((entries)=>{
     if(entries[0].isIntersecting) introBg.style.opacity = '0.5';
     else introBg.style.opacity = '0';
 }, {threshold: 0.1});
 bgObserver.observe(introTrigger);
-
 
 // 2. Horizontal Scroll
 const hContainer = document.querySelector('.hscroll-container');
@@ -348,7 +317,7 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// 3. Metaphor Section Animation (W7 Trigger)
+// 3. Metaphor Trigger
 const animElements = document.querySelectorAll('.js-trigger-anim');
 const animObserver = new IntersectionObserver((entries)=>{
     entries.forEach(e => {
@@ -357,8 +326,7 @@ const animObserver = new IntersectionObserver((entries)=>{
 }, {threshold:0.5});
 animElements.forEach(e => animObserver.observe(e));
 
-
-// 4. Video Switching & Sound Logic
+// 4. Video Logic
 const vidTexts = document.querySelectorAll('.js-vid-text');
 const vidSection = document.querySelector('.video-scrolled-section');
 const mainVideo = document.getElementById('main-video');
@@ -387,23 +355,21 @@ window.addEventListener('scroll', ()=>{
     const h = vidSection.offsetHeight;
     const scroll = window.scrollY - top;
     
-    // Stage 1: 熱情 (5% - 30%)
+    // Stage 1
     if(scroll > h * 0.05 && scroll < h * 0.3) {
         vidTexts[0].classList.add('show');
         changeVideo('video/workpassion1.mp4');
     } else {
         vidTexts[0].classList.remove('show');
     }
-    
-    // Stage 2: 職人 (35% - 60%)
+    // Stage 2
     if(scroll > h * 0.35 && scroll < h * 0.6) {
         vidTexts[1].classList.add('show');
         changeVideo('video/clothes1.mp4');
     } else {
         vidTexts[1].classList.remove('show');
     }
-
-    // Stage 3: 未來 (65% - )
+    // Stage 3
     if(scroll > h * 0.65) {
         vidTexts[2].classList.add('show');
         changeVideo('video/future1.mp4');
