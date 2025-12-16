@@ -1,102 +1,173 @@
-Surviving Venue(數字下降感) 
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>西門町的時光膠囊：紅包場的興衰與僅存</title>
+
+<!-- Libraries -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
- /* Sticky Scrollytelling */
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+  font-family:'Noto Sans TC',sans-serif;
+  background:#f5f5f0;
+  color:#2c2c2c;
+}
+h1,h2,h3,.serif{font-family:'Noto Serif TC',serif;}
+
+.neon-text{
+  color:#b91c1c;
+  text-shadow:0 0 8px rgba(185,28,28,.4);
+}
+
+/* ===== Surviving Venue Sticky ===== */
+.survive-wrap{
+  background:#1a1a1a;
+  color:#e5e5e5;
+}
 .sticky-section{
-  position: relative;
-  height: 300vh;   /* 捲動距離的關鍵 */
+  height:300vh;
 }
-
 .sticky-content{
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position:sticky;
+  top:0;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
-
-.scroll-text-block{
-  position: absolute;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all .5s ease;
+.scroll-text{
+  position:absolute;
+  opacity:0;
+  transform:translateY(20px);
+  transition:.6s ease;
 }
-
-.scroll-text-block.active{
-  opacity: 1;
-  transform: translateY(0);
+.scroll-text.active{
+  opacity:1;
+  transform:translateY(0);
 }
- <section class="sticky-section">
-  <div class="sticky-content">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;max-width:1100px;width:100%;padding:2rem;">
+</style>
+</head>
 
-      <!-- 左側：倒數數字 -->
-      <div>
-        <div style="letter-spacing:.3em;color:#999;">Surviving Venues</div>
-        <div id="counter-display"
-             style="font-size:14rem;font-weight:900;color:#b91c1c;line-height:1;">
-          30
+<body>
+
+<!-- ========== Hero（第一份）========== -->
+<header class="pt-32 pb-24 text-center max-w-5xl mx-auto px-4">
+  <span class="inline-block bg-red-100 text-red-800 px-4 py-1 text-xs font-bold tracking-widest mb-6">歷史專題</span>
+  <h1 class="text-4xl md:text-6xl font-bold serif mb-6">
+    燈紅酒綠的年代：<br><span class="neon-text">紅包場</span>的誕生與繁華
+  </h1>
+  <p class="text-lg text-gray-600 font-serif max-w-2xl mx-auto">
+    那是一個靠歌聲取暖的年代。<br>
+    也是如今，幾乎只剩下一盞燈的現在。
+  </p>
+</header>
+
+<!-- ========== 歷史起源（第一份）========== -->
+<section class="py-20 bg-white">
+  <div class="max-w-5xl mx-auto px-4">
+    <h2 class="text-3xl font-bold serif mb-6">異鄉人的心靈慰藉</h2>
+    <p class="text-gray-700 leading-relaxed mb-4">
+      1949年後，大量單身軍人來台，缺乏家庭與社交網絡。
+      紅包場成為他們聽鄉音、看舞台、確認自身存在的重要場所。
+    </p>
+    <p class="text-gray-700 leading-relaxed">
+      在那裡，紅包不是小費，而是一種被記得的證明。
+    </p>
+  </div>
+</section>
+
+<!-- ========== 🔥 Surviving Venue（第二份精華）========== -->
+<section class="survive-wrap">
+  <div class="sticky-section">
+    <div class="sticky-content">
+      <div class="max-w-6xl w-full px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+
+        <!-- Left Number -->
+        <div class="text-center md:text-left">
+          <div class="text-gray-400 tracking-widest uppercase mb-2">Surviving Venue</div>
+          <div id="venue-count" class="text-[12rem] md:text-[15rem] font-black text-red-600 serif">30</div>
+          <div class="text-gray-400 text-xl serif">西門町紅包場數量</div>
         </div>
-        <div style="color:#aaa;">西門町紅包場數量</div>
-      </div>
 
-      <!-- 右側：敘事文字 -->
-      <div style="position:relative;height:300px;display:flex;align-items:center;">
-
-        <div class="scroll-text-block active" data-step="1">
-          <h3>1980s 全盛時期</h3>
-          <p>超過 30 家歌廳爭奇鬥豔。</p>
-        </div>
-
-        <div class="scroll-text-block" data-step="2">
-          <h3>1990s–2010s 時代變遷</h3>
-          <p>觀眾流失，數量跌到個位數。</p>
-        </div>
-
-        <div class="scroll-text-block" data-step="3">
-          <h3 style="color:#ff3333;">2024 僅存碩果</h3>
-          <p>金鑽成為唯一倖存者。</p>
+        <!-- Right Text -->
+        <div class="relative h-72 md:h-96">
+          <div class="scroll-text active" data-step="1">
+            <h3 class="text-3xl font-bold mb-4">1980s 全盛</h3>
+            <p class="text-lg">
+              股市萬點，超過30家紅包場林立，西門町徹夜不眠。
+            </p>
+          </div>
+          <div class="scroll-text" data-step="2">
+            <h3 class="text-3xl font-bold mb-4">1990s 轉折</h3>
+            <p class="text-lg">
+              KTV 興起，老兵凋零，歌廳一家家熄燈。
+            </p>
+          </div>
+          <div class="scroll-text" data-step="3">
+            <h3 class="text-3xl font-bold text-red-400 mb-4">2024 僅存</h3>
+            <p class="text-lg">
+              如今，只剩下 <strong>金鑽大歌廳</strong>。
+            </p>
+          </div>
         </div>
 
       </div>
     </div>
   </div>
 </section>
- <script>
+
+<!-- ========== 紅包社會學（第一份）========== -->
+<section class="py-20 bg-white">
+  <div class="max-w-5xl mx-auto px-4">
+    <h2 class="text-3xl font-bold serif mb-8">紅包社會學：無聲的契約</h2>
+    <p class="text-gray-700 leading-relaxed">
+      紅包、彩帶、花籃，不只是金錢。
+      它們是一種社交語言，確認彼此的關係與位置。
+    </p>
+  </div>
+</section>
+
+<!-- ========== 結語（第一份）========== -->
+<footer class="bg-[#2c2c2c] text-gray-400 py-16 text-center">
+  <p class="max-w-xl mx-auto">
+    金鑽的燈還亮著。<br>
+    它不只是最後一間歌廳，<br>
+    而是一整個時代，還沒說完的故事。
+  </p>
+</footer>
+
+<script>
 gsap.registerPlugin(ScrollTrigger);
 
-const counter = document.getElementById("counter-display");
-const texts = document.querySelectorAll(".scroll-text-block");
+const count = document.getElementById('venue-count');
+const texts = document.querySelectorAll('.scroll-text');
 
 ScrollTrigger.create({
   trigger: ".sticky-section",
   start: "top top",
   end: "bottom bottom",
   scrub: 1,
-
-  onUpdate: (self) => {
+  onUpdate: self => {
     const p = self.progress;
+    let n = Math.floor(30 - 29 * p);
+    if(n < 1) n = 1;
+    count.textContent = n;
 
-    // 數字從 30 → 1
-    let count = Math.floor(30 - 29 * p);
-    if (count < 1) count = 1;
-    counter.textContent = count;
-
-    // 接近 1 時變亮紅
-    counter.style.color = count <= 5 ? "#ff3333" : "#b91c1c";
-
-    // 切換右側文字
-    texts.forEach(t => t.classList.remove("active"));
-    if (p < 0.33) {
-      document.querySelector('[data-step="1"]').classList.add("active");
-    } else if (p < 0.66) {
-      document.querySelector('[data-step="2"]').classList.add("active");
-    } else {
-      document.querySelector('[data-step="3"]').classList.add("active");
-    }
+    texts.forEach(t => t.classList.remove('active'));
+    if(p < .33) texts[0].classList.add('active');
+    else if(p < .66) texts[1].classList.add('active');
+    else texts[2].classList.add('active');
   }
 });
 </script>
 
-
+</body>
+</html>
