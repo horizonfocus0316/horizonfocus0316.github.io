@@ -20,7 +20,9 @@
     :root {
       --bg-dark: #080202;
       --accent: #FFE87A; /* 霓虹金 */
-      --accent-red: #D91E18; /* 鮮豔紅包紅 */
+      --accent-red: #D91E18; /* 鮮豔紅 */
+      /* 新增：更深沉、電影感的酒紅色，用於翻牌背景 */
+      --deep-vintage-red: #8a1515; 
       --text: #e0e0e0;
     }
 
@@ -35,12 +37,21 @@
       line-height: 2;
     }
 
-    /* SVG 噪點濾鏡 (內建代碼) */
+    /* SVG 噪點濾鏡 (共用變數) */
+    /* 將濾鏡定義在上方，方便重複使用 */
+    .noise-overlay {
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+      pointer-events: none;
+    }
+
+    /* 全域背景躁點 */
     body::before {
       content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      /* 引用上方的噪點樣式，但透明度稍微調低一點 */
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
-      opacity: 0.3; pointer-events: none; z-index: 9999;
       mix-blend-mode: overlay;
+      opacity: 0.3; z-index: 9999; pointer-events: none;
     }
 
     /* =========================================
@@ -67,46 +78,32 @@
       opacity: 0; animation: fadeIn 2s ease forwards 0.5s;
     }
 
-    /* ✨ 回歸經典：膠囊紅包按鈕 ✨ */
+    /* 膠囊紅包按鈕 */
     .pill-red-envelope {
-      background: #c21807; /* 經典紅 */
-      color: #ffd700; /* 亮金字 */
-      border: 2px solid #ffd700; 
-      padding: 18px 60px; font-size: 24px; 
-      border-radius: 50px; /* 圓潤膠囊 */
+      background: #c21807; color: #ffd700; border: 2px solid #ffd700; 
+      padding: 18px 60px; font-size: 24px; border-radius: 50px;
       font-family: sans-serif; font-weight: bold; letter-spacing: 3px;
       cursor: pointer; transition: 0.3s;
-      box-shadow: 0 0 30px rgba(194, 24, 7, 0.6); /* 強烈光暈 */
+      box-shadow: 0 0 30px rgba(194, 24, 7, 0.6);
       position: relative; z-index: 10; overflow: visible;
       opacity: 0; animation: scaleIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 1.2s;
     }
-    
     .pill-red-envelope:hover {
       transform: scale(1.05); background: #e02210; 
-      box-shadow: 0 0 50px rgba(255, 215, 0, 0.6); /* 懸浮發金光 */
+      box-shadow: 0 0 50px rgba(255, 215, 0, 0.6);
     }
 
-    /* 💸 鈔票樣式 (CSS 繪製) */
+    /* 鈔票與彩帶特效 */
     .money-bill {
-      position: fixed; 
-      width: 100px; height: 45px; 
-      background-color: #d13c3c; 
-      border: 2px solid #ecc6c6; border-radius: 2px;
-      color: #ecc6c6;
+      position: fixed; width: 100px; height: 45px; background-color: #d13c3c; 
+      border: 2px solid #ecc6c6; border-radius: 2px; color: #ecc6c6;
       display: flex; justify-content: space-between; align-items: center;
-      padding: 0 10px;
-      font-family: "Arial", sans-serif; font-weight: 900; font-size: 14px;
-      z-index: 1001; pointer-events: none;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      padding: 0 10px; font-family: "Arial", sans-serif; font-weight: 900; font-size: 14px;
+      z-index: 1001; pointer-events: none; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
     }
     .money-bill::before { content: "100"; }
     .money-bill::after { content: "💯"; font-size: 18px; }
-
-    /* 🎉 慶祝彩帶 (Confetti) */
-    .confetti {
-      position: fixed; width: 10px; height: 10px;
-      z-index: 1002; pointer-events: none;
-    }
+    .confetti { position: fixed; width: 10px; height: 10px; z-index: 1002; pointer-events: none; }
 
     @keyframes fadeIn { to { opacity: 1; } }
     @keyframes scaleIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -141,44 +138,61 @@
     .h-desc { font-size: 20px; color: #ccc; max-width: 650px; text-align: justify; line-height: 1.8; background: rgba(0,0,0,0.6); padding: 25px; border-left: 4px solid var(--accent-red); }
 
     /* =========================================
-       4. 金小姐的雜誌風排版
+       4. 金小姐的雜誌風排版 (大改版：去PPT化)
     ========================================= */
-    .container { width: min(1000px, 90%); margin: 0 auto; position: relative; z-index: 1; }
+    .container { width: min(1100px, 92%); margin: 0 auto; position: relative; z-index: 1; }
     
-    .magazine-layout {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
-      margin: 150px 0; align-items: center;
+    /* 新的雜誌版型：重疊式設計 */
+    .editorial-layout {
+      position: relative;
+      min-height: 80vh; /* 佔據大部分畫面高度 */
+      display: flex; align-items: center;
+      margin: 150px 0;
     }
-    
-    .mag-visual {
-      position: relative; height: 600px;
-      border-radius: 4px; overflow: hidden;
+
+    /* 背景大圖 */
+    .editorial-bg-img {
+      position: absolute;
+      left: 0; top: 0;
+      width: 70%; /* 圖片佔據左側 70% */
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(0.2) brightness(0.7) contrast(1.2); /* 調暗一點 */
+      z-index: 0;
+      mask-image: linear-gradient(to right, black 50%, transparent 100%); /* 讓圖片右側漸層消失 */
+      border-radius: 4px;
     }
-    
-    .mag-img {
-      width: 100%; height: 100%; object-fit: cover;
-      filter: grayscale(0.3) contrast(1.1);
-      transition: transform 10s ease;
+
+    /* 疊加的文字內容區塊 */
+    .editorial-content-overlay {
+      position: relative; z-index: 1;
+      width: 55%; /* 文字區塊寬度 */
+      margin-left: auto; /* 靠右對齊 */
+      background: rgba(20, 5, 5, 0.85); /* 半透明深色背景 */
+      backdrop-filter: blur(10px); /* 毛玻璃效果 */
+      padding: 60px;
+      border-left: 4px solid var(--accent-red); /* 左側紅線 */
+      box-shadow: -20px 30px 60px rgba(0,0,0,0.6);
     }
-    .mag-visual:hover .mag-img { transform: scale(1.1); }
-    
-    .mag-content h2 {
+
+    .editorial-content-overlay h2 {
       font-size: 48px; line-height: 1.2; margin-bottom: 40px;
-      background: linear-gradient(to right, #fff, #999);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      color: #fff;
     }
-    
-    /* 💰 兩欄式成本表 */
-    .highlight-stat {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 40px 0;
-      border-top: 1px solid #333; border-bottom: 1px solid #333;
-      padding: 30px 0;
+
+    /* 新的數據呈現方式：融入文字流 */
+    .integrated-stats {
+      margin: 40px 0; padding: 30px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 232, 122, 0.2);
     }
-    .stat-item h4 { font-size: 40px; color: var(--accent); margin: 0; font-family: sans-serif; font-weight: 900; }
-    .stat-item p { font-size: 16px; color: #888; margin: 5px 0 0 0; }
+    .stat-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 15px; }
+    .stat-row:last-child { margin-bottom: 0; }
+    .stat-big { font-size: 36px; font-weight: 900; color: var(--accent); font-family: sans-serif; }
+    .stat-label { font-size: 18px; color: #ccc; }
 
     /* =========================================
-       5. 綠雷德劇團資料
+       5. 綠雷德劇團資料 & 影片
     ========================================= */
     .theater-list { margin-top: 60px; border: 1px solid #333; padding: 30px; }
     
@@ -203,7 +217,7 @@
       box-shadow: 0 20px 80px rgba(0,0,0,0.9); border: 1px solid #222;
     }
 
-    /* 翻牌特效 */
+    /* 翻牌特效 (復古電影感優化) */
     .flip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 30px; margin-top: 60px; }
     .flip-card { perspective: 1000px; height: 280px; }
     .flip-inner {
@@ -216,9 +230,23 @@
       position: absolute; inset: 0; backface-visibility: hidden;
       display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
       padding: 20px; border-radius: 8px;
+      border: 1px solid #333;
     }
-    .flip-front { background: rgba(30,30,30,0.6); border: 1px solid #333; }
-    .flip-back { transform: rotateY(180deg); background: var(--accent-red); color: #fff; border: 1px solid var(--accent); }
+    .flip-front { background: rgba(30,30,30,0.6); }
+    
+    /* 背面樣式修正：更深、有躁點 */
+    .flip-back {
+      transform: rotateY(180deg);
+      background-color: var(--deep-vintage-red); /* 使用新的深酒紅色 */
+      color: #fff;
+      border: 1px solid var(--accent); /* 金色邊框 */
+      /* 疊加躁點紋理 */
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+      background-blend-mode: overlay;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.5); /* 內陰影增加層次 */
+    }
+    .flip-back h3 { color: var(--accent); text-shadow: 0 0 10px rgba(255, 232, 122, 0.3); }
+
 
     /* =========================================
        6. 結語霓虹燈
@@ -244,15 +272,17 @@
 
     /* RWD */
     @media (max-width: 768px) {
-      .magazine-layout { grid-template-columns: 1fr; gap: 30px; margin: 100px 0; }
-      .mag-visual { height: 350px; }
+      /* 手機版雜誌排版改為上下堆疊 */
+      .editorial-layout { flex-direction: column; min-height: auto; }
+      .editorial-bg-img { position: relative; width: 100%; height: 400px; mask-image: linear-gradient(to bottom, black 60%, transparent 100%); }
+      .editorial-content-overlay { width: 100%; margin-top: -100px; padding: 30px; backdrop-filter: blur(5px); }
+      
       .horizontal-wrapper { flex-direction: column; height: auto; }
       .h-panel { width: 100%; height: auto; padding: 80px 20px; border-bottom: 1px solid #222; }
       #horizontal-scroll-section { height: auto; display: block; }
       .program-item { flex-direction: column; align-items: flex-start; gap: 10px; }
       .gate-title { font-size: 32px; }
       .h-bg-year { font-size: 20vw; bottom: 5%; }
-      .highlight-stat { grid-template-columns: 1fr; gap: 20px; }
     }
   </style>
 </head>
@@ -311,42 +341,40 @@
 
 <main class="container">
 
-  <section class="magazine-layout" id="chapter-jin">
-    <div class="mag-visual">
-      <img src="photos/jin.png" alt="金小姐" class="mag-img">
-      <div style="position:absolute; bottom:20px; left:20px; background:rgba(0,0,0,0.7); padding:5px 10px; font-size:12px; color:#fff;">
-        金鑽經營者 / 美容科老師 (AI 示意)
-      </div>
-    </div>
+  <section class="editorial-layout" id="chapter-jin">
+    <img src="photos/jin.png" alt="金小姐" class="editorial-bg-img">
     
-    <div class="mag-content">
-      <span style="color:var(--accent-red); font-weight:bold; letter-spacing:3px;">CHAPTER 01</span>
+    <div class="editorial-content-overlay">
+      <span style="color:var(--accent-red); font-weight:bold; letter-spacing:3px; display:block; margin-bottom:20px;">CHAPTER 01</span>
       <h2>舞台還亮著：<br>美容老師的豪賭</h2>
       
-      <p class="lead" style="font-size:18px; margin-bottom:20px;">
+      <p class="lead" style="font-size:18px;">
         「有些店不是生意不好，是經營方式不一樣。」金小姐本職是<strong style="color:#fff; border-bottom:2px solid var(--accent-red);">美容科老師</strong>，卻跨界接手這家老店。這在業界看來簡直是瘋狂。
       </p>
       
-      <div class="highlight-stat">
-        <div class="stat-item">
-          <h4>20萬+</h4>
-          <p>樂手月薪資</p>
+      <div class="integrated-stats">
+        <div class="stat-row">
+          <span class="stat-label">樂手月薪資</span>
+          <span class="stat-big">20萬+</span>
         </div>
-        <div class="stat-item">
-          <h4>20萬+</h4>
-          <p>黃金地段租金</p>
+        <div class="stat-row">
+          <span class="stat-label">黃金地段租金</span>
+          <span class="stat-big">20萬+</span>
         </div>
       </div>
 
-      <p style="color:#ccc;">
+      <p style="color:#ccc; margin-top: 30px;">
         歌手雖然靠紅包抽成，但光是「租金」與「樂手」，每個月就是 40 萬起跳的固定支出。
         <br><br>
         面對壓力，她沒有選擇縮減，而是思考「跨界」。
         <br><br>
-        <span style="color:var(--accent); font-size:20px; font-weight:bold;">「我想跟表藝科系合作，讓這裡變成學生售票演出的 Live House。」</span>
-        <br><br>
-        她想引流年輕人進來，讓這裡不再只是長輩的慰藉，而是新秀的練功場。
+        <span style="color:var(--accent); font-size:20px; font-weight:bold; display:block; margin-top:20px; border-left: 4px solid var(--accent); padding-left: 20px;">
+          「我想跟表藝科系合作，讓這裡變成學生售票演出的 Live House。」
+        </span>
       </p>
+      <div style="position:absolute; bottom:20px; left:-20px; background:rgba(0,0,0,0.8); padding:5px 10px; font-size:12px; color:#aaa; transform: rotate(-90deg); transform-origin: left bottom;">
+        金鑽經營者 (AI 示意)
+      </div>
     </div>
   </section>
 
@@ -361,31 +389,23 @@
 
     <div class="theater-list">
       <h4 style="color:#fff; margin-bottom:30px; border-left:4px solid var(--accent); padding-left:15px;">近年跨界展演紀錄</h4>
-      
       <div class="program-item">
         <div class="prog-year">2023</div>
-        <div class="prog-info">
-          <h3>茶味在人情在</h3>
-          <p>結合走讀導覽：帶領觀眾走進真實茶室空間，理解萬華長輩的情感需求。</p>
-        </div>
+        <div class="prog-info"><h3>茶味在人情在</h3><p>結合走讀導覽：帶領觀眾走進真實茶室空間，理解萬華長輩的情感需求。</p></div>
         <div class="prog-tag">環境劇場</div>
       </div>
-
       <div class="program-item">
         <div class="prog-year">2024</div>
-        <div class="prog-info">
-          <h3>老闆～來碗陽春麵！</h3>
-          <p>與春河劇團合作：打破第四道牆，觀眾邊吃麵邊看紅包場歌星的人生流轉。</p>
-        </div>
+        <div class="prog-info"><h3>老闆～來碗陽春麵！</h3><p>與春河劇團合作：打破第四道牆，觀眾邊吃麵邊看紅包場歌星的人生流轉。</p></div>
         <div class="prog-tag">沉浸式體驗</div>
       </div>
     </div>
 
     <div class="video-container">
-       <video autoplay muted loop playsinline style="width: 100%; display: block;">
+       <video controls playsinline loop style="width: 100%; display: block;">
         <source src="videos/singer.mp4" type="video/mp4">
       </video>
-      <div style="padding: 15px; background: #111; color: #888; font-size: 13px; text-align: center;">▲ 現場：這不是單向表演，而是雙向的互動。</div>
+      <div style="padding: 15px; background: #111; color: #888; font-size: 13px; text-align: center;">▲ 現場：點擊播放影片，感受現場聲音與氛圍。</div>
     </div>
     
     <div class="flip-grid">
@@ -440,7 +460,7 @@
 </main>
 
 <script>
-  // 1. 噴錢動畫 (CSS 繪製版)
+  // 1. 噴錢動畫 (CSS 繪製版) + 彩帶
   function createMoney(container) {
     for (let i = 0; i < 20; i++) { 
       let bill = document.createElement('div');
@@ -449,10 +469,8 @@
       let rect = container.getBoundingClientRect();
       bill.style.left = (rect.left + rect.width / 2) + 'px';
       bill.style.top = (rect.top + rect.height / 2) + 'px';
-      
       document.body.appendChild(bill);
 
-      // 增加禮炮彩帶 (Confetti)
       let confetti = document.createElement('div');
       confetti.classList.add('confetti');
       confetti.style.left = (rect.left + rect.width / 2) + 'px';
@@ -466,20 +484,13 @@
       let ty = Math.sin(angle) * velocity - 200; 
       let rot = Math.random() * 720 - 360;
 
-      // 鈔票動畫
       gsap.to(bill, {
         x: tx, y: ty, rotation: rot, opacity: 1, duration: 0.8, ease: "power2.out",
-        onComplete: () => {
-          gsap.to(bill, { y: ty + 800, opacity: 0, duration: 1.5, ease: "power1.in", onComplete: () => bill.remove() });
-        }
+        onComplete: () => { gsap.to(bill, { y: ty + 800, opacity: 0, duration: 1.5, ease: "power1.in", onComplete: () => bill.remove() }); }
       });
-
-      // 彩帶動畫
       gsap.to(confetti, {
         x: tx * 1.2, y: ty * 1.2, rotation: rot * 2, opacity: 1, duration: 0.6, ease: "power2.out",
-        onComplete: () => {
-          gsap.to(confetti, { y: ty + 600, opacity: 0, duration: 2, ease: "power1.in", onComplete: () => confetti.remove() });
-        }
+        onComplete: () => { gsap.to(confetti, { y: ty + 600, opacity: 0, duration: 2, ease: "power1.in", onComplete: () => confetti.remove() }); }
       });
     }
   }
@@ -533,7 +544,7 @@
   }
 
   // 文字浮現
-  gsap.utils.toArray('.huge-title, .lead').forEach(element => {
+  gsap.utils.toArray('.huge-title, .lead, .editorial-content-overlay').forEach(element => {
     gsap.from(element, {
       scrollTrigger: {
         trigger: element, start: "top 85%", toggleActions: "play none none reverse"
