@@ -18,13 +18,10 @@
        1. 極致黑金變數 & 基礎設定
     ========================================= */
     :root {
-      /* 背景：不再是純黑，而是帶有深紅光暈的黑，更有舞台感 */
       --bg-dark: #080202;
-      --card: rgba(30, 10, 10, 0.6); 
       --accent: #FFE87A; /* 霓虹金 */
-      --accent-red: #D91E18; /* 鮮豔紅包紅 */
+      --accent-red: #E74C3C; /* 更亮的紅 */
       --text: #e0e0e0;
-      --muted: #aaa;
     }
 
     * { box-sizing: border-box; }
@@ -34,23 +31,16 @@
       background-color: var(--bg-dark);
       color: var(--text);
       font-family: "Noto Serif TC", serif;
-      overflow-x: hidden; /* 防止橫向捲軸 */
+      overflow-x: hidden;
       line-height: 2;
     }
 
-    /* ✨ 電影感躁點濾鏡 (內建 SVG 技術，不需要圖片檔也能跑！) */
+    /* 電影感躁點 (SVG Filter) */
     body::before {
       content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-      opacity: 0.15; pointer-events: none; z-index: 9999;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+      opacity: 0.3; pointer-events: none; z-index: 9999;
       mix-blend-mode: overlay;
-    }
-    
-    /* 背景光暈 (Spotlight) */
-    body::after {
-      content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: radial-gradient(circle at 50% 30%, rgba(100, 0, 0, 0.15), transparent 70%);
-      z-index: -1; pointer-events: none;
     }
 
     /* =========================================
@@ -58,62 +48,50 @@
     ========================================= */
     #hero-gate {
       position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-      z-index: 1000;
-      background: #000;
+      z-index: 1000; background: #000;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       transition: transform 1.5s cubic-bezier(0.7, 0, 0.3, 1);
     }
     
     .gate-bg-video {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      object-fit: cover; opacity: 0.5; filter: blur(8px) contrast(1.2);
-      z-index: -1;
+      object-fit: cover; opacity: 0.4; filter: blur(5px) grayscale(0.8); z-index: -1;
     }
-
-    .gate-content { text-align: center; position: relative; z-index: 2; }
 
     .gate-title {
       font-size: clamp(30px, 6vw, 50px);
-      letter-spacing: 0.1em; color: #fff; margin-bottom: 60px;
-      font-weight: 900;
+      letter-spacing: 0.1em; color: #fff; margin-bottom: 60px; font-weight: 900;
       text-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
       opacity: 0; animation: fadeIn 2s ease forwards 0.5s;
     }
 
-    /* ✨ 經典膠囊紅包按鈕 (修復回歸) ✨ */
+    /* 膠囊紅包按鈕 */
     .pill-red-envelope {
-      background: #c21807; color: #fff; 
-      border: 2px solid #ffcc00; 
-      padding: 18px 60px; font-size: 22px; 
-      border-radius: 50px; /* 膠囊狀 */
+      background: #D91E18; color: #FFD700; border: 2px solid #FFD700; 
+      padding: 18px 60px; font-size: 22px; border-radius: 50px;
       font-family: sans-serif; font-weight: bold; letter-spacing: 3px;
       cursor: pointer; transition: 0.3s;
-      box-shadow: 0 0 30px rgba(194, 24, 7, 0.5);
-      position: relative; overflow: visible; /* 讓錢可以噴出來 */
+      box-shadow: 0 0 30px rgba(217, 30, 24, 0.5);
+      position: relative; z-index: 10;
       opacity: 0; animation: scaleIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 1.2s;
     }
     .pill-red-envelope:hover {
-      transform: scale(1.05); background: #d62210; 
-      box-shadow: 0 0 50px rgba(194, 24, 7, 0.8);
+      transform: scale(1.05); background: #b01510; 
+      box-shadow: 0 0 50px rgba(217, 30, 24, 0.8);
     }
 
-    /* 噴錢動畫元素 */
-    .money-bill {
-      position: absolute; width: 60px; height: 30px;
-      background: #f5f5f5; border: 1px solid #ddd;
-      color: #c21807; font-size: 12px; font-weight: bold;
-      display: flex; align-items: center; justify-content: center;
-      top: 50%; left: 50%; z-index: -1;
-      opacity: 0; pointer-events: none;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    /* 噴錢圖片 */
+    .money-img {
+      position: fixed; width: 120px; height: auto; z-index: 1001;
+      pointer-events: none; display: none; /* 預設隱藏 */
+      filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
     }
-    .money-bill::after { content: "💯"; font-size: 14px; }
 
     @keyframes fadeIn { to { opacity: 1; } }
     @keyframes scaleIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
     /* =========================================
-       3. 橫向捲動長廊 (優化閱讀體驗)
+       3. 橫向捲動長廊 (清晰度優化)
     ========================================= */
     #horizontal-scroll-section {
       width: 100%; height: 100vh;
@@ -124,91 +102,101 @@
     .horizontal-wrapper { display: flex; flex-wrap: nowrap; height: 100%; }
 
     .h-panel {
-      /* 加寬每個區塊，讓文字不會擠在一起，閱讀更舒服 */
-      width: 100vw; height: 100%;
-      padding: 0 15%; /* 增加左右留白 */
+      width: 85vw; /* 稍微窄一點點讓下一張露出來，提示可以捲動 */
+      height: 100%; padding: 0 8%;
       display: flex; flex-direction: column; justify-content: center;
-      border-right: 1px solid rgba(255,255,255,0.05);
+      border-right: 1px solid rgba(255,255,255,0.1);
       position: relative;
+      /* 加上漸層遮罩，讓文字看清楚 */
+      background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
     }
 
     .h-bg-year {
-      position: absolute; bottom: 5%; right: 5%;
-      font-size: 18vw; font-weight: 900; color: rgba(255,232,122,0.03); /* 金色隱形字 */
+      position: absolute; bottom: 10%; right: 5%;
+      font-size: 15vw; font-weight: 900; 
+      color: transparent; /* 鏤空字效果 */
+      -webkit-text-stroke: 2px rgba(255, 232, 122, 0.1);
       line-height: 1; pointer-events: none; font-family: sans-serif;
+      z-index: 0;
     }
 
-    .h-year { font-size: 50px; color: var(--accent); font-weight: 900; display: block; margin-bottom: 20px; }
+    .h-content { position: relative; z-index: 2; }
+    .h-year { font-size: 60px; color: var(--accent); font-weight: 900; display: block; margin-bottom: 20px; text-shadow: 0 0 20px rgba(255, 232, 122, 0.3); }
     .h-title { font-size: 36px; color: #fff; margin-bottom: 30px; font-weight: 700; line-height: 1.3; }
-    .h-desc { font-size: 20px; color: #ccc; max-width: 650px; text-align: justify; line-height: 1.8; }
+    .h-desc { font-size: 20px; color: #ccc; max-width: 650px; text-align: justify; line-height: 1.8; background: rgba(0,0,0,0.6); padding: 20px; border-left: 4px solid var(--accent-red); }
 
     /* =========================================
-       4. 主要內容區 (無框線 + 大標題)
+       4. 金小姐的雜誌風排版 (解決呆板問題)
     ========================================= */
-    .container { width: min(900px, 90%); margin: 0 auto; position: relative; z-index: 1; }
-    .chapter-section { margin: 150px 0; position: relative; }
-
-    .kicker { 
-      color: var(--accent-red); font-size: 14px; letter-spacing: 0.4em; 
-      font-weight: 700; margin-bottom: 20px; display: block;
-    }
-
-    .huge-title {
-      font-size: clamp(36px, 5vw, 56px); color: #fff; line-height: 1.3;
-      margin-bottom: 50px; font-weight: 900;
-      text-shadow: 0 0 30px rgba(0,0,0,0.8);
-    }
-
-    .lead { font-size: 21px; color: #e0e0e0; margin-bottom: 40px; font-weight: 300; line-height: 2; text-align: justify; }
+    .container { width: min(1000px, 90%); margin: 0 auto; position: relative; z-index: 1; }
     
-    .highlight-box {
-      background: rgba(255, 255, 255, 0.03);
-      border-left: 4px solid var(--accent);
-      padding: 30px; margin: 40px 0;
-      font-size: 18px; color: #ddd;
-    }
-
-    /* 影片容器 */
-    .video-container {
-      width: 100%; border-radius: 8px; overflow: hidden; margin: 60px 0;
-      box-shadow: 0 20px 80px rgba(0,0,0,0.9); border: 1px solid #222;
+    .magazine-layout {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+      margin: 150px 0; align-items: center;
     }
     
-    /* 翻牌特效 (4張) */
-    .flip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 30px; margin-top: 60px; }
-    .flip-card { perspective: 1000px; height: 280px; }
-    .flip-inner {
-      position: relative; width: 100%; height: 100%;
-      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-      transform-style: preserve-3d; cursor: pointer;
+    .mag-visual {
+      position: relative; height: 600px;
+      border-radius: 4px; overflow: hidden;
+      /* 這裡可以放 AI 生成的圖 */
     }
-    .flip-card:hover .flip-inner { transform: rotateY(180deg); }
-    .flip-front, .flip-back {
-      position: absolute; inset: 0; backface-visibility: hidden;
-      display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
-      padding: 20px; border-radius: 8px;
+    
+    .mag-img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: grayscale(0.2) contrast(1.1);
+      transition: transform 10s ease;
     }
-    .flip-front { background: rgba(30,30,30,0.6); border: 1px solid #333; }
-    .flip-back { transform: rotateY(180deg); background: var(--accent-red); color: #fff; border: 1px solid var(--accent); }
+    .mag-visual:hover .mag-img { transform: scale(1.1); }
+    
+    .mag-content h2 {
+      font-size: 48px; line-height: 1.2; margin-bottom: 40px;
+      background: linear-gradient(to right, #fff, #999);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    
+    .highlight-stat {
+      display: flex; gap: 30px; margin: 40px 0;
+      border-top: 1px solid #333; border-bottom: 1px solid #333;
+      padding: 20px 0;
+    }
+    .stat-item h4 { font-size: 36px; color: var(--accent); margin: 0; font-family: sans-serif; }
+    .stat-item p { font-size: 13px; color: #888; margin: 0; text-transform: uppercase; }
 
     /* =========================================
-       5. 結語：點亮霓虹 (新結局)
+       5. 綠雷德劇團資料 (節目單風格)
+    ========================================= */
+    .theater-list { margin-top: 60px; border: 1px solid #333; padding: 30px; }
+    
+    .program-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 25px 0; border-bottom: 1px solid #333;
+      transition: 0.3s;
+    }
+    .program-item:last-child { border-bottom: none; }
+    .program-item:hover { background: rgba(255,255,255,0.05); padding-left: 20px; border-left: 4px solid var(--accent); }
+    
+    .prog-year { font-family: sans-serif; font-weight: bold; color: var(--accent); font-size: 24px; margin-right: 30px; }
+    .prog-info h3 { margin: 0; font-size: 22px; color: #fff; }
+    .prog-info p { margin: 5px 0 0; font-size: 14px; color: #aaa; }
+    .prog-tag { background: #333; color: #fff; padding: 4px 10px; font-size: 12px; border-radius: 20px; }
+
+    /* =========================================
+       6. 結語霓虹燈
     ========================================= */
     .conclusion { text-align: center; margin: 200px 0 100px; position: relative; }
     
     .neon-btn {
-      background: transparent; border: 2px solid #555; color: #555;
+      background: transparent; border: 2px solid #444; color: #444;
       padding: 20px 60px; font-size: 24px; font-weight: bold; letter-spacing: 5px;
       cursor: pointer; transition: 0.5s; margin-top: 50px; font-family: sans-serif;
     }
     .neon-btn:hover { border-color: #fff; color: #fff; }
     
-    /* 點亮後的狀態 */
     .neon-active {
       border-color: var(--accent); color: var(--accent);
-      box-shadow: 0 0 20px var(--accent), inset 0 0 20px var(--accent);
+      box-shadow: 0 0 30px var(--accent), inset 0 0 10px var(--accent);
       text-shadow: 0 0 10px var(--accent);
-      animation: flicker 1.5s infinite alternate;
+      animation: flicker 2s infinite;
     }
     
     .final-text-reveal {
@@ -217,35 +205,36 @@
     }
 
     @keyframes flicker {
-      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
-      20%, 24%, 55% { opacity: 0.4; }
+      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; text-shadow: 0 0 20px var(--accent); }
+      20%, 24%, 55% { opacity: 0.5; text-shadow: none; }
     }
 
     /* RWD */
     @media (max-width: 768px) {
+      .magazine-layout { grid-template-columns: 1fr; gap: 30px; margin: 100px 0; }
+      .mag-visual { height: 300px; }
       .horizontal-wrapper { flex-direction: column; height: auto; }
       .h-panel { width: 100%; height: auto; padding: 80px 20px; border-bottom: 1px solid #222; }
       #horizontal-scroll-section { height: auto; display: block; }
-      .huge-title { font-size: 32px; }
-      .pill-red-envelope { padding: 15px 40px; font-size: 18px; }
+      .program-item { flex-direction: column; align-items: flex-start; gap: 10px; }
     }
   </style>
 </head>
 
-<body style="overflow: hidden;"> <div id="hero-gate">
+<body style="overflow: hidden;"> 
+
+<div id="hero-gate">
   <video autoplay muted loop playsinline class="gate-bg-video">
     <source src="assets/videos/bg.mp4" type="video/mp4">
   </video>
   
   <div class="gate-content">
     <h1 class="gate-title">台北僅存的紅包場</h1>
-    
     <button class="pill-red-envelope" onclick="enterSite(this)">
       🧧 遞出紅包
     </button>
-    
-    <div style="margin-top: 30px; font-size: 14px; color: #888; letter-spacing: 2px; opacity: 0.8;">
-      入場低消：一份對文化的關注
+    <div style="margin-top: 30px; font-size: 14px; color: #bbb; letter-spacing: 2px;">
+      入場低消：100 元 (點擊體驗)
     </div>
   </div>
 </div>
@@ -254,9 +243,9 @@
   <div class="horizontal-wrapper">
     
     <div class="h-panel" style="background: linear-gradient(to right, #000, #111);">
-      <div class="h-bg-year">START</div>
-      <h2 style="font-size: 60px; color: #fff; margin-bottom: 20px; font-weight:900;">時光<br>長廊</h2>
-      <p class="h-desc" style="color:var(--accent);">請向右捲動，走過這段被遺忘的歷史 →</p>
+      <div class="h-bg-year">GATE</div>
+      <h2 style="font-size: 60px; color: #fff; margin-bottom: 20px; font-weight:900;">穿越<br>長廊</h2>
+      <p class="h-desc" style="background:none; border:none; color:var(--accent);">請向右捲動，閱讀這個空間的興衰 →</p>
     </div>
 
     <div class="h-panel">
@@ -269,8 +258,8 @@
     <div class="h-panel">
       <div class="h-bg-year">2020</div>
       <span class="h-year">2020</span>
-      <h3 class="h-title">疫情與孤島</h3>
-      <p class="h-desc">隨著老兵凋零與疫情衝擊，許多歌廳熄燈。全台北僅剩「金鑽」一家維持運作，成為孤島上的最後光亮，經營者金小姐咬牙苦撐。</p>
+      <h3 class="h-title">疫情下的孤島</h3>
+      <p class="h-desc">隨著老兵凋零與疫情衝擊，許多歌廳熄燈。全台北僅剩「金鑽」一家維持運作，成為孤島上的最後光亮。</p>
     </div>
 
     <div class="h-panel">
@@ -280,118 +269,89 @@
       <p class="h-desc">文化局啟動《萬華時光》，將紅包場搬到紅樓戶外。當年輕家庭帶著孩子入座，這不再只是老人的回憶，而是城市的文化資產。</p>
     </div>
     
-    <div class="h-panel" style="background: #000;">
+    <div class="h-panel" style="background: #000; border:none;">
       <h3 class="h-title" style="color:var(--accent);">故事<br>從這裡開始</h3>
-      <p class="h-desc">↓ 向下捲動，遇見守門人</p>
+      <p class="h-desc" style="background:none; border:none;">↓ 向下捲動，遇見守門人</p>
     </div>
   </div>
 </section>
 
 <main class="container">
 
-  <section class="chapter-section" id="chapter-jin">
-    <span class="kicker">CHAPTER 01</span>
-    <h2 class="huge-title">舞台還亮著：<br>每月40萬的堅持</h2>
-    
-    <div style="display: flex; gap: 50px; align-items: flex-start; flex-wrap: wrap;">
-      <div style="flex: 1; min-width: 300px;">
-        <p class="lead">
-          「有些店不是生意不好，是經營方式不一樣，有的甚至直接跑掉。」
-        </p>
-        <p style="color:#aaa;">
-          金小姐說得平淡，但這份「穩定」背後是驚人的代價。在萬華黃金地段，每個月光是歌手與樂隊的支出，分別都要<strong style="color:#fff; border-bottom:1px solid var(--accent);">二十幾萬</strong>。
-        </p>
-        <p style="color:#aaa;">
-          在別人紛紛退場時，她選擇留下。不只是為了賺錢，更是因為她看見了這裡的可能性。
-        </p>
+  <section class="magazine-layout" id="chapter-jin">
+    <div class="mag-visual">
+      <img src="https://source.unsplash.com/800x1000/?woman,stage,neon" alt="金小姐" class="mag-img">
+      <div style="position:absolute; bottom:20px; left:20px; background:rgba(0,0,0,0.7); padding:5px 10px; font-size:12px; color:#fff;">
+        AI 模擬示意：金鑽經營者
       </div>
-      <div style="flex: 1; min-width: 300px;">
-        <div class="highlight-box">
-          <h4 style="color:var(--accent); margin:0 0 10px 0;">經營者的魅力：勇於創新</h4>
-          <p style="margin:0; font-size:16px;">
-            她不甘於只是「守舊」。身為表藝老師，她大膽提出願景：希望金鑽成為表藝學生的建教合作場域，汰換新血，讓年輕人站上這個真實的舞台。
-          </p>
+    </div>
+    
+    <div class="mag-content">
+      <span style="color:var(--accent-red); font-weight:bold; letter-spacing:3px;">CHAPTER 01</span>
+      <h2>舞台還亮著：<br>每月 40 萬的賭注</h2>
+      
+      <p class="lead" style="font-size:18px; margin-bottom:20px;">
+        「有些店不是生意不好，是經營方式不一樣，有的甚至直接跑掉。」金小姐本職是<strong style="color:#fff;">美容科老師</strong>，跨界接手這家老店，這在業界看來簡直是瘋狂。
+      </p>
+      
+      <div class="highlight-stat">
+        <div class="stat-item">
+          <h4>20萬+</h4>
+          <p>每月樂手成本</p>
+        </div>
+        <div class="stat-item">
+          <h4>20萬+</h4>
+          <p>每月歌手成本</p>
         </div>
       </div>
+
+      <p style="color:#ccc;">
+        面對如此龐大的開銷，她沒有選擇縮減，而是思考「轉型」。她看見的不是沒落，而是機會：
+        <br><br>
+        <span style="color:var(--accent); font-size:20px; font-weight:bold;">「如果跟表藝科系合作，這裡就是學生售票演出的 Live House。」</span>
+        <br><br>
+        她想引流年輕人進來，讓這裡不再只是長輩的慰藉，而是新秀的舞台。
+      </p>
     </div>
   </section>
 
   <hr style="border:0; height:1px; background:linear-gradient(90deg, transparent, #333, transparent); margin:100px 0;">
 
-  <section class="chapter-section" id="chapter-trans">
-    <span class="kicker">CHAPTER 02</span>
-    <h2 class="huge-title">文化轉譯：<br>綠雷德的行動</h2>
+  <section id="chapter-trans">
+    <div style="text-align: center; margin-bottom: 60px;">
+      <span style="color:var(--accent-red); font-weight:bold; letter-spacing:3px;">CHAPTER 02</span>
+      <h2 style="font-size: 40px; color:#fff; margin-top:20px;">文化轉譯：從獵奇到共感</h2>
+      <p style="max-width:600px; margin:0 auto; color:#aaa;">綠雷德團隊深知，要年輕人走進來，不能只靠「保存」，必須靠「體驗」。</p>
+    </div>
+
+    <div class="theater-list">
+      <h4 style="color:#fff; margin-bottom:30px; border-left:4px solid var(--accent); padding-left:15px;">近年跨界展演紀錄</h4>
+      
+      <div class="program-item">
+        <div class="prog-year">2023</div>
+        <div class="prog-info">
+          <h3>茶味在人情在</h3>
+          <p>導覽 + 短劇：帶領觀眾走進真實茶室空間，理解長輩的情感需求。</p>
+        </div>
+        <div class="prog-tag">走讀劇場</div>
+      </div>
+
+      <div class="program-item">
+        <div class="prog-year">2024</div>
+        <div class="prog-info">
+          <h3>老闆～來碗陽春麵！</h3>
+          <p>與春河劇團合作：打破第四道牆，觀眾邊吃麵邊看紅包場歌星的人生流轉。</p>
+        </div>
+        <div class="prog-tag">沉浸式體驗</div>
+      </div>
+    </div>
 
     <div class="video-container">
        <video autoplay muted loop playsinline style="width: 100%; display: block;">
         <source src="assets/videos/singer.mp4" type="video/mp4">
       </video>
-      <div style="padding: 15px; background: #111; color: #888; font-size: 13px; text-align: center;">▲ 現場：歌手與觀眾的互動，是一種獨特的社交語言。</div>
+      <div style="padding: 15px; background: #111; color: #888; font-size: 13px; text-align: center;">▲ 現場：這不是單向表演，而是雙向的互動。</div>
     </div>
-
-    <p class="lead">
-      「保存文化不只是把它放在博物館，而是要讓人願意走進去。」
-      綠雷德團隊深知年輕人對紅包場的距離感，因此他們不只是導覽，更是在做<strong style="color:var(--accent);">「翻譯」</strong>——把舊時代的語言，翻譯成新世代能懂的體驗。
-    </p>
-
-    <div class="flip-grid">
-      <div class="flip-card">
-        <div class="flip-inner">
-          <div class="flip-front">
-            <h3 style="color:#fff; font-size: 24px;">煙味</h3>
-            <p style="color:#aaa;">令人卻步的第一印象</p>
-          </div>
-          <div class="flip-back">
-            <h3 style="color:#FFD700;">理解的代價</h3>
-            <p>忍受感官的不適，才看見被煙霧包裹的真情。</p>
-          </div>
-        </div>
-      </div>
-      <div class="flip-card">
-        <div class="flip-inner">
-          <div class="flip-front">
-            <h3 style="color:#fff; font-size: 24px;">情色?</h3>
-            <p style="color:#aaa;">被標籤化的想像</p>
-          </div>
-          <div class="flip-back">
-            <h3 style="color:#FFD700;">社交密碼</h3>
-            <p>紅包是對舞台的肯定，也是榮民伯伯維持尊嚴的方式。</p>
-          </div>
-        </div>
-      </div>
-      <div class="flip-card">
-        <div class="flip-inner">
-          <div class="flip-front">
-            <h3 style="color:#fff; font-size: 24px;">老人</h3>
-            <p style="color:#aaa;">過氣的群體</p>
-          </div>
-          <div class="flip-back">
-            <h3 style="color:#FFD700;">活歷史</h3>
-            <p>他們是離散時代的見證者，這裡是大時代最後的避風港。</p>
-          </div>
-        </div>
-      </div>
-      <div class="flip-card">
-        <div class="flip-inner">
-          <div class="flip-front">
-            <h3 style="color:#fff; font-size: 24px;">聽歌</h3>
-            <p style="color:#aaa;">被動的娛樂</p>
-          </div>
-          <div class="flip-back">
-            <h3 style="color:#FFD700;">參與式劇場</h3>
-            <p>透過《老闆～來碗陽春麵》，讓觀眾不再只是看客，而是入戲者。</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="chapter-section" style="text-align: center; margin-top: 150px;">
-    <h3 style="color:#888; letter-spacing: 2px;">不僅如此...</h3>
-    <p style="max-width: 600px; margin: 30px auto; color: #ccc;">
-      台北市文化局推動《萬華時光》，舉辦跨世代演唱會；劇團將戲劇搬進歌廳。
-      這是一場公部門與民間共同編織的文化行動。
-    </p>
   </section>
 
   <section class="conclusion">
@@ -418,93 +378,92 @@
 </main>
 
 <script>
-  // 1. 噴錢動畫 (Money Spray)
+  // 1. 噴錢動畫 (使用圖片)
   function createMoney(btn) {
-    // 產生 15 張鈔票
-    for (let i = 0; i < 15; i++) {
-      let bill = document.createElement('div');
-      bill.classList.add('money-bill');
+    const moneyUrl = "https://upload.wikimedia.org/wikipedia/zh/2/25/New_Taiwan_Dollar_100_2000_Series_Obverse.jpg"; // 百元鈔票範例圖，可換成你的
+    
+    for (let i = 0; i < 20; i++) { // 噴 20 張
+      let img = document.createElement('img');
+      img.src = moneyUrl;
+      img.classList.add('money-img');
       
-      // 隨機噴射方向
-      let angle = Math.random() * Math.PI * 2;
-      let velocity = 100 + Math.random() * 150;
-      let tx = Math.cos(angle) * velocity;
-      let ty = Math.sin(angle) * velocity - 100; // 稍微往上噴
-      let rot = Math.random() * 360;
-
-      // 放在按鈕位置
+      // 設定隨機大小與位置
+      let size = 60 + Math.random() * 80;
+      img.style.width = size + "px";
+      
+      // 計算起始位置 (按鈕中心)
       let rect = btn.getBoundingClientRect();
-      bill.style.left = (rect.left + rect.width / 2) + 'px';
-      bill.style.top = (rect.top + rect.height / 2) + 'px';
-      bill.style.position = 'fixed'; // 確保固定在視窗
+      img.style.left = (rect.left + rect.width / 2 - size/2) + 'px';
+      img.style.top = (rect.top + rect.height / 2 - size/2) + 'px';
+      img.style.display = 'block';
+      
+      document.body.appendChild(img);
 
-      document.body.appendChild(bill);
+      // 隨機噴射參數
+      let angle = Math.random() * Math.PI * 2;
+      let velocity = 200 + Math.random() * 300;
+      let tx = Math.cos(angle) * velocity;
+      let ty = Math.sin(angle) * velocity - 200; // 向上噴
+      let rot = Math.random() * 720 - 360;
 
-      // GSAP 動畫
-      gsap.to(bill, {
+      // GSAP 動畫序列
+      gsap.to(img, {
         x: tx,
         y: ty,
         rotation: rot,
         opacity: 1,
-        duration: 0.5,
-        ease: "power1.out",
+        duration: 0.8,
+        ease: "power2.out",
         onComplete: () => {
-          // 飄落
-          gsap.to(bill, {
-            y: ty + 300,
+          // 飄落消失
+          gsap.to(img, {
+            y: ty + 600, // 往下掉
             opacity: 0,
-            duration: 1,
+            duration: 1.5,
             ease: "power1.in",
-            onComplete: () => bill.remove()
+            onComplete: () => img.remove()
           });
         }
       });
     }
   }
 
-  // 2. 進場儀式：點擊紅包
+  // 2. 進場儀式
   function enterSite(btn) {
-    // 噴錢！
-    createMoney(btn);
-
-    // 紅包按鈕動畫
-    gsap.to(btn, { scale: 0.8, duration: 0.1, yoyo: true, repeat: 1 });
+    createMoney(btn); // 噴錢
+    gsap.to(btn, { scale: 0.9, duration: 0.1, yoyo: true, repeat: 1 });
 
     const gate = document.getElementById('hero-gate');
     const scrollSection = document.getElementById('horizontal-scroll-section');
     
-    // 延遲一點點再開門，讓錢飛一下
+    // 延遲讓錢飛一下
     setTimeout(() => {
       gsap.to(gate, {
-        opacity: 0,
-        scale: 1.1,
+        yPercent: -100, // 向上滑開
         duration: 1.5,
-        ease: "power2.inOut",
+        ease: "power3.inOut",
         onComplete: () => {
           gate.style.display = 'none';
-          document.body.style.overflow = 'auto'; // 解鎖捲動
-          scrollSection.style.opacity = 1; // 顯示時間軸
+          document.body.style.overflow = 'auto'; 
+          scrollSection.style.opacity = 1;
           
-          // 自動開始橫向捲動一點點，提示使用者
           if(window.innerWidth > 768) {
              gsap.to(window, { scrollTo: 100, duration: 1 });
           }
         }
       });
-    }, 800);
+    }, 1000);
   }
 
-  // 3. 結尾儀式：點亮霓虹
+  // 3. 結尾點燈
   function lightUp(btn) {
     btn.classList.add('neon-active');
     btn.innerText = "ON AIR";
     document.getElementById('final-content').style.opacity = 1;
-    
-    // 背景變亮一點點
-    gsap.to('body', { backgroundColor: '#110505', duration: 2 });
+    gsap.to('body', { backgroundColor: '#100000', duration: 2 });
   }
 
-  // 4. 註冊 GSAP ScrollTrigger (橫向捲動)
+  // 4. 註冊橫向捲動
   gsap.registerPlugin(ScrollTrigger);
   
   if (window.innerWidth > 768) {
@@ -516,14 +475,12 @@
         trigger: "#horizontal-scroll-section",
         pin: true,
         scrub: 1,
-        snap: 1 / (sections.length - 1),
-        // 增加捲動長度，讓速度變慢，好閱讀
         end: () => "+=" + (document.querySelector("#horizontal-scroll-section").offsetWidth * 2) 
       }
     });
   }
 
-  // 文字浮現特效
+  // 文字浮現
   gsap.utils.toArray('.huge-title, .lead').forEach(element => {
     gsap.from(element, {
       scrollTrigger: {
@@ -531,10 +488,7 @@
         start: "top 85%",
         toggleActions: "play none none reverse"
       },
-      y: 50,
-      opacity: 0,
-      duration: 1.2,
-      ease: "power3.out"
+      y: 50, opacity: 0, duration: 1.2, ease: "power3.out"
     });
   });
 
