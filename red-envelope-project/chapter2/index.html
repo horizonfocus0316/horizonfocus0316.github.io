@@ -31,27 +31,21 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-/* === 0. 開場 Hook (文字視覺化) === */
+/* === 0. 開場 Hook === */
 .hook-section{position:relative; background:var(--bg);}
 .hook-block{
-    height:100vh;
-    display:flex; flex-direction:column; justify-content:center; align-items:center;
+    height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
     padding:2rem; position:sticky; top:0; text-align:center;
-    background:transparent; /* 讓背景圖透出來 */
-    border-bottom:1px solid rgba(255,255,255,0.05); z-index:10;
+    background:transparent; border-bottom:1px solid rgba(255,255,255,0.05); z-index:10;
 }
 .hook-text{
     font-size:clamp(1.5rem, 4vw, 3rem); font-weight:900; line-height:1.6;
-    max-width:900px; opacity:0.2; filter:blur(4px); transition:0.8s ease-out;
-    transform:scale(0.95);
+    max-width:900px; opacity:0.2; filter:blur(4px); transition:0.8s ease-out; transform:scale(0.95);
 }
 .hook-block.active .hook-text{opacity:1; filter:blur(0); transform:scale(1); color:var(--gold);}
-
-/* 背景圖：一開始隱藏，滑動時出現 */
 .hook-bg-image{
-    position:fixed; top:0; left:0; width:100%; height:100%;
-    object-fit:cover; opacity:0; transition:opacity 1.5s ease; z-index:0;
-    filter: brightness(0.4) grayscale(0.5);
+    position:fixed; top:0; left:0; width:100%; height:100%; object-fit:cover; 
+    opacity:0; transition:opacity 1.5s ease; z-index:0; filter: brightness(0.4) grayscale(0.5);
 }
 
 /* === 1. 轉場金句 === */
@@ -66,8 +60,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 .h-card{
     width:70vw; max-width:500px; flex-shrink:0; margin-right:5vw;
     background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
-    display:flex; flex-direction:column; transition:0.3s;
-    position:relative;
+    display:flex; flex-direction:column; transition:0.3s; position:relative;
 }
 .h-card:hover{background:rgba(255,255,255,0.1); border-color:var(--gold);}
 .h-card-img{height:55%; overflow:hidden;}
@@ -77,44 +70,27 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 .h-card h3{font-size:1.8rem; color:var(--gold); margin-bottom:0.5rem;}
 .h-number{font-size:4rem; font-weight:900; color:rgba(255,255,255,0.1); position:absolute; top:-20px; right:10px; z-index:2;}
 
-/* === 3. W7 Trigger Animation (茶單收據) === */
+/* === 3. 茶單收據動畫 === */
 .dual-section{background:var(--bg); padding:15vh 5vw; position:relative; z-index:40;}
 .dual-container{display:grid; grid-template-columns: 1fr 1fr; gap:4rem; max-width:1200px; margin:0 auto; align-items:center;}
 .concept-card{border-top:1px solid var(--gold); padding-top:2rem;}
 .concept-visual{background:#222; aspect-ratio:16/9; margin-bottom:1.5rem; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center;}
-
-/* 收據本體 */
 .receipt{
-    background:#eee; color:#222; padding:2rem; font-family:'Courier Prime', monospace;
-    width:280px; transform:rotate(-5deg) translateY(50px); 
-    box-shadow:10px 10px 30px rgba(0,0,0,0.6);
-    opacity:0; transition:all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+    background:#eee; color:#222; padding:2rem; font-family:'Courier Prime', monospace; width:280px;
+    transform:rotate(-5deg) translateY(50px); box-shadow:10px 10px 30px rgba(0,0,0,0.6); opacity:0; transition:1s;
 }
-/* 觸發後的狀態 */
 .receipt.animate{opacity:1; transform:rotate(-2deg) translateY(0);}
-
-.r-header{text-align:center; border-bottom:1px dashed #000; padding-bottom:10px; margin-bottom:10px; font-weight:bold;}
 .r-row{display:flex; justify-content:space-between; margin-bottom:8px; opacity:0; transform:translateX(-10px); transition:0.5s;}
-/* 項目逐一出現 */
-.receipt.animate .r-row:nth-child(2){opacity:1; transform:translateX(0); transition-delay:0.5s;}
-.receipt.animate .r-row:nth-child(3){opacity:1; transform:translateX(0); transition-delay:0.7s;}
-.receipt.animate .r-row:nth-child(4){opacity:1; transform:translateX(0); transition-delay:0.9s;}
+.receipt.animate .r-row:nth-child(2){opacity:1; transition-delay:0.5s; transform:translateX(0);}
+.receipt.animate .r-row:nth-child(3){opacity:1; transition-delay:0.7s; transform:translateX(0);}
+.receipt.animate .r-row:nth-child(4){opacity:1; transition-delay:0.9s; transform:translateX(0);}
 .r-total{border-top:2px solid #000; margin-top:10px; padding-top:10px; text-align:right; font-weight:900; font-size:1.2rem;}
-
-/* 紅包圖樣 */
-.red-packet-img{
-    width:80%; max-width:300px; box-shadow:0 20px 40px rgba(0,0,0,0.6);
-    transform:scale(0.9); opacity:0; transition:1s ease;
-}
+.red-packet-img{width:80%; max-width:300px; opacity:0; transform:scale(0.9); transition:1s;}
 .red-packet-img.animate{opacity:1; transform:scale(1);}
 
-/* === 5. W10 Scrolled Video (訪談預留結構) === */
-.video-scrolled-section{
-    position:relative; height:300vh; z-index:50; background:#000;
-}
-.video-sticky{
-    position:sticky; top:0; width:100%; height:100vh; overflow:hidden;
-}
+/* === 5. 訪談 (三段式 Scrolled Video) === */
+.video-scrolled-section{position:relative; height:450vh; z-index:50; background:#000;} /* 拉長高度以容納三段 */
+.video-sticky{position:sticky; top:0; width:100%; height:100vh; overflow:hidden;}
 .video-overlay-text{
     position:absolute; bottom:15vh; left:10vw; max-width:500px;
     text-shadow:0 2px 10px rgba(0,0,0,0.8);
@@ -124,21 +100,18 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 }
 .video-overlay-text.show{opacity:1; transform:translateY(0);}
 
-/* RWD */
 @media(max-width: 768px){
     .hscroll-container{height:auto; background:var(--bg);}
     .hscroll-sticky{position:relative; height:auto; display:block; padding:10vh 5vw;}
     .hscroll-track{flex-direction:column; height:auto; padding:0; transform:none !important;}
     .h-card{width:100%; max-width:100%; margin-bottom:3rem; margin-right:0;}
     .dual-container{grid-template-columns:1fr;}
-    .hook-text{opacity:0.5; filter:blur(0);} /* 手機版減弱特效以免看不清 */
 }
 </style>
 </head>
 <body>
 
 <div class="grain-overlay"></div>
-
 <img src="photo/DSC04754.jpg" class="hook-bg-image" id="bg-hook-1">
 
 <section class="hook-section">
@@ -161,17 +134,9 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 </section>
 
 <section class="statement-section">
-    <p class="statement-text">
-        一首歌、一個眼神、一個紅包，<br>
-        構成那個年代最真誠的交流。
-    </p>
-    <div class="statement-img">
-        <img src="photo/jin-ziyan.jpg" alt="紅包場歌手">
-    </div>
-    <p class="statement-text" style="font-size:1.1rem; opacity:0.8; margin-top:2rem;">
-        紅包並非對身體的購買，而是對表演的支持。<br>
-        建立的是長時間累積的人情關係。
-    </p>
+    <p class="statement-text">一首歌、一個眼神、一個紅包，<br>構成那個年代最真誠的交流。</p>
+    <div class="statement-img"><img src="photo/jin-ziyan.jpg" alt="紅包場歌手"></div>
+    <p class="statement-text" style="font-size:1.1rem; opacity:0.8; margin-top:2rem;">紅包並非對身體的購買，而是對表演的支持。<br>建立的是長時間累積的人情關係。</p>
 </section>
 
 <section class="hscroll-container" id="elements">
@@ -184,7 +149,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
             <div class="h-card">
                 <div class="h-number">01</div>
                 <div class="h-card-img"><img src="photo/singer.jpg" alt="歌星"></div>
-                <div class="h-card-content"><h3>歌星</h3><p>輪番登台，每人2到3首歌曲的時間。穿著禮服盛裝登場，透過舞台展現自信。</p></div>
+                <div class="h-card-content"><h3>歌星</h3><p>輪番登台，每人2到3首歌曲的時間。穿著禮服盛裝登場。</p></div>
             </div>
             <div class="h-card">
                 <div class="h-number">02</div>
@@ -194,9 +159,9 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
             <div class="h-card">
                 <div class="h-number">03</div>
                 <div class="h-card-img"><img src="photo/assistant.jpg" alt="小妹"></div>
-                <div class="h-card-content"><h3>小妹</h3><p>在場內穿梭的服務生。端茶、倒水、引導客人包紅包，建立關係的重要搭擋。</p></div>
+                <div class="h-card-content"><h3>小妹</h3><p>在場內穿梭的服務生。端茶、倒水、引導客人包紅包。</p></div>
             </div>
-             <div class="h-card">
+            <div class="h-card">
                 <div class="h-number">04</div>
                 <div class="h-card-img"><img src="photo/DSC09375.jpg" alt="服裝"></div>
                 <div class="h-card-content"><h3>服裝</h3><p>每件禮服背後都有手工特製的故事。顏色、帽子、首飾搭配都有學問。</p></div>
@@ -204,12 +169,12 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
              <div class="h-card">
                 <div class="h-number">05</div>
                 <div class="h-card-img"><img src="photo/food.jpg" alt="餐飲"></div>
-                <div class="h-card-content"><h3>餐飲</h3><p>瓜子、水果盤、熱茶。茶單制進行，有時歌星會贈送炒花生增進情感。</p></div>
+                <div class="h-card-content"><h3>餐飲</h3><p>瓜子、水果盤、熱茶。茶單制進行。</p></div>
             </div>
             <div class="h-card">
                 <div class="h-number">06</div>
                 <div class="h-card-img"><img src="photo/redpacket.jpg" alt="紅包"></div>
-                <div class="h-card-content"><h3>紅包</h3><p>金額隨心隨緣，是給歌星的「面子」，也是堆疊出的人情文化。</p></div>
+                <div class="h-card-content"><h3>紅包</h3><p>隨心隨緣的金額，是給歌星的「面子」，也是人情文化。</p></div>
             </div>
         </div>
     </div>
@@ -217,7 +182,6 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 
 <section class="dual-section">
     <div class="dual-container">
-        
         <div class="concept-card">
             <h3 class="concept-title">茶單制度：人情的入場券</h3>
             <div class="concept-visual">
@@ -231,7 +195,6 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
             </div>
             <p>點餐與結款將以「茶單制」進行。歌星承擔賓客的飲食消費，而賓客則包出高於消費金額的紅包。</p>
         </div>
-
         <div class="concept-card">
             <h3 class="concept-title">紅包文化：面子的具象化</h3>
             <div class="concept-visual">
@@ -239,42 +202,43 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
             </div>
             <p>100元、300元皆隨心隨緣。多出來的金額成為鼓勵，這便堆疊成了「紅包場文化」。</p>
         </div>
-
     </div>
 </section>
 
 <section class="video-scrolled-section">
     <div class="video-sticky">
-        <video src="video/楊雅喬 車間打工.mp4" muted loop playsinline style="width:100%; height:100%; object-fit:cover; opacity:0.6;"></video>
+        <video id="main-video" src="video/workpassion1.mp4" muted loop playsinline style="width:100%; height:100%; object-fit:cover; opacity:0.6; transition:opacity 0.5s;"></video>
         
         <div class="video-overlay-text js-vid-text">
-            <h3 style="color:var(--gold); margin-bottom:0.5rem;">楊雅喬</h3>
+            <h3 style="color:var(--gold); margin-bottom:0.5rem;">楊雅喬：入行的初心</h3>
             <p>「我國高中也在紡織車間暑期打工，但發現不喜歡。不會唱，就學啊，我就這樣找到我喜歡的工作了。」</p>
         </div>
 
-        <div class="video-overlay-text js-vid-text" style="bottom:40vh; right:10vw; left:auto;">
-            <h3 style="color:var(--gold); margin-bottom:0.5rem;">翟曼芳</h3>
-            <p>「歌廳假如沒有了，其他地方也沒有我們生存的空間了...」</p>
+        <div class="video-overlay-text js-vid-text" style="bottom:40vh; left:auto; right:10vw;">
+            <h3 style="color:var(--gold); margin-bottom:0.5rem;">職人精神：親手縫製的華麗</h3>
+            <p>每一件登台的禮服，不僅是視覺的呈現，更是歌星對舞台尊重的極致展現。</p>
+        </div>
+
+        <div class="video-overlay-text js-vid-text" style="bottom:10vh; left:10vw;">
+            <h3 style="color:var(--gold); margin-bottom:0.5rem;">翟曼芳：不捨的未來</h3>
+            <p>「歌廳假如沒有了，其他地方也沒有我們生存的空間了... 我也要來作客，我也要來發紅包...」</p>
         </div>
     </div>
 </section>
 
-<footer style="padding:5vh 0; text-align:center; background:#000; color:#555; font-size:0.8rem;">
+<footer style="padding:10vh 0; text-align:center; background:#000; color:#555; font-size:0.8rem;">
     2025 唱給不在場的人專題製作組
 </footer>
 
 <script>
-// 1. Hook Animation (開場文字 + 背景圖淡入)
+// Hook & HScroll Scripts (Same as before)
 const hookBlocks = document.querySelectorAll('.js-hook-block');
 const hookBg = document.querySelector('.hook-bg-image');
-
 const hookObserver = new IntersectionObserver((entries)=>{
     entries.forEach(entry => {
         if(entry.isIntersecting){
             entry.target.classList.add('active');
-            if(entry.target.getAttribute('data-bg')){
-                hookBg.style.opacity = '0.3'; // 第一段文字時，背景圖浮現
-            }
+            if(entry.target.getAttribute('data-bg')) hookBg.style.opacity = '0.3';
         } else {
             entry.target.classList.remove('active');
         }
@@ -282,23 +246,19 @@ const hookObserver = new IntersectionObserver((entries)=>{
 }, {threshold: 0.5});
 hookBlocks.forEach(b => hookObserver.observe(b));
 
-// 2. Horizontal Scroll (電腦版橫向捲動)
 const hContainer = document.querySelector('.hscroll-container');
 const hTrack = document.getElementById('hTrack');
-
 window.addEventListener('scroll', () => {
     if(window.innerWidth > 768){
         const top = hContainer.offsetTop;
         const h = hContainer.offsetHeight - window.innerHeight;
         let p = (window.scrollY - top) / h;
         if(p<0) p=0; if(p>1) p=1;
-        
         const trackW = hTrack.scrollWidth - window.innerWidth + 200;
         hTrack.style.transform = `translateX(-${p * trackW}px)`;
     }
 });
 
-// 3. W7 Trigger Animation (收據滑入動畫)
 const animElements = document.querySelectorAll('.js-trigger-anim');
 const animObserver = new IntersectionObserver((entries)=>{
     entries.forEach(e => {
@@ -307,23 +267,51 @@ const animObserver = new IntersectionObserver((entries)=>{
 }, {threshold:0.5});
 animElements.forEach(e => animObserver.observe(e));
 
-// 4. Scrolled Video Text (訪談文字淡入)
+// === Video Switching Logic (3 Stages) ===
 const vidTexts = document.querySelectorAll('.js-vid-text');
 const vidSection = document.querySelector('.video-scrolled-section');
+const mainVideo = document.getElementById('main-video');
 
 window.addEventListener('scroll', ()=>{
     const top = vidSection.offsetTop;
     const h = vidSection.offsetHeight;
     const scroll = window.scrollY - top;
     
-    // 捲動 20% 出現第一段，60% 出現第二段
-    if(scroll > h * 0.2) vidTexts[0].classList.add('show');
-    else vidTexts[0].classList.remove('show');
+    // Stage 1: Passion (0% - 33%)
+    if(scroll > h * 0.05 && scroll < h * 0.3) {
+        vidTexts[0].classList.add('show');
+        changeVideo('video/workpassion1.mp4');
+    } else {
+        vidTexts[0].classList.remove('show');
+    }
     
-    if(scroll > h * 0.6) vidTexts[1].classList.add('show');
-    else vidTexts[1].classList.remove('show');
+    // Stage 2: Clothes (33% - 66%)
+    if(scroll > h * 0.35 && scroll < h * 0.6) {
+        vidTexts[1].classList.add('show');
+        changeVideo('video/clothes1.mp4');
+    } else {
+        vidTexts[1].classList.remove('show');
+    }
+
+    // Stage 3: Future (66% - 100%)
+    if(scroll > h * 0.65) {
+        vidTexts[2].classList.add('show');
+        changeVideo('video/future1.mp4');
+    } else {
+        vidTexts[2].classList.remove('show');
+    }
 });
 
+function changeVideo(src) {
+    if(!mainVideo.src.includes(src)) {
+        mainVideo.style.opacity = 0;
+        setTimeout(() => {
+            mainVideo.src = src;
+            mainVideo.play();
+            mainVideo.style.opacity = 0.6;
+        }, 500);
+    }
+}
 </script>
 </body>
 </html>
