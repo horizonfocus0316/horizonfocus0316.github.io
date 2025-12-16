@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>唱給不在場的人</title>
+<title>唱給不在場的人 - 數位敘事專題</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Courier+Prime&display=swap" rel="stylesheet" />
 <style>
@@ -112,7 +112,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 
 /* 聲音按鈕樣式 */
 .sound-toggle-btn{
-    position:absolute; top:100px; right:30px; z-index:100;
+    position:absolute; top:30px; right:30px; z-index:100;
     background:rgba(255,255,255,0.15); backdrop-filter:blur(5px);
     border:1px solid rgba(255,255,255,0.3); color:#fff;
     padding:10px 20px; border-radius:30px; cursor:pointer;
@@ -184,12 +184,12 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
                 <div class="h-card-img"><img src="photo/assistant.jpg" alt="小妹"></div>
                 <div class="h-card-content"><h3>小妹</h3><p>在場內穿梭的服務生。端茶、倒水、引導客人包紅包。</p></div>
             </div>
-             <div class="h-card">
+            <div class="h-card">
                 <div class="h-number">04</div>
                 <div class="h-card-img"><img src="photo/DSC09375.jpg" alt="服裝"></div>
                 <div class="h-card-content"><h3>服裝</h3><p>每件禮服背後都有手工特製的故事。顏色、帽子、首飾搭配都有學問。</p></div>
             </div>
-             <div class="h-card">
+            <div class="h-card">
                 <div class="h-number">05</div>
                 <div class="h-card-img"><img src="photo/food.jpg" alt="餐飲"></div>
                 <div class="h-card-content"><h3>餐飲</h3><p>瓜子、水果盤、熱茶。茶單制進行。</p></div>
@@ -257,7 +257,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 </footer>
 
 <script>
-// Hook Animation
+// 1. Hook Animation
 const hookBlocks = document.querySelectorAll('.js-hook-block');
 const hookObserver = new IntersectionObserver((entries)=>{
     entries.forEach(entry => {
@@ -267,7 +267,7 @@ const hookObserver = new IntersectionObserver((entries)=>{
 }, {threshold: 0.5});
 hookBlocks.forEach(b => hookObserver.observe(b));
 
-// Horizontal Scroll
+// 2. Horizontal Scroll
 const hContainer = document.querySelector('.hscroll-container');
 const hTrack = document.getElementById('hTrack');
 window.addEventListener('scroll', () => {
@@ -281,7 +281,7 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Trigger Animation
+// 3. Trigger Animation (Receipt)
 const animElements = document.querySelectorAll('.js-trigger-anim');
 const animObserver = new IntersectionObserver((entries)=>{
     entries.forEach(e => {
@@ -290,13 +290,13 @@ const animObserver = new IntersectionObserver((entries)=>{
 }, {threshold:0.5});
 animElements.forEach(e => animObserver.observe(e));
 
-// === Video Logic ===
+// 4. Video Switching & Sound Logic
 const vidTexts = document.querySelectorAll('.js-vid-text');
 const vidSection = document.querySelector('.video-scrolled-section');
 const mainVideo = document.getElementById('main-video');
 const soundBtn = document.getElementById('sound-btn');
 
-// 1. 聲音按鈕邏輯
+// 聲音開關控制
 soundBtn.addEventListener('click', () => {
     if(mainVideo.muted){
         mainVideo.muted = false;
@@ -311,13 +311,12 @@ soundBtn.addEventListener('click', () => {
     }
 });
 
-// 2. 影片捲動切換邏輯
 window.addEventListener('scroll', ()=>{
     const top = vidSection.offsetTop;
     const h = vidSection.offsetHeight;
     const scroll = window.scrollY - top;
     
-    // Stage 1
+    // Stage 1: 熱情 (0% - 33%)
     if(scroll > h * 0.05 && scroll < h * 0.3) {
         vidTexts[0].classList.add('show');
         changeVideo('video/workpassion1.mp4');
@@ -325,7 +324,7 @@ window.addEventListener('scroll', ()=>{
         vidTexts[0].classList.remove('show');
     }
     
-    // Stage 2
+    // Stage 2: 職人 (33% - 66%)
     if(scroll > h * 0.35 && scroll < h * 0.6) {
         vidTexts[1].classList.add('show');
         changeVideo('video/clothes1.mp4');
@@ -333,7 +332,7 @@ window.addEventListener('scroll', ()=>{
         vidTexts[1].classList.remove('show');
     }
 
-    // Stage 3
+    // Stage 3: 未來 (66% - 100%)
     if(scroll > h * 0.65) {
         vidTexts[2].classList.add('show');
         changeVideo('video/future1.mp4');
@@ -344,11 +343,14 @@ window.addEventListener('scroll', ()=>{
 
 function changeVideo(src) {
     if(!mainVideo.src.includes(src)) {
-        // 切換時保持聲音狀態
-        let isMuted = mainVideo.muted;
-        mainVideo.src = src;
-        mainVideo.muted = isMuted; // 確保狀態不被重置
-        mainVideo.play();
+        let isMuted = mainVideo.muted; // 紀錄目前聲音狀態
+        mainVideo.style.opacity = 0;   // 淡出舊影片
+        setTimeout(() => {
+            mainVideo.src = src;
+            mainVideo.muted = isMuted; // 保持聲音狀態
+            mainVideo.play();
+            mainVideo.style.opacity = 0.8; // 淡入新影片
+        }, 500);
     }
 }
 </script>
