@@ -24,6 +24,7 @@
       padding: 0;
     }
 
+    /* === 加入全頁淡入動畫 === */
     body {
       font-family: "Noto Serif TC", serif;
       background-color: var(--bg-color);
@@ -34,6 +35,12 @@
       flex-direction: column;
       justify-content: center;
       position: relative;
+      animation: fadeInPage 1.5s ease-out; /* 這裡加上動畫 */
+    }
+
+    @keyframes fadeInPage {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* 噪點層 */
@@ -259,11 +266,8 @@
 
   <div class="bg-container">
     <div class="bg-layer active" id="bg-0" style="background-image: url('assets/bg-cover.png');"></div>
-    
     <div class="bg-layer" id="bg-1" style="background-image: url('assets/bg-ch1..png');"></div>
-    
     <div class="bg-layer" id="bg-2" style="background-image: url('assets/bg-ch2.png');"></div>
-    
     <div class="bg-layer" id="bg-3" style="background-image: url('assets/bg-ch3.png');"></div>
   </div>
 
