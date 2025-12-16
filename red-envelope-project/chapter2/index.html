@@ -21,7 +21,15 @@ body{
     background:var(--bg);
     color:#e0e0e0;
     overflow-x:hidden;
+    /* 新增：頁面淡入動畫 */
+    animation: fadeInPage 1.5s ease-out;
 }
+
+@keyframes fadeInPage {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 img, video{width:100%; height:auto; display:block; object-fit:cover;}
 
 /* === 電影感濾鏡 (加強版) === */
@@ -196,6 +204,71 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 .video-overlay-text h3{color:var(--gold); font-size:1.8rem; margin-bottom:1rem;}
 .video-overlay-text p{font-size:1.2rem; line-height:1.8;}
 
+/* === 5. 底部按鈕區 CSS (新增) === */
+.next-chapter-section {
+  padding: 100px 20px 140px;
+  text-align: center;
+  background: linear-gradient(to bottom, transparent, #000);
+  position: relative;
+  z-index: 60; /* 確保在影片層之上 */
+}
+
+.next-label {
+  font-size: 0.9rem;
+  color: #666;
+  letter-spacing: 0.2em;
+  margin-bottom: 30px;
+  display: block;
+  text-transform: uppercase;
+}
+
+.nav-buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 15px 40px;
+  color: #fff;
+  font-family: "Noto Serif TC", serif;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  transition: all 0.4s ease;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-btn span {
+  font-size: 0.7em;
+  color: #888;
+  margin-top: 5px;
+  font-weight: 300;
+}
+
+.btn-home:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.btn-next {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.btn-next:hover {
+  border-color: var(--red); /* 使用 Chapter 2 的紅色變數 */
+  background: rgba(74, 5, 5, 0.3);
+  letter-spacing: 0.15em;
+  box-shadow: 0 0 30px rgba(74, 5, 5, 0.4);
+}
+
 /* RWD */
 @media(max-width: 768px){
     .stack-text{font-size:2rem;}
@@ -337,6 +410,20 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
         </div>
     </div>
 </section>
+
+<div class="next-chapter-section">
+  <span class="next-label">CONTINUE READING</span>
+  <div class="nav-buttons-container">
+    <a href="../index.html" class="nav-btn btn-home">
+      回專題首頁
+      <span>BACK TO HOME</span>
+    </a>
+    <a href="../chapter3/index.html" class="nav-btn btn-next">
+      下一章：最後的紅包場
+      <span>CHAPTER 03 &rarr;</span>
+    </a>
+  </div>
+</div>
 
 <footer style="padding:10vh 0; text-align:center; background:#080202; color:#666; font-size:0.8rem; border-top:1px solid #222;">
     2025 唱給不在場的人專題製作組
