@@ -15,6 +15,7 @@
  <style>
    :root {
      --red: #970C10;
+     --body-text-size: clamp(1rem, 1.6vw, 1.3rem);
    }
 
 
@@ -33,11 +34,28 @@
    }
 
 
+   h5 {
+     font-size: var(--body-text-size);
+     font-weight: 500;
+     line-height: 1.8;
+     margin: 0;
+     color: inherit;
+   }
+
+
    /* =========================
       Section 1｜Full-screen Video
    ========================== */
-   .landing-video {
+   .landing-wrapper {
      position: relative;
+     height: 200vh;
+     width: 100%;
+   }
+
+
+   .landing-video {
+     position: sticky;
+     top: 0;
      width: 100%;
      height: 100vh;
      overflow: hidden;
@@ -53,6 +71,21 @@
    }
 
 
+   .landing-hint {
+     position: absolute;
+     z-index: 2;
+     bottom: 2.5rem;
+     left: 50%;
+     transform: translateX(-50%);
+     color: rgba(255,255,255,0.85);
+     font-size: 0.9rem;
+     letter-spacing: 0.3em;
+     text-transform: uppercase;
+     animation: hint-float 2s ease-in-out infinite;
+     pointer-events: none;
+   }
+
+
    /* 可微調暗度，讓影片不刺眼 */
    .landing-video::after {
      content: "";
@@ -60,27 +93,6 @@
      inset: 0;
      background: rgba(0,0,0,0.25);
      z-index: 1;
-   }
-
-
-   /* =========================
-      Section 2｜Buffer Zone
-   ========================== */
-   .buffer {
-     position: relative;
-     height: 60vh;
-     background: var(--red);
-     overflow: hidden;
-   }
-
-
-   .buffer::after {
-     content: "";
-     position: absolute;
-     inset: 0;
-     background: url("assets/grain.png") repeat;
-     opacity: 0.25;
-     pointer-events: none;
    }
 
 
@@ -171,19 +183,6 @@
    }
 
 
-   .hero-author-line {
-     opacity: 0;
-     transform: translateY(18px);
-     transition: opacity 0.9s ease-out, transform 0.9s ease-out;
-   }
-
-
-   .hero-author-line.revealed {
-     opacity: 1;
-     transform: translateY(0);
-   }
-
-
    /* Desktop keeps Chinese titles on a single line */
    .hero h1,
    .hero h2 {
@@ -231,8 +230,8 @@
 
    .hero-entrance {
      opacity: 0;
-     transform: translateY(20px);
-     transition: opacity 0.9s ease-out, transform 0.9s ease-out;
+     transform: translateY(24px);
+     transition: opacity 1.2s ease-out, transform 1.2s ease-out;
      transition-delay: var(--delay, 0ms);
    }
 
@@ -295,7 +294,7 @@
      text-align: center;
      color: #fff;
      line-height: 1.8;
-     font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+     font-size: var(--body-text-size);
      letter-spacing: 0.03em;
    }
 
@@ -308,11 +307,8 @@
 
 
    .immersive-copy h5 {
-     font-size: clamp(1.1rem, 2vw, 1.5rem);
-     font-weight: 600;
      color: #fff;
      letter-spacing: 0.04em;
-     margin: 0;
      opacity: 0;
      transform: translateY(24px);
      transition: opacity 1s ease-out, transform 1s ease-out;
@@ -340,11 +336,19 @@
    }
 
 
-   .chapter-intro {
+   .chapter-stack {
      position: relative;
+   }
+
+
+   .chapter-intro {
+     position: sticky;
+     top: 0;
+     height: 100vh;
      min-height: 100vh;
      background: #111;
      overflow: hidden;
+     z-index: 2;
    }
 
 
@@ -361,8 +365,8 @@
      content: "";
      position: absolute;
      inset: 0;
-     background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.25) 18%, transparent 50%);
-     filter: blur(16px);
+     background: linear-gradient(180deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.3) 22%, transparent 55%);
+     filter: blur(12px);
      pointer-events: none;
    }
 
@@ -370,14 +374,15 @@
    .chapter-overlay {
      position: absolute;
      inset: 0;
-     background: linear-gradient(180deg, rgba(8,8,8,0.1) 0%, rgba(8,8,8,0.55) 90%);
+     background: linear-gradient(180deg, rgba(8,8,8,0.08) 0%, rgba(8,8,8,0.55) 92%);
    }
 
 
    .chapter-title {
      position: absolute;
      left: 5vw;
-     bottom: 4vw;
+     top: 50%;
+     transform: translateY(-50%);
      color: #fff;
      font-size: clamp(1rem, 2.2vw, 1.8rem);
      font-weight: 600;
@@ -385,6 +390,641 @@
      max-width: 520px;
      line-height: 1.4;
      white-space: nowrap;
+     text-align: left;
+     z-index: 5;
+   }
+
+
+   .chapter-body {
+     position: relative;
+     background: #970C10;
+     color: #fff;
+     min-height: 110vh;
+     padding: clamp(60px, 10vh, 120px) clamp(6vw, 10vw, 12vw);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     z-index: 3;
+   }
+
+
+   .black-finale {
+     background: #000;
+     min-height: 100vh;
+     display: grid;
+     grid-template-columns: 50vw 50vw;
+     width: 100%;
+   }
+
+
+   .finale-image {
+     position: relative;
+     min-height: 100vh;
+     overflow: hidden;
+   }
+
+
+   .finale-image img {
+     position: absolute;
+     inset: 0;
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+   }
+
+
+   .finale-text {
+     background: #000;
+     color: #fff;
+     padding: clamp(60px, 12vh, 120px) clamp(6vw, 10vw, 12vw);
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     gap: 1rem;
+     text-align: left;
+   }
+
+
+   .finale-text h3 {
+     color: #FFE87A;
+     letter-spacing: 0.1em;
+     margin-bottom: 0.5rem;
+   }
+
+
+   .finale-text h4 {
+     font-weight: 500;
+     line-height: 1.8;
+     color: #fff;
+     margin: 0;
+   }
+
+
+   .black-quote {
+     background: #000;
+     min-height: 120vh;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding: clamp(60px, 15vh, 140px) clamp(6vw, 12vw, 14vw);
+   }
+
+
+   .black-quote h3 {
+     color: #fff;
+     text-align: center;
+     letter-spacing: 0.1em;
+     line-height: 1.8;
+     max-width: 820px;
+     opacity: 0;
+     transform: translateY(40px);
+     transition: opacity 1.2s ease, transform 1.2s ease;
+     font-size: clamp(1.5rem, 4vw, 2.8rem);
+   }
+
+
+   .black-quote h3.visible {
+     opacity: 1;
+     transform: translateY(0);
+   }
+
+
+   .black-quote h3 span {
+     transition: color 0.8s ease;
+   }
+
+
+   .black-quote h3.highlight span {
+     color: #FFE87A;
+   }
+
+
+   .horizontal-scroll {
+     position: relative;
+     --panel-count: 3;
+     height: calc(var(--panel-count) * 100vh);
+   }
+
+
+   .horizontal-track {
+     position: sticky;
+     top: 0;
+     height: 100vh;
+     overflow: hidden;
+     background: #000;
+   }
+
+
+   .scroll-panels {
+     display: flex;
+     width: calc(var(--panel-count) * 100vw);
+     height: 100%;
+     transition: transform 0.08s linear;
+   }
+
+
+   .scroll-panel {
+     width: 100vw;
+     height: 100%;
+     flex-shrink: 0;
+     position: relative;
+   }
+
+
+   .panel-guobin {
+     position: relative;
+     background: url("assets/oldmanhappy.jpg") center center / cover no-repeat;
+     display: flex;
+     align-items: flex-end;
+     justify-content: flex-start;
+     padding: clamp(4rem, 8vh, 6rem);
+   }
+
+
+   .panel-boom {
+     background: url("assets/theaters_boom.jpg") center center / cover no-repeat;
+   }
+
+
+   .panel-interior {
+     background: url("assets/singing_hall_interior.jpg") center center / cover no-repeat;
+   }
+
+
+   .sticky-section {
+     position: relative;
+     height: 180vh;
+   }
+
+
+   .sticky-section.sticky-guobin {
+     height: 120vh;
+   }
+
+
+   .sticky-frame {
+     position: sticky;
+     top: 0;
+     height: 100vh;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     overflow: hidden;
+     background: #000;
+   }
+
+
+   .sticky-section.sticky-guobin .sticky-frame {
+     justify-content: flex-start;
+     padding: clamp(2rem, 6vw, 5rem);
+   }
+
+
+   .sticky-background {
+     position: absolute;
+     inset: 0;
+     background-size: cover;
+     background-position: center;
+     transform: scale(1.05);
+   }
+
+
+   .sticky-caption-block {
+     position: relative;
+     z-index: 2;
+     background: rgba(0,0,0,0.6);
+     padding: clamp(2.5rem, 4vw, 3.75rem);
+     max-width: min(480px, 80vw);
+     letter-spacing: 0.05em;
+     line-height: 1.85;
+     font-size: clamp(0.95rem, 2vw, 1.35rem);
+     text-align: left;
+     opacity: 0;
+     transform: translateY(32px);
+     transition: opacity 0.9s ease-out, transform 0.9s ease-out;
+   }
+
+
+   .sticky-caption-block::before {
+     content: "";
+     position: absolute;
+     top: 0;
+     bottom: 0;
+     left: -10px;
+     width: 4px;
+     background: var(--red);
+   }
+
+
+   .sticky-caption-block.is-visible {
+     opacity: 1;
+     transform: translateY(0);
+   }
+
+
+   .story-horizontal {
+     position: relative;
+     --panel-count: 6;
+     height: calc(var(--panel-count) * 100vh);
+     background: #000;
+   }
+
+
+   .story-horizontal .story-track {
+     position: sticky;
+     top: 0;
+     height: 100vh;
+     overflow: hidden;
+   }
+
+
+   .story-horizontal .story-panels {
+     display: flex;
+     width: calc(var(--panel-count) * 100vw);
+     height: 100%;
+     transition: transform 0.08s linear;
+   }
+
+
+   .story-panel {
+     width: 100vw;
+     height: 100%;
+     flex-shrink: 0;
+     position: relative;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding: clamp(2rem, 6vw, 6rem);
+     overflow: hidden;
+   }
+
+
+   .story-panel::before {
+     content: "";
+     position: absolute;
+     inset: 0;
+     background-size: cover;
+     background-position: center;
+     transform: scale(1.05);
+     filter: brightness(0.75);
+   }
+
+
+   .story-panel::after {
+     content: "";
+     position: absolute;
+     inset: 0;
+     background: linear-gradient(120deg, rgba(0,0,0,0.8), rgba(0,0,0,0.35));
+   }
+
+
+   .story-copy {
+     position: relative;
+     z-index: 2;
+     max-width: min(620px, 80vw);
+     text-align: center;
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     letter-spacing: 0.05em;
+     line-height: 1.9;
+     font-size: var(--body-text-size);
+   }
+
+
+   .story-panel--songhall .story-copy,
+   .story-panel--stage .story-copy,
+   .story-panel--audience .story-copy {
+     text-align: center;
+     align-items: center;
+     background: none;
+     padding: 0;
+   }
+
+
+   .story-line {
+     opacity: 0;
+     transform: translateY(24px);
+     transition: opacity 0.9s ease-out, transform 0.9s ease-out;
+   }
+
+
+   .story-panel.is-active .story-line {
+     opacity: 1;
+     transform: translateY(0);
+   }
+
+
+   .story-panel--xi::before {
+     background-image: url("assets/ch1-00-ximending-street.jpg");
+     filter: brightness(0.7);
+   }
+
+
+   .story-panel--guobin::before {
+     background-image: url("assets/ch1-01-guobin-exterior.jpg");
+   }
+
+
+   .story-panel--songhall::before {
+     background-image: url("assets/ch1-02-songhall-interior-wide.jpg");
+   }
+
+
+   .story-panel--stage::before,
+   .story-panel--parallax::before {
+     background-image: url("assets/ch1-03-stage-close.jpg");
+   }
+
+
+   .story-panel--hands::before {
+     background-image: url("assets/ch1-04-red-envelope-hands.jpg");
+     filter: brightness(0.75);
+   }
+
+
+   .story-panel--audience::before {
+     background-image: url("assets/ch1-05-audience-listening.jpg");
+     filter: brightness(0.6);
+   }
+
+
+   .story-panel--hands .hands-highlight::after {
+     transform-origin: left;
+     transform: scaleX(0);
+   }
+
+
+   .story-panel--hands.is-active .hands-highlight {
+     color: #FFE87A;
+   }
+
+
+   .story-panel--hands.is-active .hands-highlight::after {
+     transform: scaleX(1);
+   }
+
+
+   .chapter-finale {
+     position: relative;
+     height: 100vh;
+     background: #000;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     text-align: center;
+     padding: 0 6vw;
+   }
+
+
+   .chapter-finale p {
+     font-size: clamp(1.2rem, 2.6vw, 2.2rem);
+     letter-spacing: 0.08em;
+     line-height: 1.9;
+     color: #fff;
+     max-width: 780px;
+     opacity: 0;
+     transform: translateY(30px);
+     transition: opacity 1.6s ease, transform 1.6s ease;
+   }
+
+
+   .chapter-finale.is-visible p {
+     opacity: 1;
+     transform: translateY(0);
+   }
+
+
+   .chapter-finale.slow p {
+     transition-duration: 2s;
+   }
+
+
+   .finale-image-block {
+     position: relative;
+     height: 100vh;
+     overflow: hidden;
+   }
+
+
+   .finale-image-block img {
+     position: absolute;
+     inset: 0;
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+   }
+
+
+   .finale-image-block::after {
+     content: "";
+     position: absolute;
+     inset: 0;
+     background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.55));
+   }
+
+
+   .finale-image-caption {
+     position: absolute;
+     left: 50%;
+     bottom: 18vh;
+     transform: translateX(-50%);
+     color: #fff;
+     font-size: clamp(1.4rem, 3vw, 2.6rem);
+     letter-spacing: 0.15em;
+     opacity: 0;
+     transition: opacity 1.4s ease;
+   }
+
+
+   .finale-image-block.is-visible .finale-image-caption {
+     opacity: 1;
+   }
+
+
+   .chapter-body-inner {
+     position: relative;
+     width: min(1200px, 100%);
+     display: flex;
+     align-items: center;
+     gap: clamp(2rem, 6vw, 5rem);
+   }
+
+
+   .chapter-body::before {
+     content: "";
+     position: absolute;
+     inset: 0;
+     background: url("assets/grain.png") repeat;
+     opacity: 0.2;
+     filter: blur(0.5px);
+     pointer-events: none;
+   }
+
+
+   .chapter-text-block {
+     flex: 1 1 55%;
+     text-align: left;
+     display: flex;
+     flex-direction: column;
+     gap: clamp(1rem, 2.5vw, 1.8rem);
+   }
+
+
+   .chapter-text-block h3 {
+     font-size: clamp(1.2rem, 2.4vw, 2.2rem);
+     color: #FFE87A;
+     font-weight: 600;
+     letter-spacing: 0.1em;
+     margin: 0;
+     text-align: left;
+   }
+
+
+   .chapter-text-block h5 {
+     color: #fff;
+     text-align: left;
+   }
+
+
+   .vinyl-column {
+     flex: 1 1 45%;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 1.2rem;
+   }
+
+
+   .vinyl-player {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 1rem;
+   }
+
+
+   .vinyl-disc {
+     width: clamp(160px, 22vw, 220px);
+     height: clamp(160px, 22vw, 220px);
+     border-radius: 50%;
+     background: radial-gradient(circle at center, #1f1f1f 0%, #050505 60%, #000 100%);
+     border: 6px solid #222;
+     position: relative;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+     animation: vinyl-spin 8s linear infinite;
+     animation-play-state: paused;
+     cursor: pointer;
+   }
+
+
+   .vinyl-disc::before,
+   .vinyl-disc::after {
+     content: "";
+     position: absolute;
+     border-radius: 50%;
+     border: 1px solid rgba(255,255,255,0.07);
+   }
+
+
+   .vinyl-disc::before {
+     inset: 14%;
+   }
+
+
+   .vinyl-disc::after {
+     inset: 32%;
+   }
+
+
+   .vinyl-label {
+     width: 38%;
+     height: 38%;
+     border-radius: 50%;
+     background: radial-gradient(circle, #b91c1c 0%, #741010 80%);
+     border: 3px solid #ffe87a;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     font-size: 0.65rem;
+     text-align: center;
+     letter-spacing: 0.08em;
+     color: #ffe7a0;
+     font-weight: 600;
+   }
+
+
+   .vinyl-disc.is-playing {
+     animation-play-state: running;
+   }
+
+
+   .vinyl-cta {
+     border: 1px solid rgba(255,255,255,0.35);
+     background: transparent;
+     color: #ffe87a;
+     padding: 0.75rem 1.5rem;
+     letter-spacing: 0.15em;
+     text-transform: uppercase;
+     font-size: 0.75rem;
+     cursor: pointer;
+     transition: background 0.3s ease, color 0.3s ease;
+   }
+
+
+   .vinyl-cta:hover {
+     background: rgba(255,255,255,0.08);
+     color: #fff;
+   }
+
+
+   @keyframes vinyl-spin {
+     to { transform: rotate(360deg); }
+   }
+
+
+   /* 手機版調整 */
+   @media (max-width: 900px) {
+     .chapter-body {
+       min-height: unset;
+       padding: clamp(48px, 8vh, 80px) clamp(5vw, 8vw, 10vw);
+     }
+
+
+     .chapter-body-inner {
+       flex-direction: column;
+       text-align: center;
+     }
+
+
+     .chapter-text-block {
+       text-align: center;
+     }
+
+
+     .chapter-text-block h3,
+     .chapter-text-block h5 {
+       text-align: center;
+     }
+
+
+     .vinyl-column {
+       width: 100%;
+     }
+
+
+     .black-finale {
+       grid-template-columns: 1fr;
+     }
+
+
+     .finale-image {
+       min-height: clamp(260px, 45vh, 420px);
+     }
    }
 
 
@@ -423,6 +1063,9 @@
 
      .chapter-title {
        white-space: normal;
+       top: auto;
+       bottom: 2rem;
+       transform: none;
      }
 
 
@@ -439,29 +1082,27 @@
 
 
  <!-- Section 1：滿版影片 -->
- <section class="landing-video">
-   <video
-     id="landing-video"
-     src="assets/stage.mp4"
-     autoplay
-     muted
-     loop
-     playsinline
-     preload="auto">
-   </video>
- </section>
-
-
- <!-- Section 2：過渡緩衝區 -->
- <section class="buffer"></section>
+ <div class="landing-wrapper">
+   <section class="landing-video">
+     <video
+       id="landing-video"
+       src="assets/stage.mp4"
+       autoplay
+       muted
+       loop
+       playsinline
+       preload="auto">
+     </video>
+     <div class="landing-hint">SCROLL ↓</div>
+   </section>
+ </div>
 
 
  <!-- Section 3：Hero -->
  <section class="hero">
    <div class="hero-content">
-     <h1 id="hero-title" class="typewriter-line hero-entrance" data-text="唱給不在場的人" style="--delay: 0ms;"></h1>
-     <h2 id="hero-subtitle" class="typewriter-line hero-entrance" data-text="紅包歌手的世代誤解與生存現場" style="--delay: 150ms;"></h2>
-     <h3 id="hero-author" class="hero-author-line">梁朝勛、彭賀琳、莊馨予</h3>
+     <h1 id="hero-title" class="typewriter-line" data-text="唱給不在場的人"></h1>
+     <h2 id="hero-subtitle" class="typewriter-line" data-text="紅包歌手的世代誤解與生存現場"></h2>
    </div>
 
 
@@ -488,20 +1129,154 @@
  </section>
 
 
- <section class="transition-spacer">
-   <span>scroll to reveal</span>
+ <div class="chapter-stack">
+   <section class="chapter-intro">
+     <img src="assets/red-envelope-theater.jpg" alt="紅包場場景">
+     <div class="chapter-overlay"></div>
+     <div class="chapter-title">➀ 燈紅酒綠的年代 — 紅包場的誕生與繁華</div>
+   </section>
+
+
+   <section class="chapter-body">
+     <div class="chapter-body-inner">
+       <div class="chapter-text-block">
+         <h3>一扇門，通往另一個年代</h3>
+         <h5>當你步出西門町六號出口的喧囂，轉身踏入一棟舊式商辦大樓，搭上那部略顯陳舊的電梯，六樓的門一開，整個世界彷彿瞬間被按下了倒轉鍵。</h5>
+         <h5>牆上勾勒出「金鑽大歌廳」的霓虹燈條閃爍著溫潤的光，那是經營者親手設計的風景，為這片天地注入了第一份屬於自己的溫度。</h5>
+         <h5>空氣中混雜著一絲甜膩的香水、菜餚的油香，以及時間沉澱在紅絲絨座椅上的陳舊氣味。樂隊老師們早已就位，薩克斯風吹奏出的，是鄧麗君、是鳳飛飛，是那個你我或許未曾親歷，卻無比熟悉的黃金年代旋律。</h5>
+       </div>
+       <div class="vinyl-column">
+         <div class="vinyl-player">
+           <div class="vinyl-disc" id="vinyl-disc">
+             <div class="vinyl-label">
+               群星會<br/>1970
+             </div>
+           </div>
+           <button class="vinyl-cta" id="vinyl-toggle">點擊播放時代氛圍</button>
+           <audio id="vinyl-audio" src="assets/moon.mp3"></audio>
+         </div>
+       </div>
+     </div>
+   </section>
+ </div>
+
+
+ <section class="black-finale">
+   <div class="finale-image">
+     <img src="assets/lonely_man.jpg" alt="lonely man">
+   </div>
+   <div class="finale-text">
+     <h3>紅包場為何誕生？</h3>
+     <h4>故事要從民國三、四十年說起。</h4>
+     <h4>隨著國民政府遷臺，大量隨軍來臺的軍人與軍眷湧入島內。其中，有相當比例是未婚的外省籍男性。他們離開原鄉，失去了原有的社會網絡，長期居住在簡陋的臨時宿舍或眷村，生活條件拮据，精神狀態亦長期處於孤立狀態。</h4>
+     <h4>對這群人而言，娛樂不只是消遣，而是一種維繫生活平衡的必要條件。</h4>
+   </div>
  </section>
 
 
- <section class="transition-spacer">
-   <span>the light slowly returns</span>
+ <section class="black-quote">
+   <h3 id="quote-line">
+     <span>對那些不屬於本地、也未必能想像未來的人來說，</span><br>
+     <span>歌廳，是讓自己不那麼孤單的地方。</span>
+   </h3>
  </section>
 
 
- <section class="chapter-intro">
-   <img src="assets/red-envelope-theater.jpg" alt="紅包場場景">
-   <div class="chapter-overlay"></div>
-   <div class="chapter-title">➀ 燈紅酒綠的年代 — 紅包場的誕生與繁華</div>
+ <section class="horizontal-scroll" id="horizontal-scroll">
+   <div class="horizontal-track">
+     <div class="scroll-panels">
+   <div class="scroll-panel panel-guobin"></div>
+       <div class="scroll-panel panel-boom"></div>
+       <div class="scroll-panel panel-interior"></div>
+     </div>
+   </div>
+ </section>
+
+
+ <section class="story-horizontal" id="story-horizontal">
+   <div class="story-track">
+     <div class="story-panels">
+       <article class="story-panel story-panel--xi">
+         <div class="story-copy">
+           <p class="story-line">在這樣的社會需求下，</p>
+           <p class="story-line">西門町逐漸成為歌藝娛樂產業的集散地。</p>
+         </div>
+       </article>
+       <article class="story-panel story-panel--guobin">
+         <div class="story-copy">
+           <p class="story-line">民國五十年，陳大光、朱良鈞、施昭光三人</p>
+           <p class="story-line">在成都路、昆明街口的國賓戲院二樓，</p>
+           <p class="story-line">創立『國之賓大歌廳』。</p>
+           <p class="story-line">這裡，被視為日後紅包場文化的重要源頭。</p>
+         </div>
+       </article>
+       <article class="story-panel story-panel--songhall">
+         <div class="story-copy">
+           <p class="story-line">七年後，西門町迎來所謂的『歌廳熱』。</p>
+           <p class="story-line">多家大型、裝潢華麗的歌廳陸續開幕，<br>
+           歌唱表演從零散的私人娛樂，<br>
+           轉變為定時、定點、制度化的商業活動。</p>
+           <p class="story-line">西門町及其周邊，<br>
+           迅速成為台北最熱鬧的庶民娛樂核心。</p>
+         </div>
+       </article>
+       <article class="story-panel story-panel--stage">
+         <div class="story-copy">
+           <p class="story-line">這筆錢，並非額外小費，<br>
+           而是歌星最主要的收入來源。</p>
+           <p class="story-line">紅包制度形塑了一種特殊的情感結構：<br>
+           歌手靠紅包維生；觀眾透過紅包，<br>
+           確認自己被記得、被理解。</p>
+           <p class="story-line">這是一種無聲的契約。</p>
+         </div>
+       </article>
+       <article class="story-panel story-panel--hands">
+         <div class="story-copy">
+           <p class="story-line">紅包場之所以得名，<br>
+           來自一個極為直接、也極為人性的互動方式——</p>
+           <p class="story-line">觀眾將對歌星的喜愛與支持，<br>
+           <span class="hands-highlight">裝進紅包袋</span>，<br>
+           親手交到歌星手中。</p>
+         </div>
+       </article>
+       <article class="story-panel story-panel--audience">
+         <div class="story-copy">
+           <p class="story-line">紅包場的演出內容，<br>
+           多以國語流行歌曲、懷舊老歌為主。</p>
+           <p class="story-line">對許多思鄉的外省籍觀眾而言，<br>
+           這些歌曲不只是旋律，<br>
+           而是一種情緒出口——</p>
+           <p class="story-line">在政治動盪、國際局勢不安的年代，<br>
+           歌聲，成為撫慰人心的存在。</p>
+         </div>
+       </article>
+     </div>
+   </div>
+ </section>
+
+
+ <section class="chapter-finale" data-finale="intro">
+   <p>然而，進入 1990 年代，娛樂形式快速轉變。<br>紅包場，逐漸被推向城市邊緣。<br>紅包場不再屬於夜生活的主流，<br>也逐漸淡出大眾視野。</p>
+ </section>
+
+
+ <section class="finale-image-block" data-finale="image-decline">
+   <img src="assets/ch1-06-closed-songhall-night.jpg" alt="closed songhall night">
+ </section>
+
+
+ <section class="chapter-finale" data-finale="middle">
+   <p>鳳凰歌廳熄燈後，<br>金鑽歌廳成為台灣目前唯一一家以「純紅包場」形式運作的歌廳。</p>
+ </section>
+
+
+ <section class="finale-image-block" data-finale="image-warm">
+   <img src="assets/ch1-07-jinzuan-stage-empty.jpg" alt="jinzuan stage empty">
+ </section>
+
+
+ <section class="chapter-finale slow" data-finale="closing">
+   <p>紅包場不只是過去的遺跡，<br>而是一面映照時代變遷的鏡子。</p>
  </section>
 
 
@@ -510,14 +1285,15 @@
      const hero = document.querySelector(".hero");
      const titleEl = document.getElementById("hero-title");
      const subtitleEl = document.getElementById("hero-subtitle");
-     const authorEl = document.getElementById("hero-author");
+     const heroImage = document.querySelector(".hero-image.hero-entrance");
      const scrollHint = document.getElementById("scroll-hint");
-     const landingVideo = document.getElementById("landing-video");
      const typeTargets = [titleEl, subtitleEl];
-     const heroEntrances = document.querySelectorAll(".hero-entrance");
      const narrativeLines = document.querySelectorAll(".immersive-copy h5");
      let hasRun = false;
-     let audioActivated = false;
+     let scrollLocked = false;
+     let prevBodyOverflow = "";
+     let prevHtmlOverflow = "";
+     let unlockTimer = null;
 
 
      typeTargets.forEach((el) => {
@@ -527,7 +1303,32 @@
      });
 
 
-     const typeText = (el, speed = 90) =>
+     const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+
+     const lockScroll = () => {
+       if (scrollLocked) return;
+       scrollLocked = true;
+       prevBodyOverflow = document.body.style.overflow;
+       prevHtmlOverflow = document.documentElement.style.overflow;
+       document.body.style.overflow = "hidden";
+       document.documentElement.style.overflow = "hidden";
+     };
+
+
+     const unlockScroll = () => {
+       if (!scrollLocked) return;
+       scrollLocked = false;
+       document.body.style.overflow = prevBodyOverflow;
+       document.documentElement.style.overflow = prevHtmlOverflow;
+       if (unlockTimer) {
+         clearTimeout(unlockTimer);
+         unlockTimer = null;
+       }
+     };
+
+
+     const typeText = (el, speed = 120) =>
        new Promise((resolve) => {
          const text = el.dataset.text || "";
          let index = 0;
@@ -547,76 +1348,61 @@
        });
 
 
-     const startSequence = async () => {
-       if (hasRun) return;
-       hasRun = true;
-       heroEntrances.forEach((item) => item.classList.add("is-visible"));
-       for (const el of typeTargets) {
-         await typeText(el);
-       }
-       if (authorEl) {
-         requestAnimationFrame(() => authorEl.classList.add("revealed"));
-       }
+     const heroFullyVisible = () => {
+       if (!hero) return false;
+       const rect = hero.getBoundingClientRect();
+       const tolerance = 1;
+       return Math.abs(rect.top) <= tolerance;
+     };
+
+
+     const cleanupHeroListeners = () => {
+       window.removeEventListener("scroll", onScrollCheck, { passive: true });
+       window.removeEventListener("resize", onScrollCheck);
+     };
+
+
+     let scrollCheckQueued = false;
+     const scheduleHeroCheck = () => {
+       if (hasRun || scrollCheckQueued) return;
+       scrollCheckQueued = true;
        requestAnimationFrame(() => {
-         setTimeout(() => {
-           scrollHint.classList.add("visible");
-         }, 400);
+         scrollCheckQueued = false;
+         if (heroFullyVisible()) {
+           cleanupHeroListeners();
+           startSequence();
+         }
        });
      };
 
 
-     if ("IntersectionObserver" in window && hero) {
-       const heroObserver = new IntersectionObserver(
-         (entries) => {
-           entries.forEach((entry) => {
-             if (entry.isIntersecting) {
-               startSequence();
-               heroObserver.disconnect();
-             }
-           });
-         },
-         { threshold: 0.35 }
-       );
-       heroObserver.observe(hero);
-     } else {
-       startSequence();
-     }
+     const onScrollCheck = () => scheduleHeroCheck();
 
 
-     if (landingVideo) {
-       const userEvents = ["click", "touchstart"];
+     const startSequence = async () => {
+       if (hasRun) return;
+       hasRun = true;
+       lockScroll();
+       unlockTimer = setTimeout(unlockScroll, 9000);
+       await wait(500);
+       for (const el of typeTargets) {
+         await typeText(el);
+       }
+       requestAnimationFrame(() => {
+         if (heroImage) heroImage.classList.add("is-visible");
+       });
+       requestAnimationFrame(() => {
+         setTimeout(() => {
+           scrollHint.classList.add("visible");
+           unlockScroll();
+         }, 600);
+       });
+     };
 
 
-       const attemptPlay = () => {
-         const playPromise = landingVideo.play();
-         if (playPromise && typeof playPromise.then === "function") {
-           playPromise.catch(() => {});
-         }
-       };
-
-
-       const detachListeners = () => {
-         userEvents.forEach((evt) => document.removeEventListener(evt, handleUserAction));
-       };
-
-
-       const activateAudio = () => {
-         if (audioActivated) return;
-         audioActivated = true;
-         landingVideo.muted = false;
-         attemptPlay();
-       };
-
-
-       const handleUserAction = () => {
-         activateAudio();
-         detachListeners();
-       };
-
-
-       attemptPlay();
-       userEvents.forEach((evt) => document.addEventListener(evt, handleUserAction, { passive: true }));
-     }
+     window.addEventListener("scroll", onScrollCheck, { passive: true });
+     window.addEventListener("resize", onScrollCheck);
+     scheduleHeroCheck();
 
 
      if (narrativeLines.length) {
@@ -636,8 +1422,171 @@
        );
        narrativeObserver.observe(narrativeLines[0]);
      }
+
+
+     const quoteLine = document.getElementById("quote-line");
+     if (quoteLine) {
+       const quoteObserver = new IntersectionObserver(
+         (entries) => {
+           entries.forEach((entry) => {
+             if (entry.isIntersecting) {
+               quoteLine.classList.add("visible");
+               setTimeout(() => quoteLine.classList.add("highlight"), 600);
+               quoteObserver.disconnect();
+             }
+           });
+         },
+         { threshold: 0.6 }
+       );
+       quoteObserver.observe(quoteLine);
+     }
+
+
+     const stickyCaptions = document.querySelectorAll(".sticky-caption-block");
+     if (stickyCaptions.length) {
+       const captionObserver = new IntersectionObserver(
+         (entries) => {
+           entries.forEach((entry) => {
+             if (entry.isIntersecting) {
+               entry.target.classList.add("is-visible");
+             }
+           });
+         },
+         { threshold: 0.5 }
+       );
+       stickyCaptions.forEach((caption) => captionObserver.observe(caption));
+     }
+
+
+     const storyHorizontal = document.getElementById("story-horizontal");
+     if (storyHorizontal) {
+       const panelsWrapper = storyHorizontal.querySelector(".story-panels");
+       const panels = Array.from(storyHorizontal.querySelectorAll(".story-panel"));
+       const panelCount = panels.length;
+       let startOffset = 0;
+       let totalScrollable = 1;
+       const updateStoryMetrics = () => {
+         storyHorizontal.style.setProperty("--panel-count", panelCount);
+         startOffset = storyHorizontal.offsetTop;
+         totalScrollable = storyHorizontal.offsetHeight - window.innerHeight;
+         if (totalScrollable <= 0) totalScrollable = 1;
+         updateStoryPosition();
+       };
+       let storyQueued = false;
+       const updateStoryPosition = () => {
+         storyQueued = false;
+         const scrollY = window.scrollY || window.pageYOffset;
+         const current = Math.min(Math.max(scrollY - startOffset, 0), totalScrollable);
+         const progress = current / totalScrollable;
+         const translate = -progress * (panelCount - 1) * 100;
+         panelsWrapper.style.transform = `translateX(${translate}vw)`;
+         const activeIndex = Math.round(progress * (panelCount - 1));
+         panels.forEach((panel, idx) => panel.classList.toggle("is-active", idx === activeIndex));
+       };
+       const handleStoryScroll = () => {
+         if (!storyQueued) {
+           storyQueued = true;
+           requestAnimationFrame(updateStoryPosition);
+         }
+       };
+       window.addEventListener("scroll", handleStoryScroll, { passive: true });
+       window.addEventListener("resize", () => {
+         updateStoryMetrics();
+         handleStoryScroll();
+       });
+       updateStoryMetrics();
+     }
+
+
+     const finaleSections = document.querySelectorAll("[data-finale]");
+     if (finaleSections.length) {
+       const finaleObserver = new IntersectionObserver(
+         (entries) => {
+           entries.forEach((entry) => {
+             if (entry.isIntersecting) {
+               entry.target.classList.add("is-visible");
+             }
+           });
+         },
+         { threshold: 0.4 }
+       );
+       finaleSections.forEach((section) => finaleObserver.observe(section));
+     }
+
+
+     const vinylDisc = document.getElementById("vinyl-disc");
+     const vinylToggle = document.getElementById("vinyl-toggle");
+     const vinylAudio = document.getElementById("vinyl-audio");
+
+
+     if (vinylDisc && vinylToggle && vinylAudio) {
+       const updateVinylState = () => {
+         if (vinylAudio.paused) {
+           vinylDisc.classList.remove("is-playing");
+           vinylToggle.textContent = "點擊播放時代氛圍";
+         } else {
+           vinylDisc.classList.add("is-playing");
+           vinylToggle.textContent = "點擊暫停時代氛圍";
+         }
+       };
+
+
+       const toggleVinyl = () => {
+         if (vinylAudio.paused) {
+           vinylAudio.play().catch(() => {});
+         } else {
+           vinylAudio.pause();
+         }
+         updateVinylState();
+       };
+
+
+       vinylDisc.addEventListener("click", toggleVinyl);
+       vinylToggle.addEventListener("click", toggleVinyl);
+       vinylAudio.addEventListener("ended", () => {
+         vinylAudio.pause();
+         vinylAudio.currentTime = 0;
+         updateVinylState();
+       });
+       vinylAudio.addEventListener("pause", updateVinylState);
+       vinylAudio.addEventListener("play", updateVinylState);
+       updateVinylState();
+     }
+
+
+     const horizontalScroll = document.getElementById("horizontal-scroll");
+     if (horizontalScroll) {
+       const panelsWrapper = horizontalScroll.querySelector(".scroll-panels");
+       const panels = panelsWrapper ? panelsWrapper.children.length : 0;
+       if (panelsWrapper && panels > 0) {
+         horizontalScroll.style.setProperty("--panel-count", panels);
+         let startOffset = horizontalScroll.offsetTop;
+
+
+         const handleHorizontalScroll = () => {
+           const totalScrollable = horizontalScroll.offsetHeight - window.innerHeight;
+           if (totalScrollable <= 0) return;
+           const scrollY = window.scrollY || window.pageYOffset;
+           const current = Math.min(Math.max(scrollY - startOffset, 0), totalScrollable);
+           const progress = current / totalScrollable;
+           const translate = -progress * (panels - 1) * 100;
+           panelsWrapper.style.transform = `translateX(${translate}vw)`;
+         };
+
+
+         const recalcHorizontal = () => {
+           startOffset = horizontalScroll.offsetTop;
+           horizontalScroll.style.setProperty("--panel-count", panels);
+           handleHorizontalScroll();
+         };
+
+
+         window.addEventListener("scroll", handleHorizontalScroll, { passive: true });
+         window.addEventListener("resize", recalcHorizontal);
+         recalcHorizontal();
+       }
+     }
    });
  </script>
 </body>
 </html>
-
