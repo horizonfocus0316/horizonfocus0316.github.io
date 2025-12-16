@@ -34,6 +34,13 @@
       font-family: "Noto Serif TC", serif;
       overflow-x: hidden;
       line-height: 2;
+      /* 新增：頁面淡入動畫 */
+      animation: fadeInPage 1.5s ease-out;
+    }
+
+    @keyframes fadeInPage {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* 全域背景躁點 */
@@ -235,7 +242,6 @@
     }
     .flip-back h3 { color: var(--accent); text-shadow: 0 0 10px rgba(255, 232, 122, 0.3); }
 
-
     /* =========================================
        6. 結語霓虹燈
     ========================================= */
@@ -257,6 +263,71 @@
     
     .final-text-reveal { opacity: 0; transition: opacity 2s ease; margin-top: 50px; font-size: 20px; color: #ccc; }
     @keyframes flicker { 0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; } 20%, 24%, 55% { opacity: 0.5; } }
+
+    /* === 7. 底部按鈕區 CSS (新增) === */
+    .next-chapter-section {
+      padding: 100px 20px 140px;
+      text-align: center;
+      background: linear-gradient(to bottom, transparent, #000);
+      position: relative;
+      z-index: 60;
+    }
+
+    .next-label {
+      font-size: 0.9rem;
+      color: #666;
+      letter-spacing: 0.2em;
+      margin-bottom: 30px;
+      display: block;
+      text-transform: uppercase;
+    }
+
+    .nav-buttons-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 15px 40px;
+      color: #fff;
+      font-family: "Noto Serif TC", serif;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      transition: all 0.4s ease;
+      min-width: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-btn span {
+      font-size: 0.7em;
+      color: #888;
+      margin-top: 5px;
+      font-weight: 300;
+    }
+
+    .btn-home:hover {
+      border-color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-next {
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .btn-next:hover {
+      border-color: var(--accent-red); /* 使用這頁的紅色變數 */
+      background: rgba(217, 30, 24, 0.2);
+      letter-spacing: 0.15em;
+      box-shadow: 0 0 30px rgba(217, 30, 24, 0.4);
+    }
 
     /* RWD */
     @media (max-width: 768px) {
@@ -462,6 +533,20 @@
   </section>
 
 </main>
+
+<div class="next-chapter-section">
+  <span class="next-label">THE END</span>
+  <div class="nav-buttons-container">
+    <a href="../index.html" class="nav-btn btn-home">
+      回專題首頁
+      <span>BACK TO HOME</span>
+    </a>
+    <a href="../chapter1/index.html" class="nav-btn btn-next">
+      重新閱讀
+      <span>RESTART STORY &rarr;</span>
+    </a>
+  </div>
+</div>
 
 <script>
   // 1. 噴錢動畫 (CSS 繪製版) + 彩帶
