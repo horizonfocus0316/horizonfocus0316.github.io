@@ -9,28 +9,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600;700&display=swap" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
   <style>
     /* =========================================
-       1. 全站變數 & 無框線極致黑設定
+       1. 全站變數 & 極致黑金設定
     ========================================= */
     :root {
-      /* 背景：極致黑 */
       --bg-dark: #050505;
-      
-      /* 卡片背景：移除邊框，改用高透明度的深紅黑 */
-      --card: rgba(20, 10, 10, 0.6); 
-      
-      /* 強調色：霓虹金 (#FFE87A) */
-      --accent: #FFE87A;
-      
-      /* 輔助色：絲絨暗紅 */
-      --accent-red: #970C10;
-      
+      --card: rgba(20, 10, 10, 0.85); 
+      --accent: #FFE87A; /* 霓虹金 */
+      --accent-red: #970C10; /* 絲絨紅 */
       --text: #f4f4f5;
       --muted: #aaa;
-      
-      /* 光暈取代邊框 */
-      --glow: 0 0 20px rgba(151, 12, 16, 0.3);
     }
 
     * { box-sizing: border-box; }
@@ -39,28 +31,20 @@
       margin: 0; padding: 0;
       background-color: var(--bg-dark);
       color: var(--text);
-      font-family: "Noto Serif TC", serif; /* 保持思源宋體 */
-      overflow-x: hidden;
+      font-family: "Noto Serif TC", serif;
+      overflow-x: hidden; /* 重要：防止橫向捲動軸出現 */
       line-height: 1.8;
-      position: relative;
     }
 
-    /* =========================================
-       ✨ 2. 躁點濾鏡 (Grain Filter)
-    ========================================= */
+    /* 躁點濾鏡 (Film Grain) */
     body::before {
-      content: "";
-      position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
-      /* 請確保 assets/images/grain.png 存在，若無此圖可暫時移除這行 */
-      background-image: url('assets/images/grain.png'); 
-      background-repeat: repeat;
-      background-size: 200px 200px;
-      opacity: 0.08; 
-      pointer-events: none; z-index: 9999;
+      content: ""; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
+      background-image: url('assets/images/grain.png');
+      background-repeat: repeat; background-size: 200px 200px;
+      opacity: 0.06; pointer-events: none; z-index: 9999;
       animation: grain-move 1.5s steps(6) infinite;
       mix-blend-mode: overlay;
     }
-
     @keyframes grain-move {
       0%, 100% { transform: translate(0, 0); }
       20% { transform: translate(-5%, 5%); }
@@ -70,159 +54,83 @@
     }
 
     /* =========================================
-       3. 影片開場區
+       2. 版型與通用元件
     ========================================= */
-    .video-hero {
-      position: relative;
-      width: 100%; height: 100vh;
-      overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-      background: #000;
-    }
-
-    .bg-video { 
-      width: 100%; height: 100%; 
-      object-fit: cover; opacity: 0.6; 
-      filter: contrast(1.3) brightness(0.7) grayscale(0.2); 
-    }
+    .container { width: min(1000px, 90%); margin: 0 auto; position: relative; z-index: 1; }
     
-    .hero-content {
-      position: absolute; z-index: 2;
-      width: 100%; max-width: 800px; padding: 20px; text-align: center;
-    }
-
-    .immersive-text .line {
-      font-size: clamp(20px, 3vw, 28px);
-      color: rgba(255,255,255,0.95);
-      margin-bottom: 24px;
-      text-shadow: 0 0 20px rgba(0,0,0,0.8);
-      font-weight: 300; letter-spacing: 0.1em;
-      opacity: 0; transform: translateY(20px);
-      animation: fadeUp 1.5s ease forwards;
-    }
-    .immersive-text .line:nth-child(1) { animation-delay: 0.5s; }
-    .immersive-text .line:nth-child(2) { animation-delay: 2.5s; }
-    .immersive-text .line:nth-child(3) { 
-      animation-delay: 4.5s; 
-      color: var(--accent); font-weight: 600; 
-      text-shadow: 0 0 15px rgba(255, 232, 122, 0.5);
-    }
-
-    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-
-    /* =========================================
-       4. 無框線版型設計
-    ========================================= */
-    .container { width: min(1000px, 90%); margin: 0 auto; padding-bottom: 100px; position: relative; z-index: 1; }
-    
-    /* 無邊框卡片：利用毛玻璃與陰影創造層次 */
-    .card {
-      background-color: var(--card);
-      border: none; /* 🚫 移除邊框 */
-      backdrop-filter: blur(10px); /* 毛玻璃特效 */
-      border-radius: 8px;
-      padding: 40px;
-      margin-bottom: 40px;
-      /* 柔和的深紅暈影 */
-      box-shadow: 0 20px 80px rgba(0,0,0,0.8), 0 0 20px rgba(151, 12, 16, 0.1);
-      transition: transform 0.4s ease;
-    }
-    
-    .card:hover { 
-      transform: translateY(-5px); 
-      /* 懸浮時加強光暈 */
-      box-shadow: 0 30px 90px rgba(0,0,0,0.9), 0 0 40px rgba(255, 232, 122, 0.15);
+    .sectionTitle { 
+      font-size: clamp(28px, 4vw, 40px); margin: 20px 0 40px; 
+      color: #fff; font-weight: 700; letter-spacing: 0.05em; line-height: 1.4;
+      text-shadow: 0 0 30px rgba(0,0,0,0.8);
     }
     
     .kicker { 
       color: var(--accent); font-size: 14px; letter-spacing: 0.3em; 
       text-transform: uppercase; margin-bottom: 15px; display: block; font-weight: 700;
-      /* 左側線條保留，作為視覺引導，不算是「框」 */
       border-left: 3px solid var(--accent); padding-left: 15px;
     }
-    
-    .sectionTitle { 
-      font-size: clamp(28px, 4vw, 36px); margin: 10px 0 30px; 
-      color: #fff; font-weight: 600; letter-spacing: 0.05em; line-height: 1.4;
-      text-shadow: 0 0 30px rgba(0,0,0,0.8);
-    }
-    
-    .lead { 
-      color: #d0d0d0; font-size: 19px; margin-top: 0; 
-      text-align: justify; font-weight: 300; line-height: 2;
-    }
-    
+
+    .lead { color: #d0d0d0; font-size: 19px; text-align: justify; font-weight: 300; line-height: 2; }
     .small { font-size: 15px; color: var(--muted); line-height: 1.8; }
     
-    hr.sep { 
-      border: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent-red), transparent);
-      margin: 100px 0; opacity: 0.5; 
+    /* 無邊框卡片風格 */
+    .card {
+      background-color: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 8px; padding: 40px; margin-bottom: 40px;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.8);
     }
 
     /* =========================================
-       5. 第一章：金小姐
+       3. 開場：視差影片 (Parallax Video)
+    ========================================= */
+    .video-hero {
+      position: relative; width: 100%; height: 100vh;
+      overflow: hidden; display: flex; align-items: center; justify-content: center;
+      background: #000;
+    }
+    .bg-video { 
+      width: 100%; height: 100%; object-fit: cover; opacity: 0.6; 
+      filter: contrast(1.3) brightness(0.7) grayscale(0.2); 
+    }
+    .hero-content { position: absolute; z-index: 2; width: 100%; max-width: 800px; padding: 20px; text-align: center; }
+    
+    .immersive-text .line {
+      font-size: clamp(20px, 3vw, 28px); color: rgba(255,255,255,0.95);
+      margin-bottom: 24px; text-shadow: 0 0 20px rgba(0,0,0,1);
+      font-weight: 300; letter-spacing: 0.1em;
+      opacity: 0; transform: translateY(30px); /* 初始位置 */
+    }
+
+    /* =========================================
+       4. 第一章 & 第二章 (維持垂直敘事節奏)
     ========================================= */
     .sticky-container { display: flex; gap: 50px; margin-top: 40px; align-items: flex-start; }
-    
     .sticky-visual { 
-      flex: 1; position: sticky; top: 120px; 
-      height: 450px; 
-      /* 視覺區無邊框，改用徑向漸層 */
+      flex: 1; position: sticky; top: 100px; height: 450px; 
       background: radial-gradient(circle at center, #1a0505 0%, #000 70%);
-      border: none; /* 🚫 移除邊框 */
-      border-radius: 8px;
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      box-shadow: 0 0 50px rgba(0,0,0,0.8); /* 深邃陰影 */
+      border-radius: 8px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+      box-shadow: 0 0 50px rgba(0,0,0,0.8);
     }
-    .sticky-visual h3 { color: var(--accent); font-size: 26px; margin-top: 20px; letter-spacing: 2px; }
     .icon-user { font-size: 80px; filter: grayscale(1) contrast(1.5); opacity: 0.6; }
-    
     .scroll-content { flex: 1.5; }
-
-    /* 引言區塊：無框，改用背景色塊 */
+    
     .vision-quote {
-      border-left: 4px solid var(--accent); /* 只保留左側強調 */
+      border-left: 4px solid var(--accent);
       background: linear-gradient(90deg, rgba(255, 232, 122, 0.05) 0%, transparent 100%);
       padding: 30px; margin: 40px 0; 
-      font-style: italic; color: var(--accent);
-      font-size: 18px; line-height: 1.8;
+      font-style: italic; color: var(--accent); font-size: 18px;
     }
 
-    .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
-    .rule-card {
-      background: rgba(255,255,255,0.02); 
-      border: none; /* 🚫 移除邊框 */
-      padding: 25px; 
-      transition: 0.3s;
-      border-radius: 6px;
-    }
-    .rule-card:hover { 
-      background: rgba(151, 12, 16, 0.15); 
-      transform: scale(1.02);
-    }
-    
-    .rule-title { color: var(--accent); font-weight: 700; margin-bottom: 8px; font-size: 18px; }
-    .rule-desc { font-size: 14px; color: #ccc; margin: 0; font-weight: 300; }
-
-    /* =========================================
-       6. 第二章：影片與翻牌
-    ========================================= */
+    /* 歌手影片與翻牌 */
     .singer-video-container {
-      margin: 40px 0 60px 0;
-      border: none; /* 🚫 移除邊框 */
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.7); /* 僅保留陰影 */
-      position: relative;
+      margin: 40px 0 60px 0; border-radius: 8px; overflow: hidden; position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.7);
     }
     .singer-tag {
       position: absolute; bottom: 20px; left: 20px;
-      background: rgba(151, 12, 16, 0.9); color: #fff;
-      padding: 6px 16px; font-size: 14px; letter-spacing: 1px;
-      border-radius: 4px;
+      background: rgba(151, 12, 16, 0.9); color: #fff; padding: 6px 16px; border-radius: 4px;
     }
-
     .flip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap: 25px; margin-top: 50px; }
     .flip-card { perspective: 1000px; height: 260px; }
     .flip-inner {
@@ -231,76 +139,110 @@
       transform-style: preserve-3d; cursor: pointer;
     }
     .flip-card:hover .flip-inner { transform: rotateY(180deg); }
-    
     .flip-front, .flip-back {
       position: absolute; inset: 0; backface-visibility: hidden;
-      border: none; /* 🚫 移除邊框 */
-      border-radius: 8px;
-      padding: 30px;
+      border-radius: 8px; padding: 30px;
       display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
-      background: rgba(30,30,30,0.6); /* 更加透明深沈 */
-      backdrop-filter: blur(5px);
+      background: rgba(30,30,30,0.6); backdrop-filter: blur(5px);
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
-    
-    .flip-front h3 { font-size: 24px; color: #fff; margin: 0 0 15px 0; letter-spacing: 2px; }
-    
-    .flip-back { 
-      transform: rotateY(180deg); 
-      background: linear-gradient(135deg, #4a0000 0%, #1a0000 100%); /* 暗紅漸層 */
-    }
+    .flip-back { transform: rotateY(180deg); background: linear-gradient(135deg, #4a0000 0%, #1a0000 100%); }
+    .flip-front h3 { font-size: 24px; color: #fff; margin-bottom: 15px; }
     .flip-back h3 { color: var(--accent); margin-bottom: 15px; }
-    .flip-back p { font-size: 15px; color: #eee; line-height: 1.6; }
 
     /* =========================================
-       7. 第三章：時間軸
+       5. 第三章：橫向捲動時間軸 (Horizontal Scroll)
+       W8 技術應用
     ========================================= */
-    .timeline { margin-top: 50px; border-left: 1px solid rgba(255, 232, 122, 0.3); padding-left: 40px; }
-    .timeline-item { position: relative; margin-bottom: 60px; }
-    .timeline-item::before {
-      content: ""; position: absolute; left: -46px; top: 8px;
-      width: 12px; height: 12px; background: #000; 
-      border: 2px solid var(--accent); border-radius: 50%; /* 圓點回歸 */
-      box-shadow: 0 0 10px var(--accent);
-    }
-    .time { color: var(--accent); font-weight: bold; margin-bottom: 10px; display: block; letter-spacing: 1px; }
-
-    /* =========================================
-       8. 結語：金句與互動
-    ========================================= */
-    .summary-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;
-      margin: 60px 0; border-top: 1px solid rgba(151, 12, 16, 0.3); padding-top: 40px;
-    }
-    .summary-col { text-align: center; }
-    .summary-col h4 { color: var(--accent); margin-bottom: 15px; font-size: 20px; letter-spacing: 2px; }
-    .summary-col p { font-size: 15px; color: #bbb; line-height: 1.8; }
-
-    .interaction-area {
-      text-align: center; margin-top: 80px; padding: 80px 30px;
-      background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.8)); /* 漸層消失 */
+    #horizontal-scroll-section {
+      width: 100%;
+      height: 100vh; /* 佔滿一屏 */
+      overflow: hidden; /* 隱藏溢出 */
+      display: flex; /* 讓內容橫排 */
+      position: relative;
     }
     
-    /* ✨ 經典紅包按鈕 (Pill Shape) ✨ */
+    .horizontal-wrapper {
+      display: flex;
+      flex-wrap: nowrap;
+      height: 100%;
+    }
+
+    .h-panel {
+      width: 100vw; /* 每個面板佔滿視窗寬度 */
+      height: 100%;
+      padding: 100px 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid rgba(255,255,255,0.1);
+      position: relative;
+    }
+
+    /* 背景裝飾字 */
+    .h-bg-year {
+      position: absolute; top: 10%; left: 5%;
+      font-size: 15vw; font-weight: 900; color: rgba(255,255,255,0.03);
+      line-height: 1; z-index: 0; pointer-events: none;
+    }
+
+    .h-content { position: relative; z-index: 2; max-width: 800px; margin: 0 auto; }
+    .h-year { font-size: 40px; color: var(--accent); font-weight: bold; display: block; margin-bottom: 20px; }
+    .h-title { font-size: 32px; color: #fff; margin-bottom: 20px; }
+    .h-desc { font-size: 18px; color: #ccc; line-height: 1.8; }
+
+    /* =========================================
+       6. 結語：堆疊式卡片 (Sticky Stacking)
+       W5 + W7 技術應用
+    ========================================= */
+    .stacking-section {
+      position: relative;
+      padding-bottom: 100px;
+    }
+    
+    .stack-card {
+      width: 100%; max-width: 800px; margin: 0 auto;
+      height: 400px; /* 固定高度以便堆疊 */
+      background: #111;
+      border: 1px solid rgba(255, 232, 122, 0.2);
+      border-radius: 12px;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      position: sticky; top: 150px; /* 關鍵：Sticky */
+      margin-bottom: 50px; /* 卡片間距 */
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
+      text-align: center;
+      padding: 40px;
+      transform-origin: center top;
+      transition: transform 0.5s ease;
+    }
+
+    /* 不同的背景色區分層次 */
+    .stack-1 { background: linear-gradient(135deg, #1a1a1a, #050505); }
+    .stack-2 { background: linear-gradient(135deg, #2a0a0a, #0a0505); top: 180px; }
+    .stack-3 { background: linear-gradient(135deg, #3a0000, #1a0000); top: 210px; border-color: var(--accent-red); }
+
+    .stack-icon { font-size: 50px; margin-bottom: 20px; display: block; }
+    .stack-title { font-size: 28px; color: var(--accent); margin-bottom: 15px; }
+
+    /* 最終金句與按鈕 */
+    .final-interaction {
+      text-align: center; margin-top: 100px;
+      padding: 100px 20px;
+    }
+    
+    .final-quote {
+      font-size: 24px; font-style: italic; color: #fff; 
+      line-height: 1.8; margin-bottom: 50px; opacity: 0; /* 預設隱藏，靠動畫顯示 */
+      transform: translateY(30px);
+    }
+
     .red-envelope-btn {
-      background: #c21807; /* 鮮豔紅包紅 */
-      color: #fff; 
-      border: 2px solid #ffcc00; /* 亮黃色邊框 */
-      padding: 15px 50px; font-size: 20px; 
-      border-radius: 50px; /* 圓潤膠囊狀 */
-      font-family: sans-serif; /* 按鈕維持現代感比較好按 */
-      font-weight: bold;
-      cursor: pointer; transition: 0.3s;
-      box-shadow: 0 0 20px rgba(194, 24, 7, 0.4);
-      letter-spacing: 2px;
-      position: relative; overflow: hidden;
-      margin-top: 20px;
+      background: #c21807; color: #fff; 
+      border: 2px solid #ffcc00; padding: 15px 50px; font-size: 20px; 
+      border-radius: 50px; font-family: sans-serif; font-weight: bold;
+      cursor: pointer; transition: 0.3s; box-shadow: 0 0 20px rgba(194, 24, 7, 0.4);
     }
-    .red-envelope-btn:hover {
-      transform: scale(1.05); 
-      background: #d62210; 
-      box-shadow: 0 0 40px rgba(194, 24, 7, 0.7);
-    }
+    .red-envelope-btn:hover { transform: scale(1.05); background: #d62210; }
     
     .final-message {
       margin-top: 50px; opacity: 0; transition: opacity 2s ease;
@@ -313,9 +255,9 @@
     @media (max-width: 768px) {
       .sticky-container { flex-direction: column; }
       .sticky-visual { position: relative; top: 0; width: 100%; margin-bottom: 30px; height: 300px; }
-      .rules-grid { grid-template-columns: 1fr; }
-      .summary-grid { grid-template-columns: 1fr; gap: 40px; }
-      .hero-content { padding: 0 30px; }
+      .horizontal-wrapper { flex-direction: column; height: auto; } /* 手機版改回垂直 */
+      .h-panel { width: 100%; height: auto; padding: 60px 20px; border-bottom: 1px solid #333; }
+      #horizontal-scroll-section { height: auto; display: block; }
     }
   </style>
 </head>
@@ -333,16 +275,17 @@
   
   <div class="hero-content">
     <div class="immersive-text">
-      <p class="line">四散的煙味混著水果盤的甜味，在空氣裡堆出一種濃度。</p>
-      <p class="line">這味道會讓不熟悉的人本能地後退。</p>
-      <p class="line">但在這個場域裡，文化正在重新調整姿態。</p>
+      <p class="line">四散的煙味混著水果盤的甜味。</p>
+      <p class="line">不熟悉的人本能地後退。</p>
+      <p class="line" style="color:var(--accent); font-weight:600;">但在這裡，文化正在重新調整姿態。</p>
     </div>
   </div>
+  <div style="position: absolute; bottom: 30px; color: #fff; font-size: 12px; opacity: 0.7; animation: bounce 2s infinite;">SCROLL ↓</div>
 </section>
 
 <main class="container">
-
-  <section style="margin-top: 120px;">
+  
+  <section style="margin-top: 100px; margin-bottom: 100px;">
     <div class="card">
       <div class="kicker">紅包場融媒體專題</div>
       <h1 class="sectionTitle">台北僅存的紅包場：<br>它如何被留下，又如何被改寫</h1>
@@ -352,9 +295,7 @@
     </div>
   </section>
 
-  <hr class="sep" />
-
-  <section id="chapter-jin">
+  <section id="chapter-jin" style="margin-bottom: 150px;">
     <div class="kicker">第一章：守門人</div>
     <div class="sticky-container">
       <div class="sticky-visual">
@@ -367,39 +308,25 @@
         <h2 class="sectionTitle">舞台還亮著</h2>
         <p class="lead">「有些店不是生意不好，是經營方式不同。」金小姐說得平淡，但這份堅持背後是每月超過二十萬的租金與樂手成本。</p>
         
-        <p style="color: #bbb; font-weight: 300; font-size: 16px;">
-          在這個高成本的壓力下，她之所以撐著，是因為對這裡有感情。對年輕時的她而言，紅包場曾是個「領現金、很實在」的地方；如今，她成為了最後的守門人。
-        </p>
-
         <div class="vision-quote">
-          <p style="margin:0;">「歌手斷層是危機，也是轉機。我希望能汰換新血，讓這裡轉型成表藝學生的『建教合作場域』。這不只是懷舊，而是下一代的實戰舞台。」</p>
+          <p style="margin:0;">「歌手斷層是危機，也是轉機。我希望能汰換新血，讓這裡轉型成表藝學生的『建教合作場域』。」</p>
         </div>
-
-        <div class="rules-grid">
-          <div class="rule-card">
-            <div class="rule-title">01. 轉型</div>
-            <p class="rule-desc">從單純歌廳轉向「觀光化」與「教育場域」，尋求生存新路。</p>
-          </div>
-          <div class="rule-card">
-            <div class="rule-title">02. 互動</div>
-            <p class="rule-desc">紅包不只是錢，是觀眾給予舞台的「回音」。</p>
-          </div>
-          <div class="rule-card">
-            <div class="rule-title">03. 包容</div>
-            <p class="rule-desc">即使是年輕客人，也得能自在坐下，不設門檻。</p>
-          </div>
-          <div class="rule-card">
-            <div class="rule-title">04. 秩序</div>
-            <p class="rule-desc">歌手不搶客、不破壞氣氛，這是尊重的底線。</p>
-          </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
+           <div style="padding: 20px; background: rgba(255,255,255,0.03);">
+              <h4 style="color:var(--accent); margin:0 0 10px 0;">轉型</h4>
+              <p style="font-size:14px; color:#ccc; margin:0;">從單純歌廳轉向觀光與教育。</p>
+           </div>
+           <div style="padding: 20px; background: rgba(255,255,255,0.03);">
+              <h4 style="color:var(--accent); margin:0 0 10px 0;">包容</h4>
+              <p style="font-size:14px; color:#ccc; margin:0;">即使年輕人第一次來也能自在。</p>
+           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <hr class="sep" />
-
-  <section id="chapter-trans">
+  <section id="chapter-trans" style="margin-bottom: 100px;">
     <div class="kicker">第二章：視角轉換</div>
     <h2 class="sectionTitle">文化轉譯：從「風化」到「文化」</h2>
     
@@ -411,142 +338,154 @@
     </div>
 
     <p class="lead">
-      「文化對每個人的意義都不一樣。」這是團隊在田野中最深的體悟。
-      為了打破年輕人對紅包場的抗拒，綠雷德創新聯手春河劇團推出<strong style="color:var(--accent)">《老闆～來碗陽春麵！》</strong>。
-    </p>
-    <p class="small" style="color:var(--muted); margin-bottom: 30px;">
-        劇團打破傳統第四道牆，觀眾一邊吃著陽春麵，一邊看著卸下華服的歌星在麵攤與舞台間流轉。這種「沉浸式」體驗，成功將「聽歌」轉化為「看戲」，讓原本卻步的年輕人願意走進來。
+      為了打破年輕人對紅包場的抗拒，綠雷德創新聯手春河劇團推出<strong style="color:var(--accent)">《老闆～來碗陽春麵！》</strong>。觀眾一邊吃麵，一邊看著卸下華服的歌星在麵攤與舞台間流轉。
     </p>
 
     <div class="flip-grid">
       <div class="flip-card">
         <div class="flip-inner">
-          <div class="flip-front">
-            <h3>煙味與抗拒</h3>
-            <p>我也曾討厭那股味道</p>
-          </div>
-          <div class="flip-back">
-            <h3>理解的代價</h3>
-            <p>「我討厭煙味，但我願意進去理解看看。」當我們忍受了感官的不適，才看見了被煙霧包裹的真情。</p>
-          </div>
+          <div class="flip-front"><h3>煙味與抗拒</h3><p>曾令我卻步的味道</p></div>
+          <div class="flip-back"><h3>理解的代價</h3><p>忍受感官不適，才看見真情。</p></div>
         </div>
       </div>
       <div class="flip-card">
         <div class="flip-inner">
-          <div class="flip-front">
-            <h3>情色標籤</h3>
-            <p>被過度簡化的想像</p>
-          </div>
-          <div class="flip-back">
-            <h3>互動秩序</h3>
-            <p>紅包場大多並非情色，而是一套獨特的社交語言與舞台互動邏輯。</p>
-          </div>
-        </div>
-      </div>
-      <div class="flip-card">
-        <div class="flip-inner">
-          <div class="flip-front">
-            <h3>共感 (Empathy)</h3>
-            <p>綠雷德的策展核心</p>
-          </div>
-          <div class="flip-back">
-            <h3>跨越世代</h3>
-            <p>透過故事導覽，讓年輕人理解這不是獵奇，而是長輩的情感需求。</p>
-          </div>
+          <div class="flip-front"><h3>情色標籤</h3><p>被過度簡化的想像</p></div>
+          <div class="flip-back"><h3>互動秩序</h3><p>這是獨特的社交語言與回應。</p></div>
         </div>
       </div>
     </div>
   </section>
 
-  <hr class="sep" />
-
-  <section id="chapter-policy">
-    <div class="kicker">第三章：城市重生</div>
-    <h2 class="sectionTitle">回到公共視野</h2>
-    <p class="lead">
-      當民間守住火苗、轉譯者搭建橋樑，文化政策則將紅包場帶回城市的公共討論之中，賦予其「文化資產」的新身分。
-    </p>
-
-    <div class="timeline">
-      <div class="timeline-item">
-        <span class="time">計畫啟動</span>
-        <div class="card">
-          <h3 style="margin-top:0; color:#fff;">萬華時光—再現與新生</h3>
-          <p style="color:#bbb;">由北市文化局主辦，旨在翻轉大眾對茶室與紅包場的刻板印象，將其從「老兵的慰藉所」轉化為城市的記憶庫。</p>
-        </div>
-      </div>
-      <div class="timeline-item">
-        <span class="time">跨界實驗</span>
-        <div class="card">
-          <h3 style="margin-top:0; color:#fff;">西門紅樓跨世代演唱會</h3>
-          <p style="color:#bbb;">
-            將封閉的紅包場搬到戶外廣場。當家庭帶著孩子投入觀看，證明了「只要翻譯得好，文化能跨越年齡」。
-          </p>
-        </div>
-      </div>
-      <div class="timeline-item">
-        <span class="time">未來展望</span>
-        <div class="card">
-          <h3 style="margin-top:0; color:#fff;">離散與包容的場域</h3>
-          <p style="color:#bbb;">
-            未來的保存不應只是凍結空間，而是保留「人情味」。這裡將展現城市如何溫柔地接納所有記憶——無論是光鮮的，還是滄桑的。
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <hr class="sep" />
-
-  <section id="conclusion">
-    <div class="kicker">結語</div>
-    <h2 class="sectionTitle" style="text-align: center;">三條線交會之後</h2>
+</main> <section id="horizontal-scroll-section">
+  <div class="horizontal-wrapper">
     
-    <div class="summary-grid">
-      <div class="summary-col">
-        <h4 style="color:var(--accent);">守門人</h4>
-        <p>承擔現實壓力，<br>守住運作系統。</p>
-      </div>
-      <div class="summary-col">
-        <h4 style="color:var(--accent);">翻譯者</h4>
-        <p>引入戲劇體驗，<br>建立理解入口。</p>
-      </div>
-      <div class="summary-col">
-        <h4 style="color:var(--accent);">城市政策</h4>
-        <p>賦予公共身分，<br>接納城市記憶。</p>
+    <div class="h-panel" style="background: #000;">
+      <div class="h-content">
+        <div class="kicker">第三章：城市重生</div>
+        <h2 class="sectionTitle" style="font-size: 60px;">時間的<br>長廊</h2>
+        <p class="lead">請向右捲動，走過紅包場的興衰與重生 →</p>
       </div>
     </div>
 
-    <div class="card" style="background: transparent; box-shadow: none; text-align: center; padding:0;">
-      
-      <blockquote style="font-size: 22px; font-style: italic; color: #fff; border-left: none; margin-bottom: 50px; line-height: 1.8; font-family: 'Noto Serif TC', serif;">
+    <div class="h-panel">
+      <div class="h-bg-year">1980</div>
+      <div class="h-content">
+        <span class="h-year">1980s</span>
+        <h3 class="h-title">全盛時期：西門町的繁華</h3>
+        <p class="h-desc">萬華曾有二、三十家歌廳，歌手一天能跑十二家。那是紅包場最盛的年代，是許多人真實的生存舞台。</p>
+      </div>
+    </div>
+
+    <div class="h-panel">
+      <div class="h-bg-year">2023</div>
+      <div class="h-content">
+        <span class="h-year">2023</span>
+        <h3 class="h-title">僅存的火種：金鑽</h3>
+        <p class="h-desc">隨著榮民凋零與疫情衝擊，全台北僅剩「金鑽」一家維持運作。文化局啟動《萬華時光》計畫，試圖翻轉刻板印象。</p>
+      </div>
+    </div>
+
+    <div class="h-panel">
+      <div class="h-bg-year">2024</div>
+      <div class="h-content">
+        <span class="h-year">2024.11</span>
+        <h3 class="h-title">跨世代對話</h3>
+        <p class="h-desc">紅包場搬到紅樓戶外廣場。當家庭帶著孩子投入觀看，證明了「只要翻譯得好，文化能跨越年齡」。</p>
+      </div>
+    </div>
+
+    <div class="h-panel" style="border-right: none;">
+      <div class="h-bg-year">FUTURE</div>
+      <div class="h-content">
+        <span class="h-year">2025+</span>
+        <h3 class="h-title">再現與新生</h3>
+        <p class="h-desc">未來的保存不應只是凍結空間，而是保留「人情味」。這裡將成為展示城市如何溫柔接納所有記憶的場域。</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<main class="container">
+
+  <section class="stacking-section" id="conclusion-stack">
+    <div style="text-align: center; margin-bottom: 50px; padding-top: 100px;">
+      <div class="kicker" style="display:inline-block; border:none; padding:0;">結語</div>
+      <h2 class="sectionTitle">三條線交會之後</h2>
+    </div>
+
+    <div class="stack-card stack-1">
+      <span class="stack-icon">🗝️</span>
+      <h3 class="stack-title">守門人</h3>
+      <p style="color:#aaa;">承擔現實壓力，守住運作系統，讓場域「活著」。</p>
+    </div>
+
+    <div class="stack-card stack-2">
+      <span class="stack-icon">🗣️</span>
+      <h3 class="stack-title">翻譯者</h3>
+      <p style="color:#aaa;">引入沉浸式戲劇體驗，建立理解入口，讓語言「被聽懂」。</p>
+    </div>
+
+    <div class="stack-card stack-3">
+      <span class="stack-icon">🏛️</span>
+      <h3 class="stack-title">城市政策</h3>
+      <p style="color:#eee;">賦予公共身分，接納城市記憶，讓歷史「重生」。</p>
+    </div>
+
+    <div class="final-interaction">
+      <blockquote class="final-quote">
         「它既是上海繁華的贗品，也是榮民孤寂的真藥。<br>
         在巨大的歷史創傷面前，人們在這裡重建了破碎的自我。」
       </blockquote>
 
-      <p class="lead" style="max-width: 700px; margin: 0 auto; font-size: 16px;">
-        我們第一次給紅包時，感到那種衝擊；但也從那一刻理解：文化不是被凍結的空間，而是人情的流動。
-      </p>
+      <p style="color:#aaa; margin-bottom: 30px;">這不是謝幕，而是轉身。</p>
 
-      <div class="interaction-area">
-        <button class="red-envelope-btn" onclick="revealEnding()">🧧 遞出紅包</button>
-        
-        <div id="final-text" class="final-message">
-          <p>紅包場或許不再是上一代記憶中的樣子，<br>但它正以自己的節奏，在城市裡持續運作。</p>
-          <p style="font-size: 36px; margin-top: 30px; color: #fff; text-shadow: 0 0 20px var(--accent);">這不是謝幕，而是轉身。</p>
-        </div>
+      <button class="red-envelope-btn" onclick="revealEnding()">🧧 遞出紅包</button>
+      
+      <div id="final-text" class="final-message">
+        <p>紅包場正以自己的節奏，在城市裡持續運作。</p>
+        <p style="font-size: 32px; margin-top: 30px; color: #fff; text-shadow: 0 0 20px var(--accent);">文化，永不落幕。</p>
       </div>
     </div>
+
   </section>
 
-  <footer style="text-align: center; color: #666; font-size: 12px; margin-top: 50px;">
-    © 2025 紅包場融媒體專題
+  <footer style="text-align: center; color: #666; font-size: 12px; margin-top: 50px; padding-bottom: 50px;">
+    © 2025 紅包場融媒體專題 | Web114 期末呈現
   </footer>
 
 </main>
 
 <script>
-  // 1. 閱讀進度條
+  // 註冊 GSAP ScrollTrigger
+  gsap.registerPlugin(ScrollTrigger);
+
+  // 1. 開場文字視差 (Parallax)
+  gsap.to(".immersive-text .line", {
+    scrollTrigger: {
+      trigger: ".video-hero",
+      start: "top top",
+      end: "bottom top",
+      scrub: true
+    },
+    y: -100, // 文字向上移動速度比背景快
+    opacity: 0
+  });
+
+  // 讓開場文字依序浮現 (Load Animation)
+  const lines = document.querySelectorAll('.immersive-text .line');
+  lines.forEach((line, index) => {
+    gsap.to(line, {
+      opacity: 1,
+      y: 0,
+      duration: 1.5,
+      delay: 0.5 + (index * 1.5),
+      ease: "power2.out"
+    });
+  });
+
+  // 2. 閱讀進度條
   window.addEventListener('scroll', () => {
     const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
     const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -554,7 +493,37 @@
     document.getElementById("progress-bar").style.width = scrolled + "%";
   });
 
-  // 2. 結尾互動特效
+  // 3. 橫向捲動 (Horizontal Scroll)
+  // 只有在電腦版 (寬度 > 768px) 時啟用，手機版維持垂直
+  if (window.innerWidth > 768) {
+    let sections = gsap.utils.toArray(".h-panel");
+    gsap.to(sections, {
+      xPercent: -100 * (sections.length - 1),
+      ease: "none",
+      scrollTrigger: {
+        trigger: "#horizontal-scroll-section",
+        pin: true,
+        scrub: 1,
+        snap: 1 / (sections.length - 1),
+        end: () => "+=" + document.querySelector("#horizontal-scroll-section").offsetWidth
+      }
+    });
+  }
+
+  // 4. 結語金句淡入
+  gsap.to(".final-quote", {
+    scrollTrigger: {
+      trigger: ".stack-3", // 當第三張卡片出現後
+      start: "top center",
+      end: "bottom center",
+      toggleActions: "play none none reverse"
+    },
+    opacity: 1,
+    y: 0,
+    duration: 1.5
+  });
+
+  // 5. 互動按鈕特效
   function revealEnding() {
     const btn = document.querySelector('.red-envelope-btn');
     const msg = document.getElementById('final-text');
@@ -571,19 +540,16 @@
   }
 
   function createConfetti() {
-    // 模擬金粉與紅紙屑效果
     for(let i=0; i<50; i++) {
       let dot = document.createElement('div');
       dot.style.position = 'fixed';
       dot.style.width = Math.random() * 8 + 3 + 'px';
       dot.style.height = dot.style.width;
-      // 金色 (#FFE87A) 與 暗紅 (#970C10)
       dot.style.background = Math.random() > 0.6 ? '#FFE87A' : '#970C10';
       dot.style.left = Math.random() * 100 + 'vw';
       dot.style.top = '100vh';
-      dot.style.borderRadius = '2px'; // 方形紙屑感
-      dot.style.zIndex = '999';
-      dot.style.opacity = '1';
+      dot.style.borderRadius = '2px';
+      dot.style.zIndex = '9999';
       dot.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
       dot.style.transition = 'all 2.5s ease-out';
       document.body.appendChild(dot);
@@ -592,7 +558,6 @@
         dot.style.top = (Math.random() * 50 + 20) + 'vh';
         dot.style.left = (parseFloat(dot.style.left) + (Math.random() * 40 - 20)) + 'vw';
         dot.style.opacity = 0;
-        dot.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
       }, 50);
     }
   }
