@@ -21,8 +21,7 @@
       --bg-dark: #080202;
       --accent: #FFE87A; /* 霓虹金 */
       --accent-red: #D91E18; /* 鮮豔紅 */
-      /* 新增：更深沉、電影感的酒紅色，用於翻牌背景 */
-      --deep-vintage-red: #8a1515; 
+      --deep-vintage-red: #8a1515; /* 酒紅 */
       --text: #e0e0e0;
     }
 
@@ -37,18 +36,9 @@
       line-height: 2;
     }
 
-    /* SVG 噪點濾鏡 (共用變數) */
-    /* 將濾鏡定義在上方，方便重複使用 */
-    .noise-overlay {
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
-      mix-blend-mode: overlay;
-      pointer-events: none;
-    }
-
     /* 全域背景躁點 */
     body::before {
       content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      /* 引用上方的噪點樣式，但透明度稍微調低一點 */
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
       mix-blend-mode: overlay;
       opacity: 0.3; z-index: 9999; pointer-events: none;
@@ -138,52 +128,33 @@
     .h-desc { font-size: 20px; color: #ccc; max-width: 650px; text-align: justify; line-height: 1.8; background: rgba(0,0,0,0.6); padding: 25px; border-left: 4px solid var(--accent-red); }
 
     /* =========================================
-       4. 金小姐的雜誌風排版 (大改版：去PPT化)
+       4. 金小姐的雜誌風排版
     ========================================= */
     .container { width: min(1100px, 92%); margin: 0 auto; position: relative; z-index: 1; }
     
-    /* 新的雜誌版型：重疊式設計 */
     .editorial-layout {
-      position: relative;
-      min-height: 80vh; /* 佔據大部分畫面高度 */
-      display: flex; align-items: center;
-      margin: 150px 0;
+      position: relative; min-height: 80vh; display: flex; align-items: center; margin: 150px 0;
     }
 
-    /* 背景大圖 */
     .editorial-bg-img {
-      position: absolute;
-      left: 0; top: 0;
-      width: 70%; /* 圖片佔據左側 70% */
-      height: 100%;
-      object-fit: cover;
-      filter: grayscale(0.2) brightness(0.7) contrast(1.2); /* 調暗一點 */
-      z-index: 0;
-      mask-image: linear-gradient(to right, black 50%, transparent 100%); /* 讓圖片右側漸層消失 */
-      border-radius: 4px;
+      position: absolute; left: 0; top: 0; width: 70%; height: 100%;
+      object-fit: cover; filter: grayscale(0.2) brightness(0.7) contrast(1.2); z-index: 0;
+      mask-image: linear-gradient(to right, black 50%, transparent 100%); border-radius: 4px;
     }
 
-    /* 疊加的文字內容區塊 */
     .editorial-content-overlay {
-      position: relative; z-index: 1;
-      width: 55%; /* 文字區塊寬度 */
-      margin-left: auto; /* 靠右對齊 */
-      background: rgba(20, 5, 5, 0.85); /* 半透明深色背景 */
-      backdrop-filter: blur(10px); /* 毛玻璃效果 */
-      padding: 60px;
-      border-left: 4px solid var(--accent-red); /* 左側紅線 */
+      position: relative; z-index: 1; width: 55%; margin-left: auto;
+      background: rgba(20, 5, 5, 0.85); backdrop-filter: blur(10px);
+      padding: 60px; border-left: 4px solid var(--accent-red);
       box-shadow: -20px 30px 60px rgba(0,0,0,0.6);
     }
 
     .editorial-content-overlay h2 {
-      font-size: 48px; line-height: 1.2; margin-bottom: 40px;
-      color: #fff;
+      font-size: 48px; line-height: 1.2; margin-bottom: 40px; color: #fff;
     }
 
-    /* 新的數據呈現方式：融入文字流 */
     .integrated-stats {
-      margin: 40px 0; padding: 30px;
-      background: rgba(255, 255, 255, 0.03);
+      margin: 40px 0; padding: 30px; background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 232, 122, 0.2);
     }
     .stat-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 15px; }
@@ -192,33 +163,58 @@
     .stat-label { font-size: 18px; color: #ccc; }
 
     /* =========================================
-       5. 綠雷德劇團資料 & 影片
+       5. 綠雷德劇團資料 (升級版專案卡片) & 影片
     ========================================= */
-    .theater-list { margin-top: 60px; border: 1px solid #333; padding: 30px; }
+    .section-header { text-align: center; margin-bottom: 80px; }
+    .section-header h2 { font-size: 48px; color: #fff; margin-top: 20px; }
+    .section-header p { max-width: 700px; margin: 0 auto; color: #aaa; font-size: 18px; }
+
+    /* 專案卡片網格 */
+    .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; margin-bottom: 80px; }
     
-    .program-item {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 25px 0; border-bottom: 1px solid #333; transition: 0.3s;
+    .project-card {
+      background: rgba(255, 255, 255, 0.03); border: 1px solid #333;
+      border-radius: 8px; overflow: hidden; transition: 0.3s;
     }
-    .program-item:last-child { border-bottom: none; }
-    .program-item:hover { background: rgba(255,255,255,0.05); padding-left: 20px; border-left: 4px solid var(--accent); }
+    .project-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
     
-    .prog-year { font-family: sans-serif; font-weight: bold; color: var(--accent); font-size: 24px; margin-right: 30px; }
-    .prog-info h3 { margin: 0; font-size: 22px; color: #fff; }
-    .prog-info p { margin: 5px 0 0; font-size: 14px; color: #aaa; }
-    .prog-tag { background: #333; color: #fff; padding: 4px 10px; font-size: 12px; border-radius: 20px; }
+    .project-cover { height: 220px; overflow: hidden; position: relative; }
+    .project-cover img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+    .project-card:hover .project-cover img { transform: scale(1.1); }
+    .project-year-badge {
+      position: absolute; top: 15px; left: 15px;
+      background: var(--accent); color: #000;
+      padding: 5px 15px; font-weight: bold; font-family: sans-serif;
+    }
+
+    .project-info { padding: 30px; }
+    .project-info h3 { margin: 0 0 15px 0; font-size: 24px; color: #fff; }
+    .project-info p { margin: 0 0 20px 0; color: #ccc; font-size: 16px; line-height: 1.8; }
+    .project-meta { display: flex; gap: 15px; flex-wrap: wrap; }
+    .meta-tag { background: #222; color: #aaa; padding: 5px 12px; font-size: 13px; border-radius: 20px; border: 1px solid #444; }
 
     .kicker { color: var(--accent-red); font-size: 14px; letter-spacing: 0.4em; font-weight: 700; margin-bottom: 20px; display: block; }
     .lead { font-size: 21px; color: #e0e0e0; margin-bottom: 40px; font-weight: 300; line-height: 2; text-align: justify; }
 
-    /* 影片容器 */
+    /* 影片容器 (滿版化) */
     .video-container {
-      width: 100%; border-radius: 8px; overflow: hidden; margin: 60px 0;
-      box-shadow: 0 20px 80px rgba(0,0,0,0.9); border: 1px solid #222;
+      width: 100vw; /* 滿版寬度 */
+      margin: 100px 0 100px calc(-1 * (100vw - min(1100px, 92%)) / 2); /* 將容器拉出 content 寬度 */
+      position: relative;
+    }
+    .video-container video {
+      width: 100%; display: block; aspect-ratio: 16 / 9; object-fit: cover;
+      border-bottom: 4px solid var(--accent-red); /* 底部加一條紅線裝飾 */
+    }
+    .video-caption {
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,0.7); padding: 10px 20px;
+      color: #ccc; font-size: 14px; text-align: center; backdrop-filter: blur(5px);
+      border-radius: 30px;
     }
 
-    /* 翻牌特效 (復古電影感優化) */
-    .flip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 30px; margin-top: 60px; }
+    /* 翻牌特效 (復古電影感) */
+    .flip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 30px; margin-top: 80px; }
     .flip-card { perspective: 1000px; height: 280px; }
     .flip-inner {
       position: relative; width: 100%; height: 100%;
@@ -229,21 +225,13 @@
     .flip-front, .flip-back {
       position: absolute; inset: 0; backface-visibility: hidden;
       display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
-      padding: 20px; border-radius: 8px;
-      border: 1px solid #333;
+      padding: 20px; border-radius: 8px; border: 1px solid #333;
     }
     .flip-front { background: rgba(30,30,30,0.6); }
-    
-    /* 背面樣式修正：更深、有躁點 */
     .flip-back {
-      transform: rotateY(180deg);
-      background-color: var(--deep-vintage-red); /* 使用新的深酒紅色 */
-      color: #fff;
-      border: 1px solid var(--accent); /* 金色邊框 */
-      /* 疊加躁點紋理 */
+      transform: rotateY(180deg); background-color: var(--deep-vintage-red); color: #fff; border: 1px solid var(--accent);
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
-      background-blend-mode: overlay;
-      box-shadow: inset 0 0 30px rgba(0,0,0,0.5); /* 內陰影增加層次 */
+      background-blend-mode: overlay; box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
     }
     .flip-back h3 { color: var(--accent); text-shadow: 0 0 10px rgba(255, 232, 122, 0.3); }
 
@@ -272,17 +260,16 @@
 
     /* RWD */
     @media (max-width: 768px) {
-      /* 手機版雜誌排版改為上下堆疊 */
       .editorial-layout { flex-direction: column; min-height: auto; }
       .editorial-bg-img { position: relative; width: 100%; height: 400px; mask-image: linear-gradient(to bottom, black 60%, transparent 100%); }
       .editorial-content-overlay { width: 100%; margin-top: -100px; padding: 30px; backdrop-filter: blur(5px); }
-      
       .horizontal-wrapper { flex-direction: column; height: auto; }
       .h-panel { width: 100%; height: auto; padding: 80px 20px; border-bottom: 1px solid #222; }
       #horizontal-scroll-section { height: auto; display: block; }
-      .program-item { flex-direction: column; align-items: flex-start; gap: 10px; }
       .gate-title { font-size: 32px; }
       .h-bg-year { font-size: 20vw; bottom: 5%; }
+      .video-container { margin-left: -20px; width: calc(100% + 40px); }
+      .project-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -381,31 +368,48 @@
   <hr style="border:0; height:1px; background:linear-gradient(90deg, transparent, #333, transparent); margin:100px 0;">
 
   <section id="chapter-trans">
-    <div style="text-align: center; margin-bottom: 60px;">
+    <div class="section-header">
       <span style="color:var(--accent-red); font-weight:bold; letter-spacing:3px;">CHAPTER 02</span>
-      <h2 style="font-size: 40px; color:#fff; margin-top:20px;">文化轉譯：從獵奇到共感</h2>
-      <p style="max-width:600px; margin:0 auto; color:#aaa;">綠雷德團隊深知，要年輕人走進來，不能只靠「保存」，必須靠「體驗」。</p>
+      <h2>文化轉譯：從獵奇到共感</h2>
+      <p>隨著原生客群消逝，紅包場正面臨存亡危機。近年來，文化局攜手民間團隊，試圖將其從「老兵的慰藉所」轉化為「城市的文化資產」。</p>
     </div>
 
-    <div class="theater-list">
-      <h4 style="color:#fff; margin-bottom:30px; border-left:4px solid var(--accent); padding-left:15px;">近年跨界展演紀錄</h4>
-      <div class="program-item">
-        <div class="prog-year">2023</div>
-        <div class="prog-info"><h3>茶味在人情在</h3><p>結合走讀導覽：帶領觀眾走進真實茶室空間，理解萬華長輩的情感需求。</p></div>
-        <div class="prog-tag">環境劇場</div>
+    <div class="project-grid">
+      <div class="project-card">
+        <div class="project-cover">
+          <span class="project-year-badge">2023</span>
+          <img src="https://source.unsplash.com/600x400/?tea,house,vintage" alt="茶味在人情在">
+        </div>
+        <div class="project-info">
+          <h3>茶味在人情在</h3>
+          <p>由「大熊老師」劉長灝帶路，以孫子尋找阿公的故事為主軸，帶領觀眾走進萬華茶室文化老街，體驗橫跨三代的記憶，理解長輩情感需求。</p>
+          <div class="project-meta">
+            <span class="meta-tag">走動式戲劇導覽</span>
+            <span class="meta-tag">環境劇場</span>
+          </div>
+        </div>
       </div>
-      <div class="program-item">
-        <div class="prog-year">2024</div>
-        <div class="prog-info"><h3>老闆～來碗陽春麵！</h3><p>與春河劇團合作：打破第四道牆，觀眾邊吃麵邊看紅包場歌星的人生流轉。</p></div>
-        <div class="prog-tag">沉浸式體驗</div>
+      <div class="project-card">
+        <div class="project-cover">
+          <span class="project-year-badge">2024</span>
+          <img src="photos/play.jpg" alt="老闆～來碗陽春麵！">
+        </div>
+        <div class="project-info">
+          <h3>老闆～來碗陽春麵！（紅包場特別版）</h3>
+          <p>攜手「春河劇團」，直接將舞台搬進「金鑽歌廳」。打破第四道牆，讓觀眾邊吃麵邊看紅包場歌星的人生流轉，吸引年輕族群體驗復古美學。</p>
+          <div class="project-meta">
+            <span class="meta-tag">沉浸式劇場</span>
+            <span class="meta-tag">春河劇團合作</span>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="video-container">
-       <video controls playsinline loop style="width: 100%; display: block;">
-        <source src="videos/singer.mp4" type="video/mp4">
+       <video controls playsinline loop>
+        <source src="videos/singer1.mp4" type="video/mp4">
       </video>
-      <div style="padding: 15px; background: #111; color: #888; font-size: 13px; text-align: center;">▲ 現場：點擊播放影片，感受現場聲音與氛圍。</div>
+      <div class="video-caption">▲ 現場：打破第四道牆的沉浸式體驗 (點擊播放控制列開啟聲音)</div>
     </div>
     
     <div class="flip-grid">
@@ -544,7 +548,7 @@
   }
 
   // 文字浮現
-  gsap.utils.toArray('.huge-title, .lead, .editorial-content-overlay').forEach(element => {
+  gsap.utils.toArray('.huge-title, .lead, .editorial-content-overlay, .section-header, .project-card').forEach(element => {
     gsap.from(element, {
       scrollTrigger: {
         trigger: element, start: "top 85%", toggleActions: "play none none reverse"
