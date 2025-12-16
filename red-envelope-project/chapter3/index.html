@@ -135,21 +135,25 @@
     .h-desc { font-size: 20px; color: #ccc; max-width: 650px; text-align: justify; line-height: 1.8; background: rgba(0,0,0,0.6); padding: 25px; border-left: 4px solid var(--accent-red); }
 
     /* =========================================
-       4. 金小姐的雜誌風排版 (大重構)
+       4. 金小姐的雜誌風排版 (固定圖片/可滾動文字)
     ========================================= */
     .container { width: min(1100px, 92%); margin: 0 auto; position: relative; z-index: 1; }
     
     .editorial-layout {
-      position: relative; min-height: 80vh; display: flex; align-items: center; margin: 150px 0;
+      display: flex; 
+      min-height: 250vh; /* 確保有足夠的捲動空間來展示所有文字 */
+      margin: 150px 0;
     }
 
-    /* 圖片容器：用於固定左側圖片 */
+    /* 左側固定圖片容器 */
     .editorial-image-sticky {
-      position: sticky; top: 100px; 
+      position: sticky; 
+      top: 100px; /* 圖片開始黏住的位置 */
       width: 40%; 
-      height: 600px;
+      height: 600px; /* 圖片本身的高度 */
       margin-right: 5%;
-      flex-shrink: 0; /* 不被壓縮 */
+      flex-shrink: 0;
+      align-self: flex-start;
     }
 
     .editorial-bg-img {
@@ -162,20 +166,20 @@
     .editorial-story-scroll {
       width: 55%; 
       padding-left: 20px; 
-      position: relative; 
     }
 
     .editorial-content-block {
         background: rgba(20, 5, 5, 0.85); 
         backdrop-filter: blur(10px);
         padding: 40px; 
-        margin-bottom: 60px; 
+        margin-bottom: 80px; /* 增加區塊間距 */
         border-left: 4px solid var(--accent-red);
     }
     
+    /* 修正：字體較小，更適於長文案閱讀 */
     .editorial-content-block p {
-        font-size: 18px; 
-        line-height: 1.9;
+        font-size: 17px; 
+        line-height: 2; /* 增加行距，利於閱讀 */
         text-align: justify;
     }
     
@@ -297,7 +301,8 @@
 
     /* 底部轉場按鈕 */
     .next-chapter-section {
-      padding: 100px 20px 140px; text-align: center; background: linear-gradient(to bottom, transparent, #000);
+      padding: 100px 20px 40px; /* 縮小底部 padding */
+      text-align: center; background: linear-gradient(to bottom, transparent, #000);
       position: relative; z-index: 60;
     }
     .nav-buttons-container { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
@@ -313,15 +318,25 @@
       letter-spacing: 0.15em; box-shadow: 0 0 30px rgba(217, 30, 24, 0.4);
     }
 
+    /* Footer 新增 */
+    .site-footer {
+        padding: 20px 0;
+        text-align: center;
+        color: #555;
+        font-size: 12px;
+        line-height: 1.5;
+        margin-top: 20px;
+    }
+    .site-footer strong { color: #888; }
+
 
     /* RWD */
     @media (max-width: 768px) {
-      /* 手機版：圖片不再固定，而是放在最上方 */
       .editorial-layout { flex-direction: column; min-height: auto; }
       .editorial-image-sticky { position: relative; width: 100%; margin-right: 0; top: 0; height: 350px; }
       .editorial-bg-img { mask-image: none; }
       .editorial-story-scroll { width: 100%; padding-left: 0; }
-      .editorial-content-overlay { width: 100%; margin-left: 0; padding: 30px; backdrop-filter: blur(5px); }
+      .editorial-content-block { margin-bottom: 40px; } 
 
       .horizontal-wrapper { flex-direction: column; height: auto; }
       .h-panel { width: 100%; height: auto; padding: 80px 20px; border-bottom: 1px solid #222; }
@@ -330,6 +345,7 @@
       .h-bg-year { font-size: 20vw; bottom: 5%; }
       .video-container { margin-left: -20px; width: calc(100% + 40px); }
       .project-grid { grid-template-columns: 1fr; }
+      .nav-btn { min-width: 100%; margin-bottom: 10px; }
     }
   </style>
 </head>
@@ -406,7 +422,7 @@
                 金小姐的紅包場故事，由她的父親開啟。高中時，父親帶她進入這個華麗又充滿人情味的地下世界打工。
             </p>
             <p>
-                對當時要照顧弟弟、分擔家計的她來說，紅包場是一份給**現金**、**收入豐厚**的好工作。它不僅是她的收入來源，更是一個陪伴她成長、充滿溫暖的獨特場域。
+                對當時要照顧弟弟、分擔家計的她來說，紅包場是一份給<span style="color:var(--accent-red); font-weight:700;">現金</span>、<span style="color:var(--accent); font-weight:700;">收入豐厚</span>的好工作。它不僅是她的收入來源，更是一個陪伴她成長、充滿溫暖的獨特場域。
             </p>
             <div class="story-highlight">她守護的，是伴隨她青春成長的時光。</div>
         </div>
@@ -416,37 +432,39 @@
                 她在這裡一待就是十幾年，曾是舞台上的歌星，也上過不少綜藝節目。直到結婚後，她才退場。
             </p>
             <p>
-                多年後，隨著原生客群凋零、疫情衝擊，當年投資這家歌廳的四五個股東，一個個退出。最後，只剩下她一人承接下這份重擔。
+                多年後，當年投資這家歌廳的四五個股東，一個個退出。最後，只剩下她一人承接下這份重擔。
             </p>
-            <div class="story-highlight">「有些店不是生意不好，是經營方式不一樣。」</div>
+            <p>
+                <span style="font-style:italic;">「有些店不是生意不好，是經營方式不一樣。」</span>金小姐的經營之道就是**「守本分」**。她堅持**正派經營**、不亂收費、不作惡性競爭，這也是金鑽能夠堅持到最後，成為台北僅存一間的根本原因。
+            </p>
         </div>
 
         <div class="editorial-content-block">
             <p>
-                金小姐本職是**美容科老師**，卻肩負起這間老店的重擔。光是維持樂隊的穩定演出和西門町的黃金地段租金，每月就是 40 萬起跳的固定支出。
+                金小姐本職是**美容科老師**，卻肩負起這間老店的重擔。歌手雖然靠紅包抽成，但光是「租金」與「樂手」，每個月就是 40 萬起跳的固定支出。
             </p>
             
             <div class="integrated-stats">
-                <div class="stat-item">
-                    <h4>20萬+</h4>
-                    <p>樂手月薪資</p>
+                <div class="stat-row">
+                    <span class="stat-label">樂手月薪資</span>
+                    <span class="stat-big">20萬+</span>
                 </div>
-                <div class="stat-item">
-                    <h4>20萬+</h4>
-                    <p>黃金地段租金</p>
+                <div class="stat-row">
+                    <span class="stat-label">黃金地段租金</span>
+                    <span class="stat-big">20萬+</span>
                 </div>
             </div>
 
             <p style="color:#ccc; margin-top: 30px;">
-                面對這樣的壓力，她沒有選擇縮減，而是思考「跨界」與「求新求變」。
+                面對壓力，她沒有選擇縮減，而是思考「跨界」與「求新求變」。
             </p>
             <p>
                 <span style="color:var(--accent); font-size:20px; font-weight:bold; display:block; margin-top:20px; border-left: 4px solid var(--accent); padding-left: 20px;">
-                她的理念是：與觀光業、表藝科系結合，讓這裡成為學生售票演出的 Live House。
+                  她的理念是：與觀光業、表藝科系結合，讓這裡成為學生售票演出的 Live House。
                 </span>
             </p>
             <p>
-                這份新穎的經營模式，不僅能吸引年輕人流，也能讓紅包場從舊時代的慰藉所，轉型為新一代的展演舞台。
+                這份新穎的經營模式，能讓紅包場從舊時代的慰藉所，轉型為新一代的展演舞台。
             </p>
         </div>
         
@@ -460,40 +478,46 @@
       <span style="color:var(--accent-red); font-weight:bold; letter-spacing:3px;">CHAPTER 02</span>
       <h2>綠雷德進駐：文化的再現與創新</h2>
       <p>
-        對深耕萬華的綠雷德來說，文化不只是保存。他們透過創新策略，強調文化本來就會變動，並在當代以新的方式將其再現。
+        隨著原生客群消逝，紅包場正面臨存亡危機。近年來，文化局攜手民間團隊，試圖將其從「老兵的慰藉所」轉化為「城市的文化資產」。
       </p>
     </div>
 
     <div style="max-width: 800px; margin: 0 auto 80px; text-align: justify; font-size: 18px; color: #ccc;">
+        <p style="font-weight: bold; color: var(--accent);">
+            文化，是變動的總和：綠雷德的創新宣言。
+        </p>
         <p>
-            綠雷德深知文化對每個人的詮釋意義不同：有人對紅包的儀式感新奇，有人是對歌藝的欣賞，有些人是對台下源源不絕的聊天互動感興趣。
+            對深耕萬華十年的綠雷德團隊來說，文化從來不是被冰封在博物館的文物。它是一種流動的人情，是對時代的詮釋。有人對紅包的<span style="color:#fff;">儀式感</span>新奇；有人是對歌星的<span style="color:#fff;">歌藝與人生</span>產生共感；也有人熱衷於台下<span style="color:#fff;">源源不絕的聊天互動</span>。
         </p>
         <p>
             他們的策略正是在這個時代，用這個時代的語言將文化再現與創新。他們不以獵奇眼光看待，而是透過**「沉浸式體驗」**與**「共感設計」**，讓年輕一代透過故事理解長輩的情感需求。
         </p>
     </div>
 
+
     <div class="project-grid">
       <div class="project-card">
         <div class="project-cover">
-          <span class="project-year-badge">2025</span> <img src="photos/concert.jpg" alt="紅包場演唱會">
+          <span class="project-year-badge">2025</span>
+          <img src="photos/concert.jpg" alt="紅包場演唱會">
         </div>
         <div class="project-info">
           <h3>「再現與新生」紅包場演唱會</h3>
-          <p>戶外公演。將封閉的紅包場文化搬到西門紅樓廣場。這場跨世代的音樂派對，成功吸引了數千人駐足，讓大眾看見紅包場的獨特魅力。</p>
+          <p>戶外公演。將封閉的紅包場文化搬到西門紅樓廣場。這場跨世代的音樂派對，成功吸引了數千人駐足，<span style="color:var(--accent-red); font-weight:700;">一票難求</span>，讓大眾看見紅包場的魅力。</p>
           <div class="project-meta">
+            <span class="meta-tag">戶外公演</span>
             <span class="meta-tag">公共藝術</span>
-            <span class="meta-tag">一票難求</span>
           </div>
         </div>
       </div>
       <div class="project-card">
         <div class="project-cover">
-          <span class="project-year-badge">2025</span> <img src="photos/play.jpg" alt="老闆～來碗陽春麵！">
+          <span class="project-year-badge">2025</span>
+          <img src="photos/play.jpg" alt="老闆～來碗陽春麵！">
         </div>
         <div class="project-info">
           <h3>老闆～來碗陽春麵！（紅包場特別版）</h3>
-          <p>沉浸式劇場。攜手「春河劇團」，直接將舞台搬進歌廳。透過觀眾邊吃麵邊看歌星人生故事的「新嘗試」，有效地降低了年輕族群的進入門檻。</p>
+          <p>沉浸式劇場。攜手「春河劇團」，直接將舞台搬進歌廳。透過觀眾邊吃麵邊看歌星人生故事的<span style="color:var(--accent); font-weight:700;">新嘗試</span>，有效地降低了年輕族群的進入門檻。</p>
           <div class="project-meta">
             <span class="meta-tag">沉浸式體驗</span>
             <span class="meta-tag">跨界合作</span>
@@ -506,7 +530,7 @@
        <video controls playsinline loop>
         <source src="videos/singer1.mp4" type="video/mp4">
       </video>
-      <div class="video-caption">▲ 現場：點擊播放控制列開啟聲音，感受沉浸式體驗的氛圍。</div>
+      <div class="video-caption">▲ 現場：打破第四道牆的沉浸式體驗 (點擊播放控制列開啟聲音)</div>
     </div>
     
     <div class="flip-grid">
@@ -545,7 +569,9 @@
       </blockquote>
     </div>
     
-    <p style="color:#aaa;">故事還沒結束，下一場表演正要開始。</p>
+    <p style="color:#aaa; max-width: 600px; margin: 0 auto 30px;">
+        紅包場的故事並未結束，它正透過這些主動的、創新的文化轉譯行動，準備迎接下一輪時代的光芒。
+    </p>
 
     <button class="neon-btn" onclick="lightUp(this)">
       點亮文化
@@ -572,6 +598,12 @@
       <span>RESTART STORY &rarr;</span>
     </a>
   </div>
+  
+  <footer class="site-footer">
+    <strong>「台北僅存的紅包場」專案小組</strong>
+    <p>梁朝勛、彭賀琳、莊馨予</p>
+  </footer>
+
 </div>
 
 <script>
@@ -627,7 +659,9 @@
           scrollSection.style.opacity = 1;
           
           if(window.innerWidth > 768) {
-             gsap.to(window, { scrollTo: 100, duration: 1 });
+             // 滾動到第一個故事點 (橫向捲軸結束後)
+             const nextSection = document.getElementById('horizontal-scroll-section');
+             gsap.to(window, { duration: 1.5, scrollTo: nextSection.offsetTop + nextSection.offsetHeight, ease: "power2.out" });
           }
         }
       });
@@ -659,7 +693,7 @@
   }
 
   // 文字浮現
-  gsap.utils.toArray('.huge-title, .lead, .editorial-content-overlay, .section-header, .project-card').forEach(element => {
+  gsap.utils.toArray('.huge-title, .lead, .editorial-content-block, .section-header, .project-card').forEach(element => {
     gsap.from(element, {
       scrollTrigger: {
         trigger: element, start: "top 85%", toggleActions: "play none none reverse"
