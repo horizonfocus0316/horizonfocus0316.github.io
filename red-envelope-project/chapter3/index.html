@@ -34,7 +34,6 @@
       font-family: "Noto Serif TC", serif;
       overflow-x: hidden;
       line-height: 2;
-      /* 新增：頁面淡入動畫 */
       animation: fadeInPage 1.5s ease-out;
     }
 
@@ -79,7 +78,8 @@
     .pill-red-envelope {
       background: #c21807; color: #ffd700; border: 2px solid #ffd700; 
       padding: 18px 60px; font-size: 24px; border-radius: 50px;
-      font-family: sans-serif; font-weight: bold; letter-spacing: 3px;
+      font-family: "Noto Serif TC", serif; /* 修正：使用思源宋體 */
+      font-weight: 900; letter-spacing: 3px;
       cursor: pointer; transition: 0.3s;
       box-shadow: 0 0 30px rgba(194, 24, 7, 0.6);
       position: relative; z-index: 10; overflow: visible;
@@ -205,13 +205,12 @@
 
     /* 影片容器 (滿版化) */
     .video-container {
-      width: 100vw; /* 滿版寬度 */
-      margin: 100px 0 100px calc(-1 * (100vw - min(1100px, 92%)) / 2); /* 將容器拉出 content 寬度 */
+      width: 100vw; margin: 100px 0 100px calc(-1 * (100vw - min(1100px, 92%)) / 2); 
       position: relative;
     }
     .video-container video {
       width: 100%; display: block; aspect-ratio: 16 / 9; object-fit: cover;
-      border-bottom: 4px solid var(--accent-red); /* 底部加一條紅線裝飾 */
+      border-bottom: 4px solid var(--accent-red); 
     }
     .video-caption {
       position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
@@ -242,6 +241,7 @@
     }
     .flip-back h3 { color: var(--accent); text-shadow: 0 0 10px rgba(255, 232, 122, 0.3); }
 
+
     /* =========================================
        6. 結語霓虹燈
     ========================================= */
@@ -250,7 +250,7 @@
     .neon-btn {
       background: transparent; border: 2px solid #444; color: #444;
       padding: 20px 60px; font-size: 24px; font-weight: bold; letter-spacing: 5px;
-      cursor: pointer; transition: 0.5s; margin-top: 50px; font-family: sans-serif;
+      cursor: pointer; transition: 0.5s; margin-top: 50px; font-family: "Noto Serif TC", serif; /* 統一字體 */
     }
     .neon-btn:hover { border-color: #fff; color: #fff; }
     
@@ -264,7 +264,7 @@
     .final-text-reveal { opacity: 0; transition: opacity 2s ease; margin-top: 50px; font-size: 20px; color: #ccc; }
     @keyframes flicker { 0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; } 20%, 24%, 55% { opacity: 0.5; } }
 
-    /* === 7. 底部按鈕區 CSS (新增) === */
+    /* === 7. 底部按鈕區 CSS === */
     .next-chapter-section {
       padding: 100px 20px 140px;
       text-align: center;
@@ -272,62 +272,20 @@
       position: relative;
       z-index: 60;
     }
-
-    .next-label {
-      font-size: 0.9rem;
-      color: #666;
-      letter-spacing: 0.2em;
-      margin-bottom: 30px;
-      display: block;
-      text-transform: uppercase;
-    }
-
-    .nav-buttons-container {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      flex-wrap: wrap;
-    }
-
+    .next-label { font-size: 0.9rem; color: #666; letter-spacing: 0.2em; margin-bottom: 30px; display: block; text-transform: uppercase; }
+    .nav-buttons-container { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
     .nav-btn {
-      text-decoration: none;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      padding: 15px 40px;
-      color: #fff;
-      font-family: "Noto Serif TC", serif;
-      font-size: 1rem;
-      letter-spacing: 0.1em;
-      transition: all 0.4s ease;
-      min-width: 200px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 15px 40px; color: #fff; font-family: "Noto Serif TC", serif;
+      font-size: 1rem; letter-spacing: 0.1em; transition: all 0.4s ease; min-width: 200px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
     }
-
-    .nav-btn span {
-      font-size: 0.7em;
-      color: #888;
-      margin-top: 5px;
-      font-weight: 300;
-    }
-
-    .btn-home:hover {
-      border-color: #fff;
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-    }
-
-    .btn-next {
-      background: rgba(0, 0, 0, 0.6);
-    }
-
+    .nav-btn span { font-size: 0.7em; color: #888; margin-top: 5px; font-weight: 300; }
     .btn-next:hover {
-      border-color: var(--accent-red); /* 使用這頁的紅色變數 */
-      background: rgba(217, 30, 24, 0.2);
-      letter-spacing: 0.15em;
-      box-shadow: 0 0 30px rgba(217, 30, 24, 0.4);
+      border-color: var(--accent-red); background: rgba(217, 30, 24, 0.2);
+      letter-spacing: 0.15em; box-shadow: 0 0 30px rgba(217, 30, 24, 0.4);
     }
+
 
     /* RWD */
     @media (max-width: 768px) {
@@ -370,7 +328,7 @@
     <div class="h-panel" style="background: linear-gradient(to right, #000, #111);">
       <div class="h-bg-year">GATE</div>
       <h2 style="font-size: 60px; color: #fff; margin-bottom: 20px; font-weight:900;">穿越<br>長廊</h2>
-      <p class="h-desc" style="background:none; border:none; color:var(--accent); padding-left:0;">請向右捲動，閱讀這個空間的興衰 →</p>
+      <p class="h-desc" style="background:none; border:none; color:var(--accent); padding-left:0;">請向下捲動，閱讀這個空間的興衰 →</p>
     </div>
     <div class="h-panel">
       <div class="h-bg-year">1980</div>
@@ -448,15 +406,15 @@
     <div class="project-grid">
       <div class="project-card">
         <div class="project-cover">
-          <span class="project-year-badge">2023</span>
-          <img src="https://source.unsplash.com/600x400/?tea,house,vintage" alt="茶味在人情在">
+          <span class="project-year-badge">2024</span>
+          <img src="photos/concert.jpg" alt="紅包場演唱會">
         </div>
         <div class="project-info">
-          <h3>茶味在人情在</h3>
-          <p>由「大熊老師」劉長灝帶路，以孫子尋找阿公的故事為主軸，帶領觀眾走進萬華茶室文化老街，體驗橫跨三代的記憶，理解長輩情感需求。</p>
+          <h3>「萬華時光—再現與新生」紅包場演唱會</h3>
+          <p>11月15日於西門紅樓北廣場開唱。邀請「一代女皇」金佩姍等跨世代歌手同台，將封閉的歌廳文化搬到戶外，讓大眾看見紅包場的魅力。</p>
           <div class="project-meta">
-            <span class="meta-tag">走動式戲劇導覽</span>
-            <span class="meta-tag">環境劇場</span>
+            <span class="meta-tag">戶外公演</span>
+            <span class="meta-tag">公共藝術</span>
           </div>
         </div>
       </div>
@@ -470,7 +428,7 @@
           <p>攜手「春河劇團」，直接將舞台搬進「金鑽歌廳」。打破第四道牆，讓觀眾邊吃麵邊看紅包場歌星的人生流轉，吸引年輕族群體驗復古美學。</p>
           <div class="project-meta">
             <span class="meta-tag">沉浸式劇場</span>
-            <span class="meta-tag">春河劇團合作</span>
+            <span class="meta-tag">跨界合作</span>
           </div>
         </div>
       </div>
