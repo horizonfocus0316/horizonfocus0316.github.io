@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>唱給不在場的人 - 數位敘事專題</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Courier+Prime&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&display=swap" rel="stylesheet" />
 <style>
 :root{
-    --red: #970C10;
-    --gold: #FFE87A;
-    --bg: #050505;
+    /* 改為更深沉、復古的胭脂紅 */
+    --red: #5e0a0a; 
+    --gold: #cba35c; /* 金色也調暗一點配合復古感 */
+    --bg: #080202;   /* 接近純黑的深紅底色 */
 }
 
 /* === 基礎設定 === */
@@ -19,253 +20,319 @@ html{scroll-behavior:smooth;}
 body{
     font-family:"Noto Serif TC", serif;
     background:var(--bg);
-    color:#fff;
+    color:#e0e0e0;
     overflow-x:hidden;
 }
 img, video{width:100%; height:auto; display:block; object-fit:cover;}
 
-/* === 0. 開場 Hook (視差淡入版) === */
-.hook-section{
-    position:relative; 
-    background:transparent;
-    padding-bottom:10vh;
+/* === 強化的電影感躁點濾鏡 === */
+.grain-overlay{
+    position:fixed; inset:0; pointer-events:none; z-index:999;
+    opacity:0.15; /* 提高不透明度讓躁點更明顯 */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    filter: sepia(0.4); /* 加入一點懷舊色調 */
+    mix-blend-mode: overlay;
 }
-/* 背景圖固定 */
-.hook-bg-fixed{
+
+/* === 0. 全新開場：聚光燈效果 (Spotlight Intro) === */
+.intro-container{
+    position:relative;
+    background:var(--bg);
+}
+/* 固定在背後的舞台照片 */
+.intro-bg-fixed{
     position:fixed; top:0; left:0; width:100%; height:100vh;
-    z-index:-1;
+    z-index:0;
+    opacity:0; /* 一開始是全黑的 */
+    transition: opacity 0.8s ease;
+    filter: contrast(1.2) brightness(0.8);
 }
-.hook-bg-fixed img{
-    width:100%; height:100%; object-fit:cover;
-    opacity:0.3; filter: grayscale(0.6) brightness(0.5);
-}
+.intro-bg-fixed img{width:100%; height:100%; object-fit:cover;}
+
 .hook-block{
-    min-height:90vh; 
+    position:relative; z-index:10;
+    min-height:100vh; /* 拉長高度，讓聚光燈效果更明顯 */
     display:flex; flex-direction:column; justify-content:center; align-items:center;
-    text-align:center;
-    transition:opacity 0.8s ease, transform 0.8s ease;
-    opacity:0.1; transform:scale(0.95);
-    padding:2rem;
+    text-align:center; padding:2rem;
+    /* 製造聚光燈效果的關鍵：徑向漸層遮罩 */
+    background: radial-gradient(circle at center, transparent 20%, var(--bg) 60%);
+    opacity:0.4; transition:all 1s ease;
 }
-.hook-block.active{opacity:1; transform:scale(1);}
+/* 當區塊進入視線中央時的「打光」狀態 */
+.hook-block.active{
+    opacity:1;
+    background: radial-gradient(circle at center, transparent 30%, var(--bg) 70%);
+}
 .hook-text{
-    font-size:clamp(1.8rem, 5vw, 3.5rem); font-weight:900; line-height:1.5;
-    color:#fff; text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+    font-size:clamp(2rem, 5vw, 4rem); font-weight:900; line-height:1.4;
+    color:var(--gold); text-shadow: 0 0 20px rgba(203, 163, 92, 0.3);
+    transform: translateY(30px); transition: transform 1s ease;
 }
+.hook-block.active .hook-text{transform: translateY(0);}
+
 .scroll-hint{
-    margin-top:20px; font-size:0.9rem; color:var(--gold); letter-spacing:0.2em; opacity:0.8;
+    position:absolute; bottom:5vh;
+    font-size:0.9rem; color:#aaa; letter-spacing:0.2em; opacity:0.7;
+    animation: pulse 2s infinite;
 }
+@keyframes pulse { 0%,100%{opacity:0.4;} 50%{opacity:1;} }
+
 
 /* === 1. 轉場金句 === */
 .statement-section{padding:20vh 10vw; background:var(--red); position:relative; z-index:20; text-align:center;}
-.statement-text{font-size:clamp(1.2rem, 2.5vw, 2rem); line-height:2; font-weight:700;}
-.statement-img{margin:5vh auto; max-width:800px; box-shadow:0 20px 50px rgba(0,0,0,0.5);}
+.statement-text{font-size:clamp(1.2rem, 2.5vw, 2rem); line-height:2; font-weight:700; color:var(--gold);}
+.statement-img{margin:8vh auto; max-width:900px; box-shadow:0 30px 60px rgba(0,0,0,0.8); border:1px solid rgba(203, 163, 92, 0.2);}
 
-/* === 2. 六大元素 (橫向捲動) === */
-.hscroll-container{position:relative; height:500vh; z-index:30; background:#111;}
+/* === 2. 六大元素 (純圖文橫向捲動) === */
+.hscroll-container{position:relative; height:500vh; z-index:30; background:#0a0a0a;}
 .hscroll-sticky{position:sticky; top:0; height:100vh; overflow:hidden; display:flex; align-items:center;}
-.hscroll-track{display:flex; height:70vh; will-change:transform; padding-left:10vw;}
+.hscroll-header{position:absolute; top:8vh; left:8vw; z-index:5;}
+.hscroll-track{display:flex; height:65vh; will-change:transform; padding-left:10vw; margin-top:5vh;}
 .h-card{
-    width:70vw; max-width:500px; flex-shrink:0; margin-right:5vw;
-    background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
-    display:flex; flex-direction:column; transition:0.3s; position:relative;
+    width:60vw; max-width:450px; flex-shrink:0; margin-right:6vw;
+    background:rgba(20,0,0,0.6); border:1px solid rgba(255,255,255,0.1);
+    display:flex; flex-direction:column; position:relative;
 }
-.h-card:hover{background:rgba(255,255,255,0.1); border-color:var(--gold);}
-.h-card-img{height:55%; overflow:hidden;}
-.h-card-img img{width:100%; height:100%; object-fit:cover; transition:0.5s;}
-.h-card:hover .h-card-img img{transform:scale(1.1);}
-.h-card-content{padding:2rem; height:45%; display:flex; flex-direction:column;}
-.h-card h3{font-size:1.8rem; color:var(--gold); margin-bottom:0.5rem;}
-.h-number{font-size:4rem; font-weight:900; color:rgba(255,255,255,0.1); position:absolute; top:-20px; right:10px; z-index:2;}
+.h-card-img{height:60%; overflow:hidden; filter: saturate(0.8) contrast(1.1);}
+.h-card-img img{width:100%; height:100%; object-fit:cover;}
+.h-card-content{padding:2rem; height:40%; display:flex; flex-direction:column; justify-content:center; border-top:1px solid var(--red);}
+.h-card h3{font-size:1.8rem; color:var(--gold); margin-bottom:0.8rem;}
+.h-card p{font-size:1rem; line-height:1.7; color:#ccc;}
+.h-number{font-size:5rem; font-weight:900; color:rgba(203, 163, 92, 0.1); position:absolute; top:-30px; left:-20px; z-index:-1;}
 
-/* === 3. 茶單收據動畫 === */
-.dual-section{background:var(--bg); padding:15vh 5vw; position:relative; z-index:40;}
-.dual-container{display:grid; grid-template-columns: 1fr 1fr; gap:4rem; max-width:1200px; margin:0 auto; align-items:center;}
-.concept-card{border-top:1px solid var(--gold); padding-top:2rem;}
-.concept-visual{background:#222; aspect-ratio:16/9; margin-bottom:1.5rem; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center;}
-.receipt{
-    background:#eee; color:#222; padding:2rem; font-family:'Courier Prime', monospace;
-    width:280px; transform:rotate(-5deg) translateY(50px); 
-    box-shadow:10px 10px 30px rgba(0,0,0,0.6); opacity:0; transition:all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+/* === 3. 重構：茶單制與紅包文化 (隱喻互動動畫) === */
+.metaphor-section{
+    background:var(--bg); padding:20vh 5vw; position:relative; z-index:40;
 }
-.receipt.animate{opacity:1; transform:rotate(-2deg) translateY(0);}
-.r-row{display:flex; justify-content:space-between; margin-bottom:8px; opacity:0; transform:translateX(-10px); transition:0.5s;}
-.receipt.animate .r-row:nth-child(2){opacity:1; transition-delay:0.5s; transform:translateX(0);}
-.receipt.animate .r-row:nth-child(3){opacity:1; transition-delay:0.7s; transform:translateX(0);}
-.receipt.animate .r-row:nth-child(4){opacity:1; transition-delay:0.9s; transform:translateX(0);}
-.r-total{border-top:2px solid #000; margin-top:10px; padding-top:10px; text-align:right; font-weight:900; font-size:1.2rem;}
-.red-packet-img{width:80%; max-width:300px; opacity:0; transform:scale(0.9); transition:1s;}
-.red-packet-img.animate{opacity:1; transform:scale(1);}
+.metaphor-container{
+    max-width:1000px; margin:0 auto; display:flex; align-items:center; justify-content:center; gap:5vw;
+}
+/* 左側：心意選單 */
+.menu-side{
+    flex:1; text-align:right;
+    display:flex; flex-direction:column; gap:2rem;
+}
+.menu-item{
+    font-size:1.5rem; color:#888; transition:0.5s; cursor:default;
+}
+/* 右側：紅包 */
+.packet-side{
+    flex:1; display:flex; justify-content:flex-start;
+}
+.packet-visual{
+    width:200px; height:280px; 
+    /* 這裡使用紅包圖片，但保持一點透明度與邊框，製造圖層感 */
+    background: url('photos/redpacket.png') no-repeat center center / cover;
+    border:2px solid var(--gold); box-shadow:0 0 30px rgba(203, 163, 92, 0.2);
+    display:flex; align-items:center; justify-content:center;
+    transform: scale(0.9); opacity:0.5; transition:0.8s;
+}
 
-/* === 5. 訪談 (三段式 Scrolled Video) === */
+/* W7 Trigger Animation: 連結線條與啟動狀態 */
+.connection-line{
+    position:absolute; top:50%; left:50%; width:0; height:2px; background:var(--gold);
+    transform: translate(-50%, -50%); transition: width 1s ease-in-out;
+    box-shadow: 0 0 10px var(--gold); opacity:0;
+}
+/* 當觸發動畫時 */
+.metaphor-container.animate .connection-line{width:15vw; opacity:1;}
+.metaphor-container.animate .menu-item.highlight{color:var(--gold); text-shadow:0 0 10px var(--gold);}
+.metaphor-container.animate .packet-visual{transform: scale(1); opacity:1; box-shadow:0 0 50px rgba(203, 163, 92, 0.6);}
+
+.metaphor-text{
+    text-align:center; max-width:700px; margin:5rem auto 0;
+    font-size:1.2rem; line-height:1.8; color:#ccc;
+}
+
+
+/* === 4. 訪談 (三段式影片 + 聲音按鈕) === */
 .video-scrolled-section{position:relative; height:450vh; z-index:50; background:#000;}
 .video-sticky{position:sticky; top:0; width:100%; height:100vh; overflow:hidden;}
+/* 聲音按鈕優化 */
+.sound-toggle-btn{
+    position:absolute; top:40px; right:40px; z-index:100;
+    background:rgba(0,0,0,0.5); border:1px solid var(--gold); color:var(--gold);
+    padding:12px 24px; border-radius:4px; cursor:pointer;
+    font-size:0.9rem; letter-spacing:0.1em; transition:0.3s;
+    display:flex; align-items:center; gap:10px; text-transform: uppercase;
+}
+.sound-toggle-btn:hover{background:var(--gold); color:#000;}
+
 .video-overlay-text{
-    position:absolute; bottom:15vh; left:10vw; max-width:500px;
-    text-shadow:0 2px 10px rgba(0,0,0,0.8);
-    opacity:0; transform:translateY(20px); transition:0.5s;
-    background:linear-gradient(90deg, rgba(0,0,0,0.8), transparent);
-    padding:2rem; border-left:4px solid var(--gold);
-    pointer-events: none; /* 讓點擊穿透到下方 */
+    position:absolute; bottom:20vh; left:10vw; max-width:600px;
+    opacity:0; transform:translateY(30px); transition:0.8s;
+    background: linear-gradient(to right, rgba(0,0,0,0.9), rgba(0,0,0,0.4));
+    padding:3rem; border-left:6px solid var(--gold);
+    pointer-events: none;
 }
 .video-overlay-text.show{opacity:1; transform:translateY(0);}
+.video-overlay-text h3{color:var(--gold); font-size:1.8rem; margin-bottom:1rem;}
+.video-overlay-text p{font-size:1.2rem; line-height:1.8;}
 
-/* 聲音按鈕樣式 */
-.sound-toggle-btn{
-    position:absolute; top:30px; right:30px; z-index:100;
-    background:rgba(255,255,255,0.15); backdrop-filter:blur(5px);
-    border:1px solid rgba(255,255,255,0.3); color:#fff;
-    padding:10px 20px; border-radius:30px; cursor:pointer;
-    font-size:0.9rem; transition:0.3s;
-    display:flex; align-items:center; gap:8px;
-}
-.sound-toggle-btn:hover{background:rgba(255,255,255,0.3);}
-
+/* RWD */
 @media(max-width: 768px){
-    .hscroll-container{height:auto; background:var(--bg);}
-    .hscroll-sticky{position:relative; height:auto; display:block; padding:10vh 5vw;}
-    .hscroll-track{flex-direction:column; height:auto; padding:0; transform:none !important;}
-    .h-card{width:100%; max-width:100%; margin-bottom:3rem; margin-right:0;}
-    .dual-container{grid-template-columns:1fr;}
     .hook-text{font-size:1.8rem;}
+    .hscroll-container{height:auto; background:var(--bg);}
+    .hscroll-sticky{position:relative; height:auto; display:block; padding:15vh 5vw;}
+    .hscroll-track{flex-direction:column; height:auto; padding:0; margin-top:2rem; transform:none !important;}
+    .h-card{width:100%; max-width:100%; margin-bottom:4rem; margin-right:0;}
+    .metaphor-container{flex-direction:column; gap:2rem;}
+    .menu-side{text-align:center;}
+    .connection-line{display:none;} /* 手機版隱藏連線動畫 */
 }
 </style>
 </head>
 <body>
 
-<div class="hook-bg-fixed">
-    <img src="photo/DSC04754.jpg" alt="Background">
-</div>
+<div class="grain-overlay"></div>
 
-<section class="hook-section">
-    <div class="hook-block js-hook-block">
-        <div class="hook-text">不同於牛肉場<br>紅包場不以「清涼」為賣點</div>
-        <div class="scroll-hint">SCROLL TO EXPLORE ↓</div>
+<div class="intro-container">
+    <div class="intro-bg-fixed">
+        <img src="photos/DSC04754.png" alt="Background">
     </div>
-    <div class="hook-block js-hook-block">
-        <div class="hook-text">不同於舞廳<br>這裡是老少咸宜的場所</div>
-    </div>
-    <div class="hook-block js-hook-block">
-        <div class="hook-text">不同於卡拉OK<br>觀眾不會上台，只專注「聽歌」</div>
-    </div>
-    <div class="hook-block js-hook-block">
-        <div class="hook-text">不同於 Livehouse<br>歌手需要穿著「禮服」盛裝上台</div>
-    </div>
-    <div class="hook-block js-hook-block">
-        <div class="hook-text">不同於流水席<br>觀眾是特地來這裡「聽歌」的</div>
-    </div>
-</section>
+
+    <section class="hook-section">
+        <div class="hook-block js-hook-block js-intro-trigger">
+            <div class="hook-text">不同於牛肉場<br>紅包場不以「清涼」為賣點</div>
+            <div class="scroll-hint">SCROLL TO START THE SHOW ↓</div>
+        </div>
+        <div class="hook-block js-hook-block">
+            <div class="hook-text">不同於舞廳<br>這裡是老少咸宜的場所</div>
+        </div>
+        <div class="hook-block js-hook-block">
+            <div class="hook-text">不同於卡拉OK<br>觀眾不會上台，只專注「聽歌」</div>
+        </div>
+        <div class="hook-block js-hook-block">
+            <div class="hook-text">不同於 Livehouse<br>歌手需要穿著「禮服」盛裝上台</div>
+        </div>
+        <div class="hook-block js-hook-block">
+            <div class="hook-text">不同於流水席<br>觀眾是特地來這裡「聽歌」的</div>
+        </div>
+    </section>
+</div>
 
 <section class="statement-section">
     <p class="statement-text">一首歌、一個眼神、一個紅包，<br>構成那個年代最真誠的交流。</p>
-    <div class="statement-img"><img src="photo/jin-ziyan.jpg" alt="紅包場歌手"></div>
-    <p class="statement-text" style="font-size:1.1rem; opacity:0.8; margin-top:2rem;">紅包並非對身體的購買，而是對表演的支持。<br>建立的是長時間累積的人情關係。</p>
+    <div class="statement-img">
+        <img src="photos/jin-ziyan.png" alt="紅包場歌手">
+    </div>
+    <p class="statement-text" style="font-size:1.1rem; opacity:0.8; margin-top:3rem; color:#fff;">紅包並非對身體的購買，而是對表演的支持。<br>建立的是長時間累積的人情關係。</p>
 </section>
 
 <section class="hscroll-container" id="elements">
     <div class="hscroll-sticky">
-        <div style="position:absolute; top:5vh; left:5vw; z-index:5;">
+        <div class="hscroll-header">
             <h2 style="font-size:1rem; letter-spacing:0.2em; color:var(--gold);">THE ELEMENTS</h2>
-            <h3 style="font-size:2rem;">撐起紅包場的人與物</h3>
+            <h3 style="font-size:2.5rem; color:var(--red);">撐起紅包場的人與物</h3>
         </div>
         <div class="hscroll-track" id="hTrack">
             <div class="h-card">
                 <div class="h-number">01</div>
-                <div class="h-card-img"><img src="photo/singer.jpg" alt="歌星"></div>
-                <div class="h-card-content"><h3>歌星</h3><p>輪番登台，每人2到3首歌曲的時間。穿著禮服盛裝登場。</p></div>
+                <div class="h-card-img"><img src="photos/singer.png" alt="歌星"></div>
+                <div class="h-card-content"><h3>歌星</h3><p>輪番登台，每人2到3首歌曲的時間。穿著禮服盛裝登場，透過舞台展現自信。</p></div>
             </div>
             <div class="h-card">
                 <div class="h-number">02</div>
-                <div class="h-card-img"><img src="photo/band.jpg" alt="樂團"></div>
+                <div class="h-card-img"><img src="photos/band.png" alt="樂團"></div>
                 <div class="h-card-content"><h3>樂團老師</h3><p>全天候在舞臺後方，熟悉各式新舊歌曲，現場音場讓人穿梭時空。</p></div>
             </div>
             <div class="h-card">
                 <div class="h-number">03</div>
-                <div class="h-card-img"><img src="photo/assistant.jpg" alt="小妹"></div>
-                <div class="h-card-content"><h3>小妹</h3><p>在場內穿梭的服務生。端茶、倒水、引導客人包紅包。</p></div>
+                <div class="h-card-img"><img src="photos/assistant.png" alt="小妹"></div>
+                <div class="h-card-content"><h3>小妹</h3><p>在場內穿梭的服務生。端茶、倒水、引導客人包紅包，建立關係的重要搭擋。</p></div>
             </div>
             <div class="h-card">
                 <div class="h-number">04</div>
-                <div class="h-card-img"><img src="photo/DSC09375.jpg" alt="服裝"></div>
+                <div class="h-card-img"><img src="photos/costume.png" alt="服裝"></div>
                 <div class="h-card-content"><h3>服裝</h3><p>每件禮服背後都有手工特製的故事。顏色、帽子、首飾搭配都有學問。</p></div>
             </div>
             <div class="h-card">
                 <div class="h-number">05</div>
-                <div class="h-card-img"><img src="photo/food.jpg" alt="餐飲"></div>
-                <div class="h-card-content"><h3>餐飲</h3><p>瓜子、水果盤、熱茶。茶單制進行。</p></div>
+                <div class="h-card-img"><img src="photos/food.png" alt="餐飲"></div>
+                <div class="h-card-content"><h3>餐飲</h3><p>瓜子、水果盤、熱茶。茶單制進行，有時歌星會贈送炒花生增進情感。</p></div>
             </div>
             <div class="h-card">
                 <div class="h-number">06</div>
-                <div class="h-card-img"><img src="photo/redpacket.jpg" alt="紅包"></div>
-                <div class="h-card-content"><h3>紅包</h3><p>隨心隨緣的金額，是給歌星的「面子」，也是人情文化。</p></div>
+                <div class="h-card-img"><img src="photos/redpacket.png" alt="紅包"></div>
+                <div class="h-card-content"><h3>紅包</h3><p>随心随缘的金额，是给歌星的“面子”，也是堆叠出的人情文化。</p></div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="dual-section">
-    <div class="dual-container">
-        <div class="concept-card">
-            <h3 class="concept-title">茶單制度：人情的入場券</h3>
-            <div class="concept-visual">
-                <div class="receipt js-trigger-anim">
-                    <div class="r-header">RED ENVELOPE CLUB</div>
-                    <div class="r-row"><span>Tea</span><span>$200</span></div>
-                    <div class="r-row"><span>Seeds</span><span>$100</span></div>
-                    <div class="r-row" style="color:#970C10; font-weight:bold;"><span>Support</span><span>PRICELESS</span></div>
-                    <div class="r-total">TOTAL: LOVE</div>
-                </div>
-            </div>
-            <p>點餐與結款將以「茶單制」進行。歌星承擔賓客的飲食消費，而賓客則包出高於消費金額的紅包。</p>
+<section class="metaphor-section">
+    <div class="metaphor-container js-trigger-anim">
+        <div class="connection-line"></div>
+        
+        <div class="menu-side">
+            <div class="menu-item">點一首 <span style="color:var(--gold);">喜愛的歌</span></div>
+            <div class="menu-item highlight">點一份 <span style="font-size:2rem;">支持與陪伴</span></div>
+            <div class="menu-item">點一次 <span style="color:var(--gold);">真誠互動</span></div>
         </div>
-        <div class="concept-card">
-            <h3 class="concept-title">紅包文化：面子的具象化</h3>
-            <div class="concept-visual">
-                <img src="photo/redpacket.jpg" class="red-packet-img js-trigger-anim" alt="紅包">
-            </div>
-            <p>100元、300元皆隨心隨緣。多出來的金額成為鼓勵，這便堆疊成了「紅包場文化」。</p>
-        </div>
+
+        <div class="packet-side">
+            <div class="packet-visual"></div> </div>
+    </div>
+
+    <div class="metaphor-text">
+        <h3 style="font-size:1.8rem; color:var(--gold); margin-bottom:1rem;">這就是「茶單制」</h3>
+        <p>它不是真的點餐，而是一種互動的隱喻。客人透過紅包，像點歌一樣「點播」對歌手的支持。這是一種鼓勵的機制，讓歌手得到實質支持，也讓客人有了參與感。</p>
     </div>
 </section>
 
 <section class="video-scrolled-section">
     <div class="video-sticky">
         
-        <button id="sound-btn" class="sound-toggle-btn">🔇 點擊開啟聲音</button>
+        <button id="sound-btn" class="sound-toggle-btn">
+            <span id="sound-icon">🔇</span>
+            <span id="sound-text">點擊開啟聲音</span>
+        </button>
 
-        <video id="main-video" src="video/workpassion1.mp4" muted loop playsinline style="width:100%; height:100%; object-fit:cover; opacity:0.8; transition:opacity 0.5s;"></video>
+        <video id="main-video" src="video/workpassion1.mp4" muted loop playsinline style="width:100%; height:100%; object-fit:cover; opacity:0.7; transition:opacity 0.5s; filter: contrast(1.1) saturate(0.8);"></video>
         
         <div class="video-overlay-text js-vid-text">
-            <h3 style="color:var(--gold); margin-bottom:0.5rem;">楊雅喬：入行的初心</h3>
+            <h3>楊雅喬：入行的初心</h3>
             <p>「我國高中也在紡織車間暑期打工，但發現不喜歡。不會唱，就學啊，我就這樣找到我喜歡的工作了。」</p>
         </div>
 
         <div class="video-overlay-text js-vid-text" style="bottom:40vh; left:auto; right:10vw;">
-            <h3 style="color:var(--gold); margin-bottom:0.5rem;">職人精神：親手縫製的華麗</h3>
+            <h3>職人精神：親手縫製的華麗</h3>
             <p>每一件登台的禮服，不僅是視覺的呈現，更是歌星對舞台尊重的極致展現。</p>
         </div>
 
-        <div class="video-overlay-text js-vid-text" style="bottom:10vh; left:10vw;">
-            <h3 style="color:var(--gold); margin-bottom:0.5rem;">翟曼芳：不捨的未來</h3>
+        <div class="video-overlay-text js-vid-text" style="bottom:15vh; left:10vw;">
+            <h3>翟曼芳：不捨的未來</h3>
             <p>「歌廳假如沒有了，其他地方也沒有我們生存的空間了... 我也要來作客，我也要來發紅包...」</p>
         </div>
     </div>
 </section>
 
-<footer style="padding:10vh 0; text-align:center; background:#000; color:#555; font-size:0.8rem;">
+<footer style="padding:10vh 0; text-align:center; background:#080202; color:#666; font-size:0.8rem; border-top:1px solid #222;">
     2025 唱給不在場的人專題製作組
 </footer>
 
 <script>
-// 1. Hook Animation
+// 1. Intro Spotlight Animation & Background Trigger
 const hookBlocks = document.querySelectorAll('.js-hook-block');
+const introBg = document.querySelector('.intro-bg-fixed');
+const introTrigger = document.querySelector('.js-intro-trigger');
+
 const hookObserver = new IntersectionObserver((entries)=>{
     entries.forEach(entry => {
         if(entry.isIntersecting) entry.target.classList.add('active');
         else entry.target.classList.remove('active');
     });
-}, {threshold: 0.5});
+}, {threshold: 0.6}); // 提高閾值，讓聚光燈效果更集中
 hookBlocks.forEach(b => hookObserver.observe(b));
+
+// 獨立偵測第一個區塊，用來打開背景圖
+const bgObserver = new IntersectionObserver((entries)=>{
+    if(entries[0].isIntersecting) introBg.style.opacity = '0.5';
+    else introBg.style.opacity = '0';
+}, {threshold: 0.1});
+bgObserver.observe(introTrigger);
+
 
 // 2. Horizontal Scroll
 const hContainer = document.querySelector('.hscroll-container');
@@ -276,12 +343,12 @@ window.addEventListener('scroll', () => {
         const h = hContainer.offsetHeight - window.innerHeight;
         let p = (window.scrollY - top) / h;
         if(p<0) p=0; if(p>1) p=1;
-        const trackW = hTrack.scrollWidth - window.innerWidth + 200;
+        const trackW = hTrack.scrollWidth - window.innerWidth + 250;
         hTrack.style.transform = `translateX(-${p * trackW}px)`;
     }
 });
 
-// 3. Trigger Animation (Receipt)
+// 3. Metaphor Section Animation (W7 Trigger)
 const animElements = document.querySelectorAll('.js-trigger-anim');
 const animObserver = new IntersectionObserver((entries)=>{
     entries.forEach(e => {
@@ -290,24 +357,28 @@ const animObserver = new IntersectionObserver((entries)=>{
 }, {threshold:0.5});
 animElements.forEach(e => animObserver.observe(e));
 
+
 // 4. Video Switching & Sound Logic
 const vidTexts = document.querySelectorAll('.js-vid-text');
 const vidSection = document.querySelector('.video-scrolled-section');
 const mainVideo = document.getElementById('main-video');
 const soundBtn = document.getElementById('sound-btn');
+const soundIcon = document.getElementById('sound-icon');
+const soundText = document.getElementById('sound-text');
 
-// 聲音開關控制
 soundBtn.addEventListener('click', () => {
     if(mainVideo.muted){
         mainVideo.muted = false;
-        soundBtn.innerHTML = "🔊 聲音已開啟";
-        soundBtn.style.background = "rgba(255,232,122,0.8)";
+        soundIcon.innerText = "🔊";
+        soundText.innerText = "聲音已開啟";
+        soundBtn.style.background = "var(--gold)";
         soundBtn.style.color = "#000";
     } else {
         mainVideo.muted = true;
-        soundBtn.innerHTML = "🔇 點擊開啟聲音";
-        soundBtn.style.background = "rgba(255,255,255,0.15)";
-        soundBtn.style.color = "#fff";
+        soundIcon.innerText = "🔇";
+        soundText.innerText = "點擊開啟聲音";
+        soundBtn.style.background = "rgba(0,0,0,0.5)";
+        soundBtn.style.color = "var(--gold)";
     }
 });
 
@@ -316,7 +387,7 @@ window.addEventListener('scroll', ()=>{
     const h = vidSection.offsetHeight;
     const scroll = window.scrollY - top;
     
-    // Stage 1: 熱情 (0% - 33%)
+    // Stage 1: 熱情 (5% - 30%)
     if(scroll > h * 0.05 && scroll < h * 0.3) {
         vidTexts[0].classList.add('show');
         changeVideo('video/workpassion1.mp4');
@@ -324,7 +395,7 @@ window.addEventListener('scroll', ()=>{
         vidTexts[0].classList.remove('show');
     }
     
-    // Stage 2: 職人 (33% - 66%)
+    // Stage 2: 職人 (35% - 60%)
     if(scroll > h * 0.35 && scroll < h * 0.6) {
         vidTexts[1].classList.add('show');
         changeVideo('video/clothes1.mp4');
@@ -332,7 +403,7 @@ window.addEventListener('scroll', ()=>{
         vidTexts[1].classList.remove('show');
     }
 
-    // Stage 3: 未來 (66% - 100%)
+    // Stage 3: 未來 (65% - )
     if(scroll > h * 0.65) {
         vidTexts[2].classList.add('show');
         changeVideo('video/future1.mp4');
@@ -343,13 +414,13 @@ window.addEventListener('scroll', ()=>{
 
 function changeVideo(src) {
     if(!mainVideo.src.includes(src)) {
-        let isMuted = mainVideo.muted; // 紀錄目前聲音狀態
-        mainVideo.style.opacity = 0;   // 淡出舊影片
+        let isMuted = mainVideo.muted;
+        mainVideo.style.opacity = 0;
         setTimeout(() => {
             mainVideo.src = src;
-            mainVideo.muted = isMuted; // 保持聲音狀態
+            mainVideo.muted = isMuted;
             mainVideo.play();
-            mainVideo.style.opacity = 0.8; // 淡入新影片
+            mainVideo.style.opacity = 0.7;
         }, 500);
     }
 }
