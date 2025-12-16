@@ -1,497 +1,525 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>西門町的最後一盞霓虹：紅包場的流變與新生</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: #f5f5f0; /* Warm neutral background */
-            color: #2c2c2c;
-        }
-        h1, h2, h3, .serif {
-            font-family: 'Noto Serif TC', serif;
-        }
-        .neon-text {
-            color: #b91c1c;
-            text-shadow: 0 0 5px rgba(185, 28, 28, 0.3);
-        }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            height: 350px;
-            max-height: 400px;
-        }
-        .vinyl-spin {
-            animation: spin 4s linear infinite;
-        }
-        @keyframes spin {
-            100% { transform: rotate(360deg); }
-        }
-        .paused {
-            animation-play-state: paused;
-        }
-        .scrolly-active {
-            border-left: 4px solid #b91c1c;
-            padding-left: 1rem;
-            transition: all 0.3s ease;
-        }
-    </style>
-    <!-- Chosen Palette: Warm Nostalgia (Cream #f5f5f0, Deep Red #b91c1c, Charcoal #2c2c2c, Gold Accent #d97706) -->
-    <!-- Application Structure Plan: 
-         1. Hero Section: Sensory immersion (Audio/Visual vibe) to hook the user.
-         2. Context Dashboard: "Why it was born" - Data visualization of 1949 migration and gender imbalance.
-         3. The Timeline: "Rise and Fall" - Chart.js line chart showing the number of halls over decades.
-         4. The Mechanics: "The Red Envelope" - Interactive cards explaining the social contract.
-         5. The Present: "Survival & Rebirth" - 3-Tab interface exploring the Operator, The Translator (NGO), and Policy.
-         6. Conclusion: Reflection on cultural translation. 
-         Rationale: Moves from emotional hook -> logical/historical context -> data trends -> human story -> future outlook. -->
-    <!-- Visualization & Content Choices:
-         1. Migration Donut Chart: Shows the "Single Male" demographic dominance to explain the loneliness.
-         2. Venue Trends Line Chart: Visualizes the dramatic rise (peak 80s) and fall to show urgency.
-         3. Interactive Cards: For the "Rebirth" section to allow users to explore the 3 distinct perspectives (Owner, NGO, Govt) without clutter.
-         4. Vinyl Animation: CSS-based (No SVG) to represent the auditory nature of the topic.
-         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-</head>
-<body class="bg-[#f5f5f0] text-slate-800 antialiased selection:bg-red-200 selection:text-red-900">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>唱給不在場的人：西門町最後的紅包場</title>
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full bg-[#f5f5f0]/95 backdrop-blur z-50 border-b border-gray-200 shadow-sm transition-all duration-300" id="navbar">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex-shrink-0 flex items-center gap-2">
-                    <div class="w-3 h-3 rounded-full bg-red-700 animate-pulse"></div>
-                    <span class="font-bold text-xl tracking-wider serif text-red-900">金鑽專題</span>
-                </div>
-                <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-600">
-                    <button onclick="scrollToSection('intro')" class="hover:text-red-700 transition">時代氛圍</button>
-                    <button onclick="scrollToSection('origins')" class="hover:text-red-700 transition">誕生背景</button>
-                    <button onclick="scrollToSection('timeline')" class="hover:text-red-700 transition">興衰數據</button>
-                    <button onclick="scrollToSection('rebirth')" class="hover:text-red-700 transition">再現與新生</button>
-                </div>
-            </div>
-        </div>
-    </nav>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
 
-    <!-- Hero Section: Sensory Immersion -->
-    <header id="intro" class="pt-24 pb-12 md:pt-32 md:pb-20 px-4 max-w-5xl mx-auto text-center">
-        <span class="inline-block py-1 px-3 rounded-full bg-red-100 text-red-800 text-xs font-bold tracking-widest mb-4">深度專題</span>
-        <h1 class="text-4xl md:text-6xl font-bold mb-6 serif text-gray-900 leading-tight">
-            燈紅酒綠的年代：<br>
-            <span class="text-red-800 neon-text">紅包場</span>的誕生與繁華
-        </h1>
-        <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed mb-10">
-            一扇門，通往另一個年代。當你步出西門町六號出口的喧囂，轉身踏入金鑽大歌廳，
-            空氣中混雜著甜膩香水與陳舊歲月。這不僅是表演，更是一座被時光遺忘的孤島。
-        </p>
-        
-        <!-- Interactive "Vinyl" Player Simulator (CSS Shapes) -->
-        <div class="flex flex-col items-center justify-center p-8 bg-white rounded-xl shadow-lg border border-gray-100 max-w-md mx-auto relative overflow-hidden group hover:shadow-xl transition-shadow cursor-pointer" onclick="toggleMusicState()">
-            <div class="absolute top-0 left-0 w-full h-1 bg-red-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-            <div id="vinyl-disc" class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gray-900 border-4 border-gray-800 flex items-center justify-center relative shadow-2xl vinyl-spin paused">
-                <div class="w-12 h-12 bg-red-700 rounded-full flex items-center justify-center border-2 border-yellow-600">
-                    <span class="text-[8px] text-yellow-100 text-center leading-tight">金鑽<br>Golden</span>
-                </div>
-                <!-- Grooves -->
-                <div class="absolute inset-0 rounded-full border-2 border-gray-700 opacity-30 scale-90"></div>
-                <div class="absolute inset-0 rounded-full border-2 border-gray-700 opacity-30 scale-75"></div>
-            </div>
-            <div class="mt-4 text-center">
-                <p class="text-xs text-gray-400 uppercase tracking-widest">Now Playing (Imagined)</p>
-                <p class="text-gray-800 font-serif font-bold text-lg">月亮代表我的心</p>
-                <p class="text-sm text-gray-500 mt-2 flex items-center justify-center gap-2">
-                    <span id="play-status" class="w-2 h-2 rounded-full bg-gray-300"></span>
-                    <span id="play-text">點擊播放黑膠氛圍</span>
-                </p>
-            </div>
-        </div>
-    </header>
+  <style>
+    :root {
+      --bg-black: #050505;
+      --deep-red: #970C10;
+      --neon-red: #ff1a1a;
+      --gold: #FFE87A;
+      --text-gray: #b3b3b3;
+    }
 
-    <!-- Section 2: Origins & Context Data -->
-    <section id="origins" class="py-16 bg-white border-y border-gray-200">
-        <div class="max-w-5xl mx-auto px-4">
-            <div class="flex flex-col md:flex-row gap-12 items-start">
-                
-                <!-- Text Narrative -->
-                <div class="md:w-1/2">
-                    <h2 class="text-3xl font-bold mb-6 serif text-gray-900 flex items-center">
-                        <span class="text-4xl mr-3 opacity-20">01</span>
-                        孤獨催生的產業
-                    </h2>
-                    <p class="text-gray-700 mb-6 leading-relaxed">
-                        紅包場為何誕生？故事要從民國三、四十年說起。隨著國民政府遷臺，大量隨軍來臺的軍人與軍眷湧入島內。
-                    </p>
-                    <div class="bg-gray-50 p-6 rounded-lg border-l-4 border-red-700 mb-6">
-                        <h3 class="font-bold text-gray-900 mb-2 text-sm uppercase tracking-wide">關鍵歷史數據</h3>
-                        <p class="text-gray-600 text-sm mb-2">
-                            1949年前後，約有 <span class="font-bold text-red-800">120萬至200萬</span> 人從中國大陸移居台灣。
-                        </p>
-                        <p class="text-gray-600 text-sm">
-                            其中極高比例為 <span class="font-bold text-gray-900">單身男性軍人</span>。他們失去了原有的社會網絡，長期居住在簡陋宿舍。對這群人而言，歌廳是讓自己「不那麼孤單」的虛擬家庭。
-                        </p>
-                    </div>
-                    <p class="text-gray-700 leading-relaxed">
-                        1960年，陳大光等人在西門町創立「國之賓大歌廳」，被視為源頭。這裡不只是聽歌，更是思鄉的出口。上海的舊夢與台北的新生活在這裡交錯。
-                    </p>
-                </div>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-                <!-- Data Visualization: Gender/Migration Context -->
-                <div class="md:w-1/2 w-full">
-                    <div class="bg-gray-50 p-6 rounded-xl shadow-sm">
-                        <h3 class="text-center font-bold text-gray-700 mb-4">1950年代 遷台人口性別比例結構 (示意)</h3>
-                        <p class="text-xs text-center text-gray-500 mb-6">龐大的單身男性群體創造了強烈的陪伴需求</p>
-                        <div class="chart-container" style="height: 300px;">
-                            <canvas id="migrationChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    body {
+      font-family: "Noto Serif TC", serif;
+      background: var(--bg-black);
+      color: #fff;
+      overflow-x: hidden;
+    }
 
-    <!-- Section 3: The Golden Age to Decline (Data-Heavy) -->
-    <section id="timeline" class="py-16 bg-[#f5f5f0]">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold mb-4 serif text-gray-900">繁華與消逝：西門町的歌廳數據</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">
-                    從1968年的「歌廳熱」到90年代的式微。從全盛時期的數十家，到今日的碩果僅存。這是一條時代的拋物線。
-                </p>
-            </div>
-
-            <!-- Main Trend Chart -->
-            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 mb-12">
-                <div class="flex justify-between items-end mb-6">
-                    <div>
-                        <h3 class="font-bold text-lg text-gray-800">西門町歌廳/紅包場數量推移 (1960-2024)</h3>
-                        <p class="text-xs text-gray-500">資料來源：綜合新聞報導與口述歷史整理</p>
-                    </div>
-                    <div class="hidden md:block">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                            目前僅存：1 間 (金鑽)
-                        </span>
-                    </div>
-                </div>
-                <div class="chart-container w-full">
-                    <canvas id="trendChart"></canvas>
-                </div>
-            </div>
-
-            <!-- Comparison Cards: Then vs Now -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Card 1 -->
-                <div class="bg-white p-6 rounded-xl border-t-4 border-gray-300 hover:border-red-600 transition-colors group">
-                    <h3 class="font-bold text-gray-400 group-hover:text-red-700 mb-4 uppercase text-xs tracking-wider transition-colors">核心互動</h3>
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-sm font-bold text-gray-500">過去</span>
-                        <span class="text-sm font-bold text-red-800">現在</span>
-                    </div>
-                    <div class="h-px w-full bg-gray-200 mb-4"></div>
-                    <p class="text-sm text-gray-700 mb-2">
-                        <span class="font-bold">生存命脈：</span>紅包是歌手唯一收入。觀眾以此換取「被記得」的尊榮感。
-                    </p>
-                    <p class="text-sm text-gray-500">
-                        <span class="font-bold">轉變：</span>紅包轉為「互動語言」與肯定，低消與門票成為基礎，觀光體驗性質增加。
-                    </p>
-                </div>
-
-                <!-- Card 2 -->
-                <div class="bg-white p-6 rounded-xl border-t-4 border-gray-300 hover:border-red-600 transition-colors group">
-                    <h3 class="font-bold text-gray-400 group-hover:text-red-700 mb-4 uppercase text-xs tracking-wider transition-colors">客群結構</h3>
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-sm font-bold text-gray-500">過去</span>
-                        <span class="text-sm font-bold text-red-800">現在</span>
-                    </div>
-                    <div class="h-px w-full bg-gray-200 mb-4"></div>
-                    <p class="text-sm text-gray-700 mb-2">
-                        <span class="font-bold">主力：</span>退伍軍人、外省籍長者。尋找鄉音與慰藉。
-                    </p>
-                    <p class="text-sm text-gray-500">
-                        <span class="font-bold">轉變：</span>醫生、工程師、懷舊文青、好奇的觀光客。尋找放鬆與文化體驗。
-                    </p>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="bg-white p-6 rounded-xl border-t-4 border-gray-300 hover:border-red-600 transition-colors group">
-                    <h3 class="font-bold text-gray-400 group-hover:text-red-700 mb-4 uppercase text-xs tracking-wider transition-colors">環境背景</h3>
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-sm font-bold text-gray-500">過去</span>
-                        <span class="text-sm font-bold text-red-800">現在</span>
-                    </div>
-                    <div class="h-px w-full bg-gray-200 mb-4"></div>
-                    <p class="text-sm text-gray-700 mb-2">
-                        <span class="font-bold">生態：</span>西門町娛樂核心，群星會時代，歌星磨練舞台的起點。
-                    </p>
-                    <p class="text-sm text-gray-500">
-                        <span class="font-bold">轉變：</span>KTV與夜店興起後的邊緣文化，轉型為「Live House」式的展演空間。
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section 4: Rebirth - Interactive Storytelling -->
-    <section id="rebirth" class="py-16 bg-white">
-        <div class="max-w-4xl mx-auto px-4">
-            <h2 class="text-3xl font-bold mb-2 serif text-gray-900">再現與新生：三股力量的交織</h2>
-            <p class="text-gray-600 mb-10">這不是謝幕，而是轉身。看看是誰在支撐這盞最後的燈火。</p>
-            
-            <!-- Interactive Tabs -->
-            <div class="flex flex-wrap justify-center gap-2 mb-8">
-                <button onclick="showPerspective('owner')" id="btn-owner" class="px-6 py-2 rounded-full border border-red-800 bg-red-800 text-white font-medium hover:opacity-90 transition active-tab">經營者：金小姐</button>
-                <button onclick="showPerspective('ngo')" id="btn-ngo" class="px-6 py-2 rounded-full border border-gray-300 text-gray-600 font-medium hover:border-red-800 hover:text-red-800 transition">轉譯者：綠雷德</button>
-                <button onclick="showPerspective('gov')" id="btn-gov" class="px-6 py-2 rounded-full border border-gray-300 text-gray-600 font-medium hover:border-red-800 hover:text-red-800 transition">推動者：文化局</button>
-            </div>
-
-            <!-- Content Container -->
-            <div class="bg-gray-50 rounded-2xl p-8 border border-gray-100 min-h-[400px] relative transition-all duration-500 ease-in-out">
-                
-                <!-- Perspective 1: The Owner -->
-                <div id="content-owner" class="perspective-content block animate-fade-in">
-                    <div class="flex flex-col md:flex-row gap-6 items-center">
-                        <div class="md:w-1/3 text-center">
-                            <div class="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl">🎤</div>
-                            <h3 class="font-bold text-xl text-gray-900">守住運作</h3>
-                        </div>
-                        <div class="md:w-2/3 border-l-2 border-red-200 pl-6">
-                            <blockquote class="italic text-gray-600 mb-4">「這不是懷舊，這是一個真實運作的舞台。」</blockquote>
-                            <p class="text-gray-700 mb-4">
-                                金小姐從歌手出身，深知紅包場的靈魂在於「規矩」與「人情」。她眼中的未來，是將這裡打造為另類的 Live House。
-                            </p>
-                            <ul class="space-y-2 text-sm text-gray-600">
-                                <li class="flex items-center">✔ 堅持樂隊與歌手的現場實力</li>
-                                <li class="flex items-center">✔ 歡迎新一代觀眾與觀光客</li>
-                                <li class="flex items-center">✔ 讓表藝學生有實戰舞台</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Perspective 2: The NGO -->
-                <div id="content-ngo" class="perspective-content hidden">
-                    <div class="flex flex-col md:flex-row gap-6 items-center">
-                        <div class="md:w-1/3 text-center">
-                            <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl">🧩</div>
-                            <h3 class="font-bold text-xl text-gray-900">建立理解</h3>
-                        </div>
-                        <div class="md:w-2/3 border-l-2 border-green-200 pl-6">
-                            <blockquote class="italic text-gray-600 mb-4">「我們做的不是保存，而是翻譯。」</blockquote>
-                            <p class="text-gray-700 mb-4">
-                                綠雷德創新公司深耕萬華十年，致力於消除大眾對紅包場的誤解（如情色、髒亂）。他們透過導覽與設計，降低進入門檻。
-                            </p>
-                            <ul class="space-y-2 text-sm text-gray-600">
-                                <li class="flex items-center">✔ 調整場域氣味（減少菸味）</li>
-                                <li class="flex items-center">✔ 設計沉浸式走讀體驗</li>
-                                <li class="flex items-center">✔ 告訴年輕人：這是一種社交文化</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Perspective 3: The Gov -->
-                <div id="content-gov" class="perspective-content hidden">
-                    <div class="flex flex-col md:flex-row gap-6 items-center">
-                        <div class="md:w-1/3 text-center">
-                            <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl">🏛️</div>
-                            <h3 class="font-bold text-xl text-gray-900">重返公共</h3>
-                        </div>
-                        <div class="md:w-2/3 border-l-2 border-blue-200 pl-6">
-                            <blockquote class="italic text-gray-600 mb-4">「從城市陰影，回到公共視野。」</blockquote>
-                            <p class="text-gray-700 mb-4">
-                                北市文化局推動《萬華時光・再現與新生》，將紅包場元素搬出室內，讓它成為城市共同語彙的一部分。
-                            </p>
-                            <ul class="space-y-2 text-sm text-gray-600">
-                                <li class="flex items-center">✔ 沉浸式劇場合作演出</li>
-                                <li class="flex items-center">✔ 戶外跨世代演唱會</li>
-                                <li class="flex items-center">✔ 將私密記憶轉化為公共文化資產</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-[#2c2c2c] text-gray-400 py-12 border-t-4 border-red-800">
-        <div class="max-w-4xl mx-auto px-4 text-center">
-            <h2 class="text-2xl font-serif text-white mb-6">文化，因為被理解而活著</h2>
-            <p class="max-w-xl mx-auto mb-8 text-sm leading-relaxed">
-                紅包場的故事，是一部台灣戰後移民史的縮影。從慰藉鄉愁的避風港，到今日的文化體驗場域。<br>
-                這不是一個關於「結束」的故事，而是一個關於「轉譯」與「共生」的新篇章。
-            </p>
-            <div class="w-12 h-1 bg-red-800 mx-auto mb-8"></div>
-            <p class="text-xs">
-                © 2024 金鑽專題製作組 | 內容與數據基於新聞報導改編整理
-            </p>
-        </div>
-    </footer>
-
-    <!-- JavaScript Logic -->
-    <script>
-        // --- 1. Interaction Logic: Tab Switching ---
-        function showPerspective(id) {
-            // Hide all
-            document.querySelectorAll('.perspective-content').forEach(el => {
-                el.classList.add('hidden');
-                el.classList.remove('block', 'animate-fade-in');
-            });
-            // Show selected
-            const selected = document.getElementById(`content-${id}`);
-            selected.classList.remove('hidden');
-            selected.classList.add('block', 'animate-fade-in');
-
-            // Update buttons
-            const buttons = ['owner', 'ngo', 'gov'];
-            buttons.forEach(btnId => {
-                const btn = document.getElementById(`btn-${btnId}`);
-                if (btnId === id) {
-                    btn.classList.add('bg-red-800', 'text-white', 'border-red-800');
-                    btn.classList.remove('text-gray-600', 'border-gray-300');
-                } else {
-                    btn.classList.remove('bg-red-800', 'text-white', 'border-red-800');
-                    btn.classList.add('text-gray-600', 'border-gray-300');
-                }
-            });
-        }
-
-        // --- 2. Interaction Logic: Vinyl Player ---
-        let isPlaying = false;
-        function toggleMusicState() {
-            isPlaying = !isPlaying;
-            const vinyl = document.getElementById('vinyl-disc');
-            const statusDot = document.getElementById('play-status');
-            const statusText = document.getElementById('play-text');
-            
-            if (isPlaying) {
-                vinyl.classList.remove('paused');
-                statusDot.classList.remove('bg-gray-300');
-                statusDot.classList.add('bg-green-500', 'animate-pulse');
-                statusText.innerText = "播放中... (想像旋律流動)";
-                statusText.classList.add('text-red-800', 'font-bold');
-            } else {
-                vinyl.classList.add('paused');
-                statusDot.classList.add('bg-gray-300');
-                statusDot.classList.remove('bg-green-500', 'animate-pulse');
-                statusText.innerText = "點擊播放黑膠氛圍";
-                statusText.classList.remove('text-red-800', 'font-bold');
-            }
-        }
-
-        // --- 3. Navigation Scroll ---
-        function scrollToSection(id) {
-            const element = document.getElementById(id);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // --- 4. Chart.js Initialization ---
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            // Chart 1: Migration Demographics (Donut)
-            const ctxMigration = document.getElementById('migrationChart').getContext('2d');
-            new Chart(ctxMigration, {
-                type: 'doughnut',
-                data: {
-                    labels: ['單身軍人/隨軍男性', '其他眷屬/女性', '隨行兒童'],
-                    datasets: [{
-                        data: [65, 25, 10], // Estimation for narrative impact showing male dominance
-                        backgroundColor: [
-                            '#991b1b', // Red 800 - Dominant
-                            '#d1d5db', // Gray 300
-                            '#e5e7eb'  // Gray 200
-                        ],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return context.label + ': 約 ' + context.raw + '% (估計)';
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Chart 2: Trends over Time (Line)
-            const ctxTrend = document.getElementById('trendChart').getContext('2d');
-            new Chart(ctxTrend, {
-                type: 'line',
-                data: {
-                    labels: ['1960(萌芽)', '1970(歌廳熱)', '1985(全盛)', '1995(轉變)', '2010(衰退)', '2024(現今)'],
-                    datasets: [{
-                        label: '西門町歌廳/紅包場 估計數量',
-                        data: [3, 15, 30, 20, 5, 1], // Historical estimation trajectory
-                        borderColor: '#b91c1c',
-                        backgroundColor: 'rgba(185, 28, 28, 0.1)',
-                        fill: true,
-                        tension: 0.4,
-                        pointRadius: 6,
-                        pointBackgroundColor: '#fff',
-                        pointBorderColor: '#b91c1c',
-                        pointBorderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: { display: true, text: '店家數量' }
-                        }
-                    },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                afterLabel: function(context) {
-                                    if (context.dataIndex === 2) return '全盛期：多達數十家爭鳴';
-                                    if (context.dataIndex === 5) return '僅存：金鑽大歌廳';
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        });
-
-        // Add simple scroll spy for navbar
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                nav.classList.add('shadow-md');
-                nav.classList.replace('bg-[#f5f5f0]/95', 'bg-white/95');
-            } else {
-                nav.classList.remove('shadow-md');
-                nav.classList.replace('bg-white/95', 'bg-[#f5f5f0]/95');
-            }
-        });
-    </script>
+    /* === 工具類：金色強調色 === */
+    .text-gold { color: var(--gold); }
+    .text-red { color: var(--neon-red); text-shadow: 0 0 8px rgba(255, 26, 26, 0.4); }
     
-    <style>
-        /* Animation Utilities */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+    /* === 1. 懸浮音樂播放器 (Vinyl Player) === */
+    .music-player {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.3s;
+    }
+    .music-player:hover { opacity: 1; }
+    
+    .vinyl-disc {
+      width: 60px;
+      height: 60px;
+      background: #111;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 15px rgba(255, 232, 122, 0.1);
+      transition: transform 0.5s ease;
+    }
+    
+    .vinyl-disc::before { /* 唱片紋路 */
+      content: '';
+      position: absolute;
+      width: 85%;
+      height: 85%;
+      border-radius: 50%;
+      border: 1px solid #333;
+      box-shadow: 0 0 0 4px #111, 0 0 0 5px #333, 0 0 0 9px #111, 0 0 0 10px #333;
+    }
+    
+    .vinyl-label {
+      width: 20px;
+      height: 20px;
+      background: var(--deep-red);
+      border-radius: 50%;
+      z-index: 2;
+    }
+
+    .vinyl-playing { animation: spin 4s linear infinite; box-shadow: 0 0 20px rgba(255, 232, 122, 0.4); }
+    
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    .music-hint {
+      font-size: 0.8rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      opacity: 0;
+      transform: translateX(10px);
+      transition: all 0.5s;
+    }
+    .music-player:hover .music-hint { opacity: 1; transform: translateX(0); }
+
+    /* === 2. Hero Section (保留原本的) === */
+    .landing-wrapper { position: relative; height: 180vh; width: 100%; }
+    .landing-video { position: sticky; top: 0; width: 100%; height: 100vh; overflow: hidden; }
+    .landing-video video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+    
+    .hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0 8vw;
+      background: linear-gradient(to bottom, transparent, var(--bg-black));
+      margin-top: -100vh; /* Pull up over video */
+      z-index: 10;
+    }
+
+    .hero-content h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); color: var(--gold); margin-bottom: 1rem; line-height: 1.2; }
+    .hero-content h2 { font-size: clamp(1.2rem, 2vw, 2rem); color: #fff; margin-bottom: 2rem; font-weight: 400; }
+    .hero-line { width: 60px; height: 4px; background: var(--deep-red); margin-bottom: 2rem; }
+
+    /* === 3. 沉浸式氛圍段落 (Intro Text) === */
+    .atmosphere-section {
+      background: var(--bg-black);
+      padding: 15vh 10vw;
+      text-align: center;
+      position: relative;
+    }
+    
+    .atmosphere-text p {
+      font-size: clamp(1.1rem, 2vw, 1.5rem);
+      line-height: 2;
+      color: #ddd;
+      margin-bottom: 2rem;
+      opacity: 0; /* JS Animation target */
+      transform: translateY(20px);
+      transition: all 1s ease;
+    }
+    .atmosphere-text p.visible { opacity: 1; transform: translateY(0); }
+    .highlight-red { color: var(--neon-red); font-weight: 600; }
+
+    /* === 4. 數據儀表板 (Dark Mode Data) === */
+    .data-section {
+      background: #0a0a0a;
+      padding: 10vh 5vw;
+      border-top: 1px solid #222;
+      border-bottom: 1px solid #222;
+    }
+    
+    .section-title {
+      color: var(--gold);
+      font-size: 2rem;
+      margin-bottom: 3rem;
+      text-align: center;
+      letter-spacing: 0.1em;
+    }
+
+    .chart-wrapper {
+      max-width: 900px;
+      margin: 0 auto 4rem auto;
+      position: relative;
+      height: 400px;
+    }
+
+    .stat-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .stat-card {
+      background: #111;
+      border: 1px solid #333;
+      padding: 2rem;
+      border-left: 4px solid var(--deep-red);
+      transition: transform 0.3s;
+    }
+    .stat-card:hover { transform: translateY(-5px); border-color: var(--gold); }
+    
+    .stat-card h4 { color: #888; font-size: 0.9rem; margin-bottom: 1rem; letter-spacing: 0.1em; }
+    .stat-card .number { font-size: 2.5rem; color: #fff; font-family: 'Noto Sans TC', sans-serif; font-weight: 700; margin-bottom: 0.5rem; }
+    .stat-card p { font-size: 0.9rem; color: #aaa; line-height: 1.6; }
+
+    /* === 5. 三股力量 (Interactive Cards) === */
+    .story-section {
+      padding: 15vh 5vw;
+      background: var(--bg-black);
+    }
+
+    .tabs-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .tab-headers {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      border-bottom: 1px solid #333;
+      padding-bottom: 1rem;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: #666;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding-bottom: 0.5rem;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .tab-btn.active { color: var(--gold); }
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1.1rem;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--gold);
+      box-shadow: 0 0 10px var(--gold);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.8s ease;
+    }
+    .tab-content.active { display: block; }
+
+    .content-box {
+      background: linear-gradient(145deg, #111, #080808);
+      border: 1px solid #222;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    
+    @media (min-width: 768px) {
+      .content-box { flex-direction: row; align-items: start; }
+    }
+
+    .quote-box {
+      flex: 1;
+      font-size: 1.8rem;
+      color: var(--gold);
+      font-style: italic;
+      line-height: 1.4;
+      border-left: 2px solid var(--deep-red);
+      padding-left: 2rem;
+    }
+
+    .detail-box {
+      flex: 1.5;
+      color: #ccc;
+      line-height: 1.8;
+      font-size: 1.05rem;
+    }
+    
+    .detail-box strong { color: #fff; font-weight: 600; }
+
+    /* === 6. 結尾 (Footer) === */
+    footer {
+      padding: 10vh 5vw;
+      text-align: center;
+      background: #000;
+      border-top: 1px solid #222;
+    }
+    
+    .footer-quote {
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      color: var(--gold);
+      margin-bottom: 2rem;
+    }
+    
+    .footer-text {
+      max-width: 600px;
+      margin: 0 auto;
+      color: #666;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+  <div class="music-player" id="musicToggle">
+    <div class="music-hint">PLAY AMBIENCE</div>
+    <div class="vinyl-disc" id="vinyl">
+      <div class="vinyl-label"></div>
+    </div>
+    <audio id="bgMusic" loop>
+      <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=old-record-player-scratch-static-116823.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+
+  <div class="landing-wrapper">
+    <section class="landing-video">
+      <video autoplay muted loop playsinline>
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-red-lights-in-a-dark-room-4191-large.mp4" type="video/mp4">
+      </video>
+    </section>
+  </div>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-line"></div>
+      <h1 class="typewriter">唱給不在場的人</h1>
+      <h2>紅包歌手的世代誤解與生存現場</h2>
+      <p style="color: #666; margin-top: 1rem;">文 / 專題製作組</p>
+    </div>
+  </section>
+
+  <section class="atmosphere-section">
+    <div class="atmosphere-text">
+      <p>午後的金鑽歌廳，燈光昏黃而繁複，沿著天花板和牆邊流動。</p>
+      <p>霓虹燈反射在斑駁的天花板上，旋轉舞台緩緩轉著；</p>
+      <p>四散的<span class="highlight-red">煙味</span>混著水果盤的<span class="highlight-red">甜味</span>，在空氣裡堆出一種濃度。</p>
+      <p style="margin-top: 4rem; color: var(--gold);">這種味道會讓不熟悉的人本能地往後縮一步。</p>
+      <p>但也在這個場域裡，我們看見一種文化並非走向終章，而是重新調整姿態。</p>
+    </div>
+  </section>
+
+  <section class="data-section">
+    <h3 class="section-title">數據裡的興衰與轉變</h3>
+    
+    <div class="chart-wrapper">
+      <canvas id="trendChart"></canvas>
+    </div>
+
+    <div class="stat-cards">
+      <div class="stat-card">
+        <h4>過去 (THE PAST)</h4>
+        <div class="number text-red">30+</div>
+        <p>全盛時期萬華區的歌廳數量。當時金小姐一天要跑 12 家場子。</p>
+      </div>
+      
+      <div class="stat-card">
+        <h4>現在 (THE PRESENT)</h4>
+        <div class="number text-gold">1</div>
+        <p>僅存「金鑽大歌廳」。能留下來不是因為懷舊，而是因為「運作單純且穩定」。</p>
+      </div>
+
+      <div class="stat-card">
+        <h4>客群結構 (DEMOGRAPHICS)</h4>
+        <div class="number" style="font-size: 1.2rem; line-height: 1.4;">醫生、工程師、<br>保險業務</div>
+        <p style="margin-top: 0.5rem">客群不再只是退伍老兵。「大家來這裡，就是想放鬆一下，而且低消很便宜。」</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="story-section">
+    <h3 class="section-title">誰在支撐這盞燈？</h3>
+
+    <div class="tabs-container">
+      <div class="tab-headers">
+        <button class="tab-btn active" onclick="switchTab('operator', this)">經營者</button>
+        <button class="tab-btn" onclick="switchTab('ngo', this)">轉譯者</button>
+        <button class="tab-btn" onclick="switchTab('gov', this)">推動者</button>
+      </div>
+
+      <div id="operator" class="tab-content active">
+        <div class="content-box">
+          <div class="quote-box">
+            「這不是懷舊，<br>是真實運作的舞台。」
+          </div>
+          <div class="detail-box">
+            <h4 style="color:var(--gold); margin-bottom: 1rem; font-size: 1.2rem;">金小姐 / 金鑽歌廳負責人</h4>
+            <p>
+              金小姐第一次踏進紅包場，是因為爸爸帶她來。那時她還是表藝科學生，來這裡打工，只覺得「可以領現金，很實在」。
+              <br><br>
+              多年後接手經營，她不談太多感性。在她眼中，這裡是一套嚴謹的<strong>運作系統</strong>：歌手不能搶客、舞台要有新歌、客人要能自在坐下。
+              <br><br>
+              <strong>未來願景：</strong>她希望金鑽能成為像 Live House 一樣的場域，讓表藝系學生有真實的操練舞台，而不只是被封存的歷史標本。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div id="ngo" class="tab-content">
+        <div class="content-box">
+          <div class="quote-box">
+            「我們做的不是保存，<br>而是翻譯。」
+          </div>
+          <div class="detail-box">
+            <h4 style="color:var(--gold); margin-bottom: 1rem; font-size: 1.2rem;">綠雷德創新公司 / 文化團隊</h4>
+            <p>
+              這群深耕萬華十年的年輕人坦言，一開始對紅包場也有距離感。直到親自走訪，才發現排斥源於「不了解」與「氣味」。
+              <br><br>
+              <strong>關鍵行動：</strong>
+              他們在導覽與演出前，會刻意調整場域的氣味（減少煙味），移除第一道感官門檻。「觀眾如果一進門就受不了，是沒有機會理解文化的。」
+              <br><br>
+              他們建立理解的入口，告訴年輕人：紅包不是施捨，是一種互動的社交語言。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div id="gov" class="tab-content">
+        <div class="content-box">
+          <div class="quote-box">
+            「從城市陰影，<br>回到公共視野。」
+          </div>
+          <div class="detail-box">
+            <h4 style="color:var(--gold); margin-bottom: 1rem; font-size: 1.2rem;">北市文化局 / 政策推動</h4>
+            <p>
+              透過《萬華時光・再現與新生》計畫，政府試圖將私密的記憶轉化為公共的文化語彙。
+              <br><br>
+              <strong>再現手法：</strong>
+              <ul>
+                <li>沉浸式劇場：直接在金鑽演出，讓觀眾體驗傳統瓜果茶水。</li>
+                <li>戶外演唱會：將紅包場搬到西門紅樓廣場，證明「只要翻譯得好，文化能跨過年齡」。</li>
+              </ul>
+              <br>
+              這讓紅包場從特定世代的娛樂，成為城市共同討論的一環。
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <h2 class="footer-quote">這不是謝幕，而是轉身。</h2>
+    <div class="footer-text">
+      <p>紅包場或許不再是上一代記憶中的樣子，但它仍然活著——在舞台、在語言、在新的觀眾裡，以它自己的節奏，持續在城市裡運作。</p>
+      <br>
+      <p style="opacity: 0.5;">© 2024 金鑽專題製作組 | 內容改寫自深度訪談資料</p>
+    </div>
+  </footer>
+
+  <script>
+    // 1. Music Player Logic
+    const musicToggle = document.getElementById('musicToggle');
+    const vinyl = document.getElementById('vinyl');
+    const audio = document.getElementById('bgMusic');
+    let isPlaying = false;
+
+    musicToggle.addEventListener('click', () => {
+      if (isPlaying) {
+        audio.pause();
+        vinyl.classList.remove('vinyl-playing');
+        document.querySelector('.music-hint').innerText = "PLAY AMBIENCE";
+      } else {
+        audio.play().catch(e => console.log("Audio play failed interaction required"));
+        vinyl.classList.add('vinyl-playing');
+        document.querySelector('.music-hint').innerText = "PAUSE";
+      }
+      isPlaying = !isPlaying;
+    });
+
+    // 2. Tab Switching Logic
+    function switchTab(tabId, btnElement) {
+      // Hide all contents
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      // Remove active class from buttons
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      
+      // Activate selected
+      document.getElementById(tabId).classList.add('active');
+      btnElement.classList.add('active');
+    }
+
+    // 3. Scroll Animation for Text
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
         }
-        .animate-fade-in {
-            animation: fadeIn 0.5s ease-out forwards;
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.atmosphere-text p').forEach(p => observer.observe(p));
+
+    // 4. Chart.js (Dark Theme Config)
+    const ctx = document.getElementById('trendChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['1970s', '1980s (盛世)', '1990s', '2000s', '2015', '2024'],
+        datasets: [{
+          label: '歌廳數量估計',
+          data: [15, 30, 20, 10, 3, 1],
+          borderColor: '#FFE87A', // Gold
+          backgroundColor: 'rgba(255, 232, 122, 0.1)',
+          borderWidth: 2,
+          pointBackgroundColor: '#970C10',
+          pointBorderColor: '#FFE87A',
+          pointRadius: 5,
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#222',
+            titleColor: '#FFE87A',
+            bodyColor: '#fff',
+            borderColor: '#555',
+            borderWidth: 1
+          }
+        },
+        scales: {
+          y: {
+            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+            ticks: { color: '#666' }
+          },
+          x: {
+            grid: { display: false },
+            ticks: { color: '#888' }
+          }
         }
-    </style>
+      }
+    });
+  </script>
+
 </body>
 </html>
