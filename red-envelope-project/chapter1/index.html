@@ -3,16 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>唱給不在場的人</title>
+  <title>燈紅酒綠的年代</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&display=swap" rel="stylesheet">
 
   <style>
+    /* =========================================
+       1. 全域變數與基礎設定 (Global Settings)
+       ========================================= */
     :root {
       --red: #970C10;
+      --gold: #FFE87A;
       --body-text-size: clamp(1rem, 1.6vw, 1.3rem);
+      --bg-dark: #000;
+      --transition-slow: 1.2s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     * {
@@ -21,18 +27,22 @@
       box-sizing: border-box;
     }
 
-    /* === 頁面載入動畫 (新增) === */
     body {
       font-family: "Noto Serif TC", serif;
-      background: #000;
+      background: var(--bg-dark);
       color: #fff;
       overflow-x: hidden;
+      /* 頁面載入時的淡入效果 */
       animation: fadeInPage 1.5s ease-out;
     }
 
     @keyframes fadeInPage {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1, h2, h3, h4, h5, p {
+      font-weight: normal;
     }
 
     h5 {
@@ -43,154 +53,77 @@
       color: inherit;
     }
 
-    /* =========================
-       Section 1｜Full-screen Video
-    ========================== */
-    .landing-wrapper {
-      position: relative;
-      height: 200vh;
-      width: 100%;
-    }
-
-    .landing-video {
-      position: sticky;
-      top: 0;
-      width: 100%;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .landing-video video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .landing-hint {
-      position: absolute;
-      z-index: 2;
-      bottom: 2.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      color: rgba(255,255,255,0.85);
-      font-size: 0.9rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      animation: hint-float 2s ease-in-out infinite;
-      pointer-events: none;
-    }
-
-    /* 可微調暗度，讓影片不刺眼 */
-    .landing-video::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.25);
-      z-index: 1;
-    }
-
-    /* =========================
-       Section 3｜Hero Section
-    ========================== */
-    .hero {
+    /* =========================================
+       2. 第一幕：靜態主視覺 (Static Hero)
+       ========================================= */
+    .hero-static {
       position: relative;
       height: 100vh;
-      min-height: 100vh;
-      background: var(--red);
-      overflow: visible;
+      width: 100%;
+      background: url("assets/hero_bg.jpg") center center / cover no-repeat;
       display: flex;
       align-items: center;
       padding: 0 7vw;
-      gap: min(6vw, 64px);
+      overflow: hidden;
     }
 
-    /* 顆粒層 */
-    .hero::before {
+    .hero-static::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg, 
+        rgba(151,12,16,0.85) 0%, 
+        rgba(151,12,16,0.5) 50%, 
+        rgba(0,0,0,0.1) 100%
+      );
+      z-index: 1;
+    }
+
+    .hero-static::after {
       content: "";
       position: absolute;
       inset: 0;
       background: url("assets/grain.png") repeat;
-      opacity: 0.3;
-      z-index: 1;
-    }
-
-    /* 人物圖層 */
-    .hero-image {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      display: flex;
-      justify-content: flex-end;
-      align-items: flex-end;
-      z-index: 2;
+      opacity: 0.35;
+      mix-blend-mode: overlay;
       pointer-events: none;
+      z-index: 2;
     }
 
-    .hero-image img {
-      width: clamp(420px, 60vw, 920px);
-      max-height: 92vh;
-      height: auto;
-      object-fit: contain;
-    }
-
-    /* 文字內容 */
     .hero-content {
       position: relative;
       z-index: 3;
-      flex: 0 1 48%;
-      max-width: 640px;
+      max-width: 720px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      min-height: 100%;
+      height: 100%;
     }
 
-    .hero h1 {
-      font-size: clamp(2.5rem, 5vw, 4rem);
+    .hero-static h1 {
+      font-size: clamp(3rem, 6vw, 5rem);
       font-weight: 900;
-      color: #FFE87A;
-      margin-bottom: 1rem;
-      letter-spacing: 0.05em;
-    }
-
-    .hero h2 {
-      font-size: clamp(1.4rem, 3vw, 2.2rem);
-      font-weight: 700;
-      color: #FFE87A;
+      color: var(--gold);
       margin-bottom: 1.5rem;
+      letter-spacing: 0.05em;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      line-height: 1.1;
     }
 
-    .hero h3 {
-      font-size: clamp(1rem, 2.2vw, 1.3rem);
-      font-weight: 600;
-      color: #fff;
-      letter-spacing: 0.08em;
-      margin-bottom: 2rem;
-    }
-
-    /* Desktop keeps Chinese titles on a single line */
-    .hero h1,
-    .hero h2 {
-      white-space: nowrap;
-    }
-
-    .hero .en {
-      font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+    .hero-static h2 {
+      font-size: clamp(1.4rem, 2.5vw, 2.2rem);
       font-weight: 700;
-      line-height: 1.45;
-      color: rgba(255,255,255,0.9);
-      max-width: 28ch;            /* 你可以在 26–34ch 微調 */
-      text-wrap: balance;         /* 支援的瀏覽器會自動平衡每行長度 */
-      overflow-wrap: anywhere;    /* 保底：避免奇怪溢出 */
+      color: rgba(255,255,255,0.95);
+      margin-bottom: 2rem;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.4);
     }
-
+    
+    /* 打字機效果樣式 */
     .typewriter-line {
       display: inline-block;
       position: relative;
       min-height: 1em;
-      overflow: hidden;
     }
 
     .typewriter-line.typing::after {
@@ -201,7 +134,7 @@
       transform: translateY(-50%);
       height: 1.2em;
       width: 2px;
-      background: #FFE87A;
+      background: var(--gold);
       animation: caret-blink 0.8s steps(1) infinite;
     }
 
@@ -210,52 +143,76 @@
       opacity: 0;
     }
 
-    .hero-entrance {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 1.2s ease-out, transform 1.2s ease-out;
-      transition-delay: var(--delay, 0ms);
-    }
-
-    .hero-entrance.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .scroll-hint {
-      position: absolute;
-      bottom: 3rem;
-      left: 50%;
-      transform: translate(-50%, 0.5rem);
-      font-size: 0.9rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.85);
-      opacity: 0;
-      transition: opacity 0.6s ease, transform 0.6s ease;
-      pointer-events: none;
-    }
-
-    .scroll-hint.visible {
-      opacity: 1;
-      transform: translate(-50%, 0);
-      animation: hint-float 2s ease-in-out infinite;
-    }
-
     @keyframes caret-blink {
       0%, 49% { opacity: 1; }
       50%, 100% { opacity: 0; }
     }
 
-    @keyframes hint-float {
-      0% { transform: translate(-50%, 0); }
-      50% { transform: translate(-50%, -8px); }
-      100% { transform: translate(-50%, 0); }
+    /* 捲動提示 */
+    .scroll-hint {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.9rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      z-index: 4;
+      pointer-events: none;
+      animation: hint-float 2s ease-in-out infinite;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    
+    .scroll-hint.visible {
+      opacity: 1;
     }
 
+    @keyframes hint-float {
+      0% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, -10px); }
+      100% { transform: translate(-50%, 0); }
+    }
+    
+    /* === 新增：主視覺區塊的轉場按鈕樣式 === */
+    .transition-cta {
+      position: relative;
+      z-index: 5; 
+      margin-top: 2rem; /* 調整間距 */
+      padding: 1rem 3rem;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: inherit;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      display: inline-block;
+      opacity: 0; /* 預設隱藏，等打字機跑完再顯示 */
+    }
+
+    .transition-cta:hover {
+      background: rgba(255, 232, 122, 0.1);
+      color: #fff;
+      border-color: #fff;
+    }
+
+    .transition-cta.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 1s; /* 讓它在打字機跑完後再出現 */
+    }
+
+    /* =========================================
+       3. 第二幕：沉浸式導讀 (Immersive Text)
+       ========================================= */
     .immersive-section {
       background: #000;
-      min-height: 150vh;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -265,26 +222,26 @@
     }
 
     .immersive-inner {
-      max-width: 680px;
+      max-width: 700px;
       text-align: center;
       color: #fff;
-      line-height: 1.8;
+      line-height: 2;
       font-size: var(--body-text-size);
-      letter-spacing: 0.03em;
+      letter-spacing: 0.05em;
     }
 
     .immersive-copy {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 2rem;
     }
 
     .immersive-copy h5 {
-      color: #fff;
-      letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.95);
+      letter-spacing: 0.06em;
       opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 1s ease-out, transform 1s ease-out;
+      transform: translateY(30px);
+      transition: opacity 1.2s ease-out, transform 1.2s ease-out;
     }
 
     .immersive-copy h5.visible {
@@ -292,20 +249,86 @@
       transform: translateY(0);
     }
 
-    .transition-spacer {
+    /* =========================================
+       4. 第三幕：影片揭幕 (Video Reveal)
+       ========================================= */
+    .reveal-video-wrapper {
       position: relative;
-      min-height: 120vh;
+      width: 100%;
+      height: 120vh;
+      background: #000;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0 6vw;
-      background: #000;
-      color: rgba(255,255,255,0.6);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      font-size: 0.85rem;
+      overflow: hidden;
     }
 
+    .reveal-video-container {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .reveal-video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.9) contrast(1.1); 
+      transform: scale(1.05);
+    }
+
+    .reveal-video-container::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg, 
+        #000 0%, 
+        transparent 15%, 
+        transparent 85%, 
+        #000 100%
+      );
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* 影片聲音控制按鈕 */
+    .video-control-btn {
+      position: absolute;
+      bottom: 4rem;
+      right: 4rem;
+      z-index: 20;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 50px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: "Noto Serif TC", serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.15em;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(8px);
+    }
+
+    .video-control-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #fff;
+      transform: scale(1.05);
+    }
+
+    .video-control-btn .btn-icon {
+      font-size: 1.1em;
+    }
+    
+    /* =========================================
+       5. 章節一封面與內文 (Chapter 1 Intro & Body)
+       ========================================= */
     .chapter-stack {
       position: relative;
     }
@@ -326,6 +349,8 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transform: scale(1.02);
+      transition: transform 10s ease-out;
     }
 
     .chapter-intro::before {
@@ -335,47 +360,186 @@
       background: linear-gradient(180deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.3) 22%, transparent 55%);
       filter: blur(12px);
       pointer-events: none;
+      z-index: 1;
     }
 
     .chapter-overlay {
       position: absolute;
       inset: 0;
       background: linear-gradient(180deg, rgba(8,8,8,0.08) 0%, rgba(8,8,8,0.55) 92%);
+      z-index: 2;
     }
 
     .chapter-title {
       position: absolute;
-      left: 5vw;
+      left: 6vw;
       top: 50%;
       transform: translateY(-50%);
       color: #fff;
-      font-size: clamp(1rem, 2.2vw, 1.8rem);
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      max-width: 520px;
-      line-height: 1.4;
-      white-space: nowrap;
-      text-align: left;
+      font-size: clamp(1.2rem, 3vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      max-width: 600px;
+      line-height: 1.5;
+      text-shadow: 0 4px 10px rgba(0,0,0,0.5);
       z-index: 5;
     }
 
     .chapter-body {
       position: relative;
-      background: #970C10;
+      background: var(--red);
       color: #fff;
       min-height: 110vh;
-      padding: clamp(60px, 10vh, 120px) clamp(6vw, 10vw, 12vw);
+      padding: clamp(80px, 12vh, 140px) clamp(6vw, 10vw, 12vw);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 3;
     }
 
+    .chapter-body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url("assets/grain.png") repeat;
+      opacity: 0.2;
+      filter: blur(0.5px);
+      pointer-events: none;
+    }
+
+    .chapter-body-inner {
+      position: relative;
+      width: min(1200px, 100%);
+      display: flex;
+      align-items: center;
+      gap: clamp(3rem, 8vw, 6rem);
+    }
+
+    .chapter-text-block {
+      flex: 1 1 55%;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(1.5rem, 3vw, 2rem);
+    }
+
+    .chapter-text-block h3 {
+      font-size: clamp(1.5rem, 3vw, 2.8rem);
+      color: var(--gold);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      margin: 0;
+    }
+
+    .chapter-text-block h5 {
+      color: rgba(255,255,255,0.95);
+      text-align: justify;
+      font-weight: 400;
+    }
+
+    /* 黑膠唱片區 (Vinyl Player) */
+    .vinyl-column {
+      flex: 1 1 45%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .vinyl-player {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .vinyl-disc {
+      width: clamp(200px, 28vw, 320px);
+      height: clamp(200px, 28vw, 320px);
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #1f1f1f 0%, #050505 60%, #000 100%);
+      border: 8px solid #222;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+      animation: vinyl-spin 8s linear infinite;
+      animation-play-state: paused;
+      cursor: pointer;
+      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .vinyl-disc:hover {
+      transform: scale(1.02);
+      border-color: #333;
+    }
+
+    .vinyl-disc::before,
+    .vinyl-disc::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .vinyl-disc::before { inset: 15%; }
+    .vinyl-disc::after { inset: 35%; }
+
+    .vinyl-label {
+      width: 35%;
+      height: 35%;
+      border-radius: 50%;
+      background: radial-gradient(circle, #b91c1c 0%, #741010 80%);
+      border: 4px solid var(--gold);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      text-align: center;
+      letter-spacing: 0.1em;
+      color: #ffe7a0;
+      font-weight: 700;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .vinyl-disc.is-playing {
+      animation-play-state: running;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+    }
+
+    .vinyl-cta {
+      border: 1px solid rgba(255,255,255,0.4);
+      background: transparent;
+      color: var(--gold);
+      padding: 12px 28px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .vinyl-cta:hover {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border-color: #fff;
+    }
+
+    @keyframes vinyl-spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* =========================================
+       6. 黑色過場與引言 (Finale & Quote)
+       ========================================= */
     .black-finale {
       background: #000;
       min-height: 100vh;
       display: grid;
-      grid-template-columns: 50vw 50vw;
+      grid-template-columns: 1fr 1fr;
       width: 100%;
     }
 
@@ -391,6 +555,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      filter: grayscale(0.2);
     }
 
     .finale-text {
@@ -400,21 +565,23 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 1rem;
+      gap: 2rem;
       text-align: left;
     }
 
     .finale-text h3 {
-      color: #FFE87A;
-      letter-spacing: 0.1em;
+      color: var(--gold);
+      letter-spacing: 0.15em;
+      font-size: 1.8rem;
       margin-bottom: 0.5rem;
     }
 
     .finale-text h4 {
-      font-weight: 500;
-      line-height: 1.8;
-      color: #fff;
+      font-weight: 400;
+      line-height: 1.9;
+      color: #ddd;
       margin: 0;
+      font-size: 1.1rem;
     }
 
     .black-quote {
@@ -429,13 +596,13 @@
     .black-quote h3 {
       color: #fff;
       text-align: center;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       line-height: 1.8;
-      max-width: 820px;
+      max-width: 900px;
       opacity: 0;
       transform: translateY(40px);
-      transition: opacity 1.2s ease, transform 1.2s ease;
-      font-size: clamp(1.5rem, 4vw, 2.8rem);
+      transition: opacity 1.4s ease, transform 1.4s ease;
+      font-size: clamp(1.6rem, 4vw, 3rem);
     }
 
     .black-quote h3.visible {
@@ -444,17 +611,22 @@
     }
 
     .black-quote h3 span {
-      transition: color 0.8s ease;
+      transition: color 1s ease;
     }
 
     .black-quote h3.highlight span {
-      color: #FFE87A;
+      color: var(--gold);
     }
 
+    /* =========================================
+       7. 橫向捲動區塊 A (Horizontal Scroll - Scene)
+       ========================================= */
     .horizontal-scroll {
       position: relative;
+      /* 設定滾動長度：3個面板 * 100vh */
       --panel-count: 3;
       height: calc(var(--panel-count) * 100vh);
+      background: #000;
     }
 
     .horizontal-track {
@@ -469,7 +641,8 @@
       display: flex;
       width: calc(var(--panel-count) * 100vw);
       height: 100%;
-      transition: transform 0.08s linear;
+      transition: transform 0.1s linear;
+      will-change: transform;
     }
 
     .scroll-panel {
@@ -480,85 +653,18 @@
     }
 
     .panel-guobin {
-      position: relative;
       background: url("assets/oldmanhappy.jpg") center center / cover no-repeat;
-      display: flex;
-      align-items: flex-end;
-      justify-content: flex-start;
-      padding: clamp(4rem, 8vh, 6rem);
     }
-
     .panel-boom {
       background: url("assets/theaters_boom.jpg") center center / cover no-repeat;
     }
-
     .panel-interior {
       background: url("assets/singing_hall_interior.jpg") center center / cover no-repeat;
     }
 
-    .sticky-section {
-      position: relative;
-      height: 180vh;
-    }
-
-    .sticky-section.sticky-guobin {
-      height: 120vh;
-    }
-
-    .sticky-frame {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      background: #000;
-    }
-
-    .sticky-section.sticky-guobin .sticky-frame {
-      justify-content: flex-start;
-      padding: clamp(2rem, 6vw, 5rem);
-    }
-
-    .sticky-background {
-      position: absolute;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      transform: scale(1.05);
-    }
-
-    .sticky-caption-block {
-      position: relative;
-      z-index: 2;
-      background: rgba(0,0,0,0.6);
-      padding: clamp(2.5rem, 4vw, 3.75rem);
-      max-width: min(480px, 80vw);
-      letter-spacing: 0.05em;
-      line-height: 1.85;
-      font-size: clamp(0.95rem, 2vw, 1.35rem);
-      text-align: left;
-      opacity: 0;
-      transform: translateY(32px);
-      transition: opacity 0.9s ease-out, transform 0.9s ease-out;
-    }
-
-    .sticky-caption-block::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: -10px;
-      width: 4px;
-      background: var(--red);
-    }
-
-    .sticky-caption-block.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
+    /* =========================================
+       8. 橫向捲動區塊 B (Story Horizontal - Narrative)
+       ========================================= */
     .story-horizontal {
       position: relative;
       --panel-count: 6;
@@ -566,18 +672,19 @@
       background: #000;
     }
 
-    .story-horizontal .story-track {
+    .story-track {
       position: sticky;
       top: 0;
       height: 100vh;
       overflow: hidden;
     }
 
-    .story-horizontal .story-panels {
+    .story-panels {
       display: flex;
       width: calc(var(--panel-count) * 100vw);
       height: 100%;
-      transition: transform 0.08s linear;
+      transition: transform 0.1s linear;
+      will-change: transform;
     }
 
     .story-panel {
@@ -592,97 +699,71 @@
       overflow: hidden;
     }
 
+    /* 統一的背景處理 */
     .story-panel::before {
       content: "";
       position: absolute;
       inset: 0;
       background-size: cover;
       background-position: center;
-      transform: scale(1.05);
-      filter: brightness(0.75);
+      transform: scale(1.1);
+      filter: brightness(0.6);
+      transition: transform 10s ease;
+    }
+
+    .story-panel.is-active::before {
+      transform: scale(1.0);
     }
 
     .story-panel::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(120deg, rgba(0,0,0,0.8), rgba(0,0,0,0.35));
+      background: linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 100%);
+      z-index: 1;
     }
 
     .story-copy {
       position: relative;
       z-index: 2;
-      max-width: min(620px, 80vw);
+      max-width: min(680px, 85vw);
       text-align: center;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-      letter-spacing: 0.05em;
-      line-height: 1.9;
+      gap: 1.5rem;
+      letter-spacing: 0.08em;
+      line-height: 2;
       font-size: var(--body-text-size);
-    }
-
-    .story-panel--songhall .story-copy,
-    .story-panel--stage .story-copy,
-    .story-panel--audience .story-copy {
-      text-align: center;
-      align-items: center;
-      background: none;
-      padding: 0;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
 
     .story-line {
       opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.9s ease-out, transform 0.9s ease-out;
+      transform: translateY(30px);
+      transition: opacity 1s ease-out, transform 1s ease-out;
     }
 
-    .story-panel.is-active .story-line {
-      opacity: 1;
-      transform: translateY(0);
+    .story-panel.is-active .story-line:nth-child(1) { transition-delay: 0.2s; opacity: 1; transform: translateY(0); }
+    .story-panel.is-active .story-line:nth-child(2) { transition-delay: 0.5s; opacity: 1; transform: translateY(0); }
+    .story-panel.is-active .story-line:nth-child(3) { transition-delay: 0.8s; opacity: 1; transform: translateY(0); }
+    .story-panel.is-active .story-line:nth-child(4) { transition-delay: 1.1s; opacity: 1; transform: translateY(0); }
+
+    .story-panel--xi::before { background-image: url("assets/ch1-00-ximending-street.jpg"); filter: brightness(0.5) sepia(0.2); }
+    .story-panel--guobin::before { background-image: url("assets/ch1-01-guobin-exterior.jpg"); }
+    .story-panel--songhall::before { background-image: url("assets/ch1-02-songhall-interior-wide.jpg"); }
+    .story-panel--stage::before { background-image: url("assets/ch1-03-stage-close.jpg"); }
+    .story-panel--hands::before { background-image: url("assets/ch1-04-red-envelope-hands.jpg"); filter: brightness(0.7); }
+    .story-panel--audience::before { background-image: url("assets/ch1-05-audience-listening.jpg"); filter: brightness(0.5); }
+
+    .story-panel--hands .hands-highlight {
+      color: var(--gold);
+      border-bottom: 1px solid var(--gold);
+      padding-bottom: 2px;
     }
 
-    .story-panel--xi::before {
-      background-image: url("assets/ch1-00-ximending-street.jpg");
-      filter: brightness(0.7);
-    }
-
-    .story-panel--guobin::before {
-      background-image: url("assets/ch1-01-guobin-exterior.jpg");
-    }
-
-    .story-panel--songhall::before {
-      background-image: url("assets/ch1-02-songhall-interior-wide.jpg");
-    }
-
-    .story-panel--stage::before,
-    .story-panel--parallax::before {
-      background-image: url("assets/ch1-03-stage-close.jpg");
-    }
-
-    .story-panel--hands::before {
-      background-image: url("assets/ch1-04-red-envelope-hands.jpg");
-      filter: brightness(0.75);
-    }
-
-    .story-panel--audience::before {
-      background-image: url("assets/ch1-05-audience-listening.jpg");
-      filter: brightness(0.6);
-    }
-
-    .story-panel--hands .hands-highlight::after {
-      transform-origin: left;
-      transform: scaleX(0);
-    }
-
-    .story-panel--hands.is-active .hands-highlight {
-      color: #FFE87A;
-    }
-
-    .story-panel--hands.is-active .hands-highlight::after {
-      transform: scaleX(1);
-    }
-
+    /* =========================================
+       9. 結尾過場 (Finale Sequence)
+       ========================================= */
     .chapter-finale {
       position: relative;
       height: 100vh;
@@ -692,14 +773,15 @@
       justify-content: center;
       text-align: center;
       padding: 0 6vw;
+      overflow: hidden;
     }
 
     .chapter-finale p {
       font-size: clamp(1.2rem, 2.6vw, 2.2rem);
-      letter-spacing: 0.08em;
-      line-height: 1.9;
+      letter-spacing: 0.1em;
+      line-height: 2;
       color: #fff;
-      max-width: 780px;
+      max-width: 800px;
       opacity: 0;
       transform: translateY(30px);
       transition: opacity 1.6s ease, transform 1.6s ease;
@@ -711,13 +793,14 @@
     }
 
     .chapter-finale.slow p {
-      transition-duration: 2s;
+      transition-duration: 2.5s;
     }
 
     .finale-image-block {
       position: relative;
-      height: 100vh;
+      height: 120vh;
       overflow: hidden;
+      width: 100%;
     }
 
     .finale-image-block img {
@@ -726,172 +809,36 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 1.5s ease-out;
+      transform: scale(1.1);
+    }
+
+    .finale-image-block.is-visible img {
+      transform: scale(1);
     }
 
     .finale-image-block::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.55));
+      background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%);
     }
 
-    .finale-image-caption {
-      position: absolute;
-      left: 50%;
-      bottom: 18vh;
-      transform: translateX(-50%);
-      color: #fff;
-      font-size: clamp(1.4rem, 3vw, 2.6rem);
-      letter-spacing: 0.15em;
-      opacity: 0;
-      transition: opacity 1.4s ease;
-    }
-
-    .finale-image-block.is-visible .finale-image-caption {
-      opacity: 1;
-    }
-
-    .chapter-body-inner {
-      position: relative;
-      width: min(1200px, 100%);
-      display: flex;
-      align-items: center;
-      gap: clamp(2rem, 6vw, 5rem);
-    }
-
-    .chapter-body::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: url("assets/grain.png") repeat;
-      opacity: 0.2;
-      filter: blur(0.5px);
-      pointer-events: none;
-    }
-
-    .chapter-text-block {
-      flex: 1 1 55%;
-      text-align: left;
-      display: flex;
-      flex-direction: column;
-      gap: clamp(1rem, 2.5vw, 1.8rem);
-    }
-
-    .chapter-text-block h3 {
-      font-size: clamp(1.2rem, 2.4vw, 2.2rem);
-      color: #FFE87A;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      margin: 0;
-      text-align: left;
-    }
-
-    .chapter-text-block h5 {
-      color: #fff;
-      text-align: left;
-    }
-
-    .vinyl-column {
-      flex: 1 1 45%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.2rem;
-    }
-
-    .vinyl-player {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .vinyl-disc {
-      width: clamp(160px, 22vw, 220px);
-      height: clamp(160px, 22vw, 220px);
-      border-radius: 50%;
-      background: radial-gradient(circle at center, #1f1f1f 0%, #050505 60%, #000 100%);
-      border: 6px solid #222;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.45);
-      animation: vinyl-spin 8s linear infinite;
-      animation-play-state: paused;
-      cursor: pointer;
-    }
-
-    .vinyl-disc::before,
-    .vinyl-disc::after {
-      content: "";
-      position: absolute;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.07);
-    }
-
-    .vinyl-disc::before {
-      inset: 14%;
-    }
-
-    .vinyl-disc::after {
-      inset: 32%;
-    }
-
-    .vinyl-label {
-      width: 38%;
-      height: 38%;
-      border-radius: 50%;
-      background: radial-gradient(circle, #b91c1c 0%, #741010 80%);
-      border: 3px solid #ffe87a;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.65rem;
-      text-align: center;
-      letter-spacing: 0.08em;
-      color: #ffe7a0;
-      font-weight: 600;
-    }
-
-    .vinyl-disc.is-playing {
-      animation-play-state: running;
-    }
-
-    .vinyl-cta {
-      border: 1px solid rgba(255,255,255,0.35);
-      background: transparent;
-      color: #ffe87a;
-      padding: 0.75rem 1.5rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: background 0.3s ease, color 0.3s ease;
-    }
-
-    .vinyl-cta:hover {
-      background: rgba(255,255,255,0.08);
-      color: #fff;
-    }
-
-    @keyframes vinyl-spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* === 底部按鈕區 CSS (新增) === */
+    /* =========================================
+       10. 底部導覽 (Footer Navigation)
+       ========================================= */
     .next-chapter-section {
-      padding: 100px 20px 140px;
+      padding: 120px 20px 160px;
       text-align: center;
-      background: linear-gradient(to bottom, transparent, #000);
+      background: linear-gradient(to bottom, #000 0%, #111 100%);
+      position: relative;
     }
 
     .next-label {
-      font-size: 0.9rem;
-      color: #666;
-      letter-spacing: 0.2em;
-      margin-bottom: 30px;
+      font-size: 0.85rem;
+      color: #888;
+      letter-spacing: 0.3em;
+      margin-bottom: 40px;
       display: block;
       text-transform: uppercase;
     }
@@ -899,158 +846,126 @@
     .nav-buttons-container {
       display: flex;
       justify-content: center;
-      gap: 30px;
+      gap: 40px;
       flex-wrap: wrap;
     }
 
     .nav-btn {
       text-decoration: none;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      padding: 15px 40px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 20px 50px;
       color: #fff;
       font-family: "Noto Serif TC", serif;
-      font-size: 1rem;
-      letter-spacing: 0.1em;
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
       transition: all 0.4s ease;
-      min-width: 200px;
+      min-width: 220px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      position: relative;
+      overflow: hidden;
     }
 
     .nav-btn span {
-      font-size: 0.7em;
-      color: #888;
-      margin-top: 5px;
+      font-size: 0.65em;
+      color: #666;
+      margin-top: 8px;
       font-weight: 300;
+      letter-spacing: 0.2em;
+      transition: color 0.4s ease;
     }
 
     .btn-home:hover {
       border-color: #fff;
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
     }
 
     .btn-next {
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(255, 255, 255, 0.05);
     }
 
     .btn-next:hover {
       border-color: #c02828;
-      background: rgba(192, 40, 40, 0.15);
-      letter-spacing: 0.15em;
-      box-shadow: 0 0 30px rgba(192, 40, 40, 0.4);
+      background: rgba(192, 40, 40, 0.2);
+      box-shadow: 0 0 40px rgba(192, 40, 40, 0.3);
     }
 
-    /* 手機版調整 */
+    .btn-next:hover span {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* =========================================
+       11. 響應式設計 (Responsive Design)
+       ========================================= */
+    @media (max-width: 1024px) {
+      .black-finale { grid-template-columns: 1fr; }
+      .finale-image { min-height: 50vh; }
+      .finale-text { padding: 80px 6vw; }
+      .chapter-body-inner { gap: 4rem; }
+    }
+
     @media (max-width: 900px) {
-      .chapter-body {
-        min-height: unset;
-        padding: clamp(48px, 8vh, 80px) clamp(5vw, 8vw, 10vw);
-      }
-
-      .chapter-body-inner {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .chapter-text-block {
-        text-align: center;
-      }
-
-      .chapter-text-block h3,
-      .chapter-text-block h5 {
-        text-align: center;
-      }
-
-      .vinyl-column {
-        width: 100%;
-      }
-
-      .black-finale {
-        grid-template-columns: 1fr;
-      }
-
-      .finale-image {
-        min-height: clamp(260px, 45vh, 420px);
-      }
+      .chapter-body { padding: 80px 5vw; }
+      .chapter-body-inner { flex-direction: column; text-align: center; }
+      .chapter-text-block { text-align: center; }
+      .chapter-text-block h5 { text-align: left; }
+      .vinyl-column { width: 100%; margin-top: 2rem; }
+      .nav-buttons-container { gap: 20px; }
+      .nav-btn { width: 100%; }
     }
 
-    /* 手機版調整 */
     @media (max-width: 768px) {
-      .hero {
-        padding: 4vh 8vw;
+      .hero-static { padding: 0 6vw; }
+      .hero-static h1 { font-size: 2.8rem; margin-bottom: 1rem; }
+      .hero-static h2 { font-size: 1.2rem; margin-bottom: 1.5rem; }
+      
+      .video-control-btn {
+        bottom: 5rem;
+        right: 1.5rem;
+        padding: 10px 18px;
+        font-size: 0.85rem;
       }
-
-      .hero-content {
-        flex: 1 1 auto;
-        min-height: auto;
-      }
-
-      .hero-image {
-        right: -5vw;
-        bottom: 1rem;
-        opacity: 0.6;
-      }
-
-      .hero-image img {
-        width: min(78vw, 420px);
-        max-height: 60vh;
-      }
-
-      /* Let mobile wrap naturally to avoid overflow */
-      .hero h1,
-      .hero h2 {
-        white-space: normal;
-      }
-
+      
+      .scroll-hint { bottom: 2.5rem; }
+      
       .chapter-title {
-        white-space: normal;
-        top: auto;
-        bottom: 2rem;
-        transform: none;
+        left: 5vw;
+        font-size: 1.5rem;
+        width: 80%;
       }
-
-      .scroll-hint {
-        letter-spacing: 0.2em;
-        bottom: 2rem;
+      
+      .black-quote h3 {
+        font-size: 1.4rem;
+        line-height: 1.6;
+      }
+      
+      .story-copy { font-size: 1rem; }
+      
+      .transition-cta {
+          margin-top: 1.5rem;
+          padding: 0.8rem 2rem;
+          font-size: 1rem;
       }
     }
   </style>
-</head>
+  <body>
 
-<body>
-
-  <div class="landing-wrapper">
-    <section class="landing-video">
-      <video
-        id="landing-video"
-        src="assets/stage.mp4"
-        autoplay
-        muted
-        loop
-        playsinline
-        preload="auto">
-      </video>
-      <div class="landing-hint">SCROLL ↓</div>
-    </section>
-  </div>
-
-  <section class="hero">
+  <section class="hero-static">
     <div class="hero-content">
-      <h1 id="hero-title" class="typewriter-line" data-text="唱給不在場的人"></h1>
+      <h1 id="hero-title" class="typewriter-line" data-text="燈紅酒綠的年代"></h1>
       <h2 id="hero-subtitle" class="typewriter-line" data-text="紅包歌手的世代誤解與生存現場"></h2>
+      
+      <a href="#immersive-start" id="transition-cta" class="transition-cta">
+        開始深入閱讀 &darr;
+      </a>
     </div>
-
-    <div class="hero-image hero-entrance" style="--delay: 0ms;">
-      <img src="assets/hero_cover.png" alt="紅包場歌手英姿">
-    </div>
-
     <div id="scroll-hint" class="scroll-hint">SCROLL ↓</div>
   </section>
 
-  <section class="immersive-section">
+  <section class="immersive-section" id="immersive-start">
     <div class="immersive-inner">
       <div class="immersive-copy">
         <h5>夜晚的西門町總帶著一種說不出的濕氣。</h5>
@@ -1062,6 +977,25 @@
       </div>
     </div>
   </section>
+
+  <div class="reveal-video-wrapper">
+    <section class="reveal-video-container">
+      <video
+        id="reveal-video"
+        src="assets/stage.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto">
+      </video>
+      
+      <button id="unmute-btn" class="video-control-btn">
+        <span class="btn-icon">🔇</span>
+        <span class="btn-text">開啟聲音</span>
+      </button>
+    </section>
+  </div>
 
   <div class="chapter-stack">
     <section class="chapter-intro">
@@ -1078,6 +1012,7 @@
           <h5>牆上勾勒出「金鑽大歌廳」的霓虹燈條閃爍著溫潤的光，那是經營者親手設計的風景，為這片天地注入了第一份屬於自己的溫度。</h5>
           <h5>空氣中混雜著一絲甜膩的香水、菜餚的油香，以及時間沉澱在紅絲絨座椅上的陳舊氣味。樂隊老師們早已就位，薩克斯風吹奏出的，是鄧麗君、是鳳飛飛，是那個你我或許未曾親歷，卻無比熟悉的黃金年代旋律。</h5>
         </div>
+        
         <div class="vinyl-column">
           <div class="vinyl-player">
             <div class="vinyl-disc" id="vinyl-disc">
@@ -1092,7 +1027,6 @@
       </div>
     </section>
   </div>
-
   <section class="black-finale">
     <div class="finale-image">
       <img src="assets/lonely_man.jpg" alt="lonely man">
@@ -1115,7 +1049,7 @@
   <section class="horizontal-scroll" id="horizontal-scroll">
     <div class="horizontal-track">
       <div class="scroll-panels">
-    <div class="scroll-panel panel-guobin"></div>
+        <div class="scroll-panel panel-guobin"></div>
         <div class="scroll-panel panel-boom"></div>
         <div class="scroll-panel panel-interior"></div>
       </div>
@@ -1142,47 +1076,33 @@
         <article class="story-panel story-panel--songhall">
           <div class="story-copy">
             <p class="story-line">七年後，西門町迎來所謂的『歌廳熱』。</p>
-            <p class="story-line">多家大型、裝潢華麗的歌廳陸續開幕，<br>
-            歌唱表演從零散的私人娛樂，<br>
-            轉變為定時、定點、制度化的商業活動。</p>
-            <p class="story-line">西門町及其周邊，<br>
-            迅速成為台北最熱鬧的庶民娛樂核心。</p>
+            <p class="story-line">多家大型、裝潢華麗的歌廳陸續開幕，<br>歌唱表演從零散的私人娛樂，<br>轉變為定時、定點、制度化的商業活動。</p>
+            <p class="story-line">西門町及其周邊，<br>迅速成為台北最熱鬧的庶民娛樂核心。</p>
           </div>
         </article>
         <article class="story-panel story-panel--stage">
           <div class="story-copy">
-            <p class="story-line">這筆錢，並非額外小費，<br>
-            而是歌星最主要的收入來源。</p>
-            <p class="story-line">紅包制度形塑了一種特殊的情感結構：<br>
-            歌手靠紅包維生；觀眾透過紅包，<br>
-            確認自己被記得、被理解。</p>
+            <p class="story-line">這筆錢，並非額外小費，<br>而是歌星最主要的收入來源。</p>
+            <p class="story-line">紅包制度形塑了一種特殊的情感結構：<br>歌手靠紅包維生；觀眾透過紅包，<br>確認自己被記得、被理解。</p>
             <p class="story-line">這是一種無聲的契約。</p>
           </div>
         </article>
         <article class="story-panel story-panel--hands">
           <div class="story-copy">
-            <p class="story-line">紅包場之所以得名，<br>
-            來自一個極為直接、也極為人性的互動方式——</p>
-            <p class="story-line">觀眾將對歌星的喜愛與支持，<br>
-            <span class="hands-highlight">裝進紅包袋</span>，<br>
-            親手交到歌星手中。</p>
+            <p class="story-line">紅包場之所以得名，<br>來自一個極為直接、也極為人性的互動方式——</p>
+            <p class="story-line">觀眾將對歌星的喜愛與支持，<br><span class="hands-highlight">裝進紅包袋</span>，<br>親手交到歌星手中。</p>
           </div>
         </article>
         <article class="story-panel story-panel--audience">
           <div class="story-copy">
-            <p class="story-line">紅包場的演出內容，<br>
-            多以國語流行歌曲、懷舊老歌為主。</p>
-            <p class="story-line">對許多思鄉的外省籍觀眾而言，<br>
-            這些歌曲不只是旋律，<br>
-            而是一種情緒出口——</p>
-            <p class="story-line">在政治動盪、國際局勢不安的年代，<br>
-            歌聲，成為撫慰人心的存在。</p>
+            <p class="story-line">紅包場的演出內容，<br>多以國語流行歌曲、懷舊老歌為主。</p>
+            <p class="story-line">對許多思鄉的外省籍觀眾而言，<br>這些歌曲不只是旋律，<br>而是一種情緒出口——</p>
+            <p class="story-line">在政治動盪、國際局勢不安的年代，<br>歌聲，成為撫慰人心的存在。</p>
           </div>
         </article>
       </div>
     </div>
   </section>
-
   <section class="chapter-finale" data-finale="intro">
     <p>然而，進入 1990 年代，娛樂形式快速轉變。<br>紅包場，逐漸被推向城市邊緣。<br>紅包場不再屬於夜生活的主流，<br>也逐漸淡出大眾視野。</p>
   </section>
@@ -1219,48 +1139,23 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const hero = document.querySelector(".hero");
+      
+      // === 1. 打字機特效 (Typewriter Effect) ===
       const titleEl = document.getElementById("hero-title");
       const subtitleEl = document.getElementById("hero-subtitle");
-      const heroImage = document.querySelector(".hero-image.hero-entrance");
       const scrollHint = document.getElementById("scroll-hint");
+      const transitionCta = document.getElementById("transition-cta");
       const typeTargets = [titleEl, subtitleEl];
-      const narrativeLines = document.querySelectorAll(".immersive-copy h5");
-      let hasRun = false;
-      let scrollLocked = false;
-      let prevBodyOverflow = "";
-      let prevHtmlOverflow = "";
-      let unlockTimer = null;
 
+      // 初始化：清空文字並讀取 data-text
       typeTargets.forEach((el) => {
         const text = el.dataset.text || el.textContent.trim();
         el.dataset.text = text;
         el.textContent = "";
       });
 
-      const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-      const lockScroll = () => {
-        if (scrollLocked) return;
-        scrollLocked = true;
-        prevBodyOverflow = document.body.style.overflow;
-        prevHtmlOverflow = document.documentElement.style.overflow;
-        document.body.style.overflow = "hidden";
-        document.documentElement.style.overflow = "hidden";
-      };
-
-      const unlockScroll = () => {
-        if (!scrollLocked) return;
-        scrollLocked = false;
-        document.body.style.overflow = prevBodyOverflow;
-        document.documentElement.style.overflow = prevHtmlOverflow;
-        if (unlockTimer) {
-          clearTimeout(unlockTimer);
-          unlockTimer = null;
-        }
-      };
-
-      const typeText = (el, speed = 120) =>
+      // 打字函式
+      const typeText = (el, speed = 100) =>
         new Promise((resolve) => {
           const text = el.dataset.text || "";
           let index = 0;
@@ -1279,64 +1174,44 @@
           tick();
         });
 
-      const heroFullyVisible = () => {
-        if (!hero) return false;
-        const rect = hero.getBoundingClientRect();
-        const tolerance = 1;
-        return Math.abs(rect.top) <= tolerance;
-      };
-
-      const cleanupHeroListeners = () => {
-        window.removeEventListener("scroll", onScrollCheck, { passive: true });
-        window.removeEventListener("resize", onScrollCheck);
-      };
-
-      let scrollCheckQueued = false;
-      const scheduleHeroCheck = () => {
-        if (hasRun || scrollCheckQueued) return;
-        scrollCheckQueued = true;
-        requestAnimationFrame(() => {
-          scrollCheckQueued = false;
-          if (heroFullyVisible()) {
-            cleanupHeroListeners();
-            startSequence();
-          }
-        });
-      };
-
-      const onScrollCheck = () => scheduleHeroCheck();
-
+      // 啟動序列
       const startSequence = async () => {
-        if (hasRun) return;
-        hasRun = true;
-        lockScroll();
-        unlockTimer = setTimeout(unlockScroll, 9000);
-        await wait(500);
+        
+        await new Promise(r => setTimeout(r, 600));
+        
         for (const el of typeTargets) {
           await typeText(el);
         }
+        
+        // 顯示 Scroll Hint 和 新增的 CTA 按鈕
         requestAnimationFrame(() => {
-          if (heroImage) heroImage.classList.add("is-visible");
+          if (scrollHint) scrollHint.classList.add("visible");
+          if (transitionCta) transitionCta.classList.add("visible");
         });
-        requestAnimationFrame(() => {
-          setTimeout(() => {
-            scrollHint.classList.add("visible");
-            unlockScroll();
-          }, 600);
-        });
+        
+        // 點擊按鈕實現平滑滾動
+        if(transitionCta) {
+          transitionCta.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = document.getElementById('immersive-start');
+            if(target) {
+              target.scrollIntoView({ behavior: 'smooth' });
+            }
+          });
+        }
       };
 
-      window.addEventListener("scroll", onScrollCheck, { passive: true });
-      window.addEventListener("resize", onScrollCheck);
-      scheduleHeroCheck();
+      startSequence();
 
+      // === 2. 沉浸式文字淡入 (Immersive Text Fade) ===
+      const narrativeLines = document.querySelectorAll(".immersive-copy h5");
       if (narrativeLines.length) {
         const narrativeObserver = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
                 narrativeLines.forEach((line, idx) => {
-                  line.style.transitionDelay = `${idx * 130}ms`;
+                  line.style.transitionDelay = `${idx * 150}ms`;
                   requestAnimationFrame(() => line.classList.add("visible"));
                 });
                 narrativeObserver.disconnect();
@@ -1348,92 +1223,24 @@
         narrativeObserver.observe(narrativeLines[0]);
       }
 
-      const quoteLine = document.getElementById("quote-line");
-      if (quoteLine) {
-        const quoteObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                quoteLine.classList.add("visible");
-                setTimeout(() => quoteLine.classList.add("highlight"), 600);
-                quoteObserver.disconnect();
-              }
-            });
-          },
-          { threshold: 0.6 }
-        );
-        quoteObserver.observe(quoteLine);
-      }
+      // === 3. 影片聲音控制 (Video Audio Control) ===
+      const revealVideo = document.getElementById("reveal-video");
+      const unmuteBtn = document.getElementById("unmute-btn");
 
-      const stickyCaptions = document.querySelectorAll(".sticky-caption-block");
-      if (stickyCaptions.length) {
-        const captionObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add("is-visible");
-              }
-            });
-          },
-          { threshold: 0.5 }
-        );
-        stickyCaptions.forEach((caption) => captionObserver.observe(caption));
-      }
-
-      const storyHorizontal = document.getElementById("story-horizontal");
-      if (storyHorizontal) {
-        const panelsWrapper = storyHorizontal.querySelector(".story-panels");
-        const panels = Array.from(storyHorizontal.querySelectorAll(".story-panel"));
-        const panelCount = panels.length;
-        let startOffset = 0;
-        let totalScrollable = 1;
-        const updateStoryMetrics = () => {
-          storyHorizontal.style.setProperty("--panel-count", panelCount);
-          startOffset = storyHorizontal.offsetTop;
-          totalScrollable = storyHorizontal.offsetHeight - window.innerHeight;
-          if (totalScrollable <= 0) totalScrollable = 1;
-          updateStoryPosition();
-        };
-        let storyQueued = false;
-        const updateStoryPosition = () => {
-          storyQueued = false;
-          const scrollY = window.scrollY || window.pageYOffset;
-          const current = Math.min(Math.max(scrollY - startOffset, 0), totalScrollable);
-          const progress = current / totalScrollable;
-          const translate = -progress * (panelCount - 1) * 100;
-          panelsWrapper.style.transform = `translateX(${translate}vw)`;
-          const activeIndex = Math.round(progress * (panelCount - 1));
-          panels.forEach((panel, idx) => panel.classList.toggle("is-active", idx === activeIndex));
-        };
-        const handleStoryScroll = () => {
-          if (!storyQueued) {
-            storyQueued = true;
-            requestAnimationFrame(updateStoryPosition);
+      if (revealVideo && unmuteBtn) {
+        unmuteBtn.addEventListener("click", () => {
+          if (revealVideo.muted) {
+            revealVideo.muted = false;
+            unmuteBtn.innerHTML = '<span class="btn-icon">🔊</span><span class="btn-text">關閉聲音</span>';
+            revealVideo.play().catch(e => console.error("播放失敗:", e));
+          } else {
+            revealVideo.muted = true;
+            unmuteBtn.innerHTML = '<span class="btn-icon">🔇</span><span class="btn-text">開啟聲音</span>';
           }
-        };
-        window.addEventListener("scroll", handleStoryScroll, { passive: true });
-        window.addEventListener("resize", () => {
-          updateStoryMetrics();
-          handleStoryScroll();
         });
-        updateStoryMetrics();
       }
 
-      const finaleSections = document.querySelectorAll("[data-finale]");
-      if (finaleSections.length) {
-        const finaleObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add("is-visible");
-              }
-            });
-          },
-          { threshold: 0.4 }
-        );
-        finaleSections.forEach((section) => finaleObserver.observe(section));
-      }
-
+      // === 4. 黑膠唱片播放器 (Vinyl Player) ===
       const vinylDisc = document.getElementById("vinyl-disc");
       const vinylToggle = document.getElementById("vinyl-toggle");
       const vinylAudio = document.getElementById("vinyl-audio");
@@ -1460,45 +1267,97 @@
 
         vinylDisc.addEventListener("click", toggleVinyl);
         vinylToggle.addEventListener("click", toggleVinyl);
+        
         vinylAudio.addEventListener("ended", () => {
           vinylAudio.pause();
           vinylAudio.currentTime = 0;
           updateVinylState();
         });
+        
         vinylAudio.addEventListener("pause", updateVinylState);
         vinylAudio.addEventListener("play", updateVinylState);
+        
         updateVinylState();
       }
 
-      const horizontalScroll = document.getElementById("horizontal-scroll");
-      if (horizontalScroll) {
-        const panelsWrapper = horizontalScroll.querySelector(".scroll-panels");
-        const panels = panelsWrapper ? panelsWrapper.children.length : 0;
-        if (panelsWrapper && panels > 0) {
-          horizontalScroll.style.setProperty("--panel-count", panels);
-          let startOffset = horizontalScroll.offsetTop;
+      // === 5. 金句特效 (Quote Highlight) ===
+      const quoteLine = document.getElementById("quote-line");
+      if (quoteLine) {
+        const quoteObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                quoteLine.classList.add("visible");
+                setTimeout(() => quoteLine.classList.add("highlight"), 800);
+                quoteObserver.disconnect();
+              }
+            });
+          },
+          { threshold: 0.6 }
+        );
+        quoteObserver.observe(quoteLine);
+      }
 
-          const handleHorizontalScroll = () => {
-            const totalScrollable = horizontalScroll.offsetHeight - window.innerHeight;
+      // === 6. 結尾淡入特效 (Finale Fade-in) ===
+      const finaleSections = document.querySelectorAll("[data-finale]");
+      if (finaleSections.length) {
+        const finaleObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+              }
+            });
+          },
+          { threshold: 0.35 }
+        );
+        finaleSections.forEach((section) => finaleObserver.observe(section));
+      }
+
+      // === 7. 橫向捲動 A (Horizontal Scroll - Scene) & B (Story Horizontal - Narrative) ===
+      const horizontalScroll = document.getElementById("horizontal-scroll");
+      const storyHorizontal = document.getElementById("story-horizontal");
+
+      const setupHorizontalScroll = (element) => {
+        if (!element) return;
+        const panelsWrapper = element.querySelector(".scroll-panels") || element.querySelector(".story-panels");
+        const panels = Array.from(panelsWrapper ? panelsWrapper.children : []).length;
+
+        if (panels > 0) {
+          element.style.setProperty("--panel-count", panels);
+
+          const handleScroll = () => {
+            const startOffset = element.offsetTop;
+            const totalScrollable = element.offsetHeight - window.innerHeight;
+            
             if (totalScrollable <= 0) return;
+            
             const scrollY = window.scrollY || window.pageYOffset;
             const current = Math.min(Math.max(scrollY - startOffset, 0), totalScrollable);
             const progress = current / totalScrollable;
+            
             const translate = -progress * (panels - 1) * 100;
             panelsWrapper.style.transform = `translateX(${translate}vw)`;
+            
+            // 故事橫捲的 Active Class 邏輯
+            if (element.id === "story-horizontal") {
+              const panelsArray = Array.from(element.querySelectorAll(".story-panel"));
+              const activeIndex = Math.round(progress * (panels - 1));
+              panelsArray.forEach((panel, idx) => {
+                panel.classList.toggle("is-active", idx === activeIndex);
+              });
+            }
           };
 
-          const recalcHorizontal = () => {
-            startOffset = horizontalScroll.offsetTop;
-            horizontalScroll.style.setProperty("--panel-count", panels);
-            handleHorizontalScroll();
-          };
-
-          window.addEventListener("scroll", handleHorizontalScroll, { passive: true });
-          window.addEventListener("resize", recalcHorizontal);
-          recalcHorizontal();
+          window.addEventListener("scroll", handleScroll, { passive: true });
+          window.addEventListener("resize", handleScroll);
+          handleScroll();
         }
-      }
+      };
+      
+      setupHorizontalScroll(horizontalScroll);
+      setupHorizontalScroll(storyHorizontal);
+
     });
   </script>
 </body>
