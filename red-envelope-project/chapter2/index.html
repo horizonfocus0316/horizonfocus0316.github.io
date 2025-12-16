@@ -8,9 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&display=swap" rel="stylesheet" />
 <style>
 :root{
-    --red: #4a0505; /* 更深沉的血紅/胭脂紅 */
+    --red: #5e0a0a; 
     --gold: #cba35c;
-    --bg: #0a0101;
+    --bg: #080202;
 }
 
 /* === 基礎設定 === */
@@ -21,102 +21,95 @@ body{
     background:var(--bg);
     color:#e0e0e0;
     overflow-x:hidden;
-    /* 新增：頁面淡入動畫 */
-    animation: fadeInPage 1.5s ease-out;
 }
-
-@keyframes fadeInPage {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
 img, video{width:100%; height:auto; display:block; object-fit:cover;}
 
-/* === 電影感濾鏡 (加強版) === */
+/* === 電影感濾鏡 === */
 .grain-overlay{
     position:fixed; inset:0; pointer-events:none; z-index:9999;
-    opacity:0.18;
+    opacity:0.12;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    filter: sepia(0.2);
-    mix-blend-mode: overlay;
+    filter: sepia(0.2); mix-blend-mode: overlay;
 }
 
 /* === 0. 開場：層層壓迫 (Sticky Stacking) === */
 .stack-container {
-    position: relative;
     background: var(--bg);
+    padding-bottom: 10vh;
 }
-
-.intro-bg-fixed {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-    z-index: 0; opacity: 0.4; filter: brightness(0.5) blur(2px);
-}
-.intro-bg-fixed img { width: 100%; height: 100%; object-fit: cover; }
-
-/* 每一層卡片 */
 .stack-card {
     position: sticky; top: 0;
     height: 100vh;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     text-align: center;
-    /* 這裡的背景色很重要，用來蓋住上一層 */
-    background: linear-gradient(to bottom, rgba(10,1,1,0.9), rgba(74,5,5,0.95));
-    box-shadow: 0 -10px 30px rgba(0,0,0,0.8); /* 陰影製造層次感 */
-    border-top: 1px solid rgba(255,255,255,0.1);
-    transform-origin: center top;
+    background: linear-gradient(180deg, #0f0505 0%, #3a0505 100%);
+    box-shadow: 0 -20px 50px rgba(0,0,0,0.8);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    overflow: hidden;
 }
-
+.stack-bg {
+    position: absolute; inset: 0; opacity: 0.3; 
+    filter: grayscale(1) contrast(1.2); z-index: 0;
+    object-fit: cover; width: 100%; height: 100%;
+}
+.stack-content {
+    position: relative; z-index: 10; padding: 2rem; max-width: 900px;
+}
 .stack-text {
-    font-size: clamp(2rem, 5vw, 4rem);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
     font-weight: 900;
     color: #fff;
-    text-shadow: 0 5px 20px rgba(0,0,0,0.8);
-    opacity: 0; transform: translateY(50px);
-    transition: all 0.8s ease-out;
+    line-height: 1.4;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.9);
 }
-/* 當卡片到達頂部時，文字浮現 */
-.stack-card.active .stack-text {
-    opacity: 1; transform: translateY(0);
-}
-
-.scroll-hint-wrapper {
-    position: absolute; bottom: 5vh; width: 100%; text-align: center;
-    opacity: 0; transition: opacity 1s;
-}
-.stack-card.active .scroll-hint-wrapper { opacity: 1; }
 .scroll-hint {
-    font-size: 0.9rem; letter-spacing: 0.3em; color: var(--gold);
-    animation: bounce 2s infinite;
+    margin-top: 3rem; font-size: 0.9rem; color: var(--gold); letter-spacing: 0.3em;
+    animation: bounce 2s infinite; opacity: 0.8;
 }
-@keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+@keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(10px);} }
 
-
-/* === 1. 滿版大圖與轉場 === */
+/* === 1. 滿版紅包大圖 (Visual Impact) === */
 .full-screen-image {
-    position: relative; z-index: 10;
-    width: 100vw; height: 100vh;
+    position: relative; z-index: 20;
+    width: 100%; height: 100vh;
     overflow: hidden;
 }
 .full-screen-image img {
     width: 100%; height: 100%; object-fit: cover;
-    transform: scale(1.1); transition: transform 10s ease-out; /* 緩慢放大效果 */
+    animation: slowZoom 20s infinite alternate;
 }
-.full-screen-image:hover img { transform: scale(1); }
-
+@keyframes slowZoom { from{transform:scale(1);} to{transform:scale(1.1);} }
 .quote-overlay {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.4);
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.3);
     display: flex; align-items: center; justify-content: center;
-    flex-direction: column;
+    flex-direction: column; text-align: center;
 }
 .quote-text {
     font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 700; color: #fff;
-    text-align: center; line-height: 2; text-shadow: 0 0 30px rgba(0,0,0,0.8);
+    line-height: 1.8; text-shadow: 0 0 40px rgba(0,0,0,1);
+    background: rgba(0,0,0,0.4); padding: 2rem;
+    backdrop-filter: blur(5px); border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);
 }
 
+/* === 1.5 歷史轉場 (Jin-Ziyan 回歸) === */
+.history-bridge {
+    padding: 20vh 10vw; background: var(--bg); position: relative; z-index: 25;
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+.bridge-img {
+    max-width: 800px; width: 100%; margin-bottom: 3rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 0 50px rgba(94, 10, 10, 0.3);
+    filter: sepia(0.2);
+}
+.bridge-text {
+    font-size: 1.2rem; line-height: 2; color: #aaa; max-width: 700px;
+}
+.bridge-highlight { color: var(--gold); font-weight: bold; border-bottom: 1px solid var(--gold); }
 
-/* === 2. 六大元素 (圖文橫向捲動) === */
-.hscroll-container{position:relative; height:500vh; z-index:20; background:#0a0a0a;}
+/* === 2. 六大元素 (橫向捲動) === */
+.hscroll-container{position:relative; height:500vh; z-index:30; background:#0a0a0a;}
 .hscroll-sticky{position:sticky; top:0; height:100vh; overflow:hidden; display:flex; align-items:center;}
 .hscroll-header{position:absolute; top:8vh; left:8vw; z-index:5;}
 .hscroll-track{display:flex; height:65vh; will-change:transform; padding-left:10vw; margin-top:5vh;}
@@ -132,57 +125,54 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 .h-card p{font-size:1rem; line-height:1.7; color:#ccc;}
 .h-number{font-size:5rem; font-weight:900; color:rgba(203, 163, 92, 0.1); position:absolute; top:-30px; left:-20px; z-index:-1;}
 
-
-/* === 3. 茶單制 (行為翻譯機 - 鮮活版) === */
-.translator-section {
-    background: var(--bg); padding: 20vh 5vw; position: relative; z-index: 30;
+/* === 3. 茶單制 (能量動畫) === */
+.metaphor-section {
+    background: var(--bg); padding: 20vh 5vw; position: relative; z-index: 40;
     overflow: hidden;
 }
-.translator-title { text-align: center; margin-bottom: 5rem; color: var(--gold); }
-
-/* 翻譯機容器 */
-.translator-box {
-    display: flex; align-items: center; justify-content: center; gap: 2rem;
+.metaphor-title { text-align: center; margin-bottom: 4rem; color: var(--gold); font-size: 2rem; font-weight: bold; }
+.energy-container {
+    display: flex; align-items: center; justify-content: center; gap: 5vw;
     max-width: 1000px; margin: 0 auto;
 }
-.t-item {
-    flex: 1; text-align: center; padding: 3rem 1rem;
-    border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
-    background: rgba(255,255,255,0.02); transition: 0.5s;
-    position: relative;
+.energy-node {
+    width: 250px; height: 250px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.2);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; position: relative; background: rgba(255,255,255,0.05); transition: 0.5s;
 }
-/* 左邊：行為 */
-.t-action h4 { font-size: 1.2rem; color: #888; margin-bottom: 1rem; letter-spacing: 0.2em; }
-.t-action .big-text { font-size: 2.5rem; font-weight: 900; color: #fff; }
-
-/* 中間：等於符號 */
-.t-equal { 
-    font-size: 3rem; color: #555; font-weight: 300; 
-    transition: 0.5s;
+.energy-node h4 { font-size: 1rem; color: #888; margin-bottom: 0.5rem; letter-spacing: 0.1em; }
+.energy-node .icon { font-size: 4rem; margin-bottom: 0.5rem; filter: grayscale(1); transition: 0.5s; }
+.energy-node .label { font-size: 1.5rem; font-weight: bold; color: #fff; opacity: 0.5; transition: 0.5s; }
+.energy-pipe { flex: 1; height: 4px; background: #333; position: relative; border-radius: 4px; }
+.energy-flow {
+    position: absolute; left: 0; top: 0; height: 100%; width: 0%;
+    background: var(--gold); box-shadow: 0 0 15px var(--gold);
+    border-radius: 4px; transition: width 1.5s ease-out;
 }
-
-/* 右邊：意義 */
-.t-meaning h4 { font-size: 1.2rem; color: #888; margin-bottom: 1rem; letter-spacing: 0.2em; }
-.t-meaning .big-text { font-size: 2.5rem; font-weight: 900; color: var(--red); opacity: 0.3; filter: blur(5px); transition: 1s;}
-
-/* 觸發動畫樣式 */
-.translator-box.active .t-item { border-color: var(--gold); background: rgba(203, 163, 92, 0.05); }
-.translator-box.active .t-equal { color: var(--gold); transform: scale(1.5); text-shadow: 0 0 20px var(--gold); }
-.translator-box.active .t-meaning .big-text { opacity: 1; filter: blur(0); color: var(--gold); text-shadow: 0 0 30px rgba(203, 163, 92, 0.5); }
-
-.translator-desc {
-    text-align: center; margin-top: 4rem; font-size: 1.1rem; color: #aaa; line-height: 1.8; max-width: 600px; margin-left: auto; margin-right: auto;
+.metaphor-section.active .energy-node.left { border-color: var(--gold); box-shadow: 0 0 30px rgba(203, 163, 92, 0.2); }
+.metaphor-section.active .energy-node.left .icon { filter: grayscale(0); transform: scale(1.1); }
+.metaphor-section.active .energy-node.left .label { opacity: 1; }
+.metaphor-section.active .energy-flow { width: 100%; }
+.metaphor-section.active .energy-node.right { 
+    border-color: var(--red); background: rgba(94, 10, 10, 0.2);
+    box-shadow: 0 0 50px rgba(94, 10, 10, 0.6); transition-delay: 1s; 
 }
+.metaphor-section.active .energy-node.right .icon { filter: grayscale(0); transform: scale(1.2); transition-delay: 1s; }
+.metaphor-section.active .energy-node.right .label { opacity: 1; color: var(--gold); transition-delay: 1s; }
+.metaphor-desc { text-align: center; max-width: 600px; margin: 4rem auto 0; font-size: 1.1rem; color: #aaa; line-height: 1.8; }
 
-
-/* === 4. 訪談導讀與影片 === */
-.interview-intro {
-    background: #000; padding: 20vh 10vw 10vh; z-index: 40; position: relative; text-align: center;
-    border-top: 1px solid #222;
+/* === 4. 訪談導讀 === */
+.intertitle-screen {
+    height: 80vh; background: #000;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 2rem; position: relative; z-index: 45;
 }
-.interview-intro h2 { font-size: 3rem; color: #fff; margin-bottom: 2rem; }
-.interview-intro p { font-size: 1.2rem; color: #888; line-height: 1.8; max-width: 700px; margin: 0 auto; }
+.intertitle-line { width: 50px; height: 2px; background: var(--red); margin-bottom: 2rem; }
+.intertitle-h2 { font-size: 3rem; color: #fff; margin-bottom: 1.5rem; letter-spacing: 0.1em; }
+.intertitle-p { font-size: 1.2rem; color: #888; max-width: 600px; line-height: 1.8; }
 
+/* === 5. 訪談影片 === */
 .video-scrolled-section{position:relative; height:450vh; z-index:50; background:#000;}
 .video-sticky{position:sticky; top:0; width:100%; height:100vh; overflow:hidden;}
 .sound-toggle-btn{
@@ -197,87 +187,58 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     position:absolute; bottom:20vh; left:10vw; max-width:600px;
     opacity:0; transform:translateY(30px); transition:0.8s;
     background: linear-gradient(to right, rgba(0,0,0,0.9), rgba(0,0,0,0.4));
-    padding:3rem; border-left:6px solid var(--gold);
-    pointer-events: none;
+    padding:3rem; border-left:6px solid var(--gold); pointer-events: none;
 }
 .video-overlay-text.show{opacity:1; transform:translateY(0);}
 .video-overlay-text h3{color:var(--gold); font-size:1.8rem; margin-bottom:1rem;}
 .video-overlay-text p{font-size:1.2rem; line-height:1.8;}
 
-/* === 5. 底部按鈕區 CSS (新增) === */
+/* === 6. 底部轉場按鈕 === */
 .next-chapter-section {
   padding: 100px 20px 140px;
   text-align: center;
-  background: linear-gradient(to bottom, transparent, #000);
-  position: relative;
-  z-index: 60; /* 確保在影片層之上 */
+  background: linear-gradient(to bottom, #000, var(--red));
+  position: relative; z-index: 60;
 }
-
 .next-label {
-  font-size: 0.9rem;
-  color: #666;
-  letter-spacing: 0.2em;
-  margin-bottom: 30px;
-  display: block;
-  text-transform: uppercase;
+  font-size: 0.9rem; color: #aaa; letter-spacing: 0.2em;
+  margin-bottom: 30px; display: block; text-transform: uppercase;
 }
-
 .nav-buttons-container {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  flex-wrap: wrap;
+  display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;
 }
-
 .nav-btn {
   text-decoration: none;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 15px 40px;
-  color: #fff;
-  font-family: "Noto Serif TC", serif;
-  font-size: 1rem;
-  letter-spacing: 0.1em;
-  transition: all 0.4s ease;
-  min-width: 200px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  padding: 15px 40px; color: #fff;
+  font-size: 1rem; letter-spacing: 0.1em;
+  transition: all 0.4s ease; min-width: 200px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
-
 .nav-btn span {
-  font-size: 0.7em;
-  color: #888;
-  margin-top: 5px;
-  font-weight: 300;
+  font-size: 0.7em; color: #888; margin-top: 5px; font-weight: 300;
 }
-
 .btn-home:hover {
-  border-color: #fff;
-  background: rgba(255, 255, 255, 0.1);
+  border-color: #fff; background: rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
 }
-
-.btn-next {
-  background: rgba(0, 0, 0, 0.6);
-}
-
+.btn-next { background: rgba(0, 0, 0, 0.6); }
 .btn-next:hover {
-  border-color: var(--red); /* 使用 Chapter 2 的紅色變數 */
-  background: rgba(74, 5, 5, 0.3);
-  letter-spacing: 0.15em;
-  box-shadow: 0 0 30px rgba(74, 5, 5, 0.4);
+  border-color: var(--gold); background: rgba(74, 5, 5, 0.5);
+  letter-spacing: 0.15em; box-shadow: 0 0 30px rgba(203, 163, 92, 0.4); color: var(--gold);
 }
 
 /* RWD */
 @media(max-width: 768px){
-    .stack-text{font-size:2rem;}
+    .stack-text{font-size: 2rem;}
     .hscroll-container{height:auto; background:var(--bg);}
     .hscroll-sticky{position:relative; height:auto; display:block; padding:15vh 5vw;}
     .hscroll-track{flex-direction:column; height:auto; padding:0; margin-top:2rem; transform:none !important;}
     .h-card{width:100%; max-width:100%; margin-bottom:4rem; margin-right:0;}
-    .translator-box{flex-direction:column; gap:1rem;}
-    .t-equal{transform:rotate(90deg);}
+    .energy-container{flex-direction: column; gap: 2rem;}
+    .energy-pipe{width: 4px; height: 100px;}
+    .energy-flow{width: 100%; height: 0%; top: 0; left: 0; transition: height 1.5s ease-out;}
+    .metaphor-section.active .energy-flow { height: 100%; width: 100%; }
 }
 </style>
 </head>
@@ -286,24 +247,43 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 <div class="grain-overlay"></div>
 
 <div class="stack-container">
-    <div class="intro-bg-fixed"><img src="photos/singer.jpg" alt="bg"></div>
+    
+    <div class="stack-card" style="z-index:1;">
+        <img src="photos/singer.jpg" class="stack-bg" alt="bg">
+        <div class="stack-content">
+            <div class="stack-text">不同於牛肉場<br>紅包場不以「清涼」為賣點</div>
+            <div class="scroll-hint">SCROLL ↓</div>
+        </div>
+    </div>
+    
+    <div class="stack-card" style="z-index:2;">
+        <img src="photos/singer.jpg" class="stack-bg" alt="bg">
+        <div class="stack-content">
+            <div class="stack-text">不同於舞廳<br>這裡是老少咸宜的場所</div>
+        </div>
+    </div>
 
-    <div class="stack-card js-stack-card">
-        <div class="stack-text">不同於牛肉場<br>紅包場不以「清涼」為賣點</div>
-        <div class="scroll-hint-wrapper"><div class="scroll-hint">SCROLL ↓</div></div>
+    <div class="stack-card" style="z-index:3;">
+        <img src="photos/singer.jpg" class="stack-bg" alt="bg">
+        <div class="stack-content">
+            <div class="stack-text">不同於卡拉OK<br>觀眾不會上台，只專注「聽歌」</div>
+        </div>
     </div>
-    <div class="stack-card js-stack-card" style="z-index:2;">
-        <div class="stack-text">不同於舞廳<br>這裡是老少咸宜的場所</div>
+
+    <div class="stack-card" style="z-index:4;">
+        <img src="photos/singer.jpg" class="stack-bg" alt="bg">
+        <div class="stack-content">
+            <div class="stack-text">不同於 Livehouse<br>歌手需要穿著「禮服」盛裝上台</div>
+        </div>
     </div>
-    <div class="stack-card js-stack-card" style="z-index:3;">
-        <div class="stack-text">不同於卡拉OK<br>觀眾不會上台，只專注「聽歌」</div>
+
+    <div class="stack-card" style="z-index:5;">
+        <img src="photos/singer.jpg" class="stack-bg" alt="bg">
+        <div class="stack-content">
+            <div class="stack-text">不同於流水席<br>觀眾是特地來這裡「聽歌」的</div>
+        </div>
     </div>
-    <div class="stack-card js-stack-card" style="z-index:4;">
-        <div class="stack-text">不同於 Livehouse<br>歌手需要穿著「禮服」盛裝上台</div>
-    </div>
-    <div class="stack-card js-stack-card" style="z-index:5;">
-        <div class="stack-text">不同於流水席<br>觀眾是特地來這裡「聽歌」的</div>
-    </div>
+
 </div>
 
 <section class="full-screen-image">
@@ -316,11 +296,20 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     </div>
 </section>
 
+<section class="history-bridge">
+    <img src="photos/jin-ziyan.png" class="bridge-img" alt="紅包場歷史">
+    <p class="bridge-text">
+        紅包場以歌唱表演與陪伴感為核心。<br>
+        紅包並非對身體的購買，而是對<span class="bridge-highlight">表演的支持</span>。<br>
+        觀眾來聽歌、點歌、聊天，建立的是長時間累積的人情關係。
+    </p>
+</section>
+
 <section class="hscroll-container" id="elements">
     <div class="hscroll-sticky">
         <div class="hscroll-header">
             <h2 style="font-size:1rem; letter-spacing:0.2em; color:var(--gold);">THE ELEMENTS</h2>
-            <h3 style="font-size:2.5rem; color:var(--red);">撐起紅包場的人與物</h3>
+            <h3 style="font-size:2.5rem; color:#fff;">撐起紅包場的人與物</h3>
         </div>
         <div class="hscroll-track" id="hTrack">
             <div class="h-card">
@@ -357,33 +346,36 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     </div>
 </section>
 
-<section class="translator-section">
-    <div class="translator-title">
-        <h2>茶單制：不只是點餐，而是點心意</h2>
-    </div>
+<section class="metaphor-section js-metaphor-trigger">
+    <div class="metaphor-title">茶單制：互動的隱喻</div>
     
-    <div class="translator-box js-translator">
-        <div class="t-item t-action">
-            <h4>表面行為</h4>
-            <div class="big-text">遞送紅包</div>
+    <div class="energy-container">
+        <div class="energy-node left">
+            <h4>ACTION</h4>
+            <div class="icon">🧧</div>
+            <div class="label">遞送紅包</div>
         </div>
         
-        <div class="t-equal">＝</div>
+        <div class="energy-pipe">
+            <div class="energy-flow"></div>
+        </div>
         
-        <div class="t-item t-meaning">
-            <h4>背後意義</h4>
-            <div class="big-text">給予支持</div>
+        <div class="energy-node right">
+            <h4>MEANING</h4>
+            <div class="icon">❤️</div>
+            <div class="label">給予支持</div>
         </div>
     </div>
 
-    <div class="translator-desc">
-        <p>「茶單制」是紅包場特有的互動隱喻。客人透過紅包，像點歌一樣「點播」對歌手的喜愛。這是一種實質的鼓勵機制，也讓台下的聽眾，擁有了參與台上的權力。</p>
+    <div class="metaphor-desc">
+        <p>這是一種「鼓勵」與「互動」的機制。<br>客人透過紅包，像點歌一樣「點播」對歌手的喜愛。<br>讓歌手得到實質支持，也讓客人擁有了參與感。</p>
     </div>
 </section>
 
-<section class="interview-intro">
-    <h2>生存與夢想的對話</h2>
-    <p>紅包場不只是歷史的遺跡，它是這些歌星賴以生存的現在進行式。從年輕唱到現在，這裡不僅是工作場所，更是她們的「家」。</p>
+<section class="intertitle-screen">
+    <div class="intertitle-line"></div>
+    <h2 class="intertitle-h2">生存與夢想的對話</h2>
+    <p class="intertitle-p">紅包場不只是歷史的遺跡，它是這些歌星賴以生存的現在進行式。<br>從年輕唱到現在，這裡不僅是工作場所，更是她們的「家」。</p>
 </section>
 
 <section class="video-scrolled-section">
@@ -430,21 +422,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 </footer>
 
 <script>
-// 1. Stack Animation
-const stackCards = document.querySelectorAll('.js-stack-card');
-const stackObserver = new IntersectionObserver((entries)=>{
-    entries.forEach(e => {
-        // 當卡片到達頂端附近時，標記為 active (文字浮現)
-        if(e.isIntersecting && e.boundingClientRect.top < 100) {
-            e.target.classList.add('active');
-        } else {
-            e.target.classList.remove('active');
-        }
-    });
-}, {threshold: 0.5});
-stackCards.forEach(c => stackObserver.observe(c));
-
-// 2. Horizontal Scroll
+// 1. Horizontal Scroll
 const hContainer = document.querySelector('.hscroll-container');
 const hTrack = document.getElementById('hTrack');
 window.addEventListener('scroll', () => {
@@ -458,14 +436,14 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// 3. Translator Animation
-const translator = document.querySelector('.js-translator');
-const transObserver = new IntersectionObserver((entries)=>{
-    if(entries[0].isIntersecting) translator.classList.add('active');
-}, {threshold: 0.6});
-transObserver.observe(translator);
+// 2. Metaphor Trigger (Energy Flow)
+const metaphorSection = document.querySelector('.js-metaphor-trigger');
+const metaphorObserver = new IntersectionObserver((entries)=>{
+    if(entries[0].isIntersecting) metaphorSection.classList.add('active');
+}, {threshold: 0.5});
+metaphorObserver.observe(metaphorSection);
 
-// 4. Video Logic
+// 3. Video Logic
 const vidTexts = document.querySelectorAll('.js-vid-text');
 const vidSection = document.querySelector('.video-scrolled-section');
 const mainVideo = document.getElementById('main-video');
