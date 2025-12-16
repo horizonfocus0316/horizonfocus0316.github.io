@@ -1,525 +1,92 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>唱給不在場的人：西門町最後的紅包場</title>
+沒問題！這是最務實、風險最低的決定。既然時間不夠，我們就不要強求「單頁式」，而是把重點放在**「讓跳轉按鈕變漂亮」**，讓讀者覺得這是故意設計的章節切換。
+請按照以下步驟，在每一章的最後面加上這個「下一章」按鈕模組。
+步驟一：加入按鈕樣式 (CSS)
+請打開 chapter1/index.html，把這段 CSS 貼到你的 <style> 標籤的最下面。這段程式碼設計了帶有「呼吸感」的按鈕，很符合你的紅包場復古風格。
+CSS
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --bg-black: #050505;
-      --deep-red: #970C10;
-      --neon-red: #ff1a1a;
-      --gold: #FFE87A;
-      --text-gray: #b3b3b3;
-    }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+/* === 下一章導引區塊樣式 === */
+.next-chapter-section {
+  padding: 80px 20px 120px; /* 上下留白 */
+  text-align: center;
+  background: linear-gradient(to bottom, transparent, #000); /* 底部漸黑 */
+}
 
-    body {
-      font-family: "Noto Serif TC", serif;
-      background: var(--bg-black);
-      color: #fff;
-      overflow-x: hidden;
-    }
+.next-label {
+  font-size: 0.9rem;
+  color: #666;
+  letter-spacing: 0.2em;
+  margin-bottom: 20px;
+  display: block;
+}
 
-    /* === 工具類：金色強調色 === */
-    .text-gold { color: var(--gold); }
-    .text-red { color: var(--neon-red); text-shadow: 0 0 8px rgba(255, 26, 26, 0.4); }
+.next-btn {
+  display: inline-block;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 20px 60px;
+  color: #fff;
+  font-family: "Noto Serif TC", serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  transition: all 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 滑鼠移過去的效果：變亮 + 紅色邊框 */
+.next-btn:hover {
+  border-color: #c02828; /* 你的專題紅 */
+  background: rgba(192, 40, 40, 0.1);
+  letter-spacing: 0.2em; /* 字距拉開的動態感 */
+  box-shadow: 0 0 30px rgba(192, 40, 40, 0.2);
+}
+
+.next-btn span {
+  display: block;
+  font-size: 0.8em;
+  color: #888;
+  margin-top: 5px;
+  font-weight: 300;
+}
+
+步驟二：加入按鈕 HTML
+請在 chapter1/index.html 的 <body> 結束標籤 </body> 之前（也就是文章結束的地方），貼上這段 HTML：
+HTML
+
+
+
+  <div class="next-chapter-section">
+    <span class="next-label">CONTINUE READING</span>
     
-    /* === 1. 懸浮音樂播放器 (Vinyl Player) === */
-    .music-player {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      cursor: pointer;
-      opacity: 0.8;
-      transition: opacity 0.3s;
-    }
-    .music-player:hover { opacity: 1; }
-    
-    .vinyl-disc {
-      width: 60px;
-      height: 60px;
-      background: #111;
-      border-radius: 50%;
-      border: 2px solid var(--gold);
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 0 15px rgba(255, 232, 122, 0.1);
-      transition: transform 0.5s ease;
-    }
-    
-    .vinyl-disc::before { /* 唱片紋路 */
-      content: '';
-      position: absolute;
-      width: 85%;
-      height: 85%;
-      border-radius: 50%;
-      border: 1px solid #333;
-      box-shadow: 0 0 0 4px #111, 0 0 0 5px #333, 0 0 0 9px #111, 0 0 0 10px #333;
-    }
-    
-    .vinyl-label {
-      width: 20px;
-      height: 20px;
-      background: var(--deep-red);
-      border-radius: 50%;
-      z-index: 2;
-    }
-
-    .vinyl-playing { animation: spin 4s linear infinite; box-shadow: 0 0 20px rgba(255, 232, 122, 0.4); }
-    
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-
-    .music-hint {
-      font-size: 0.8rem;
-      color: var(--gold);
-      letter-spacing: 0.1em;
-      opacity: 0;
-      transform: translateX(10px);
-      transition: all 0.5s;
-    }
-    .music-player:hover .music-hint { opacity: 1; transform: translateX(0); }
-
-    /* === 2. Hero Section (保留原本的) === */
-    .landing-wrapper { position: relative; height: 180vh; width: 100%; }
-    .landing-video { position: sticky; top: 0; width: 100%; height: 100vh; overflow: hidden; }
-    .landing-video video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-    
-    .hero {
-      position: relative;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 0 8vw;
-      background: linear-gradient(to bottom, transparent, var(--bg-black));
-      margin-top: -100vh; /* Pull up over video */
-      z-index: 10;
-    }
-
-    .hero-content h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); color: var(--gold); margin-bottom: 1rem; line-height: 1.2; }
-    .hero-content h2 { font-size: clamp(1.2rem, 2vw, 2rem); color: #fff; margin-bottom: 2rem; font-weight: 400; }
-    .hero-line { width: 60px; height: 4px; background: var(--deep-red); margin-bottom: 2rem; }
-
-    /* === 3. 沉浸式氛圍段落 (Intro Text) === */
-    .atmosphere-section {
-      background: var(--bg-black);
-      padding: 15vh 10vw;
-      text-align: center;
-      position: relative;
-    }
-    
-    .atmosphere-text p {
-      font-size: clamp(1.1rem, 2vw, 1.5rem);
-      line-height: 2;
-      color: #ddd;
-      margin-bottom: 2rem;
-      opacity: 0; /* JS Animation target */
-      transform: translateY(20px);
-      transition: all 1s ease;
-    }
-    .atmosphere-text p.visible { opacity: 1; transform: translateY(0); }
-    .highlight-red { color: var(--neon-red); font-weight: 600; }
-
-    /* === 4. 數據儀表板 (Dark Mode Data) === */
-    .data-section {
-      background: #0a0a0a;
-      padding: 10vh 5vw;
-      border-top: 1px solid #222;
-      border-bottom: 1px solid #222;
-    }
-    
-    .section-title {
-      color: var(--gold);
-      font-size: 2rem;
-      margin-bottom: 3rem;
-      text-align: center;
-      letter-spacing: 0.1em;
-    }
-
-    .chart-wrapper {
-      max-width: 900px;
-      margin: 0 auto 4rem auto;
-      position: relative;
-      height: 400px;
-    }
-
-    .stat-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .stat-card {
-      background: #111;
-      border: 1px solid #333;
-      padding: 2rem;
-      border-left: 4px solid var(--deep-red);
-      transition: transform 0.3s;
-    }
-    .stat-card:hover { transform: translateY(-5px); border-color: var(--gold); }
-    
-    .stat-card h4 { color: #888; font-size: 0.9rem; margin-bottom: 1rem; letter-spacing: 0.1em; }
-    .stat-card .number { font-size: 2.5rem; color: #fff; font-family: 'Noto Sans TC', sans-serif; font-weight: 700; margin-bottom: 0.5rem; }
-    .stat-card p { font-size: 0.9rem; color: #aaa; line-height: 1.6; }
-
-    /* === 5. 三股力量 (Interactive Cards) === */
-    .story-section {
-      padding: 15vh 5vw;
-      background: var(--bg-black);
-    }
-
-    .tabs-container {
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .tab-headers {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-bottom: 3rem;
-      border-bottom: 1px solid #333;
-      padding-bottom: 1rem;
-    }
-
-    .tab-btn {
-      background: none;
-      border: none;
-      color: #666;
-      font-family: 'Noto Serif TC', serif;
-      font-size: 1.2rem;
-      cursor: pointer;
-      padding-bottom: 0.5rem;
-      transition: all 0.3s;
-      position: relative;
-    }
-
-    .tab-btn.active { color: var(--gold); }
-    .tab-btn.active::after {
-      content: '';
-      position: absolute;
-      bottom: -1.1rem;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: var(--gold);
-      box-shadow: 0 0 10px var(--gold);
-    }
-
-    .tab-content {
-      display: none;
-      animation: fadeIn 0.8s ease;
-    }
-    .tab-content.active { display: block; }
-
-    .content-box {
-      background: linear-gradient(145deg, #111, #080808);
-      border: 1px solid #222;
-      padding: 3rem;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-    
-    @media (min-width: 768px) {
-      .content-box { flex-direction: row; align-items: start; }
-    }
-
-    .quote-box {
-      flex: 1;
-      font-size: 1.8rem;
-      color: var(--gold);
-      font-style: italic;
-      line-height: 1.4;
-      border-left: 2px solid var(--deep-red);
-      padding-left: 2rem;
-    }
-
-    .detail-box {
-      flex: 1.5;
-      color: #ccc;
-      line-height: 1.8;
-      font-size: 1.05rem;
-    }
-    
-    .detail-box strong { color: #fff; font-weight: 600; }
-
-    /* === 6. 結尾 (Footer) === */
-    footer {
-      padding: 10vh 5vw;
-      text-align: center;
-      background: #000;
-      border-top: 1px solid #222;
-    }
-    
-    .footer-quote {
-      font-size: clamp(1.5rem, 3vw, 2.5rem);
-      color: var(--gold);
-      margin-bottom: 2rem;
-    }
-    
-    .footer-text {
-      max-width: 600px;
-      margin: 0 auto;
-      color: #666;
-      font-size: 0.9rem;
-      line-height: 1.6;
-    }
-
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-  </style>
-</head>
-<body>
-
-  <div class="music-player" id="musicToggle">
-    <div class="music-hint">PLAY AMBIENCE</div>
-    <div class="vinyl-disc" id="vinyl">
-      <div class="vinyl-label"></div>
-    </div>
-    <audio id="bgMusic" loop>
-      <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=old-record-player-scratch-static-116823.mp3" type="audio/mpeg">
-    </audio>
+    <a href="../chapter2/index.html" class="next-btn">
+      下一章：霓虹燈下的組成
+      <span>CHAPTER 02 &rarr;</span>
+    </a>
   </div>
 
-  <div class="landing-wrapper">
-    <section class="landing-video">
-      <video autoplay muted loop playsinline>
-        <source src="https://assets.mixkit.co/videos/preview/mixkit-red-lights-in-a-dark-room-4191-large.mp4" type="video/mp4">
-      </video>
-    </section>
-  </div>
+  </body>
 
-  <section class="hero">
-    <div class="hero-content">
-      <div class="hero-line"></div>
-      <h1 class="typewriter">唱給不在場的人</h1>
-      <h2>紅包歌手的世代誤解與生存現場</h2>
-      <p style="color: #666; margin-top: 1rem;">文 / 專題製作組</p>
-    </div>
-  </section>
+步驟三：讓切換變得「高級」一點 (選用)
+雖然是跳頁，但我們可以加一個簡單的「淡入動畫」，讓讀者點過去時，下一頁是慢慢浮現出來，而不是生硬的閃一下。這會大大增加「連續感」。
+請在 Chapter 2 和 Chapter 3 的 <style> 最上面加上這行：
+CSS
 
-  <section class="atmosphere-section">
-    <div class="atmosphere-text">
-      <p>午後的金鑽歌廳，燈光昏黃而繁複，沿著天花板和牆邊流動。</p>
-      <p>霓虹燈反射在斑駁的天花板上，旋轉舞台緩緩轉著；</p>
-      <p>四散的<span class="highlight-red">煙味</span>混著水果盤的<span class="highlight-red">甜味</span>，在空氣裡堆出一種濃度。</p>
-      <p style="margin-top: 4rem; color: var(--gold);">這種味道會讓不熟悉的人本能地往後縮一步。</p>
-      <p>但也在這個場域裡，我們看見一種文化並非走向終章，而是重新調整姿態。</p>
-    </div>
-  </section>
 
-  <section class="data-section">
-    <h3 class="section-title">數據裡的興衰與轉變</h3>
-    
-    <div class="chart-wrapper">
-      <canvas id="trendChart"></canvas>
-    </div>
 
-    <div class="stat-cards">
-      <div class="stat-card">
-        <h4>過去 (THE PAST)</h4>
-        <div class="number text-red">30+</div>
-        <p>全盛時期萬華區的歌廳數量。當時金小姐一天要跑 12 家場子。</p>
-      </div>
-      
-      <div class="stat-card">
-        <h4>現在 (THE PRESENT)</h4>
-        <div class="number text-gold">1</div>
-        <p>僅存「金鑽大歌廳」。能留下來不是因為懷舊，而是因為「運作單純且穩定」。</p>
-      </div>
+/* 讓整頁載入時有一個 1.5秒 的淡入效果 */
+body {
+  animation: fadeInPage 1.5s ease-out;
+}
 
-      <div class="stat-card">
-        <h4>客群結構 (DEMOGRAPHICS)</h4>
-        <div class="number" style="font-size: 1.2rem; line-height: 1.4;">醫生、工程師、<br>保險業務</div>
-        <p style="margin-top: 0.5rem">客群不再只是退伍老兵。「大家來這裡，就是想放鬆一下，而且低消很便宜。」</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="story-section">
-    <h3 class="section-title">誰在支撐這盞燈？</h3>
-
-    <div class="tabs-container">
-      <div class="tab-headers">
-        <button class="tab-btn active" onclick="switchTab('operator', this)">經營者</button>
-        <button class="tab-btn" onclick="switchTab('ngo', this)">轉譯者</button>
-        <button class="tab-btn" onclick="switchTab('gov', this)">推動者</button>
-      </div>
-
-      <div id="operator" class="tab-content active">
-        <div class="content-box">
-          <div class="quote-box">
-            「這不是懷舊，<br>是真實運作的舞台。」
-          </div>
-          <div class="detail-box">
-            <h4 style="color:var(--gold); margin-bottom: 1rem; font-size: 1.2rem;">金小姐 / 金鑽歌廳負責人</h4>
-            <p>
-              金小姐第一次踏進紅包場，是因為爸爸帶她來。那時她還是表藝科學生，來這裡打工，只覺得「可以領現金，很實在」。
-              <br><br>
-              多年後接手經營，她不談太多感性。在她眼中，這裡是一套嚴謹的<strong>運作系統</strong>：歌手不能搶客、舞台要有新歌、客人要能自在坐下。
-              <br><br>
-              <strong>未來願景：</strong>她希望金鑽能成為像 Live House 一樣的場域，讓表藝系學生有真實的操練舞台，而不只是被封存的歷史標本。
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div id="ngo" class="tab-content">
-        <div class="content-box">
-          <div class="quote-box">
-            「我們做的不是保存，<br>而是翻譯。」
-          </div>
-          <div class="detail-box">
-            <h4 style="color:var(--gold); margin-bottom: 1rem; font-size: 1.2rem;">綠雷德創新公司 / 文化團隊</h4>
-            <p>
-              這群深耕萬華十年的年輕人坦言，一開始對紅包場也有距離感。直到親自走訪，才發現排斥源於「不了解」與「氣味」。
-              <br><br>
-              <strong>關鍵行動：</strong>
-              他們在導覽與演出前，會刻意調整場域的氣味（減少煙味），移除第一道感官門檻。「觀眾如果一進門就受不了，是沒有機會理解文化的。」
-              <br><br>
-              他們建立理解的入口，告訴年輕人：紅包不是施捨，是一種互動的社交語言。
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div id="gov" class="tab-content">
-        <div class="content-box">
-          <div class="quote-box">
-            「從城市陰影，<br>回到公共視野。」
-          </div>
-          <div class="detail-box">
-            <h4 style="color:var(--gold); margin-bottom: 1rem; font-size: 1.2rem;">北市文化局 / 政策推動</h4>
-            <p>
-              透過《萬華時光・再現與新生》計畫，政府試圖將私密的記憶轉化為公共的文化語彙。
-              <br><br>
-              <strong>再現手法：</strong>
-              <ul>
-                <li>沉浸式劇場：直接在金鑽演出，讓觀眾體驗傳統瓜果茶水。</li>
-                <li>戶外演唱會：將紅包場搬到西門紅樓廣場，證明「只要翻譯得好，文化能跨過年齡」。</li>
-              </ul>
-              <br>
-              這讓紅包場從特定世代的娛樂，成為城市共同討論的一環。
-            </p>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <footer>
-    <h2 class="footer-quote">這不是謝幕，而是轉身。</h2>
-    <div class="footer-text">
-      <p>紅包場或許不再是上一代記憶中的樣子，但它仍然活著——在舞台、在語言、在新的觀眾裡，以它自己的節奏，持續在城市裡運作。</p>
-      <br>
-      <p style="opacity: 0.5;">© 2024 金鑽專題製作組 | 內容改寫自深度訪談資料</p>
-    </div>
-  </footer>
-
-  <script>
-    // 1. Music Player Logic
-    const musicToggle = document.getElementById('musicToggle');
-    const vinyl = document.getElementById('vinyl');
-    const audio = document.getElementById('bgMusic');
-    let isPlaying = false;
-
-    musicToggle.addEventListener('click', () => {
-      if (isPlaying) {
-        audio.pause();
-        vinyl.classList.remove('vinyl-playing');
-        document.querySelector('.music-hint').innerText = "PLAY AMBIENCE";
-      } else {
-        audio.play().catch(e => console.log("Audio play failed interaction required"));
-        vinyl.classList.add('vinyl-playing');
-        document.querySelector('.music-hint').innerText = "PAUSE";
-      }
-      isPlaying = !isPlaying;
-    });
-
-    // 2. Tab Switching Logic
-    function switchTab(tabId, btnElement) {
-      // Hide all contents
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-      // Remove active class from buttons
-      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-      
-      // Activate selected
-      document.getElementById(tabId).classList.add('active');
-      btnElement.classList.add('active');
-    }
-
-    // 3. Scroll Animation for Text
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.atmosphere-text p').forEach(p => observer.observe(p));
-
-    // 4. Chart.js (Dark Theme Config)
-    const ctx = document.getElementById('trendChart').getContext('2d');
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['1970s', '1980s (盛世)', '1990s', '2000s', '2015', '2024'],
-        datasets: [{
-          label: '歌廳數量估計',
-          data: [15, 30, 20, 10, 3, 1],
-          borderColor: '#FFE87A', // Gold
-          backgroundColor: 'rgba(255, 232, 122, 0.1)',
-          borderWidth: 2,
-          pointBackgroundColor: '#970C10',
-          pointBorderColor: '#FFE87A',
-          pointRadius: 5,
-          tension: 0.4,
-          fill: true
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: '#222',
-            titleColor: '#FFE87A',
-            bodyColor: '#fff',
-            borderColor: '#555',
-            borderWidth: 1
-          }
-        },
-        scales: {
-          y: {
-            grid: { color: 'rgba(255, 255, 255, 0.1)' },
-            ticks: { color: '#666' }
-          },
-          x: {
-            grid: { display: false },
-            ticks: { color: '#888' }
-          }
-        }
-      }
-    });
-  </script>
-
-</body>
-</html>
+@keyframes fadeInPage {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+總結操作順序：
+1. Chapter 1 結尾： 貼上 CSS 和 HTML 按鈕（連結設為 ../chapter2/index.html）。
+2. Chapter 2 結尾： 貼上 CSS 和 HTML 按鈕（連結設為 ../chapter3/index.html，文字改成「下一章：最後的紅包場」）。
+3. Chapter 3 結尾： 貼上 CSS 和 HTML 按鈕（連結設為 ../index.html，文字改成「回到首頁 / 專題謝幕」）。
+4. 所有頁面 CSS： 加上 fadeInPage 動畫。
+這樣做只需複製貼上，不用改結構，最快 10 分鐘內就能完成！
