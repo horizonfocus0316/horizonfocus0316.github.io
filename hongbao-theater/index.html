@@ -1,567 +1,1010 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>台北僅存的紅包場：它如何被留下，又如何被改寫</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#970C10" />
+<title>唱給不在場的人</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&display=swap" rel="stylesheet" />
+<style>
+:root{
+--red:#970C10;
+--gold:#FFE87A;
+--ink:#000;
+--card:rgba(255,255,255,0.06);
+--card-border:rgba(255,255,255,0.14);
+--text:rgba(255,255,255,0.92);
+--muted:rgba(255,255,255,0.70);
+--focus:rgba(255,232,122,0.95);
+--navH: 92px;
+}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600;700&display=swap" rel="stylesheet">
+*{margin:0;padding:0;box-sizing:border-box;}
+html{
+scroll-behavior:smooth;
+text-rendering:optimizeLegibility;
+-webkit-font-smoothing:antialiased;
+-moz-osx-font-smoothing:grayscale;
+}
+body{
+font-family:"Noto Serif TC", serif;
+background:#000;
+color:#fff;
+overflow-x:hidden;
+}
+a{color:inherit;}
+a:focus-visible, button:focus-visible{
+outline:2px solid var(--focus);
+outline-offset:3px;
+border-radius:10px;
+}
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+.skip-link{
+position:absolute;
+left:-999px;
+top:10px;
+z-index:9999;
+background:rgba(0,0,0,0.85);
+border:1px solid rgba(255,255,255,0.20);
+color:#fff;
+padding:10px 12px;
+border-radius:12px;
+letter-spacing:0.08em;
+}
+.skip-link:focus{left:10px;}
 
-  <style>
-    /* =========================================
-       1. 全站變數 & 極致黑金設定
-    ========================================= */
-    :root {
-      --bg-dark: #050505;
-      --card: rgba(20, 10, 10, 0.85); 
-      --accent: #FFE87A; /* 霓虹金 */
-      --accent-red: #970C10; /* 絲絨紅 */
-      --text: #f4f4f5;
-      --muted: #aaa;
-    }
+/* ===== CSS grain ===== */
+.grainy::before{
+content:"";
+position:absolute;
+inset:0;
+pointer-events:none;
+opacity:0.22;
+mix-blend-mode:overlay;
+background:
+repeating-linear-gradient(0deg, rgba(255,255,255,0.06), rgba(255,255,255,0.06) 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 3px),
+repeating-linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.05) 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 4px);
+filter: blur(0.2px);
+z-index: 10; /* Ensure grain is on top */
+}
 
-    * { box-sizing: border-box; }
+/* =========================
+Atmosphere: fog / smoke
+========================== */
+.fog-layer{
+position:fixed;
+inset:-30vh -20vw -30vh -20vw;
+pointer-events:none;
+z-index:20;
+opacity:0.22;
+mix-blend-mode:screen;
+filter: blur(8px) contrast(110%);
+background:
+radial-gradient(closest-side at 20% 30%, rgba(255,255,255,0.16), rgba(255,255,255,0) 70%),
+radial-gradient(closest-side at 70% 55%, rgba(255,232,122,0.12), rgba(255,255,255,0) 72%),
+radial-gradient(closest-side at 35% 80%, rgba(255,255,255,0.14), rgba(255,255,255,0) 72%);
+animation:fog-drift 18s ease-in-out infinite;
+}
+/* Fog animations omitted for brevity, same as before */
 
-    html, body {
-      margin: 0; padding: 0;
-      background-color: var(--bg-dark);
-      color: var(--text);
-      font-family: "Noto Serif TC", serif;
-      overflow-x: hidden; /* 重要：防止橫向捲動軸出現 */
-      line-height: 1.8;
-    }
+/* =========================
+Sticky Mini Nav + Progress
+========================== */
+.mini-nav{
+position:sticky;
+top:0;
+z-index:60;
+backdrop-filter:blur(10px);
+background:rgba(0,0,0,0.55);
+border-bottom:1px solid rgba(255,255,255,0.10);
+margin-top: -1px; /* Visual fix */
+}
+.mini-nav-inner{
+display:flex;
+align-items:center;
+gap:1rem;
+padding:0.75rem 6vw 0.65rem;
+overflow-x:auto;
+scrollbar-width:none;
+}
+.mini-nav-inner::-webkit-scrollbar{display:none;}
+.mini-nav a{
+color:rgba(255,255,255,0.78);
+text-decoration:none;
+font-size:0.9rem;
+letter-spacing:0.12em;
+white-space:nowrap;
+padding:0.35rem 0.65rem;
+border-radius:999px;
+border:1px solid rgba(255,255,255,0.12);
+transition:0.25s ease;
+}
+.mini-nav a:hover{color:#fff;border-color:rgba(255,255,255,0.24);}
+.mini-nav a.active{color:#000;background:var(--gold);border-color:transparent;}
 
-    /* 躁點濾鏡 (Film Grain) */
-    body::before {
-      content: ""; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
-      background-image: url('assets/images/grain.png');
-      background-repeat: repeat; background-size: 200px 200px;
-      opacity: 0.06; pointer-events: none; z-index: 9999;
-      animation: grain-move 1.5s steps(6) infinite;
-      mix-blend-mode: overlay;
-    }
-    @keyframes grain-move {
-      0%, 100% { transform: translate(0, 0); }
-      20% { transform: translate(-5%, 5%); }
-      40% { transform: translate(-10%, -5%); }
-      60% { transform: translate(5%, 10%); }
-      80% { transform: translate(10%, -10%); }
-    }
+.progressbar{
+height:3px;
+background:rgba(255,255,255,0.10);
+margin:0 6vw 0.65rem;
+border-radius:999px;
+overflow:hidden;
+}
+.progressbar > div{
+height:100%;
+width:0%;
+background:var(--gold);
+border-radius:999px;
+transition:width 0.1s linear;
+}
 
-    /* =========================================
-       2. 版型與通用元件
-    ========================================= */
-    .container { width: min(1000px, 90%); margin: 0 auto; position: relative; z-index: 1; }
-    
-    .sectionTitle { 
-      font-size: clamp(28px, 4vw, 40px); margin: 20px 0 40px; 
-      color: #fff; font-weight: 700; letter-spacing: 0.05em; line-height: 1.4;
-      text-shadow: 0 0 30px rgba(0,0,0,0.8);
-    }
-    
-    .kicker { 
-      color: var(--accent); font-size: 14px; letter-spacing: 0.3em; 
-      text-transform: uppercase; margin-bottom: 15px; display: block; font-weight: 700;
-      border-left: 3px solid var(--accent); padding-left: 15px;
-    }
+/* =========================
+Opening Horizontal Scroll (Chapter 01)
+========================== */
+.hscroll-opener{
+position:relative;
+height: 500vh; /* Adjust height for scroll length */
+background: var(--red);
+}
+.hscroll-opener .grainy{
+position: absolute;
+inset: 0;
+}
 
-    .lead { color: #d0d0d0; font-size: 19px; text-align: justify; font-weight: 300; line-height: 2; }
-    .small { font-size: 15px; color: var(--muted); line-height: 1.8; }
-    
-    /* 無邊框卡片風格 */
-    .card {
-      background-color: var(--card);
-      backdrop-filter: blur(10px);
-      border-radius: 8px; padding: 40px; margin-bottom: 40px;
-      box-shadow: 0 20px 80px rgba(0,0,0,0.8);
-    }
+.hscroll-pin-wrapper{
+position:sticky;
+top:0;
+height:100vh;
+overflow:hidden;
+display: flex;
+align-items: center;
+}
 
-    /* =========================================
-       3. 開場：視差影片 (Parallax Video)
-    ========================================= */
-    .video-hero {
-      position: relative; width: 100%; height: 100vh;
-      overflow: hidden; display: flex; align-items: center; justify-content: center;
-      background: #000;
-    }
-    .bg-video { 
-      width: 100%; height: 100%; object-fit: cover; opacity: 0.6; 
-      filter: contrast(1.3) brightness(0.7) grayscale(0.2); 
-    }
-    .hero-content { position: absolute; z-index: 2; width: 100%; max-width: 800px; padding: 20px; text-align: center; }
-    
-    .immersive-text .line {
-      font-size: clamp(20px, 3vw, 28px); color: rgba(255,255,255,0.95);
-      margin-bottom: 24px; text-shadow: 0 0 20px rgba(0,0,0,1);
-      font-weight: 300; letter-spacing: 0.1em;
-      opacity: 0; transform: translateY(30px); /* 初始位置 */
-    }
+.hscroll-track{
+display:flex;
+height: 100vh;
+width: max-content; /* Auto width based on children */
+will-change:transform;
+}
 
-    /* =========================================
-       4. 第一章 & 第二章 (維持垂直敘事節奏)
-    ========================================= */
-    .sticky-container { display: flex; gap: 50px; margin-top: 40px; align-items: flex-start; }
-    .sticky-visual { 
-      flex: 1; position: sticky; top: 100px; height: 450px; 
-      background: radial-gradient(circle at center, #1a0505 0%, #000 70%);
-      border-radius: 8px; display: flex; flex-direction: column; justify-content: center; align-items: center;
-      box-shadow: 0 0 50px rgba(0,0,0,0.8);
-    }
-    .icon-user { font-size: 80px; filter: grayscale(1) contrast(1.5); opacity: 0.6; }
-    .scroll-content { flex: 1.5; }
-    
-    .vision-quote {
-      border-left: 4px solid var(--accent);
-      background: linear-gradient(90deg, rgba(255, 232, 122, 0.05) 0%, transparent 100%);
-      padding: 30px; margin: 40px 0; 
-      font-style: italic; color: var(--accent); font-size: 18px;
-    }
+.intro-panel, .panel{
+width:100vw;
+height:100vh;
+flex-shrink: 0;
+display:flex;
+align-items:center;
+justify-content:center;
+position: relative;
+padding: 0 8vw;
+}
 
-    /* 歌手影片與翻牌 */
-    .singer-video-container {
-      margin: 40px 0 60px 0; border-radius: 8px; overflow: hidden; position: relative;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-    }
-    .singer-tag {
-      position: absolute; bottom: 20px; left: 20px;
-      background: rgba(151, 12, 16, 0.9); color: #fff; padding: 6px 16px; border-radius: 4px;
-    }
-    .flip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap: 25px; margin-top: 50px; }
-    .flip-card { perspective: 1000px; height: 260px; }
-    .flip-inner {
-      position: relative; width: 100%; height: 100%;
-      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-      transform-style: preserve-3d; cursor: pointer;
-    }
-    .flip-card:hover .flip-inner { transform: rotateY(180deg); }
-    .flip-front, .flip-back {
-      position: absolute; inset: 0; backface-visibility: hidden;
-      border-radius: 8px; padding: 30px;
-      display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
-      background: rgba(30,30,30,0.6); backdrop-filter: blur(5px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    .flip-back { transform: rotateY(180deg); background: linear-gradient(135deg, #4a0000 0%, #1a0000 100%); }
-    .flip-front h3 { font-size: 24px; color: #fff; margin-bottom: 15px; }
-    .flip-back h3 { color: var(--accent); margin-bottom: 15px; }
+/* Title Slide Design */
+.intro-panel{
+background: #000;
+flex-direction: column;
+text-align: center;
+z-index: 5;
+}
+.intro-panel h1{
+font-size:clamp(3rem,8vw,6rem);
+font-weight:900;
+color:var(--gold);
+margin-bottom:1rem;
+letter-spacing:0.05em;
+line-height: 1.1;
+}
+.intro-panel h2{
+font-size:clamp(1.2rem,3vw,2rem);
+font-weight:400;
+color:#fff;
+margin-bottom:2rem;
+letter-spacing: 0.1em;
+}
+.intro-panel .scroll-hint-h{
+font-size:0.9rem;
+letter-spacing:0.3em;
+text-transform:uppercase;
+color:rgba(255,255,255,0.6);
+animation:hint-float-h 2s ease-in-out infinite;
+margin-top: 3rem;
+}
+@keyframes hint-float-h{0%{transform:translateX(0);}50%{transform:translateX(10px);}100%{transform:translateX(0);}}
 
-    /* =========================================
-       5. 第三章：橫向捲動時間軸 (Horizontal Scroll)
-       W8 技術應用
-    ========================================= */
-    #horizontal-scroll-section {
-      width: 100%;
-      height: 100vh; /* 佔滿一屏 */
-      overflow: hidden; /* 隱藏溢出 */
-      display: flex; /* 讓內容橫排 */
-      position: relative;
-    }
-    
-    .horizontal-wrapper {
-      display: flex;
-      flex-wrap: nowrap;
-      height: 100%;
-    }
 
-    .h-panel {
-      width: 100vw; /* 每個面板佔滿視窗寬度 */
-      height: 100%;
-      padding: 100px 50px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      border-right: 1px solid rgba(255,255,255,0.1);
-      position: relative;
-    }
+/* Content Panels in Horizontal Scroll */
+.panel{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:min(5vw,60px);
+}
+.panel .panel-media{
+border-radius:22px;
+overflow:hidden;
+border:1px solid rgba(255,255,255,0.14);
+background:rgba(0,0,0,0.25);
+box-shadow:0 30px 80px rgba(0,0,0,0.45);
+position:relative;
+isolation:isolate;
+width: 100%;
+}
+.panel .panel-media img,
+.panel .panel-media video{
+width:100%;
+height:min(60vh,620px);
+object-fit:cover;
+display:block;
+background:#000;
+}
+.panel .panel-media::after{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(to bottom, rgba(0,0,0,0.12), rgba(0,0,0,0.35));
+pointer-events:none;
+z-index:2;
+}
+.panel-text{
+display: flex;
+flex-direction: column;
+justify-content: center;
+}
+.panel h3{
+font-size:clamp(1.8rem,3vw,2.4rem);
+font-weight:900;
+letter-spacing:0.12em;
+color:var(--gold);
+margin-bottom:0.55rem;
+}
+.panel .tagline{
+font-size:0.92rem;
+letter-spacing:0.22em;
+color:rgba(255,255,255,0.66);
+margin-bottom:1.0rem;
+text-transform:uppercase;
+}
+.panel .desc{
+color:rgba(255,255,255,0.90);
+font-size:clamp(1.05rem,1.6vw,1.2rem);
+line-height:1.95;
+margin:0.6rem 0 1.1rem;
+}
+.panel .cta{
+display:inline-flex;
+align-items:center;
+gap:0.55rem;
+font-size:0.95rem;
+letter-spacing:0.12em;
+color:rgba(255,255,255,0.88);
+user-select:none;
+cursor:pointer;
+border:1px solid rgba(255,255,255,0.20);
+background:rgba(0,0,0,0.16);
+padding:0.55rem 0.85rem;
+border-radius:999px;
+transition:0.25s ease;
+align-self: flex-start;
+}
+.panel .cta:hover{
+border-color:rgba(255,255,255,0.32);
+background:rgba(0,0,0,0.26);
+}
 
-    /* 背景裝飾字 */
-    .h-bg-year {
-      position: absolute; top: 10%; left: 5%;
-      font-size: 15vw; font-weight: 900; color: rgba(255,255,255,0.03);
-      line-height: 1; z-index: 0; pointer-events: none;
-    }
+/* =========================
+Chapters Base
+========================== */
+main{display:block;}
+.chapter{
+background:#000;
+padding:14vh 8vw;
+position:relative;
+isolation:isolate;
+}
+.chapter-inner{max-width:980px;margin:0 auto;}
+.kicker{
+color:rgba(255,255,255,0.7);
+letter-spacing:0.18em;
+font-size:0.9rem;
+margin-bottom:1.2rem;
+text-transform:uppercase;
+}
+.chapter h2{
+font-size:clamp(1.8rem,3.5vw,2.8rem);
+font-weight:900;
+letter-spacing:0.06em;
+margin-bottom:1.1rem;
+color:var(--gold);
+}
+.chapter p{
+font-size:clamp(1.05rem,1.6vw,1.2rem);
+line-height:1.95;
+color:var(--text);
+margin:0.9rem 0;
+}
+.chapter strong{color:rgba(255,255,255,0.98);}
+.note{
+color:rgba(255,255,255,0.72);
+font-size:0.98rem;
+line-height:1.85;
+}
+.hr{
+height:1px;
+background:rgba(255,255,255,0.12);
+margin:2.2rem 0;
+}
 
-    .h-content { position: relative; z-index: 2; max-width: 800px; margin: 0 auto; }
-    .h-year { font-size: 40px; color: var(--accent); font-weight: bold; display: block; margin-bottom: 20px; }
-    .h-title { font-size: 32px; color: #fff; margin-bottom: 20px; }
-    .h-desc { font-size: 18px; color: #ccc; line-height: 1.8; }
+.reveal{
+opacity:0;
+transform:translateY(14px);
+transition:opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.is-visible{opacity:1;transform:translateY(0);}
 
-    /* =========================================
-       6. 結語：堆疊式卡片 (Sticky Stacking)
-       W5 + W7 技術應用
-    ========================================= */
-    .stacking-section {
-      position: relative;
-      padding-bottom: 100px;
-    }
-    
-    .stack-card {
-      width: 100%; max-width: 800px; margin: 0 auto;
-      height: 400px; /* 固定高度以便堆疊 */
-      background: #111;
-      border: 1px solid rgba(255, 232, 122, 0.2);
-      border-radius: 12px;
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      position: sticky; top: 150px; /* 關鍵：Sticky */
-      margin-bottom: 50px; /* 卡片間距 */
-      box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
-      text-align: center;
-      padding: 40px;
-      transform-origin: center top;
-      transition: transform 0.5s ease;
-    }
+/* =========================
+Sticky Compare / Sticky Narrative
+========================== */
+.sticky-section{
+background:var(--red);
+padding:0;
+overflow:hidden;
+position:relative;
+}
+.sticky-section.grainy{position:relative;}
 
-    /* 不同的背景色區分層次 */
-    .stack-1 { background: linear-gradient(135deg, #1a1a1a, #050505); }
-    .stack-2 { background: linear-gradient(135deg, #2a0a0a, #0a0505); top: 180px; }
-    .stack-3 { background: linear-gradient(135deg, #3a0000, #1a0000); top: 210px; border-color: var(--accent-red); }
+.sticky-wrap{
+position:relative;
+z-index:1;
+display:grid;
+grid-template-columns: 1.05fr 0.95fr;
+gap:min(5vw,60px);
+padding:12vh 8vw;
+align-items:start;
+}
+.sticky-media{
+position:sticky;
+top:calc(var(--navH) + 8px);
+border-radius:22px;
+overflow:hidden;
+border:1px solid rgba(255,255,255,0.14);
+background:rgba(0,0,0,0.25);
+box-shadow:0 30px 80px rgba(0,0,0,0.45);
+isolation:isolate;
+}
+.sticky-media img, .sticky-media video{
+width:100%;
+height:min(72vh,720px);
+object-fit:cover;
+display:block;
+}
+.sticky-media::after{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(to bottom, rgba(0,0,0,0.14), rgba(0,0,0,0.38));
+pointer-events:none;
+z-index:2;
+}
 
-    .stack-icon { font-size: 50px; margin-bottom: 20px; display: block; }
-    .stack-title { font-size: 28px; color: var(--accent); margin-bottom: 15px; }
+.sticky-text{padding-bottom:20vh;}
+.sticky-text .lead{
+color:rgba(255,255,255,0.88);
+font-size:clamp(1.1rem,1.8vw,1.25rem);
+line-height:1.95;
+margin:0.8rem 0 1.2rem;
+}
+.sticky-step{
+margin:0;
+padding:1.1rem 1.1rem;
+border-radius:18px;
+border:1px solid rgba(255,255,255,0.12);
+background:rgba(0,0,0,0.18);
+transition:background 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
+transform:translateY(0);
+}
+.sticky-step + .sticky-step{margin-top:1rem;}
+.sticky-step .label{
+display:block;
+letter-spacing:0.18em;
+text-transform:uppercase;
+font-size:0.82rem;
+color:rgba(255,255,255,0.70);
+margin-bottom:0.35rem;
+}
+.sticky-step.is-active{
+background:rgba(0,0,0,0.34);
+border-color:rgba(255,255,255,0.20);
+transform:translateY(-2px);
+}
+.sticky-step.is-active .label{color:rgba(255,232,122,0.85);}
+.sticky-step.is-active .text{color:rgba(255,255,255,0.98);}
+.sticky-step .text{
+color:rgba(255,255,255,0.86);
+font-size:clamp(1.05rem,1.7vw,1.2rem);
+line-height:1.95;
+}
 
-    /* 最終金句與按鈕 */
-    .final-interaction {
-      text-align: center; margin-top: 100px;
-      padding: 100px 20px;
-    }
-    
-    .final-quote {
-      font-size: 24px; font-style: italic; color: #fff; 
-      line-height: 1.8; margin-bottom: 50px; opacity: 0; /* 預設隱藏，靠動畫顯示 */
-      transform: translateY(30px);
-    }
+.tip{
+position:relative;
+border-bottom:1px dashed rgba(255,255,255,0.55);
+cursor:help;
+}
+.tip:hover::after{
+content:attr(data-tip);
+position:absolute;
+left:0;
+top:1.7em;
+width:min(320px,70vw);
+padding:10px 12px;
+background:rgba(0,0,0,.90);
+color:#fff;
+border:1px solid rgba(255,255,255,0.15);
+border-radius:14px;
+font-size:0.95rem;
+line-height:1.5;
+z-index:20;
+}
 
-    .red-envelope-btn {
-      background: #c21807; color: #fff; 
-      border: 2px solid #ffcc00; padding: 15px 50px; font-size: 20px; 
-      border-radius: 50px; font-family: sans-serif; font-weight: bold;
-      cursor: pointer; transition: 0.3s; box-shadow: 0 0 20px rgba(194, 24, 7, 0.4);
-    }
-    .red-envelope-btn:hover { transform: scale(1.05); background: #d62210; }
-    
-    .final-message {
-      margin-top: 50px; opacity: 0; transition: opacity 2s ease;
-      font-size: 24px; color: var(--accent); font-weight: bold;
-      transform: translateY(20px); height: 0; overflow: hidden;
-    }
-    .final-message.reveal { opacity: 1; transform: translateY(0); height: auto; }
+/* =========================
+Chapter 03: order stage (scroll-lit)
+========================== */
+.order-stage{
+border-radius:24px;
+padding:1.4rem 1.4rem 1.2rem;
+border:1px solid rgba(255,255,255,0.12);
+background:rgba(0,0,0,0.22);
+transition:background 0.8s ease, border-color 0.8s ease, filter 0.8s ease;
+filter:brightness(0.6) saturate(0.95);
+}
+.order-stage.is-lit{
+background:rgba(0,0,0,0.34);
+border-color:rgba(255,255,255,0.22);
+filter:brightness(1) saturate(1);
+}
+.order-stage p{margin:0.75rem 0;}
 
-    /* RWD */
-    @media (max-width: 768px) {
-      .sticky-container { flex-direction: column; }
-      .sticky-visual { position: relative; top: 0; width: 100%; margin-bottom: 30px; height: 300px; }
-      .horizontal-wrapper { flex-direction: column; height: auto; } /* 手機版改回垂直 */
-      .h-panel { width: 100%; height: auto; padding: 60px 20px; border-bottom: 1px solid #333; }
-      #horizontal-scroll-section { height: auto; display: block; }
-    }
-  </style>
+/* =========================
+Scrolled Video (Chapter 05)
+========================== */
+.sv-wrap{
+display:grid;
+grid-template-columns: 1.05fr 0.95fr;
+gap:min(5vw,60px);
+align-items:start;
+margin-top:2.0rem;
+}
+.sv-video{
+position:sticky;
+top:calc(var(--navH) + 8px);
+border-radius:22px;
+overflow:hidden;
+border:1px solid rgba(255,255,255,0.12);
+background:rgba(255,255,255,0.03);
+box-shadow:0 30px 80px rgba(0,0,0,0.45);
+}
+.sv-video video{
+width:100%;
+height:min(72vh,720px);
+object-fit:cover;
+display:block;
+background:#000;
+}
+.sv-lines{padding-bottom:30vh;}
+.sv-line{
+border-radius:18px;
+border:1px solid rgba(255,255,255,0.10);
+background:rgba(255,255,255,0.04);
+padding:1.1rem 1.1rem;
+margin:0 0 1rem;
+transition:background 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
+}
+.sv-line .who{
+margin-top:0.55rem;
+color:rgba(255,255,255,0.65);
+font-size:0.95rem;
+letter-spacing:0.08em;
+}
+.sv-line.is-active{
+background:rgba(255,255,255,0.08);
+border-color:rgba(255,255,255,0.18);
+transform:translateY(-2px);
+}
+.sv-line.is-active .quoteText{color:rgba(255,255,255,0.98);}
+.sv-line .quoteText{
+color:rgba(255,255,255,0.84);
+font-size:clamp(1.05rem,1.6vw,1.2rem);
+line-height:1.95;
+}
+
+/* =========================
+Modal
+========================== */
+.modal-backdrop{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.72);
+z-index:120;
+display:none;
+align-items:center;
+justify-content:center;
+padding:6vh 6vw;
+}
+.modal-backdrop.open{display:flex;}
+.modal{
+width:min(980px,100%);
+max-height:86vh;
+overflow:auto;
+background:rgba(10,10,10,0.96);
+border:1px solid rgba(255,255,255,0.16);
+border-radius:24px;
+padding:1.4rem 1.4rem 1.2rem;
+box-shadow:0 30px 80px rgba(0,0,0,0.6);
+}
+.modal-header{
+display:flex;
+align-items:flex-start;
+justify-content:space-between;
+gap:1rem;
+margin-bottom:0.8rem;
+}
+.modal-title{
+font-size:1.6rem;
+font-weight:900;
+letter-spacing:0.10em;
+color:var(--gold);
+}
+.modal-close{
+appearance:none;
+border:1px solid rgba(255,255,255,0.20);
+background:rgba(255,255,255,0.06);
+color:rgba(255,255,255,0.92);
+border-radius:999px;
+padding:0.55rem 0.85rem;
+cursor:pointer;
+font-size:0.95rem;
+letter-spacing:0.12em;
+}
+.modal-close:hover{border-color:rgba(255,255,255,0.28);}
+.modal-body p{margin:0.8rem 0;}
+.modal-media{margin-top:1rem;}
+.modal-media video, .modal-media img{
+width:100%;
+border-radius:18px;
+display:block;
+border:1px solid rgba(255,255,255,0.10);
+background:rgba(255,255,255,0.03);
+}
+.modal-caption{
+margin-top:0.7rem;
+color:rgba(255,255,255,0.72);
+font-size:0.95rem;
+line-height:1.6;
+}
+
+@media (prefers-reduced-motion: reduce){
+html{scroll-behavior:auto !important;}
+*{scroll-behavior:auto !important;}
+.reveal{transition:none !important;transform:none !important;}
+.scroll-hint-h{animation:none !important;}
+}
+
+@media (max-width: 900px){
+:root{ --navH: 86px; }
+.sticky-wrap, .sv-wrap{grid-template-columns:1fr;}
+.sticky-media, .sv-video{top:calc(var(--navH) + 8px);}
+.sticky-media img, .sticky-media video, .sv-video video{height:56vh;}
+.panel{
+grid-template-columns:1fr;
+align-content:start;
+padding:6vh 8vw;
+}
+.panel .panel-media img, .panel .panel-media video{height:40vh;}
+}
+@media (max-width: 768px){
+.intro-panel h1{font-size:3.5rem;}
+.mini-nav-inner{padding:0.65rem 6vw 0.55rem;}
+.progressbar{margin:0 6vw 0.55rem;}
+}
+</style>
 </head>
 
 <body>
+<a class="skip-link" href="#main">跳到正文</a>
+<div class="fog-layer" aria-hidden="true"></div>
 
-<div id="progress-container" style="position: fixed; top: 0; left: 0; width: 100%; height: 3px; background: transparent; z-index: 9999;">
-  <div id="progress-bar" style="height: 100%; width: 0%; background: var(--accent); box-shadow: 0 0 10px var(--accent); transition: width 0.1s;"></div>
+<section class="hscroll-opener grainy" id="hscroll-opener">
+<div class="hscroll-pin-wrapper">
+<div class="hscroll-track" id="hscroll-track">
+<div class="intro-panel">
+<h1>唱給不在場的人</h1>
+<h2>紅包歌手的世代誤解與生存現場</h2>
+<div style="font-size:1.1rem; color:rgba(255,255,255,0.8); margin-top:1rem;">梁朝勛、彭賀琳、莊馨予</div>
+<div class="scroll-hint-h">SCROLL →</div>
 </div>
 
-<section class="video-hero">
-  <video autoplay muted loop playsinline class="bg-video">
-    <source src="assets/videos/bg.mp4" type="video/mp4">
-  </video>
-  
-  <div class="hero-content">
-    <div class="immersive-text">
-      <p class="line">四散的煙味混著水果盤的甜味。</p>
-      <p class="line">不熟悉的人本能地後退。</p>
-      <p class="line" style="color:var(--accent); font-weight:600;">但在這裡，文化正在重新調整姿態。</p>
-    </div>
-  </div>
-  <div style="position: absolute; bottom: 30px; color: #fff; font-size: 12px; opacity: 0.7; animation: bounce 2s infinite;">SCROLL ↓</div>
+<section class="panel" data-title="歌星" data-subtitle="THE SINGER" data-body="歌星輪番登台，每人2-3首歌曲的時間，跑馬燈穿過個人稱號，歌星穿著禮服盛裝登場，帶來經典好歌，除了手工製作演唱服裝，更拜師學歌藝精益求精，透過舞台展現自信與對歌唱的喜愛，演出期間嚴守在台上不會走到台下，在歌廳盛行的年代，還要連跑好幾場，盛況空前，紅包場也捧紅眾多電視新星。" data-media-type="img" data-media-src="photo/singer.jpg" data-media-caption="舞台上的歌星 (photo/singer.jpg)">
+<div class="panel-text">
+<h3>歌星</h3>
+<div class="tagline">THE SINGER</div>
+<div class="desc">輪番登台、禮服盛裝。二到三首歌的時間，是一輩子累積的職業身段。</div>
+<button class="cta js-open-modal" type="button">＋ 展開更多</button>
+</div>
+<div class="panel-media">
+<img src="photo/singer.jpg" alt="歌星｜舞台畫面" loading="lazy" decoding="async">
+</div>
 </section>
 
-<main class="container">
-  
-  <section style="margin-top: 100px; margin-bottom: 100px;">
-    <div class="card">
-      <div class="kicker">紅包場融媒體專題</div>
-      <h1 class="sectionTitle">台北僅存的紅包場：<br>它如何被留下，又如何被改寫</h1>
-      <p class="lead">
-        霓虹燈反射在斑駁的天花板上，旋轉舞台緩緩轉著。我們看見一種文化並非走向終章，而是重新調整姿態，準備迎接下一輪的觀眾。
-      </p>
-    </div>
-  </section>
-
-  <section id="chapter-jin" style="margin-bottom: 150px;">
-    <div class="kicker">第一章：守門人</div>
-    <div class="sticky-container">
-      <div class="sticky-visual">
-        <div class="icon-user">👤</div>
-        <h3>金小姐的堅持</h3>
-        <p style="color:var(--muted); font-size:14px; margin-top:5px; font-family:sans-serif;">金鑽歌廳 經營者</p>
-      </div>
-      
-      <div class="scroll-content">
-        <h2 class="sectionTitle">舞台還亮著</h2>
-        <p class="lead">「有些店不是生意不好，是經營方式不同。」金小姐說得平淡，但這份堅持背後是每月超過二十萬的租金與樂手成本。</p>
-        
-        <div class="vision-quote">
-          <p style="margin:0;">「歌手斷層是危機，也是轉機。我希望能汰換新血，讓這裡轉型成表藝學生的『建教合作場域』。」</p>
-        </div>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
-           <div style="padding: 20px; background: rgba(255,255,255,0.03);">
-              <h4 style="color:var(--accent); margin:0 0 10px 0;">轉型</h4>
-              <p style="font-size:14px; color:#ccc; margin:0;">從單純歌廳轉向觀光與教育。</p>
-           </div>
-           <div style="padding: 20px; background: rgba(255,255,255,0.03);">
-              <h4 style="color:var(--accent); margin:0 0 10px 0;">包容</h4>
-              <p style="font-size:14px; color:#ccc; margin:0;">即使年輕人第一次來也能自在。</p>
-           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="chapter-trans" style="margin-bottom: 100px;">
-    <div class="kicker">第二章：視角轉換</div>
-    <h2 class="sectionTitle">文化轉譯：從「風化」到「文化」</h2>
-    
-    <div class="singer-video-container">
-      <video autoplay muted loop playsinline style="width: 100%; display: block;">
-        <source src="assets/videos/singer.mp4" type="video/mp4">
-      </video>
-      <div class="singer-tag">▲ 現場：歌手與觀眾的互動語言</div>
-    </div>
-
-    <p class="lead">
-      為了打破年輕人對紅包場的抗拒，綠雷德創新聯手春河劇團推出<strong style="color:var(--accent)">《老闆～來碗陽春麵！》</strong>。觀眾一邊吃麵，一邊看著卸下華服的歌星在麵攤與舞台間流轉。
-    </p>
-
-    <div class="flip-grid">
-      <div class="flip-card">
-        <div class="flip-inner">
-          <div class="flip-front"><h3>煙味與抗拒</h3><p>曾令我卻步的味道</p></div>
-          <div class="flip-back"><h3>理解的代價</h3><p>忍受感官不適，才看見真情。</p></div>
-        </div>
-      </div>
-      <div class="flip-card">
-        <div class="flip-inner">
-          <div class="flip-front"><h3>情色標籤</h3><p>被過度簡化的想像</p></div>
-          <div class="flip-back"><h3>互動秩序</h3><p>這是獨特的社交語言與回應。</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-</main> <section id="horizontal-scroll-section">
-  <div class="horizontal-wrapper">
-    
-    <div class="h-panel" style="background: #000;">
-      <div class="h-content">
-        <div class="kicker">第三章：城市重生</div>
-        <h2 class="sectionTitle" style="font-size: 60px;">時間的<br>長廊</h2>
-        <p class="lead">請向右捲動，走過紅包場的興衰與重生 →</p>
-      </div>
-    </div>
-
-    <div class="h-panel">
-      <div class="h-bg-year">1980</div>
-      <div class="h-content">
-        <span class="h-year">1980s</span>
-        <h3 class="h-title">全盛時期：西門町的繁華</h3>
-        <p class="h-desc">萬華曾有二、三十家歌廳，歌手一天能跑十二家。那是紅包場最盛的年代，是許多人真實的生存舞台。</p>
-      </div>
-    </div>
-
-    <div class="h-panel">
-      <div class="h-bg-year">2023</div>
-      <div class="h-content">
-        <span class="h-year">2023</span>
-        <h3 class="h-title">僅存的火種：金鑽</h3>
-        <p class="h-desc">隨著榮民凋零與疫情衝擊，全台北僅剩「金鑽」一家維持運作。文化局啟動《萬華時光》計畫，試圖翻轉刻板印象。</p>
-      </div>
-    </div>
-
-    <div class="h-panel">
-      <div class="h-bg-year">2024</div>
-      <div class="h-content">
-        <span class="h-year">2024.11</span>
-        <h3 class="h-title">跨世代對話</h3>
-        <p class="h-desc">紅包場搬到紅樓戶外廣場。當家庭帶著孩子投入觀看，證明了「只要翻譯得好，文化能跨越年齡」。</p>
-      </div>
-    </div>
-
-    <div class="h-panel" style="border-right: none;">
-      <div class="h-bg-year">FUTURE</div>
-      <div class="h-content">
-        <span class="h-year">2025+</span>
-        <h3 class="h-title">再現與新生</h3>
-        <p class="h-desc">未來的保存不應只是凍結空間，而是保留「人情味」。這裡將成為展示城市如何溫柔接納所有記憶的場域。</p>
-      </div>
-    </div>
-
-  </div>
+<section class="panel" data-title="樂團老師" data-subtitle="THE BAND" data-body="全天候在舞臺後方，對於鼓、效果器、各式新舊歌曲高度熟悉，偶爾搭配自身的合音，為每場歌星演唱增添風情。透過1至2位樂團老師，現場音場讓人穿梭時空，感受情調並隨之舞動。" data-media-type="img" data-media-src="photo/band.jpg" data-media-caption="樂團老師 (photo/band.jpg)">
+<div class="panel-text">
+<h3>樂團老師</h3>
+<div class="tagline">THE BAND</div>
+<div class="desc">全天候鎮守舞台後方。只需一兩位樂手，就能撐起那個年代的時空感。</div>
+<button class="cta js-open-modal" type="button">＋ 展開更多</button>
+</div>
+<div class="panel-media">
+<img src="photo/band.jpg" alt="樂團老師" loading="lazy" decoding="async">
+</div>
 </section>
 
-<main class="container">
+<section class="panel" data-title="小妹" data-subtitle="THE ASSISTANT" data-body="在場內穿梭的小妹擔任服務生的角色，小妹命名的由來除了是當年老兵在桌內的喊聲外，也有小妹是附隨歌星生存、走跳，在端茶、倒水、引導客人包紅包方式之外，成為歌星穩固業績、建立關係的重要搭擋，不過歌廳也會規定禁止搶客，否則會遭人側目嘴舌。" data-media-type="img" data-media-src="photo/assistant.jpg" data-media-caption="場內服務的小妹 (photo/assistant.jpg)">
+<div class="panel-text">
+<h3>小妹</h3>
+<div class="tagline">THE ASSISTANT</div>
+<div class="desc">附隨歌星生存的影子。端茶、倒水、引導紅包，是建立關係的重要搭擋。</div>
+<button class="cta js-open-modal" type="button">＋ 展開更多</button>
+</div>
+<div class="panel-media">
+<img src="photo/assistant.jpg" alt="小妹" loading="lazy" decoding="async">
+</div>
+</section>
 
-  <section class="stacking-section" id="conclusion-stack">
-    <div style="text-align: center; margin-bottom: 50px; padding-top: 100px;">
-      <div class="kicker" style="display:inline-block; border:none; padding:0;">結語</div>
-      <h2 class="sectionTitle">三條線交會之後</h2>
-    </div>
+<section class="panel" data-title="服裝" data-subtitle="THE COSTUME" data-body="每位歌星在登場前會提早至舞台旁的服裝間換衣服，每件禮服、表演服裝的背後都有特製、手工製作等獨特故事，紅包場中的服裝有時也與歌星的個人風格、偏好息息相關，比如黑色的沈著低調、亮綠色的活潑外向，又甚至是帽子、首飾等搭配都有所學問，彰顯每次歌唱呈現背後的用心累積。" data-media-type="video" data-media-src="video/翟曼芳 服裝.mp4" data-media-caption="翟曼芳姐介紹服裝細節 (video/翟曼芳 服裝.mp4)">
+<div class="panel-text">
+<h3>服裝</h3>
+<div class="tagline">THE COSTUME</div>
+<div class="desc">每一件禮服背後，都有手工特製的故事。顏色與配件，彰顯著歌者的個性。</div>
+<button class="cta js-open-modal" type="button">＋ 展開更多 (含影片)</button>
+</div>
+<div class="panel-media">
+<img src="photo/DSC09375.jpg" alt="服裝細節" loading="lazy" decoding="async">
+</div>
+</section>
 
-    <div class="stack-card stack-1">
-      <span class="stack-icon">🗝️</span>
-      <h3 class="stack-title">守門人</h3>
-      <p style="color:#aaa;">承擔現實壓力，守住運作系統，讓場域「活著」。</p>
-    </div>
+<section class="panel" data-title="餐飲" data-subtitle="FOOD & DRINKS" data-body="在桌面常見的像是瓜子、水果盤，或者是普洱、烏龍、清茶等選項，隨著經營者的商業考量，也會有熱炒、啤酒，有時還會由歌星個人贈送像炒花生、果醬等增進情感，點餐與結款將以「茶單制」進行，用餐區域多以舞台現場開放空間為主。" data-media-type="img" data-media-src="photo/food.jpg" data-media-caption="桌面餐飲與茶單 (photo/food.jpg)">
+<div class="panel-text">
+<h3>餐飲</h3>
+<div class="tagline">FOOD & DRINKS</div>
+<div class="desc">瓜子、熱茶、水果盤。茶單制度，是這場人情交流的入場券。</div>
+<button class="cta js-open-modal" type="button">＋ 展開更多</button>
+</div>
+<div class="panel-media">
+<img src="photo/food.jpg" alt="餐飲" loading="lazy" decoding="async">
+</div>
+</section>
 
-    <div class="stack-card stack-2">
-      <span class="stack-icon">🗣️</span>
-      <h3 class="stack-title">翻譯者</h3>
-      <p style="color:#aaa;">引入沉浸式戲劇體驗，建立理解入口，讓語言「被聽懂」。</p>
-    </div>
+<section class="panel" data-title="紅包" data-subtitle="THE RED ENVELOPE" data-body="紅包場最經典的畫面，歌星演唱期間，由聽眾或小妹親手從臺下交付歌星紅包，紅包內的金額，無論是100元、300元、1000元皆隨心隨緣，過往如需凸顯個人，也會將大面額的鈔票露出，為喜愛的歌星「做面子」，甚至有觀眾爭相包紅包的景象。紅包場的文化內涵，從「茶單」制度（讓歌星承擔賓客的飲食消費），賓客透過包高出消費金額的紅包交給「捧場」的歌星，多出來的金額成為鼓勵，這便堆疊成了「紅包場文化」。" data-media-type="img" data-media-src="photo/redpacket.jpg" data-media-caption="紅包交付瞬間 (photo/redpacket.jpg)">
+<div class="panel-text">
+<h3>紅包</h3>
+<div class="tagline">THE RED ENVELOPE</div>
+<div class="desc">隨心隨緣的金額。這是給歌星的「面子」，也是建立關係的具象化。</div>
+<button class="cta js-open-modal" type="button">＋ 展開更多</button>
+</div>
+<div class="panel-media">
+<img src="photo/redpacket.jpg" alt="紅包" loading="lazy" decoding="async">
+</div>
+</section>
+</div>
+</div>
+</section>
 
-    <div class="stack-card stack-3">
-      <span class="stack-icon">🏛️</span>
-      <h3 class="stack-title">城市政策</h3>
-      <p style="color:#eee;">賦予公共身分，接納城市記憶，讓歷史「重生」。</p>
-    </div>
+<nav class="mini-nav" aria-label="章節導覽">
+<div class="mini-nav-inner" role="navigation">
+<a href="#chapter-hook" data-section="chapter-hook">01 HOOK</a>
+<a href="#chapter-redpacket" data-section="chapter-redpacket">02 紅包</a>
+<a href="#chapter-order" data-section="chapter-order">03 秩序</a>
+<a href="#chapter-interviews" data-section="chapter-interviews">04 訪談</a>
+</div>
+<div class="progressbar" aria-hidden="true"><div id="progress-fill"></div></div>
+</nav>
 
-    <div class="final-interaction">
-      <blockquote class="final-quote">
-        「它既是上海繁華的贗品，也是榮民孤寂的真藥。<br>
-        在巨大的歷史創傷面前，人們在這裡重建了破碎的自我。」
-      </blockquote>
+<main id="main">
+<section class="chapter sticky-section grainy" id="chapter-hook" aria-label="章節一：紅包場與刻板印象">
+<div class="sticky-wrap">
+<div class="sticky-media" aria-hidden="true">
+<img
+id="compare-media"
+src="photo/DSC04754.jpg"
+alt="紅包場內景"
+loading="eager"
+decoding="async"
+/>
+</div>
 
-      <p style="color:#aaa; margin-bottom: 30px;">這不是謝幕，而是轉身。</p>
+<div class="sticky-text">
+<div class="kicker reveal">CHAPTER 01</div>
+<h2 class="reveal">紅包場，和你想的不一樣</h2>
+<p class="lead reveal">把它誤會成「某種刺激消費」很容易；但真正的樣貌，往往只在你坐下來之後，才慢慢浮現。</p>
 
-      <button class="red-envelope-btn" onclick="revealEnding()">🧧 遞出紅包</button>
-      
-      <div id="final-text" class="final-message">
-        <p>紅包場正以自己的節奏，在城市裡持續運作。</p>
-        <p style="font-size: 32px; margin-top: 30px; color: #fff; text-shadow: 0 0 20px var(--accent);">文化，永不落幕。</p>
-      </div>
-    </div>
+<div class="sticky-step reveal js-sticky-step is-active" data-media="photo/DSC04754.jpg">
+<span class="label">COMPARE 01</span>
+<div class="text">它常被拿來和 <span class="tip" data-tip="紅包場不以「清涼」或「火辣」為賣點">牛肉場</span>混為一談，但紅包場的核心是「聽歌」：觀眾把注意力給表演，歌手把完整的演出給舞台。</div>
+</div>
 
-  </section>
+<div class="sticky-step reveal js-sticky-step" data-media="photo/singer.jpg">
+<span class="label">COMPARE 02</span>
+<div class="text">它也不等同 <span class="tip" data-tip="紅包場是老少宜的場所">舞廳</span>。紅包場裡，主角始終在台上，秩序與默契反而更像一套「固定座位的劇場」。</div>
+</div>
 
-  <footer style="text-align: center; color: #666; font-size: 12px; margin-top: 50px; padding-bottom: 50px;">
-    © 2025 紅包場融媒體專題 | Web114 期末呈現
-  </footer>
+<div class="sticky-step reveal js-sticky-step" data-media="photo/DSC09319.jpg">
+<span class="label">COMPARE 03</span>
+<div class="text">你可以把它和 <span class="tip" data-tip="紅包場觀眾不會上台唱歌">卡拉OK</span>區分開來：紅包場觀眾多半不登台，點歌、聽歌、聊天，維持的是「台上台下」的距離。</div>
+</div>
 
+<div class="sticky-step reveal js-sticky-step" data-media="photo/DSC09375.jpg">
+<span class="label">COMPARE 04</span>
+<div class="text">它也不同於 <span class="tip" data-tip="紅包場歌手需要穿著「禮服」上台">Livehouse</span>。紅包場的舞台更像「秀場」：禮服、燈光、稱號、流程，構成一種職業規範。</div>
+</div>
+
+<div class="sticky-step reveal js-sticky-step" data-media="photo/DSC09375.jpg">
+<span class="label">COMPARE 05</span>
+<div class="text">更別說 <span class="tip" data-tip="紅包場的觀眾是特地來聽歌的">流水席</span>：紅包場的觀眾是為了歌而來，餐飲只是把時間留在現場的方式。</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="chapter sticky-section grainy" id="chapter-redpacket" aria-label="章節二：紅包的意義">
+<div class="sticky-wrap">
+<div class="sticky-media">
+<video id="redpacket-loop" muted loop playsinline preload="metadata" poster="photo/DSC09375.jpg">
+<source src="video/c0621.mp4" type="video/mp4" />
+</video>
+</div>
+
+<div class="sticky-text">
+<div class="kicker reveal">CHAPTER 02</div>
+<h2 class="reveal">紅包的意義：支持表演，而不是購買身體</h2>
+
+<p class="lead reveal">把「紅包」理解成交易，很快；但在現場，它更像一種回應：喜歡、尊重、面子、人情，最後都落在一個小小的信封裡。</p>
+
+<div class="sticky-step reveal js-sticky-step-2 is-active" data-media="photo/DSC04754.jpg" data-kind="img">
+<span class="label">POINT 01</span>
+<div class="text">紅包場是歌手、表演者與觀眾最直接互動的地方。觀眾用紅包表達喜歡，歌手用表演回應掌聲。</div>
+</div>
+
+<div class="sticky-step reveal js-sticky-step-2" data-media="photo/redpacket.jpg" data-kind="img">
+<span class="label">POINT 02</span>
+<div class="text">紅包不是對身體的購買，而是對「表演」的支持；觀眾來聽歌、點歌、聊天，建立的是長時間的人情關係。</div>
+</div>
+
+<div class="sticky-step reveal js-sticky-step-2" data-media="photo/DSC09375.jpg" data-kind="img">
+<span class="label">POINT 03</span>
+<div class="text">紅包場的文化內涵，來自「茶單」制度：歌星承擔賓客的飲食消費，賓客則包高出消費金額的紅包交給所捧場的歌星。</div>
+</div>
+
+<div class="sticky-step reveal js-sticky-step-2" data-media="photo/assistant.jpg" data-kind="img">
+<span class="label">POINT 04</span>
+<div class="text">多出來的金額成為鼓勵，也讓「紅包」成為關係的可見形式：不是一次性的刺激消費，而是累積的信任與照顧。</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="chapter" id="chapter-order" aria-label="章節三：仍在運作的秩序">
+<div class="chapter-inner">
+<div class="kicker reveal">CHAPTER 03</div>
+<h2 class="reveal">一個仍在運作的秩序</h2>
+
+<div class="order-stage reveal" id="order-stage">
+<p class="js-order-line">坐進觀眾席後，紅包場的日常很快展開。茶水與水果盤被送上桌，「小妹」在場內來回穿梭，確認每一桌的狀態。</p>
+<p class="js-order-line">對第一次進場的人來說，這套秩序未必容易理解：座位距離近，舞台與觀眾幾乎沒有明確分界；任何多餘的動作，都顯得突兀。</p>
+<p class="js-order-line">這種不自在，並非來自危險或衝突，而是來自——<strong>不知道自己該如何被放進這個空間</strong>。</p>
+</div>
+
+<div class="hr reveal"></div>
+
+<p class="reveal js-order-line">在現場，新面孔很少被直接問「覺得好不好」。更常出現的，是另一個問題：<strong>「怎麼會來這裡？」</strong></p>
+<p class="note reveal js-order-line">年輕人的出現往往被理解成「帶著目的」：作業、報導、拍攝、找題材。於是紅包場面對新世代時，常同時帶著開放與防備。</p>
+</div>
+</section>
+
+<section class="chapter sv-section grainy" id="chapter-interviews" aria-label="章節四：歌星訪談">
+<div class="chapter-inner">
+<div class="kicker reveal">CHAPTER 04</div>
+<h2 class="reveal">生存與夢想的對話</h2>
+<p class="reveal">許多歌星從年輕唱到現在，這裡不僅是工作場所，更是她們的「家」。</p>
+</div>
+<div class="sv-wrap">
+<div class="sv-video">
+<video id="interview-video" src="video/楊雅喬 車間打工.mp4" muted loop playsinline preload="metadata"></video>
+</div>
+<div class="sv-lines">
+<div class="sv-line js-sv-trigger" data-video="video/楊雅喬 車間打工.mp4">
+<p class="quoteText">「我國高中也在紡織車間暑期打工，但發現不喜歡。不會唱，就學啊，我就這樣找到我喜歡的工作了。」</p>
+<div class="who">— 楊雅喬（談入行）</div>
+</div>
+<div class="sv-line js-sv-trigger" data-video="video/楊雅喬 楚芸 歌星生涯啟蒙.mp4">
+<p class="quoteText">從小聽著收音機、父母放的歌曲，就這樣喜歡上了。透過唱歌賺取生活費用，也在歌廳空間持續創造精彩回憶。</p>
+<div class="who">— 楊雅喬與歌星好友</div>
+</div>
+<div class="sv-line js-sv-trigger" data-video="video/翟曼芳個人.mp4">
+<p class="quoteText">「字正腔圓、抒情歌后翟曼芳。」</p>
+<div class="who">— 翟曼芳</div>
+</div>
+<div class="sv-line js-sv-trigger" data-video="video/翟曼芳 歌廳生存.mp4">
+<p class="quoteText">「歌廳假如沒有了，其他地方也沒有我們生存的空間了⋯⋯我也要來作客，我也要來發紅包，我希望辣⋯⋯」</p>
+<div class="who">— 翟曼芳（談未來）</div>
+</div>
+</div>
+</div>
+</section>
+
+<footer style="background:#000; padding:10vh 8vw; color:rgba(255,255,255,0.4); text-align:center; font-size:0.85rem;">
+<p>2025 唱給不在場的人專題製作組</p>
+<p style="margin-top:0.5rem;">梁朝勛、彭賀琳、莊馨予</p>
+</footer>
 </main>
 
+<div class="modal-backdrop" id="modal-backdrop" aria-hidden="true">
+<div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+<div class="modal-header">
+<h3 id="modal-title" class="modal-title">標題</h3>
+<button class="modal-close" id="modal-close">關閉 ✕</button>
+</div>
+<div class="modal-body">
+<p id="modal-desc" style="color:rgba(255,255,255,0.85); font-size:1.1rem; line-height:1.8; white-space: pre-wrap;">內容...</p>
+<div class="modal-media" id="modal-media-container"></div>
+<div class="modal-caption" id="modal-caption"></div>
+</div>
+</div>
+</div>
+
 <script>
-  // 註冊 GSAP ScrollTrigger
-  gsap.registerPlugin(ScrollTrigger);
+document.addEventListener('DOMContentLoaded', () => {
+const observerOptions = { root: null, threshold: 0.1 };
+const observer = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if(entry.isIntersecting){
+entry.target.classList.add('is-visible');
+observer.unobserve(entry.target);
+}
+});
+}, observerOptions);
 
-  // 1. 開場文字視差 (Parallax)
-  gsap.to(".immersive-text .line", {
-    scrollTrigger: {
-      trigger: ".video-hero",
-      start: "top top",
-      end: "bottom top",
-      scrub: true
-    },
-    y: -100, // 文字向上移動速度比背景快
-    opacity: 0
-  });
+document.querySelectorAll('.reveal, .order-stage').forEach(el => observer.observe(el));
 
-  // 讓開場文字依序浮現 (Load Animation)
-  const lines = document.querySelectorAll('.immersive-text .line');
-  lines.forEach((line, index) => {
-    gsap.to(line, {
-      opacity: 1,
-      y: 0,
-      duration: 1.5,
-      delay: 0.5 + (index * 1.5),
-      ease: "power2.out"
-    });
-  });
+// Scroll Logic for Horizontal Header
+const hOpener = document.getElementById('hscroll-opener');
+const hTrack = document.getElementById('hscroll-track');
+const navLinks = document.querySelectorAll('.mini-nav a');
+const sections = document.querySelectorAll('section[id]');
+const progressFill = document.getElementById('progress-fill');
 
-  // 2. 閱讀進度條
-  window.addEventListener('scroll', () => {
-    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const scrolled = (winScroll / height) * 100;
-    document.getElementById("progress-bar").style.width = scrolled + "%";
-  });
+if(hOpener && hTrack){
+window.addEventListener('scroll', () => {
+const rect = hOpener.getBoundingClientRect();
+const offsetTop = rect.top; // negative as we scroll down
+const openerH = rect.height;
+const winH = window.innerHeight;
+const scrollDist = openerH - winH;
 
-  // 3. 橫向捲動 (Horizontal Scroll)
-  // 只有在電腦版 (寬度 > 768px) 時啟用，手機版維持垂直
-  if (window.innerWidth > 768) {
-    let sections = gsap.utils.toArray(".h-panel");
-    gsap.to(sections, {
-      xPercent: -100 * (sections.length - 1),
-      ease: "none",
-      scrollTrigger: {
-        trigger: "#horizontal-scroll-section",
-        pin: true,
-        scrub: 1,
-        snap: 1 / (sections.length - 1),
-        end: () => "+=" + document.querySelector("#horizontal-scroll-section").offsetWidth
-      }
-    });
-  }
+// Horizontal Scroll Calculation
+let percent = 0;
+if(offsetTop <= 0 && Math.abs(offsetTop) < scrollDist){
+percent = Math.abs(offsetTop) / scrollDist;
+} else if (Math.abs(offsetTop) >= scrollDist){
+percent = 1;
+}
+// Width of track minus window width
+const trackW = hTrack.scrollWidth;
+const maxTranslate = trackW - window.innerWidth;
+const translateX = percent * maxTranslate;
+hTrack.style.transform = `translateX(-${translateX}px)`;
 
-  // 4. 結語金句淡入
-  gsap.to(".final-quote", {
-    scrollTrigger: {
-      trigger: ".stack-3", // 當第三張卡片出現後
-      start: "top center",
-      end: "bottom center",
-      toggleActions: "play none none reverse"
-    },
-    opacity: 1,
-    y: 0,
-    duration: 1.5
-  });
+// Nav Progress Logic (Rest of page)
+const scrollY = window.scrollY;
+const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+const scrolled = (scrollY / docHeight) * 100;
+if(progressFill) progressFill.style.width = scrolled + "%";
 
-  // 5. 互動按鈕特效
-  function revealEnding() {
-    const btn = document.querySelector('.red-envelope-btn');
-    const msg = document.getElementById('final-text');
-    
-    // 按鈕消失動畫
-    btn.style.transform = "scale(0)";
-    btn.style.opacity = "0";
-    
-    setTimeout(() => {
-      btn.style.display = 'none';
-      msg.classList.add('reveal');
-      createConfetti();
-    }, 500);
-  }
+let current = '';
+sections.forEach(section => {
+const sectionTop = section.offsetTop;
+if (scrollY >= sectionTop - 200) {
+current = section.getAttribute('id');
+}
+});
+navLinks.forEach(link => {
+link.classList.remove('active');
+if(link.getAttribute('href').includes(current)){
+link.classList.add('active');
+}
+});
+});
+}
 
-  function createConfetti() {
-    for(let i=0; i<50; i++) {
-      let dot = document.createElement('div');
-      dot.style.position = 'fixed';
-      dot.style.width = Math.random() * 8 + 3 + 'px';
-      dot.style.height = dot.style.width;
-      dot.style.background = Math.random() > 0.6 ? '#FFE87A' : '#970C10';
-      dot.style.left = Math.random() * 100 + 'vw';
-      dot.style.top = '100vh';
-      dot.style.borderRadius = '2px';
-      dot.style.zIndex = '9999';
-      dot.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
-      dot.style.transition = 'all 2.5s ease-out';
-      document.body.appendChild(dot);
+const stickySteps = document.querySelectorAll('.js-sticky-step, .js-sticky-step-2');
+const compareMedia = document.getElementById('compare-media');
 
-      setTimeout(() => {
-        dot.style.top = (Math.random() * 50 + 20) + 'vh';
-        dot.style.left = (parseFloat(dot.style.left) + (Math.random() * 40 - 20)) + 'vw';
-        dot.style.opacity = 0;
-      }, 50);
-    }
-  }
+const stickyObserver = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if(entry.isIntersecting){
+entry.target.parentElement.querySelectorAll('.sticky-step').forEach(s => s.classList.remove('is-active'));
+entry.target.classList.add('is-active');
+
+const mediaSrc = entry.target.getAttribute('data-media');
+if(entry.target.classList.contains('js-sticky-step')){
+if(compareMedia && mediaSrc) compareMedia.src = mediaSrc;
+}
+}
+});
+}, { rootMargin: '-40% 0px -40% 0px' });
+
+stickySteps.forEach(step => stickyObserver.observe(step));
+
+const svTriggers = document.querySelectorAll('.js-sv-trigger');
+const interviewVideo = document.getElementById('interview-video');
+
+const svObserver = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if(entry.isIntersecting){
+svTriggers.forEach(t => t.classList.remove('is-active'));
+entry.target.classList.add('is-active');
+const vidSrc = entry.target.getAttribute('data-video');
+if(interviewVideo && vidSrc){
+const currentSrc = interviewVideo.getAttribute('src');
+if(!currentSrc || decodeURIComponent(currentSrc) !== vidSrc){
+interviewVideo.src = vidSrc;
+interviewVideo.play();
+}
+}
+}
+});
+}, { rootMargin: '-45% 0px -45% 0px' });
+
+svTriggers.forEach(t => svObserver.observe(t));
+
+// Modal Logic
+const modalBackdrop = document.getElementById('modal-backdrop');
+const modalClose = document.getElementById('modal-close');
+const modalTitle = document.getElementById('modal-title');
+const modalDesc = document.getElementById('modal-desc');
+const modalMediaContainer = document.getElementById('modal-media-container');
+const modalCaption = document.getElementById('modal-caption');
+
+document.querySelectorAll('.js-open-modal').forEach(btn => {
+btn.addEventListener('click', (e) => {
+const panel = e.target.closest('.panel');
+if(!panel) return;
+const title = panel.getAttribute('data-title');
+const body = panel.getAttribute('data-body');
+const mType = panel.getAttribute('data-media-type');
+const mSrc = panel.getAttribute('data-media-src');
+const mCap = panel.getAttribute('data-media-caption');
+modalTitle.innerText = title;
+modalDesc.innerText = body;
+modalCaption.innerText = mCap || '';
+modalMediaContainer.innerHTML = '';
+if(mType === 'video'){
+modalMediaContainer.innerHTML = `<video src="${mSrc}" controls autoplay playsinline></video>`;
+} else {
+modalMediaContainer.innerHTML = `<img src="${mSrc}" alt="${title}">`;
+}
+modalBackdrop.classList.add('open');
+document.body.style.overflow = 'hidden';
+});
+});
+
+const closeModal = () => {
+modalBackdrop.classList.remove('open');
+modalMediaContainer.innerHTML = '';
+document.body.style.overflow = '';
+};
+
+if(modalClose) modalClose.addEventListener('click', closeModal);
+if(modalBackdrop) modalBackdrop.addEventListener('click', (e) => {
+if(e.target === modalBackdrop) closeModal();
+});
+});
 </script>
-
 </body>
 </html>
