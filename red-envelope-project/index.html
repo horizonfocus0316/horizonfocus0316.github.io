@@ -1,20 +1,249 @@
-<footer>
-    <div class="project-info">
-      <div class="group-title">@紅包場專案小組</div>
-      <div class="members">梁朝勛、彭賀琳、莊馨予</div>
-    </div>
-    <div class="copyright">
-      © 2025 台北紅包場融媒體新聞專題
-    </div>
-  </footer>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>台北僅存的紅包場｜融媒體專題</title>
 
-  ```
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;500;700;900&display=swap" rel="stylesheet">
 
-### 🎨 新增/修改的 CSS 樣式
+  <style>
+    :root {
+      --bg-color: #0a0a0a;
+      --text-main: #f0f0f0;
+      --text-dim: #999;
+      --accent-red: #c02828;
+      --hover-gold: #d4af37;
+    }
 
-請在 `<style>` 標籤中，**修改**原有的 `footer` 樣式，並**新增** `.project-info`, `.group-title`, 和 `.members` 樣式。
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-```css
+    /* === 加入全頁淡入動畫 === */
+    body {
+      font-family: "Noto Serif TC", serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      animation: fadeInPage 1.5s ease-out; /* 這裡加上動畫 */
+    }
+
+    @keyframes fadeInPage {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 噪點層 */
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url('https://grainy-gradients.vercel.app/noise.svg');
+      opacity: 0.06;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* 背景圖層容器 */
+    .bg-container {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: #000;
+    }
+
+    .bg-layer {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out, transform 8s ease-out;
+      filter: brightness(0.4) grayscale(0.1);
+    }
+    
+    .bg-layer.active {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 20;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 5vw;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 60px;
+      align-items: center;
+      height: 80vh;
+    }
+
+    .header-group {
+      animation: fadeIn 1s ease-out;
+    }
+
+    .header-group h1 {
+      font-size: clamp(2.5rem, 4.5vw, 4.5rem);
+      line-height: 1.1;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      margin-bottom: 32px;
+      color: #fff;
+      text-shadow: 0 0 30px rgba(185, 28, 28, 0.4);
+    }
+
+    .header-group .subtitle {
+      font-size: clamp(1rem, 1.2vw, 1.25rem);
+      color: #fff;
+      line-height: 1.8;
+      font-weight: 300;
+      border-left: 1px solid var(--accent-red);
+      padding-left: 24px;
+      margin-bottom: 40px;
+      max-width: 520px;
+      text-align: justify;
+    }
+
+    .header-group .intro-highlight {
+      color: var(--hover-gold);
+      font-weight: 500;
+      display: block;
+      margin-top: 12px;
+      font-size: 1.1em;
+    }
+
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-left: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .nav-item {
+      text-decoration: none;
+      color: rgba(255,255,255,0.5);
+      padding: 30px 40px;
+      transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .nav-item::before {
+      content: "";
+      position: absolute;
+      left: -1px;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--accent-red);
+      transform: scaleY(0);
+      transition: transform 0.4s ease;
+    }
+
+    .nav-item:hover, .nav-item.active-link {
+      color: #fff;
+      background: linear-gradient(90deg, rgba(255,255,255,0.03), transparent);
+      padding-left: 50px;
+    }
+
+    .nav-item:hover::before {
+      transform: scaleY(1);
+    }
+
+    .chapter-num {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-red);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .chapter-title {
+      font-size: clamp(1.4rem, 2vw, 1.8rem);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .chapter-desc {
+      font-size: 0.9rem;
+      color: #bbb;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.4s ease;
+      height: 0;
+      overflow: hidden;
+      line-height: 1.6;
+    }
+
+    .nav-item:hover .chapter-desc {
+      opacity: 1;
+      transform: translateY(0);
+      height: auto;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .wrap {
+        grid-template-columns: 1fr;
+        height: auto;
+        padding: 80px 24px;
+        gap: 40px;
+      }
+      
+      body {
+        height: auto;
+        overflow-y: auto;
+      }
+      
+      .header-group h1 {
+        font-size: 2.8rem;
+      }
+
+      .nav-list {
+        border-left: none;
+        border-top: 1px solid rgba(255,255,255,0.1);
+      }
+
+      .nav-item {
+        padding: 24px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+
+      .nav-item:hover {
+        padding-left: 0;
+        background: none;
+      }
+
+      .nav-item::before {
+        display: none;
+      }
+
+      .chapter-desc {
+        opacity: 1;
+        height: auto;
+        transform: none;
+        margin-top: 8px;
+      }
+    }
+
+    /* 這裡開始是修改後的 FOOTER 樣式 */
     footer {
       position: fixed;
       bottom: 24px;
@@ -51,7 +280,91 @@
       font-weight: 300;
       font-size: 0.75rem;
     }
-    
-    @media (max-width: 768px) {
-      /* ... (原有 mobile 樣式不變) ... */
+    /* 這裡結束是修改後的 FOOTER 樣式 */
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
+  </style>
+</head>
+
+<body>
+
+  <div class="bg-container">
+    <div class="bg-layer active" id="bg-0" style="background-image: url('assets/bg-cover.png');"></div>
+    <div class="bg-layer" id="bg-1" style="background-image: url('assets/bg-ch1..png');"></div>
+    <div class="bg-layer" id="bg-2" style="background-image: url('assets/bg-ch2.png');"></div>
+    <div class="bg-layer" id="bg-3" style="background-image: url('assets/bg-ch3.png');"></div>
+  </div>
+
+  <main class="wrap">
+    <div class="header-group">
+      <h1>台北僅存的<br>紅包場</h1>
+      <div class="subtitle">
+        不同於牛肉場的清涼，不同於Livehouse的狂歡。<br>
+        這裡沒有清涼秀，只有穿著華麗禮服的歌手，<br>
+        與特地來聽歌、包紅包的老聽眾。<br><br>
+        一首歌、一個眼神、一個紅包，<br>
+        <span class="intro-highlight">構成那個年代最真誠的交流。</span>
+      </div>
+    </div>
+
+    <nav class="nav-list">
+      
+      <a href="chapter1/index.html" class="nav-item" data-bg="bg-1">
+        <div class="chapter-num">CHAPTER 01</div>
+        <div class="chapter-title">燈紅酒綠的年代</div>
+        <div class="chapter-desc">紅包場的誕生與繁華，為何它能成為那個時代最溫暖的避風港？</div>
+      </a>
+      
+      <a href="chapter2/index.html" class="nav-item" data-bg="bg-2">
+        <div class="chapter-num">CHAPTER 02</div>
+        <div class="chapter-title">霓虹燈下的組成</div>
+        <div class="chapter-desc">紅包不是交易，它是那個年代的一種社交語言。拆解歌手、樂手與小妹的人情結構。</div>
+      </a>
+      
+      <a href="chapter3/index.html" class="nav-item" data-bg="bg-3">
+        <div class="chapter-num">CHAPTER 03</div>
+        <div class="chapter-title">最後的紅包場</div>
+        <div class="chapter-desc">「這不是謝幕，而是轉身。」<br>從金鑽歌廳的堅持到綠雷德的翻譯，看文化如何被改寫與新生。</div>
+      </a>
+
+    </nav>
+  </main>
+
+  <footer>
+    <div class="project-info">
+      <div class="group-title">@紅包場專案小組</div>
+      <div class="members">梁朝勛、彭賀琳、莊馨予</div>
+    </div>
+    <div class="copyright">
+      © 2025 台北紅包場融媒體新聞專題
+    </div>
+  </footer>
+
+  <script>
+    const navItems = document.querySelectorAll('.nav-item');
+    const bgLayers = document.querySelectorAll('.bg-layer');
+    const defaultBg = document.getElementById('bg-0');
+
+    navItems.forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        bgLayers.forEach(bg => bg.classList.remove('active'));
+        const targetId = item.getAttribute('data-bg');
+        const targetBg = document.getElementById(targetId);
+        if (targetBg) {
+          targetBg.classList.add('active');
+        }
+      });
+
+      item.addEventListener('mouseleave', () => {
+        bgLayers.forEach(bg => bg.classList.remove('active'));
+        if (defaultBg) {
+          defaultBg.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
