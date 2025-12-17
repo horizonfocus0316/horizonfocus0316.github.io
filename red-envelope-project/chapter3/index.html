@@ -23,6 +23,7 @@
       --accent-red: #D91E18; /* 鮮豔紅 */
       --deep-vintage-red: #8a1515; /* 酒紅 */
       --text: #e0e0e0;
+      --deep-maroon: #380808; /* 深紅色，用於結尾背景 */
     }
 
     * { box-sizing: border-box; }
@@ -76,7 +77,6 @@
 
     /* 膠囊紅包按鈕 */
     .pill-red-envelope {
-      background: #c21807; color: #ffd700; border: 2px solid #ffd700; 
       padding: 18px 60px; font-size: 24px; border-radius: 50px;
       font-family: "Noto Serif TC", serif;
       font-weight: 900; letter-spacing: 3px;
@@ -132,15 +132,14 @@
     .h-desc { font-size: 20px; color: #ccc; max-width: 650px; text-align: justify; line-height: 1.8; background: rgba(0,0,0,0.6); padding: 25px; border-left: 4px solid var(--accent-red); }
 
     /* =========================================
-       4. 金小姐的雜誌風排版 (STICKY FIX)
+       4. 金小姐的雜誌風排版 (固定圖片/可滾動文字)
     ========================================= */
     .container { width: min(1100px, 92%); margin: 0 auto; position: relative; z-index: 1; }
     
     .editorial-layout {
       display: flex; 
-      min-height: 250vh; 
+      min-height: 250vh; /* 確保有足夠的捲動空間來展示所有文字 */
       margin: 150px 0;
-      /* 確保父層不會隱藏溢出，讓 sticky 正常工作 */
     }
 
     /* 左側固定圖片容器 */
@@ -199,6 +198,7 @@
       display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 40px 0;
       border-top: 1px solid #333; border-bottom: 1px solid #333; padding: 30px 0;
     }
+    /* 修正數字樣式，確保突出 */
     .stat-item h4 { font-size: 40px; color: var(--accent); font-weight: 900; margin: 0; }
     .stat-item p { font-size: 16px; color: #888; margin: 5px 0 0 0; }
 
@@ -297,22 +297,29 @@
     .final-text-reveal { opacity: 0; transition: opacity 2s ease; margin-top: 50px; font-size: 20px; color: #ccc; }
     @keyframes flicker { 0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; } 20%, 24%, 55% { opacity: 0.5; } }
 
-    /* 底部轉場按鈕 */
+    /* 底部轉場按鈕 (結尾風格參考) */
     .next-chapter-section {
-      padding: 100px 20px 40px; text-align: center; background: linear-gradient(to bottom, transparent, #000);
-      position: relative; z-index: 60;
+      padding: 100px 20px 40px; 
+      text-align: center; 
+      background: var(--deep-maroon); /* 參考結尾截圖的深紅色背景 */
+      position: relative; 
+      z-index: 60;
+      border-top: 5px solid rgba(255, 255, 255, 0.1);
     }
+    .next-chapter-section .next-label { color: #aaa; }
+
     .nav-buttons-container { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
     .nav-btn {
-      text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.3);
+      text-decoration: none; border: 1px solid #aaa; /* 淺色線框 */
       padding: 15px 40px; color: #fff; font-family: "Noto Serif TC", serif;
       font-size: 1rem; letter-spacing: 0.1em; transition: all 0.4s ease; min-width: 200px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: rgba(0, 0, 0, 0.3);
     }
-    .nav-btn span { font-size: 0.7em; color: #888; margin-top: 5px; font-weight: 300; }
-    .btn-next:hover {
-      border-color: var(--accent-red); background: rgba(217, 30, 24, 0.2);
-      letter-spacing: 0.15em; box-shadow: 0 0 30px rgba(217, 30, 24, 0.4);
+    .nav-btn span { font-size: 0.7em; color: #aaa; margin-top: 5px; font-weight: 300; }
+    .nav-btn:hover {
+        border-color: #fff;
+        background: rgba(255, 255, 255, 0.1);
     }
 
     /* Footer 新增 */
@@ -357,7 +364,8 @@
   <div class="gate-content">
     <h1 class="gate-title">台北僅存的紅包場</h1>
     
-    <button class="pill-red-envelope" onclick="enterSite(this)">
+    <button class="pill-red-envelope" onclick="enterSite(this)"
+        style="background: #c21807; color: #ffd700; border: 2px solid #ffd700;">
       🧧 遞出紅包
     </button>
     
@@ -432,7 +440,7 @@
                 多年後，當年投資這家歌廳的四五個股東，一個個退出。最後，只剩下她一人承接下這份重擔。
             </p>
             <p>
-                <span style="font-style:italic;">「有些店不是生意不好，是經營方式不一樣。」</span>金小姐的經營之道就是**「守本分」**。她堅持**正派經營**、不亂收費、不作惡性競爭，這也是金鑽能夠堅持到最後，成為台北僅存一間的根本原因。
+                <span style="font-style:italic;">「有些店不是生意不好，是經營方式不一樣。」</span>金小姐的經營之道就是<span style="font-weight:700;">「守本分」</span>。她堅持<span style="font-weight:700;">正派經營</span>、不亂收費、不作惡性競爭，這也是金鑽能夠堅持到最後，成為台北僅存一間的根本原因。
             </p>
         </div>
 
