@@ -1189,7 +1189,7 @@
         1980年代是紅包場的黃金時期。根據資深業者與文史工作者的回憶，當時西門町漢中街、武昌街一帶，歌廳林立，全盛時期約有 30 家 營業，單日超過 100 位 歌手輪番登台。以下圖表展示歌廳數量從萌芽到凋零的歷史軌跡。
     </div>
     
-    <div class="chart-container-wrapper" data-chart="trend">
+    <div class="chart-container-wrapper">
         <h5 class="text-xl font-serif text-gray-200 mb-4">西門町紅包場/歌廳數量變遷 (1960 - 2024)</h5>
         <div class="chart-canvas">
             <canvas id="trendChart"></canvas>
@@ -1206,7 +1206,7 @@
         紅包場的經濟邏輯建立在「非強制性消費」上。歌手甚至沒有底薪，完全依賴觀眾的紅包。紅包的金額和給予方式，同時代表了觀眾的財力，和對歌手的情感投射。
     </div>
     
-    <div class="chart-container-wrapper" data-chart="income">
+    <div class="chart-container-wrapper">
         <h5 class="text-xl font-serif text-gray-200 mb-4">紅包收入結構 vs. 基本消費 (全盛時期推估)</h5>
         <div class="chart-canvas w-full max-w-sm h-72">
             <canvas id="incomeChart"></canvas>
@@ -1233,7 +1233,7 @@
         紅包場的主要消費者是「老兵」或「榮民」。這群人在年輕時隨軍來台，許多人終身未婚，或將妻兒留在了大陸。根據資料，萬華區因有眷村聚集大量榮民人口。然而，隨著時間推移，核心客群正快速凋零。
     </div>
     
-    <div class="chart-container-wrapper" data-chart="population">
+    <div class="chart-container-wrapper">
         <h5 class="text-xl font-serif text-gray-200 mb-4">萬華區總人口數變遷 (1991 - 2021)</h5>
         <div class="chart-canvas">
             <canvas id="populationChart"></canvas>
@@ -1541,21 +1541,16 @@
       
       handleImageZoom();
       
-      // === 9. Chart.js 初始化與動畫觸發 (數據圖表) ===
+      // === 9. Chart.js 初始化 (數據圖表) ===
       
       const chartRed = 'rgb(151, 12, 16)';
       const chartGold = 'rgb(255, 232, 122)';
       const chartLight = 'rgb(209, 213, 219)';
-      
-      // 存储 Chart 实例
-      let trendChartInstance = null;
-      let incomeChartInstance = null;
-      let populationChartInstance = null;
 
       // Chart 1: 歌廳數量變遷趨勢 (Chapter 3)
       const ctxTrend = document.getElementById('trendChart');
       if (ctxTrend) {
-          trendChartInstance = new Chart(ctxTrend.getContext('2d'), {
+          new Chart(ctxTrend.getContext('2d'), {
               type: 'line',
               data: {
                   labels: ['1960 (萌芽)', '1970 (歌廳熱)', '1985 (全盛)', '1995 (轉變)', '2010 (衰退)', '2024 (現今)'],
@@ -1575,7 +1570,10 @@
               options: {
                   responsive: true,
                   maintainAspectRatio: false,
-                  animation: false, // 初始禁用動畫
+                  animation: {
+                      duration: 1500, 
+                      easing: 'easeInOutQuart', 
+                  },
                   scales: {
                       y: {
                           beginAtZero: true,
@@ -1606,7 +1604,7 @@
       // Chart 2: 紅包收入結構圓餅圖 (Chapter 3)
       const ctxIncome = document.getElementById('incomeChart');
       if (ctxIncome) {
-          incomeChartInstance = new Chart(ctxIncome.getContext('2d'), {
+          new Chart(ctxIncome.getContext('2d'), {
               type: 'doughnut',
               data: {
                   labels: ['歌手紅包收入 (分成後)', '店家茶資/門票收入', '樂隊/其他開支'],
@@ -1623,7 +1621,10 @@
               options: {
                   responsive: true,
                   maintainAspectRatio: false,
-                  animation: false, // 初始禁用動畫
+                  animation: {
+                      duration: 1500, 
+                      easing: 'easeInOutQuart', 
+                  },
                   plugins: {
                       legend: { position: 'bottom', labels: { color: chartLight } },
                       tooltip: {
@@ -1648,7 +1649,7 @@
       // Chart 3: 萬華區人口趨勢 (Chapter 4)
       const ctxPopulation = document.getElementById('populationChart');
       if (ctxPopulation) {
-          populationChartInstance = new Chart(ctxPopulation.getContext('2d'), {
+          new Chart(ctxPopulation.getContext('2d'), {
               type: 'bar',
               data: {
                   labels: ['1991 (基準點)', '2001 (下滑 -3.3%)', '2011 (下滑 -2.1%)', '2021 (顯著下滑 -8.7%)'],
@@ -1662,7 +1663,10 @@
               options: {
                   responsive: true,
                   maintainAspectRatio: false,
-                  animation: false, // 初始禁用動畫
+                  animation: {
+                      duration: 1500, 
+                      easing: 'easeInOutQuart', 
+                  },
                   scales: {
                       y: {
                           title: { display: true, text: '人口數 (人)', color: chartLight },
@@ -1688,548 +1692,6 @@
               }
           });
       }
-      
-      // === 10. 圖表動畫觸發邏輯 (新增) ===
-      const chartsToAnimate = [
-          { container: document.querySelector('.chart-container-wrapper[data-chart="trend"]'), instance: trendChartInstance },
-          { container: document.querySelector('.chart-container-wrapper[data-chart="income"]'), instance: incomeChartInstance },
-          { container: document.querySelector('.chart-container-wrapper[data-chart="population"]'), instance: populationChartInstance }
-      ];
-
-      const chartObserver = new IntersectionObserver((entries, observer) => {
-          entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                  const chartData = chartsToAnimate.find(c => c.container === entry.target);
-                  if (chartData && chartData.instance) {
-                      // 啟用動畫並更新 (這將觸發 Chart.js 的繪製動畫)
-                      chartData.instance.options.animation = true;
-                      chartData.instance.update();
-                      
-                      // 動畫播放一次後停止觀察
-                      observer.unobserve(entry.target);
-                  }
-              }
-          });
-      }, { threshold: 0.5 }); // 50% 進入視窗時觸發
-
-      chartsToAnimate.forEach(c => {
-          if (c.container) {
-              chartObserver.observe(c.container);
-          }
-      });
-      // 初始手動更新一次確保初次載入時可見
-      if(trendChartInstance) trendChartInstance.update();
-      if(incomeChartInstance) incomeChartInstance.update();
-      if(populationChartInstance) populationChartInstance.update();
-
-
-    });
-  </script>
-</body>
-</html><div class="chapter-stack">
-      <section class="chapter-intro">
-        <img src="assets/red-envelope-theater.jpg" alt="Chapter 4 Cover">
-        <div class="chapter-overlay"></div>
-        <div class="chapter-title">社會學分析：榮民、擬親屬關係與情感結構</div>
-      </section>
-  </div>
-
-  <section class="social-analysis">
-    
-    <h4>人口結構與「孤獨經濟」</h4>
-    <div class="social-text-paragraph">
-        紅包場的主要消費者是「老兵」或「榮民」。這群人在年輕時隨軍來台，許多人終身未婚，或將妻兒留在了大陸。根據資料，萬華區因有眷村聚集大量榮民人口。然而，隨著時間推移，核心客群正快速凋零。
-    </div>
-    
-    <div class="chart-container-wrapper" data-chart="population">
-        <h5 class="text-xl font-serif text-gray-200 mb-4">萬華區總人口數變遷 (1991 - 2021)</h5>
-        <div class="chart-canvas">
-            <canvas id="populationChart"></canvas>
-        </div>
-        <p class="text-xs text-gray-500 mt-4">資料來源：內政部戶政司、退輔會資料整理</p>
-    </div>
-
-    <div class="social-text-paragraph">
-        對於這群生活在眷村或單身宿舍的老兵而言，紅包場不僅是娛樂場所，更是「情感的避風港」。他們在這裡花費退休金，購買的不僅是歌曲，更是「尊嚴」與「親情」。
-    </div>
-    
-    <h4>「乾爹」與「女兒」：擬親屬關係的建立</h4>
-    <div class="social-text-paragraph">
-        紅包場最獨特的社會學現象，是歌手與觀眾之間發展出的「擬親屬關係」（Pseudo-kinship）。許多老兵將年輕的女歌手認作「乾女兒」（乾爹-乾女兒關係）。
-    </div>
-    
-    <ul class="pseudo-kinship-list">
-        <li>情感投射：對於無子嗣或子女不在身邊的老兵，歌手填補了「女兒」的角色空缺。</li>
-        <li>相互依存：長期捧場下，雙方關係超越了買賣，變得像老友甚至親人。有歌手會照顧生病的老客人，老客人則將歌手視為精神寄託。</li>
-        <li>權力展演：透過贈送紅包，社會地位邊緣的老兵得以在歌廳這個封閉空間內，展現「施予者」的權力與慷慨，獲得短暫的社會肯定。</li>
-    </ul>
-    
-    <h4>兩岸開放的結構性衝擊</h4>
-    <div class="social-text-paragraph">
-        1987年兩岸開放探親，是紅包場走向衰落的關鍵轉折點。在此之前，老兵們認為歸鄉無望，便將積蓄毫無保留地投入紅包場，尋求心靈慰藉。開放探親後，老兵們得以聯繫上大陸的真親屬，資金流向隨之改變，紅包金額大幅縮水，從數千元降至一兩百元。這證明了紅包場的繁榮實則是建立在「離散」（Diaspora）與「封閉」的特殊歷史情境之上。
-    </div>
-  </section>
-
-  <section class="chapter-finale" data-finale="intro">
-    <p>紅包場的燈光或許已經黯淡，<br>但那個年代透過歌聲建立的真摯情感，<br>將永遠是這座城市最溫暖的迴響。</p>
-  </section>
-
-  <section class="finale-image-block" data-finale="image-decline">
-    <img id="finale-img-1" src="assets/ch1-06-closed-songhall-night.jpg" alt="closed songhall night">
-  </section>
-
-  <section class="chapter-finale" data-finale="middle">
-    <p>鳳凰歌廳熄燈後，<br>金鑽歌廳成為台灣目前唯一一家以「純紅包場」形式運作的歌廳。</p>
-  </section>
-
-  <section class="finale-image-block" data-finale="image-warm">
-    <img id="finale-img-2" src="assets/ch1-07-jinzuan-stage-empty.jpg" alt="jinzuan stage empty">
-  </section>
-
-  <section class="chapter-finale slow" data-finale="closing">
-    <p>舞台的燈光會熄滅，但情感不會。<br>對那些不在場的人來說，<br>每一首老歌，都曾是他們生命中最溫暖的迴響。</p>
-  </section>
-
-  <div class="next-chapter-section">
-    <span class="next-label">CONTINUE READING</span>
-    <div class="nav-buttons-container">
-      <a href="../index.html" class="nav-btn btn-home">
-        回專題首頁
-        <span>BACK TO HOME</span>
-      </a>
-      <a href="../chapter2/index.html" class="nav-btn btn-next">
-        下一章：霓虹燈下的組成
-        <span>CHAPTER 02 &rarr;</span>
-      </a>
-    </div>
-    
-    <div class="footer-info">
-        <p>「台北僅存的紅包場」專案小組</p>
-        <p>梁朝勛、彭賀琳、莊馨予</p>
-    </div>
-  </div>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      
-      // === 1. 打字機特效 (Typewriter Effect) ===
-      const titleEl = document.getElementById("hero-title");
-      const subtitleEl = document.getElementById("hero-subtitle");
-      const scrollHint = document.getElementById("scroll-hint");
-      const transitionCta = document.getElementById("transition-cta");
-      const typeTargets = [titleEl, subtitleEl];
-
-      typeTargets.forEach((el) => {
-        const text = el.dataset.text || el.textContent.trim();
-        el.dataset.text = text;
-        el.textContent = "";
-      });
-
-      const typeText = (el, speed = 100) =>
-        new Promise((resolve) => {
-          const text = el.dataset.text || "";
-          let index = 0;
-          el.classList.add("typing");
-          const tick = () => {
-            el.textContent += text.charAt(index);
-            index += 1;
-            if (index < text.length) {
-              setTimeout(tick, speed);
-            } else {
-              el.classList.remove("typing");
-              el.classList.add("done");
-              resolve();
-            }
-          };
-          tick();
-        });
-
-      const startSequence = async () => {
-        
-        await new Promise(r => setTimeout(r, 600));
-        
-        for (const el of typeTargets) {
-          await typeText(el);
-        }
-        
-        requestAnimationFrame(() => {
-          if (scrollHint) scrollHint.classList.add("visible");
-          if (transitionCta) transitionCta.classList.add("visible");
-        });
-        
-        if(transitionCta) {
-          transitionCta.addEventListener('click', (e) => {
-            e.preventDefault();
-            const target = document.getElementById('immersive-start');
-            if(target) {
-              target.scrollIntoView({ behavior: 'smooth' });
-            }
-          });
-        }
-      };
-
-      startSequence();
-
-      // === 2. 沉浸式文字淡入 (Immersive Text Fade) ===
-      const narrativeLines = document.querySelectorAll(".immersive-copy h5");
-      if (narrativeLines.length) {
-        const narrativeObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                narrativeLines.forEach((line, idx) => {
-                  line.style.transitionDelay = `${idx * 150}ms`;
-                  requestAnimationFrame(() => line.classList.add("visible"));
-                });
-                narrativeObserver.disconnect();
-              }
-            });
-          },
-          { threshold: 0.2 }
-        );
-        narrativeObserver.observe(narrativeLines[0]);
-      }
-
-      // === 3. 影片聲音控制 (Video Audio Control) ===
-      const revealVideo = document.getElementById("reveal-video");
-      const unmuteBtn = document.getElementById("unmute-btn");
-
-      if (revealVideo && unmuteBtn) {
-        unmuteBtn.addEventListener("click", () => {
-          if (revealVideo.muted) {
-            revealVideo.muted = false;
-            unmuteBtn.innerHTML = '<span class="btn-icon">🔊</span><span class="btn-text">關閉聲音</span>';
-            revealVideo.play().catch(e => console.error("播放失敗:", e));
-          } else {
-            revealVideo.muted = true;
-            unmuteBtn.innerHTML = '<span class="btn-icon">🔇</span><span class="btn-text">開啟聲音</span>';
-          }
-        });
-      }
-
-      // === 4. 黑膠唱片播放器 (Vinyl Player) ===
-      const vinylDisc = document.getElementById("vinyl-disc");
-      const vinylToggle = document.getElementById("vinyl-toggle");
-      const vinylAudio = document.getElementById("vinyl-audio");
-
-      if (vinylDisc && vinylToggle && vinylAudio) {
-        const updateVinylState = () => {
-          if (vinylAudio.paused) {
-            vinylDisc.classList.remove("is-playing");
-            vinylToggle.textContent = "點擊播放時代氛圍";
-          } else {
-            vinylDisc.classList.add("is-playing");
-            vinylToggle.textContent = "點擊暫停時代氛圍";
-          }
-        };
-
-        const toggleVinyl = () => {
-          if (vinylAudio.paused) {
-            vinylAudio.play().catch(() => {});
-          } else {
-            vinylAudio.pause();
-          }
-          updateVinylState();
-        };
-
-        vinylDisc.addEventListener("click", toggleVinyl);
-        vinylToggle.addEventListener("click", toggleVinyl);
-        
-        vinylAudio.addEventListener("ended", () => {
-          vinylAudio.pause();
-          vinylAudio.currentTime = 0;
-          updateVinylState();
-        });
-        
-        vinylAudio.addEventListener("pause", updateVinylState);
-        vinylAudio.addEventListener("play", updateVinylState);
-        
-        updateVinylState();
-      }
-
-      // === 5. 金句特效 (Quote Highlight) ===
-      const quoteLine = document.getElementById("quote-line");
-      if (quoteLine) {
-        const quoteObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                quoteLine.classList.add("visible");
-                setTimeout(() => quoteLine.classList.add("highlight"), 800);
-                quoteObserver.disconnect();
-              }
-            });
-          },
-          { threshold: 0.6 }
-        );
-        quoteObserver.observe(quoteLine);
-      }
-
-      // === 6. 結尾淡入特效 (Finale Fade-in) ===
-      const finaleSections = document.querySelectorAll("[data-finale]");
-      if (finaleSections.length) {
-        const finaleObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add("is-visible");
-              }
-            });
-          },
-          { threshold: 0.35 }
-        );
-        finaleSections.forEach((section) => finaleObserver.observe(section));
-      }
-
-      // === 7. 橫向捲動 A & B 邏輯 (Horizontal Scroll) ===
-      const horizontalScroll = document.getElementById("horizontal-scroll");
-      const storyHorizontal = document.getElementById("story-horizontal");
-
-      const setupHorizontalScroll = (element) => {
-        if (!element) return;
-        const panelsWrapper = element.querySelector(".scroll-panels") || element.querySelector(".story-panels");
-        const panels = Array.from(panelsWrapper ? panelsWrapper.children : []).length;
-
-        if (panels > 0) {
-          element.style.setProperty("--panel-count", panels);
-
-          const handleScroll = () => {
-            const startOffset = element.offsetTop;
-            const totalScrollable = element.offsetHeight - window.innerHeight;
-            
-            if (totalScrollable <= 0) return;
-            
-            const scrollY = window.scrollY || window.pageYOffset;
-            const current = Math.min(Math.max(scrollY - startOffset, 0), totalScrollable);
-            const progress = current / totalScrollable;
-            
-            const translate = -progress * (panels - 1) * 100;
-            panelsWrapper.style.transform = `translateX(${translate}vw)`;
-            
-            if (element.id === "story-horizontal") {
-              const panelsArray = Array.from(element.querySelectorAll(".story-panel"));
-              const activeIndex = Math.round(progress * (panels - 1));
-              panelsArray.forEach((panel, idx) => {
-                panel.classList.toggle("is-active", idx === activeIndex);
-              });
-            }
-          };
-
-          window.addEventListener("scroll", handleScroll, { passive: true });
-          window.addEventListener("resize", handleScroll);
-          handleScroll();
-        }
-      };
-      
-      setupHorizontalScroll(horizontalScroll);
-      setupHorizontalScroll(storyHorizontal);
-      
-      // === 8. 結尾圖片滾動放大特效 (Scroll Zoom) ===
-      const finaleImages = [
-        { el: document.getElementById('finale-img-1'), container: document.querySelector('.finale-image-block[data-finale="image-decline"]') },
-        { el: document.getElementById('finale-img-2'), container: document.querySelector('.finale-image-block[data-finale="image-warm"]') }
-      ];
-
-      const handleImageZoom = () => {
-        finaleImages.forEach(({ el, container }) => {
-          if (!el || !container) return;
-          
-          const containerRect = container.getBoundingClientRect();
-          const viewHeight = window.innerHeight;
-          
-          if (containerRect.top < viewHeight && containerRect.bottom > 0) {
-            const progress = 1 - (containerRect.bottom / (container.offsetHeight + viewHeight));
-            const scale = 1.0 + (progress * 0.15); 
-            
-            el.style.transform = `scale(${Math.min(scale, 1.15)})`;
-          }
-        });
-        requestAnimationFrame(handleImageZoom);
-      };
-      
-      handleImageZoom();
-      
-      // === 9. Chart.js 初始化與動畫觸發 (數據圖表) ===
-      
-      const chartRed = 'rgb(151, 12, 16)';
-      const chartGold = 'rgb(255, 232, 122)';
-      const chartLight = 'rgb(209, 213, 219)';
-      
-      // 存储 Chart 实例
-      let trendChartInstance = null;
-      let incomeChartInstance = null;
-      let populationChartInstance = null;
-
-      // Chart 1: 歌廳數量變遷趨勢 (Chapter 3)
-      const ctxTrend = document.getElementById('trendChart');
-      if (ctxTrend) {
-          trendChartInstance = new Chart(ctxTrend.getContext('2d'), {
-              type: 'line',
-              data: {
-                  labels: ['1960 (萌芽)', '1970 (歌廳熱)', '1985 (全盛)', '1995 (轉變)', '2010 (衰退)', '2024 (現今)'],
-                  datasets: [{
-                      label: '歌廳/紅包場 估計數量',
-                      data: [3, 15, 30, 20, 5, 1], 
-                      borderColor: chartRed,
-                      backgroundColor: 'rgba(151, 12, 16, 0.3)',
-                      fill: true,
-                      tension: 0.3,
-                      pointRadius: 6,
-                      pointBackgroundColor: chartGold,
-                      pointBorderColor: chartRed,
-                      pointBorderWidth: 2
-                  }]
-              },
-              options: {
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  animation: false, // 初始禁用動畫
-                  scales: {
-                      y: {
-                          beginAtZero: true,
-                          title: { display: true, text: '店家數量 (家)', color: chartLight },
-                          grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                          ticks: { color: chartLight }
-                      },
-                      x: {
-                          grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                          ticks: { color: chartLight }
-                      }
-                  },
-                  plugins: {
-                      legend: { labels: { color: chartLight } },
-                      tooltip: { 
-                          callbacks: {
-                              afterLabel: function(context) {
-                                  if (context.dataIndex === 2) return '股市萬點行情，紅包場最鼎盛時期';
-                                  if (context.dataIndex === 5) return '僅存：金鑽大歌廳'; 
-                              }
-                          }
-                      }
-                  }
-              }
-          });
-      }
-
-      // Chart 2: 紅包收入結構圓餅圖 (Chapter 3)
-      const ctxIncome = document.getElementById('incomeChart');
-      if (ctxIncome) {
-          incomeChartInstance = new Chart(ctxIncome.getContext('2d'), {
-              type: 'doughnut',
-              data: {
-                  labels: ['歌手紅包收入 (分成後)', '店家茶資/門票收入', '樂隊/其他開支'],
-                  datasets: [{
-                      data: [50, 35, 15], 
-                      backgroundColor: [
-                          chartGold,
-                          chartRed,
-                          '#555555'
-                      ],
-                      borderWidth: 0
-                  }]
-              },
-              options: {
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  animation: false, // 初始禁用動畫
-                  plugins: {
-                      legend: { position: 'bottom', labels: { color: chartLight } },
-                      tooltip: {
-                          callbacks: {
-                              label: function(context) {
-                                  let label = context.label || '';
-                                  if (label) label += ': ';
-                                  if (context.raw) label += context.raw + '%';
-                                  return label;
-                              },
-                              footer: function(context) {
-                                  if (context[0].dataIndex === 0) return '歌手主要生計來源，需靠社交勞動維繫';
-                                  if (context[0].dataIndex === 1) return '固定成本，歸場地所有';
-                              }
-                          }
-                      }
-                  }
-              }
-          });
-      }
-      
-      // Chart 3: 萬華區人口趨勢 (Chapter 4)
-      const ctxPopulation = document.getElementById('populationChart');
-      if (ctxPopulation) {
-          populationChartInstance = new Chart(ctxPopulation.getContext('2d'), {
-              type: 'bar',
-              data: {
-                  labels: ['1991 (基準點)', '2001 (下滑 -3.3%)', '2011 (下滑 -2.1%)', '2021 (顯著下滑 -8.7%)'],
-                  datasets: [{
-                      label: '萬華區總人口數 (人)',
-                      data: [230801, 204024, 190855, 176617],
-                      backgroundColor: chartRed,
-                      hoverBackgroundColor: chartGold,
-                  }]
-              },
-              options: {
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  animation: false, // 初始禁用動畫
-                  scales: {
-                      y: {
-                          title: { display: true, text: '人口數 (人)', color: chartLight },
-                          grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                          ticks: { color: chartLight }
-                      },
-                      x: {
-                          grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                          ticks: { color: chartLight }
-                      }
-                  },
-                  plugins: {
-                      legend: { display: false },
-                      tooltip: {
-                          callbacks: {
-                              afterLabel: function(context) {
-                                  const trend = ['紅包場活躍期', '觀眾基數開始萎縮', '產業進入整併期', '核心客群極度匱乏'];
-                                  return '趨勢：' + trend[context.dataIndex];
-                              }
-                          }
-                      }
-                  }
-              }
-          });
-      }
-      
-      // === 10. 圖表動畫觸發邏輯 (新增) ===
-      const chartsToAnimate = [
-          { container: document.querySelector('.chart-container-wrapper[data-chart="trend"]'), instance: trendChartInstance },
-          { container: document.querySelector('.chart-container-wrapper[data-chart="income"]'), instance: incomeChartInstance },
-          { container: document.querySelector('.chart-container-wrapper[data-chart="population"]'), instance: populationChartInstance }
-      ];
-
-      const chartObserver = new IntersectionObserver((entries, observer) => {
-          entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                  const chartData = chartsToAnimate.find(c => c.container === entry.target);
-                  if (chartData && chartData.instance) {
-                      // 啟用動畫並更新 (這將觸發 Chart.js 的繪製動畫)
-                      chartData.instance.options.animation = true;
-                      chartData.instance.update();
-                      
-                      // 動畫播放一次後停止觀察
-                      observer.unobserve(entry.target);
-                  }
-              }
-          });
-      }, { threshold: 0.5 }); // 50% 進入視窗時觸發
-
-      chartsToAnimate.forEach(c => {
-          if (c.container) {
-              chartObserver.observe(c.container);
-          }
-      });
-      // 初始手動更新一次確保初次載入時可見
-      if(trendChartInstance) trendChartInstance.update();
-      if(incomeChartInstance) incomeChartInstance.update();
-      if(populationChartInstance) populationChartInstance.update();
-
 
     });
   </script>
