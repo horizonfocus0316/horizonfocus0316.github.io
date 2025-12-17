@@ -23,6 +23,7 @@
       --accent-red: #D91E18; /* 鮮豔紅 */
       --deep-vintage-red: #8a1515; /* 酒紅 */
       --text: #e0e0e0;
+      --deep-maroon: #380808; /* 深紅色，用於結尾背景 */
     }
 
     * { box-sizing: border-box; }
@@ -102,9 +103,6 @@
     .money-bill::after { content: "💯"; font-size: 18px; }
     .confetti { position: fixed; width: 10px; height: 10px; z-index: 1002; pointer-events: none; }
 
-    @keyframes fadeIn { to { opacity: 1; } }
-    @keyframes scaleIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
     /* =========================================
        3. 橫向捲動長廊
     ========================================= */
@@ -141,16 +139,16 @@
     
     .editorial-layout {
       display: flex; 
-      min-height: 250vh; 
+      min-height: 250vh; /* 確保有足夠的捲動空間來展示所有文字 */
       margin: 150px 0;
     }
 
     /* 左側固定圖片容器 */
     .editorial-image-sticky {
       position: sticky; 
-      top: 100px; 
+      top: 100px; /* 圖片開始黏住的位置 */
       width: 40%; 
-      height: 600px;
+      height: 600px; /* 圖片本身的高度 */
       margin-right: 5%;
       flex-shrink: 0;
       align-self: flex-start;
@@ -172,14 +170,14 @@
         background: rgba(20, 5, 5, 0.85); 
         backdrop-filter: blur(10px);
         padding: 40px; 
-        margin-bottom: 80px; 
+        margin-bottom: 80px; /* 增加區塊間距 */
         border-left: 4px solid var(--accent-red);
     }
     
     /* 修正：字體較小，更適於長文案閱讀 */
     .editorial-content-block p {
         font-size: 17px; 
-        line-height: 2; 
+        line-height: 2; /* 增加行距，利於閱讀 */
         text-align: justify;
     }
     
@@ -201,6 +199,7 @@
       display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 40px 0;
       border-top: 1px solid #333; border-bottom: 1px solid #333; padding: 30px 0;
     }
+    /* 修正數字樣式，確保突出 */
     .stat-item h4 { font-size: 40px; color: var(--accent); font-weight: 900; margin: 0; }
     .stat-item p { font-size: 16px; color: #888; margin: 5px 0 0 0; }
 
@@ -299,22 +298,29 @@
     .final-text-reveal { opacity: 0; transition: opacity 2s ease; margin-top: 50px; font-size: 20px; color: #ccc; }
     @keyframes flicker { 0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; } 20%, 24%, 55% { opacity: 0.5; } }
 
-    /* 底部轉場按鈕 */
+    /* 底部轉場按鈕 (結尾風格參考) */
     .next-chapter-section {
-      padding: 100px 20px 40px; text-align: center; background: linear-gradient(to bottom, transparent, #000);
-      position: relative; z-index: 60;
+      padding: 100px 20px 40px; 
+      text-align: center; 
+      background: var(--deep-maroon); /* 參考結尾截圖的深紅色背景 */
+      position: relative; 
+      z-index: 60;
+      border-top: 5px solid rgba(255, 255, 255, 0.1);
     }
+    .next-chapter-section .next-label { color: #aaa; }
+
     .nav-buttons-container { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
     .nav-btn {
-      text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.3);
+      text-decoration: none; border: 1px solid #aaa; /* 淺色線框 */
       padding: 15px 40px; color: #fff; font-family: "Noto Serif TC", serif;
       font-size: 1rem; letter-spacing: 0.1em; transition: all 0.4s ease; min-width: 200px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: rgba(0, 0, 0, 0.3);
     }
-    .nav-btn span { font-size: 0.7em; color: #888; margin-top: 5px; font-weight: 300; }
-    .btn-next:hover {
-      border-color: var(--accent-red); background: rgba(217, 30, 24, 0.2);
-      letter-spacing: 0.15em; box-shadow: 0 0 30px rgba(217, 30, 24, 0.4);
+    .nav-btn span { font-size: 0.7em; color: #aaa; margin-top: 5px; font-weight: 300; }
+    .nav-btn:hover {
+        border-color: #fff;
+        background: rgba(255, 255, 255, 0.1);
     }
 
     /* Footer 新增 */
@@ -331,7 +337,6 @@
 
     /* RWD */
     @media (max-width: 768px) {
-      /* 手機版：圖片不再固定，而是放在最上方 */
       .editorial-layout { flex-direction: column; min-height: auto; }
       .editorial-image-sticky { position: relative; width: 100%; margin-right: 0; top: 0; height: 350px; }
       .editorial-bg-img { mask-image: none; }
@@ -365,8 +370,7 @@
     </button>
     
     <div style="margin-top: 40px; font-size: 16px; color: #ccc; letter-spacing: 3px; font-weight: 300;">
-      四散的菸味混著水果盤的甜膩，這是舊時光裡獨有的濃度。<br>
-      不熟悉的人會本能地後退，因為這裡是城市的異質空間。
+      入場請賞。這一份，是給舊時光的敬意。
     </div>
   </div>
 </div>
@@ -531,7 +535,7 @@
        <video controls playsinline loop>
         <source src="videos/singer1.mp4" type="video/mp4">
       </video>
-      <div class="video-caption">▲ 現場：點擊播放控制列開啟聲音，感受沉浸式體驗的氛圍。</div>
+      <div class="video-caption">▲ 現場演唱畫面 (點擊播放控制列開啟聲音)</div>
     </div>
     
     <div class="flip-grid">
@@ -643,7 +647,7 @@
     }
   }
 
-  // 2. 進場儀式
+  // 2. 進場儀式 (修正滾動目標，確保順暢)
   function enterSite(btn) {
     createMoney(btn); 
     gsap.to(btn, { scale: 0.9, duration: 0.1, yoyo: true, repeat: 1 });
@@ -662,7 +666,12 @@
           if(window.innerWidth > 768) {
              // 滾動到第一個故事點 (橫向捲軸結束後)
              const nextSection = document.getElementById('horizontal-scroll-section');
-             gsap.to(window, { duration: 1.5, scrollTo: nextSection.offsetTop + nextSection.offsetHeight, ease: "power2.out" });
+             // 確保滾動順暢，直接滾到橫向區塊下方
+             gsap.to(window, { 
+                duration: 1.5, 
+                scrollTo: nextSection.offsetTop + nextSection.offsetHeight - 100, // 減去 100px 確保有視覺緩衝
+                ease: "power2.out" 
+            });
           }
         }
       });
