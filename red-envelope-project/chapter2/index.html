@@ -12,6 +12,7 @@
     --gold: #cba35c;
     --bg: #080202;
     --white: #ffffff;
+    --bright-red: #c63333; /* 🌟 新增：更亮的紅色強調色 */
 }
 
 /* === 基礎設定 === */
@@ -43,7 +44,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
     z-index: 0;
     opacity: 0.4; filter: brightness(0.5) contrast(1.2); 
-    transform: translateY(0); /* 鎖定背景 */
+    transform: translateY(0); 
     transition: none; 
 }
 .intro-bg-fixed img { width: 100%; height: 100%; object-fit: cover; }
@@ -65,7 +66,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 .stack-text {
     font-size: clamp(2.5rem, 6vw, 4.5rem);
     font-weight: 900;
-    color: #fff;
+    color: #fff; 
     line-height: 1.4;
     text-shadow: 0 0 10px rgba(0,0,0,0.8);
     transition: all 0.5s ease-out; 
@@ -122,17 +123,16 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 .bridge-highlight { color: var(--gold); font-weight: bold; border-bottom: 1px solid var(--gold); }
 
 /* === 2. 六大元素 (橫向捲動) === */
-.hscroll-container{position:relative; height:500vh; z-index:30; background:var(--white);} /* 修正：底色改為白色 */
+.hscroll-container{position:relative; height:500vh; z-index:30; background:var(--white);} /* 🌟 修正：底色改為白色 */
 .hscroll-sticky{position:sticky; top:0; height:100vh; overflow:hidden; display:flex; align-items:center;}
-/* 修正：標題區塊新增白色背景，字體顏色改黑 */
 .hscroll-header{position:absolute; top:8vh; left:8vw; z-index:5; background:var(--white); padding: 20px 30px; border-radius: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);} 
 .hscroll-header h2 { color: var(--gold); }
-.hscroll-header h3 { color: #000; } /* 確保標題是黑色字 */
+.hscroll-header h3 { color: #000; } 
 
 .hscroll-track{display:flex; height:65vh; will-change:transform; padding-left:10vw; margin-top:5vh;}
 .h-card{
     width:60vw; max-width:450px; flex-shrink:0; margin-right:6vw;
-    background:rgba(20,0,0,0.8); /* 卡片背景保留深色，確保對比 */
+    background:rgba(20,0,0,0.8); 
     border:1px solid rgba(255,255,255,0.1);
     display:flex; flex-direction:column; position:relative;
 }
@@ -192,10 +192,11 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 /* 訪談導讀文字強調 */
 .intertitle-p .home-highlight {
     font-size: 1.5rem; 
-    font-weight: 700; 
-    color: var(--red); /* 突出的紅色 */
-    display: block; /* 讓它獨立成行 */
+    font-weight: 900; 
+    color: var(--bright-red); /* 🌟 修正：使用更亮的紅色 */
+    display: block; 
     margin-top: 10px;
+    letter-spacing: 0.1em;
 }
 
 /* === 5. 訪談影片 === */
@@ -226,7 +227,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
   background: linear-gradient(to bottom, #000, var(--red));
   position: relative; z-index: 60;
 }
-.next-label {
+.nav-label {
   font-size: 0.9rem; color: #aaa; letter-spacing: 0.2em;
   margin-bottom: 30px; display: block; text-transform: uppercase;
 }
@@ -444,9 +445,9 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 const stackCards = document.querySelectorAll('.stack-card');
 const introBgFixed = document.querySelector('.intro-bg-fixed');
 
+// 移除背景視差移動的 JS，讓背景完全靜止
 const stackObserver = new IntersectionObserver((entries)=>{
     entries.forEach(e => {
-        // 當卡片到達頂端附近時，標記為 active (文字變金色並放大)
         if(e.isIntersecting && e.boundingClientRect.top < 100) {
             e.target.classList.add('active');
         } else {
