@@ -357,7 +357,7 @@
     }
     
     /* =========================================
-       5. Chapter 1 & 2 Intro & Body
+       5. Chapter Intro & Body (章節封面、紅底區、黑膠)
        ========================================= */
     .chapter-stack { position: relative; }
 
@@ -385,8 +385,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.3) 22%, transparent 55%);
-      filter: blur(12px);
+      background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.1) 22%, transparent 55%); /* 柔化疊層 */
       pointer-events: none;
       z-index: 1;
     }
@@ -397,17 +396,18 @@
       background: linear-gradient(180deg, rgba(8,8,8,0.08) 0%, rgba(8,8,8,0.55) 92%);
       z-index: 2;
     }
-
+    
+    /* 調整標題位置，以便移除數字 */
     .chapter-title {
       position: absolute;
       left: 6vw;
-      top: 50%;
-      transform: translateY(-50%);
+      bottom: 10vh; /* 移到底部，創造電影字幕感 */
+      transform: none;
       color: #fff;
       font-size: clamp(1.2rem, 3vw, 2.2rem);
       font-weight: 700;
       letter-spacing: 0.1em;
-      max-width: 600px;
+      max-width: 800px;
       line-height: 1.5;
       text-shadow: 0 4px 10px rgba(0,0,0,0.5);
       z-index: 5;
@@ -504,7 +504,7 @@
     @keyframes vinyl-spin { to { transform: rotate(360deg); } }
 
     /* =========================================
-       6. Chapter 3: 產業經濟學段落 (數據圖表樣式)
+       6. Chapter 3 & 4 (數據圖表樣式)
        ========================================= */
     .data-section, .social-analysis {
         background: var(--bg-dark); 
@@ -559,14 +559,6 @@
         margin: 0 auto;
     }
 
-    /* 引用強調文字 */
-    .source-citation {
-        font-size: 0.8em;
-        color: #888;
-        font-style: italic;
-        margin-left: 5px;
-    }
-    
     /* 列表樣式 */
     .pseudo-kinship-list {
         list-style: none;
@@ -1061,7 +1053,7 @@
     <section class="chapter-intro">
       <img src="assets/red-envelope-theater.jpg" alt="紅包場場景">
       <div class="chapter-overlay"></div>
-      <div class="chapter-title">➀ 燈紅酒綠的年代 — 紅包場的誕生與繁華</div>
+      <div class="chapter-title">燈紅酒綠的年代 — 紅包場的誕生與繁華</div>
     </section>
 
     <section class="chapter-body">
@@ -1168,20 +1160,18 @@
       <section class="chapter-intro">
         <img src="assets/red-envelope-theater.jpg" alt="Chapter 3 Cover">
         <div class="chapter-overlay"></div>
-        <div class="chapter-title">➂ 全盛時期的產業經濟學：數據與生態</div>
+        <div class="chapter-title">全盛時期的產業經濟學：數據與生態</div>
       </section>
   </div>
   
   <section class="data-section">
-    <h3>全盛時期的產業經濟學：數據與生態</h3>
-    
     <h4>3.1 空間分佈與數量規模：西門町歌廳盛衰圖</h4>
     <div class="data-text-paragraph">
-        1980年代是紅包場的黃金時期。根據資深業者與文史工作者的回憶，當時西門町漢中街、武昌街一帶，歌廳林立，全盛時期約有 **30 家** 營業，單日超過 **100 位** 歌手輪番登台。以下圖表展示歌廳數量從萌芽到凋零的歷史軌跡。
+        1980年代是紅包場的黃金時期。根據資深業者與文史工作者的回憶，當時西門町漢中街、武昌街一帶，歌廳林立，全盛時期約有 30 家 營業，單日超過 100 位 歌手輪番登台。以下圖表展示歌廳數量從萌芽到凋零的歷史軌跡。
     </div>
     
     <div class="chart-container-wrapper">
-        <h5 class="text-xl font-serif text-gray-200 mb-4">圖 1：西門町紅包場/歌廳數量變遷 (1960 - 2024)</h5>
+        <h5 class="text-xl font-serif text-gray-200 mb-4">西門町紅包場/歌廳數量變遷 (1960 - 2024)</h5>
         <div class="chart-canvas">
             <canvas id="trendChart"></canvas>
         </div>
@@ -1189,16 +1179,16 @@
     </div>
 
     <div class="data-text-paragraph">
-        西門町的「紅包場經濟圈」養活了大量的周邊產業。例如，歌迷會在歌手生日時訂購巨大的花籃與花圈，甚至沿著樓梯擺放至舞台，形成壯觀的「花海隧道」<span class="source-citation">4</span>。此外，歌手對華麗禮服的需求，也帶動了周邊旗袍店與珠寶銀樓的生意 <span class="source-citation">2</span>。
+        西門町的「紅包場經濟圈」養活了大量的周邊產業。例如，歌迷會在歌手生日時訂購巨大的花籃與花圈，甚至沿著樓梯擺放至舞台，形成壯觀的「花海隧道」。此外，歌手對華麗禮服的需求，也帶動了周邊旗袍店與珠寶銀樓的生意。
     </div>
 
     <h4>3.2 紅包經濟學：消費結構與收入分析</h4>
     <div class="data-text-paragraph">
-        紅包場的經濟邏輯建立在「非強制性消費」上。歌手甚至沒有底薪，完全依賴觀眾的紅包 <span class="source-citation">1</span>。紅包的金額和給予方式，同時代表了**觀眾的財力**和**對歌手的情感投射**。
+        紅包場的經濟邏輯建立在「非強制性消費」上。歌手甚至沒有底薪，完全依賴觀眾的紅包。紅包的金額和給予方式，同時代表了觀眾的財力，和對歌手的情感投射。
     </div>
     
     <div class="chart-container-wrapper">
-        <h5 class="text-xl font-serif text-gray-200 mb-4">圖 2：紅包收入結構 vs. 基本消費 (全盛時期推估)</h5>
+        <h5 class="text-xl font-serif text-gray-200 mb-4">紅包收入結構 vs. 基本消費 (全盛時期推估)</h5>
         <div class="chart-canvas w-full max-w-sm h-72">
             <canvas id="incomeChart"></canvas>
         </div>
@@ -1213,28 +1203,26 @@
       <section class="chapter-intro">
         <img src="assets/red-envelope-theater.jpg" alt="Chapter 4 Cover">
         <div class="chapter-overlay"></div>
-        <div class="chapter-title">➃ 社會學分析：榮民、擬親屬關係與情感結構</div>
+        <div class="chapter-title">社會學分析：榮民、擬親屬關係與情感結構</div>
       </section>
   </div>
 
   <section class="social-analysis">
-    <h3>社會學分析：榮民、擬親屬關係與情感結構</h3>
-    
     <h4>4.1 榮民人口結構與「孤獨經濟」</h4>
     <div class="social-text-paragraph">
-        紅包場的主要消費者是「老兵」或「榮民」。這群人在年輕時隨軍來台，許多人終身未婚，或將妻兒留在了大陸 <span class="source-citation">10</span>。根據資料，萬華區因有眷村聚集大量榮民人口。然而，隨著時間推移，核心客群正快速凋零。
+        紅包場的主要消費者是「老兵」或「榮民」。這群人在年輕時隨軍來台，許多人終身未婚，或將妻兒留在了大陸。根據資料，萬華區因有眷村聚集大量榮民人口。然而，隨著時間推移，核心客群正快速凋零。
     </div>
     
     <div class="chart-container-wrapper">
-        <h5 class="text-xl font-serif text-gray-200 mb-4">圖 3：萬華區總人口數變遷 (1991 - 2021)</h5>
+        <h5 class="text-xl font-serif text-gray-200 mb-4">萬華區總人口數變遷 (1991 - 2021)</h5>
         <div class="chart-canvas">
             <canvas id="populationChart"></canvas>
         </div>
-        <p class="text-xs text-gray-500 mt-4">資料來源：內政部戶政司、退輔會資料整理 <span class="source-citation">12</span></p>
+        <p class="text-xs text-gray-500 mt-4">資料來源：內政部戶政司、退輔會資料整理</p>
     </div>
 
     <div class="social-text-paragraph">
-        對於這群生活在眷村或單身宿舍的老兵而言，紅包場不僅是娛樂場所，更是「情感的避風港」。他們在這裡花費退休金，購買的不僅是歌曲，更是「尊嚴」與「親情」<span class="source-citation">3</span>。
+        對於這群生活在眷村或單身宿舍的老兵而言，紅包場不僅是娛樂場所，更是「情感的避風港」。他們在這裡花費退休金，購買的不僅是歌曲，更是「尊嚴」與「親情」。
     </div>
     
     <h4>4.2 「乾爹」與「女兒」：擬親屬關係的建立</h4>
@@ -1243,19 +1231,19 @@
     </div>
     
     <ul class="pseudo-kinship-list">
-        <li>**情感投射：** 對於無子嗣或子女不在身邊的老兵，歌手填補了「女兒」的角色空缺。</li>
-        <li>**相互依存：** 長期捧場下，雙方關係超越了買賣，變得像老友甚至親人。有歌手會照顧生病的老客人，老客人則將歌手視為精神寄託 <span class="source-citation">3</span>。</li>
-        <li>**權力展演：** 透過贈送紅包，社會地位邊緣的老兵得以在歌廳這個封閉空間內，展現「施予者」的權力與慷慨，獲得短暫的社會肯定。</li>
+        <li>情感投射：對於無子嗣或子女不在身邊的老兵，歌手填補了「女兒」的角色空缺。</li>
+        <li>相互依存：長期捧場下，雙方關係超越了買賣，變得像老友甚至親人。有歌手會照顧生病的老客人，老客人則將歌手視為精神寄託。</li>
+        <li>權力展演：透過贈送紅包，社會地位邊緣的老兵得以在歌廳這個封閉空間內，展現「施予者」的權力與慷慨，獲得短暫的社會肯定。</li>
     </ul>
     
     <h4>4.3 兩岸開放的結構性衝擊</h4>
     <div class="social-text-paragraph">
-        1987年兩岸開放探親，是紅包場走向衰落的關鍵轉折點。在此之前，老兵們認為歸鄉無望，便將積蓄毫無保留地投入紅包場，尋求心靈慰藉。開放探親後，老兵們得以聯繫上大陸的真親屬，資金流向隨之改變，紅包金額大幅縮水，從數千元降至一兩百元 <span class="source-citation">3</span>。這證明了紅包場的繁榮實則是建立在「離散」（Diaspora）與「封閉」的特殊歷史情境之上。
+        1987年兩岸開放探親，是紅包場走向衰落的關鍵轉折點。在此之前，老兵們認為歸鄉無望，便將積蓄毫無保留地投入紅包場，尋求心靈慰藉。開放探親後，老兵們得以聯繫上大陸的真親屬，資金流向隨之改變，紅包金額大幅縮水，從數千元降至一兩百元。這證明了紅包場的繁榮實則是建立在「離散」（Diaspora）與「封閉」的特殊歷史情境之上。
     </div>
   </section>
 
   <section class="chapter-finale" data-finale="intro">
-    <p>紅包場不只是過去的遺跡，<br>而是一面映照時代變遷的鏡子。</p>
+    <p>紅包場的燈光或許已經黯淡，<br>但那個年代透過歌聲建立的真摯情感，<br>將永遠是這座城市最溫暖的迴響。</p>
   </section>
 
   <section class="finale-image-block" data-finale="image-decline">
@@ -1271,7 +1259,7 @@
   </section>
 
   <section class="chapter-finale slow" data-finale="closing">
-    <p>歌手與觀眾間的情感，超越了時代與地域。<br>無論舞台是否熄燈，他們都曾是彼此生命中，最溫暖的聽眾。</p>
+    <p>舞台的燈光會熄滅，但情感不會。<br>對那些不在場的人來說，<br>每一首老歌，都曾是他們生命中最溫暖的迴響。</p>
   </section>
 
   <div class="next-chapter-section">
@@ -1548,7 +1536,7 @@
                   labels: ['1960 (萌芽)', '1970 (歌廳熱)', '1985 (全盛)', '1995 (轉變)', '2010 (衰退)', '2024 (現今)'],
                   datasets: [{
                       label: '歌廳/紅包場 估計數量',
-                      data: [3, 15, 30, 20, 5, 2],
+                      data: [3, 15, 30, 20, 5, 1], // 修正為 1 (只剩金鑽)
                       borderColor: chartRed,
                       backgroundColor: 'rgba(151, 12, 16, 0.3)',
                       fill: true,
@@ -1580,7 +1568,7 @@
                           callbacks: {
                               afterLabel: function(context) {
                                   if (context.dataIndex === 2) return '股市萬點行情，紅包場最鼎盛時期';
-                                  if (context.dataIndex === 5) return '僅存：金鑽、鳳凰等 (需確認)';
+                                  if (context.dataIndex === 5) return '僅存：金鑽大歌廳'; // 修正註釋
                               }
                           }
                       }
