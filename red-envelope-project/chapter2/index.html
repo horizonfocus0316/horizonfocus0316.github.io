@@ -12,7 +12,7 @@
     --gold: #cba35c;
     --bg: #080202;
     --white: #ffffff;
-    --bright-red: #c63333; /* 🌟 新增：更亮的紅色強調色 */
+    --bright-red: #c63333; /* 🌟 亮紅色強調色 */
 }
 
 /* === 基礎設定 === */
@@ -44,7 +44,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
     z-index: 0;
     opacity: 0.4; filter: brightness(0.5) contrast(1.2); 
-    transform: translateY(0); 
+    transform: translateY(0); /* 鎖定背景 */
     transition: none; 
 }
 .intro-bg-fixed img { width: 100%; height: 100%; object-fit: cover; }
@@ -54,7 +54,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     height: 100vh;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     text-align: center;
-    background: var(--bg); 
+    background: var(--bg); /* 純背景色 */
     box-shadow: 0 -20px 50px rgba(0,0,0,0.8);
     border-top: 1px solid rgba(255,255,255,0.05);
     overflow: hidden;
@@ -123,7 +123,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 .bridge-highlight { color: var(--gold); font-weight: bold; border-bottom: 1px solid var(--gold); }
 
 /* === 2. 六大元素 (橫向捲動) === */
-.hscroll-container{position:relative; height:500vh; z-index:30; background:var(--white);} /* 🌟 修正：底色改為白色 */
+.hscroll-container{position:relative; height:500vh; z-index:30; background:var(--white);} /* 修正：底色改為白色 */
 .hscroll-sticky{position:sticky; top:0; height:100vh; overflow:hidden; display:flex; align-items:center;}
 .hscroll-header{position:absolute; top:8vh; left:8vw; z-index:5; background:var(--white); padding: 20px 30px; border-radius: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);} 
 .hscroll-header h2 { color: var(--gold); }
@@ -445,9 +445,9 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 const stackCards = document.querySelectorAll('.stack-card');
 const introBgFixed = document.querySelector('.intro-bg-fixed');
 
-// 移除背景視差移動的 JS，讓背景完全靜止
 const stackObserver = new IntersectionObserver((entries)=>{
     entries.forEach(e => {
+        // 當卡片到達頂端附近時，標記為 active (文字變金色並放大)
         if(e.isIntersecting && e.boundingClientRect.top < 100) {
             e.target.classList.add('active');
         } else {
