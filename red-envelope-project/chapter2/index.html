@@ -33,15 +33,20 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     filter: sepia(0.2); mix-blend-mode: overlay;
 }
 
-/* === 0. 開場：層層壓迫 (Sticky Stacking) === */
+/* === 0. 開場：層層壓迫 (優化版) === */
 .stack-container {
     background: var(--bg);
     padding-bottom: 10vh;
+    position: relative;
 }
+/* 背景圖，現在透過 JS 控制其位置，產生視差效果 */
 .intro-bg-fixed {
     position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
     z-index: 0;
     opacity: 0.4; filter: brightness(0.5) contrast(1.2); 
+    /* 初始狀態，讓圖片可以移動 */
+    transform: translateY(0);
+    transition: none; /* 移除 CSS transition，改用 JS 處理平滑度 */
 }
 .intro-bg-fixed img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -50,15 +55,12 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     height: 100vh;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     text-align: center;
-    /* 修正：純背景色，移除漸層 */
+    /* 背景使用純色，避免疊影 */
     background: var(--bg); 
     box-shadow: 0 -20px 50px rgba(0,0,0,0.8);
     border-top: 1px solid rgba(255,255,255,0.05);
     overflow: hidden;
-}
-.stack-bg {
-    /* 移除，只用 intro-bg-fixed 統一背景 */
-    display: none; 
+    transition: background 0.3s ease; /* 讓背景切換更平滑 */
 }
 
 .stack-content {
@@ -67,12 +69,14 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 .stack-text {
     font-size: clamp(2.5rem, 6vw, 4.5rem);
     font-weight: 900;
-    color: var(--gold);
+    color: #fff; /* 初始為白色 */
     line-height: 1.4;
     text-shadow: 0 0 10px rgba(0,0,0,0.8);
-    transition: transform 0.3s ease;
+    transition: all 0.5s ease-out; /* 增加過場動畫 */
 }
+/* 🌟 激活效果：文字變金色並放大 */
 .stack-card.active .stack-text {
+    color: var(--gold);
     transform: scale(1.05);
 }
 
@@ -252,10 +256,12 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 <body>
 
 <div class="grain-overlay"></div>
+
 <div class="stack-container">
     
     <div class="intro-bg-fixed">
-        <img src="photos/singer.jpg" alt=""> </div>
+        <img src="photos/singer.jpg" alt="">
+    </div>
     
     <div class="stack-card" style="z-index:1;">
         <div class="stack-content">
@@ -422,15 +428,28 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 </div>
 
 <footer class="final-footer">
-    <p>台北僅存的紅包場專案小組</p>
+    <p>@紅包場專案小組</p>
     <p>梁朝勛、彭賀琳、莊馨予</p>
 </footer>
+
 <script>
-// 1. Stack Animation (文字壓迫感)
-const stackCards = document.querySelectorAll('.stack-card'); // 這裡不需要 js-stack-card
+// 1. Stack Animation (文字激活效果)
+const stackCards = document.querySelectorAll('.stack-card');
+const introBgFixed = document.querySelector('.intro-bg-fixed');
+
+// 計算背景視差移動的比例
+window.addEventListener('scroll', () => {
+    // 讓背景圖與捲軸方向相反移動，產生視差感
+    const scrollY = window.scrollY;
+    // 調整移動係數 (例如 0.2，即捲動 5px 背景移動 1px)
+    const moveFactor = 0.2; 
+    introBgFixed.style.transform = `translateY(${scrollY * moveFactor}px)`;
+});
+
+
 const stackObserver = new IntersectionObserver((entries)=>{
     entries.forEach(e => {
-        // 當卡片到達頂端附近時，標記為 active (讓文字有微動態效果)
+        // 當卡片到達頂端附近時，標記為 active (文字變金色並放大)
         if(e.isIntersecting && e.boundingClientRect.top < 100) {
             e.target.classList.add('active');
         } else {
