@@ -33,20 +33,18 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     filter: sepia(0.2); mix-blend-mode: overlay;
 }
 
-/* === 0. 開場：層層壓迫 (優化版) === */
+/* === 0. 開場：層層壓迫 (Sticky Stacking) === */
 .stack-container {
     background: var(--bg);
     padding-bottom: 10vh;
     position: relative;
 }
-/* 背景圖，現在透過 JS 控制其位置，產生視差效果 */
 .intro-bg-fixed {
     position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
     z-index: 0;
     opacity: 0.4; filter: brightness(0.5) contrast(1.2); 
-    /* 初始狀態，讓圖片可以移動 */
-    transform: translateY(0);
-    transition: none; /* 移除 CSS transition，改用 JS 處理平滑度 */
+    transform: translateY(0); /* 鎖定背景，避免微動 */
+    transition: none; 
 }
 .intro-bg-fixed img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -55,14 +53,12 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     height: 100vh;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     text-align: center;
-    /* 背景使用純色，避免疊影 */
-    background: var(--bg); 
+    background: var(--bg); /* 純背景色 */
     box-shadow: 0 -20px 50px rgba(0,0,0,0.8);
     border-top: 1px solid rgba(255,255,255,0.05);
     overflow: hidden;
-    transition: background 0.3s ease; /* 讓背景切換更平滑 */
+    transition: background 0.3s ease; 
 }
-
 .stack-content {
     position: relative; z-index: 10; padding: 2rem; max-width: 900px;
 }
@@ -72,14 +68,12 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     color: #fff; /* 初始為白色 */
     line-height: 1.4;
     text-shadow: 0 0 10px rgba(0,0,0,0.8);
-    transition: all 0.5s ease-out; /* 增加過場動畫 */
+    transition: all 0.5s ease-out; 
 }
-/* 🌟 激活效果：文字變金色並放大 */
 .stack-card.active .stack-text {
     color: var(--gold);
     transform: scale(1.05);
 }
-
 .scroll-hint {
     margin-top: 3rem; font-size: 0.9rem; color: var(--gold); letter-spacing: 0.3em;
     animation: bounce 2s infinite; opacity: 0.8;
@@ -130,7 +124,10 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 /* === 2. 六大元素 (橫向捲動) === */
 .hscroll-container{position:relative; height:500vh; z-index:30; background:#0a0a0a;}
 .hscroll-sticky{position:sticky; top:0; height:100vh; overflow:hidden; display:flex; align-items:center;}
-.hscroll-header{position:absolute; top:8vh; left:8vw; z-index:5;}
+/* 修正：為標題區塊新增白色背景 */
+.hscroll-header{position:absolute; top:8vh; left:8vw; z-index:5; background:var(--white); padding: 20px 30px; border-radius: 5px;} 
+.hscroll-header h2, .hscroll-header h3 { color: #000; } /* 確保標題是黑色字 */
+
 .hscroll-track{display:flex; height:65vh; will-change:transform; padding-left:10vw; margin-top:5vh;}
 .h-card{
     width:60vw; max-width:450px; flex-shrink:0; margin-right:6vw;
@@ -219,7 +216,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
   background: linear-gradient(to bottom, #000, var(--red));
   position: relative; z-index: 60;
 }
-.next-label {
+.nav-label {
   font-size: 0.9rem; color: #aaa; letter-spacing: 0.2em;
   margin-bottom: 30px; display: block; text-transform: uppercase;
 }
@@ -256,7 +253,6 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 <body>
 
 <div class="grain-overlay"></div>
-
 <div class="stack-container">
     
     <div class="intro-bg-fixed">
@@ -319,7 +315,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     <div class="hscroll-sticky">
         <div class="hscroll-header">
             <h2 style="font-size:1rem; letter-spacing:0.2em; color:var(--gold);">THE ELEMENTS</h2>
-            <h3 style="font-size:2.5rem; color:#fff;">撐起紅包場的人與物</h3>
+            <h3 style="font-size:2.5rem; color:#000;">撐起紅包場的人與物</h3>
         </div>
         <div class="hscroll-track" id="hTrack">
             <div class="h-card">
@@ -385,7 +381,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
 <section class="intertitle-screen">
     <div class="intertitle-line"></div>
     <h2 class="intertitle-h2">生存與夢想的對話</h2>
-    <p class="intertitle-p">紅包場不只是歷史的遺跡，它是這些歌星賴以生存的現在進行式。<br>從在<span style="color:var(--gold);">紡織廠</span>打工，到找到自己的舞台，這裡不僅是工作場所，更是她們的「家」。</p>
+    <p class="intertitle-p">紅包場不只是歷史的遺跡，它是這些歌星賴以生存的現在進行式。<br>從在<span style="color:var(--gold);">紡織廠</span>打工，到找到自己的舞台，這裡不僅是工作場所，<br>更是她們的「家」。</p>
 </section>
 
 <section class="video-scrolled-section">
@@ -398,7 +394,7 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
         
         <div class="video-overlay-text js-vid-text">
             <h3>楊雅喬：入行的初心</h3>
-            <p>「我國高中也在紡織車間暑期打工，但發現不喜歡。不會唱，就學啊，我就這樣找到我喜歡的工作了。」</p>
+            <p>「我國高中也在紡織廠暑期打工，但發現不喜歡。不會唱，就學啊，我就這樣找到我喜歡的工作了。」</p>
         </div>
 
         <div class="video-overlay-text js-vid-text" style="bottom:40vh; left:auto; right:10vw;">
@@ -431,21 +427,19 @@ img, video{width:100%; height:auto; display:block; object-fit:cover;}
     <p>@紅包場專案小組</p>
     <p>梁朝勛、彭賀琳、莊馨予</p>
 </footer>
-
 <script>
 // 1. Stack Animation (文字激活效果)
 const stackCards = document.querySelectorAll('.stack-card');
 const introBgFixed = document.querySelector('.intro-bg-fixed');
 
-// 計算背景視差移動的比例
+// 移除背景視差移動的 JS，讓背景完全靜止
+/*
 window.addEventListener('scroll', () => {
-    // 讓背景圖與捲軸方向相反移動，產生視差感
     const scrollY = window.scrollY;
-    // 調整移動係數 (例如 0.2，即捲動 5px 背景移動 1px)
     const moveFactor = 0.2; 
     introBgFixed.style.transform = `translateY(${scrollY * moveFactor}px)`;
 });
-
+*/
 
 const stackObserver = new IntersectionObserver((entries)=>{
     entries.forEach(e => {
