@@ -8,6 +8,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&display=swap" rel="stylesheet">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  
+  <script src="https://cdn.tailwindcss.com"></script> 
 
   <style>
     /* =========================================
@@ -52,10 +56,9 @@
       color: inherit;
     }
     
-    /* 輔助類別：使段落換行更明顯 */
     .text-break {
         display: block;
-        height: 1.5em; /* 行距高度 */
+        height: 1.5em; 
         content: "";
     }
 
@@ -97,7 +100,7 @@
       z-index: 2;
     }
     
-    /* 疊在背景上的去背人物圖層 (新增) */
+    /* 疊在背景上的去背人物圖層 */
     .hero-image-overlay {
         position: absolute;
         right: 0;
@@ -202,7 +205,7 @@
       100% { transform: translate(-50%, 0); }
     }
     
-    /* 主視覺區塊的轉場按鈕樣式 (新增) */
+    /* 主視覺區塊的轉場按鈕樣式 */
     .transition-cta {
       position: relative;
       z-index: 5; 
@@ -354,7 +357,7 @@
     }
     
     /* =========================================
-       5. Chapter 1 & 2 Intro & Body (黑膠、紅底、橫捲 A/B)
+       5. Chapter 1 & 2 Intro & Body
        ========================================= */
     .chapter-stack { position: relative; }
 
@@ -501,17 +504,17 @@
     @keyframes vinyl-spin { to { transform: rotate(360deg); } }
 
     /* =========================================
-       6. Chapter 3: 產業經濟學段落 (新增)
+       6. Chapter 3: 產業經濟學段落 (數據圖表樣式)
        ========================================= */
-    .data-section {
-        background: var(--bg-dark);
+    .data-section, .social-analysis {
+        background: var(--bg-dark); 
         color: #fff;
         padding: clamp(60px, 12vh, 120px) clamp(6vw, 10vw, 12vw);
         max-width: 1400px;
         margin: 0 auto;
     }
     
-    .data-section h3 {
+    .data-section h3, .social-analysis h3 {
         color: var(--gold);
         font-size: clamp(1.8rem, 4vw, 3rem);
         margin-bottom: 2.5rem;
@@ -519,7 +522,7 @@
         letter-spacing: 0.1em;
     }
 
-    .data-section h4 {
+    .data-section h4, .social-analysis h4 {
         color: #fff;
         font-size: clamp(1.3rem, 2.5vw, 2rem);
         margin-top: 3rem;
@@ -528,54 +531,34 @@
         letter-spacing: 0.05em;
     }
     
-    .data-text-paragraph {
+    .data-text-paragraph, .social-text-paragraph {
         line-height: 2;
         font-size: var(--body-text-size);
         color: rgba(255, 255, 255, 0.85);
         margin-bottom: 1.5rem;
     }
 
-    /* 表格樣式 */
-    .styled-table {
+    /* 圖表容器樣式 */
+    .chart-container-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 3rem 0;
+        padding: 1.5rem;
+        background: #1a1a1a; 
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    
+    .chart-canvas {
+        position: relative;
         width: 100%;
-        border-collapse: collapse;
-        margin: 2rem 0;
-        font-size: clamp(0.8rem, 1.2vw, 1rem);
-        text-align: left;
-    }
-    
-    .styled-table caption {
-        font-size: 1.2em;
-        font-weight: 600;
-        color: var(--gold);
-        margin-bottom: 1em;
-        caption-side: top;
+        max-width: 700px;
+        height: 350px;
+        margin: 0 auto;
     }
 
-    .styled-table th, .styled-table td {
-        padding: 15px 18px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .styled-table thead th {
-        background-color: rgba(255, 255, 255, 0.05);
-        color: var(--gold);
-        font-weight: 700;
-        letter-spacing: 0.1em;
-    }
-
-    .styled-table tbody tr {
-        transition: background-color 0.3s ease;
-    }
-
-    .styled-table tbody tr:hover {
-        background-color: rgba(151, 12, 16, 0.1);
-    }
-    
-    .styled-table tbody td {
-        color: rgba(255, 255, 255, 0.85);
-    }
-    
     /* 引用強調文字 */
     .source-citation {
         font-size: 0.8em;
@@ -583,42 +566,7 @@
         font-style: italic;
         margin-left: 5px;
     }
-
-
-    /* =========================================
-       7. Chapter 4: 社會學段落 (新增)
-       ========================================= */
-    .social-analysis {
-        background: #111;
-        padding: clamp(60px, 12vh, 120px) clamp(6vw, 10vw, 12vw);
-        max-width: 1400px;
-        margin: 0 auto;
-    }
     
-    .social-analysis h3 {
-        color: var(--gold);
-        font-size: clamp(1.8rem, 4vw, 3rem);
-        margin-bottom: 2.5rem;
-        text-align: center;
-        letter-spacing: 0.1em;
-    }
-
-    .social-analysis h4 {
-        color: #fff;
-        font-size: clamp(1.3rem, 2.5vw, 2rem);
-        margin-top: 3rem;
-        margin-bottom: 1rem;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-    }
-    
-    .social-text-paragraph {
-        line-height: 2;
-        font-size: var(--body-text-size);
-        color: rgba(255, 255, 255, 0.85);
-        margin-bottom: 1.5rem;
-    }
-
     /* 列表樣式 */
     .pseudo-kinship-list {
         list-style: none;
@@ -642,9 +590,9 @@
         position: absolute;
         left: 0;
     }
-    
+
     /* =========================================
-       8. 黑色過場與引言 (Finale & Quote)
+       7. 黑色過場與引言 (Finale & Quote)
        ========================================= */
     .black-finale {
       background: #000;
@@ -730,7 +678,7 @@
     }
 
     /* =========================================
-       9. 橫向捲動區塊 (Horizontal Scrolls)
+       8. 橫向捲動區塊 (Horizontal Scrolls)
        ========================================= */
     .horizontal-scroll {
       position: relative;
@@ -860,7 +808,7 @@
     }
 
     /* =========================================
-       10. 結尾過場 (Finale Sequence)
+       9. 結尾過場 (Finale Sequence)
        ========================================= */
     .chapter-finale {
       position: relative;
@@ -902,8 +850,8 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transform: scale(1.0); /* 初始縮放設為 1.0 */
-      transition: transform 0.1s linear; /* 讓 JS 控制的滾動更順暢 */
+      transform: scale(1.0); 
+      transition: transform 0.1s linear; 
       will-change: transform;
     }
 
@@ -915,7 +863,7 @@
     }
 
     /* =========================================
-       11. 底部導覽 (Footer Navigation)
+       10. 底部導覽 (Footer Navigation)
        ========================================= */
     .next-chapter-section {
       padding: 120px 20px 160px;
@@ -986,9 +934,16 @@
     .btn-next:hover span {
       color: rgba(255, 255, 255, 0.8);
     }
+    
+    .footer-info {
+        margin-top: 5rem;
+        color: #666;
+        font-size: 0.85rem;
+        line-height: 1.8;
+    }
 
     /* =========================================
-       12. 響應式設計 (Responsive Design)
+       11. 響應式設計 (Responsive Design)
        ========================================= */
     @media (max-width: 1024px) {
       .black-finale { grid-template-columns: 1fr; }
@@ -1001,12 +956,11 @@
       .chapter-body { padding: 80px 5vw; }
       .chapter-body-inner { flex-direction: column; text-align: center; }
       .chapter-text-block { text-align: center; }
-      /* 內文維持靠左閱讀較佳 */
       .chapter-text-block h5, .social-text-paragraph, .pseudo-kinship-list li { text-align: left; }
       .vinyl-column { width: 100%; margin-top: 2rem; }
       .nav-buttons-container { gap: 20px; }
       .nav-btn { width: 100%; }
-      .styled-table { font-size: 0.85rem; }
+      .chart-canvas { height: 300px; }
     }
 
     @media (max-width: 768px) {
@@ -1050,7 +1004,7 @@
           font-size: 1rem;
       }
       
-      .styled-table th, .styled-table td { padding: 10px; }
+      .chart-canvas { height: 250px; }
     }
   </style>
   <body>
@@ -1221,93 +1175,38 @@
   <section class="data-section">
     <h3>全盛時期的產業經濟學：數據與生態</h3>
     
-    <h4>3.1 空間分佈與數量規模</h4>
+    <h4>3.1 空間分佈與數量規模：西門町歌廳盛衰圖</h4>
     <div class="data-text-paragraph">
-        1980年代是紅包場的黃金時期。根據資深業者與文史工作者的回憶及報導統計，當時西門町漢中街、武昌街一帶，歌廳林立。
+        1980年代是紅包場的黃金時期。根據資深業者與文史工作者的回憶，當時西門町漢中街、武昌街一帶，歌廳林立，全盛時期約有 **30 家** 營業，單日超過 **100 位** 歌手輪番登台。以下圖表展示歌廳數量從萌芽到凋零的歷史軌跡。
     </div>
     
-    <table class="styled-table">
-        <caption>表 1：西門町紅包場產業全盛時期與現況對比</caption>
-        <thead>
-            <tr>
-                <th>統計指標</th>
-                <th>全盛時期 (約 1980s-1990s)</th>
-                <th>衰退時期 (2019-2024)</th>
-                <th>資料來源</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>歌廳數量</td>
-                <td>約 30 家</td>
-                <td>僅存 2-3 家 (如金鑽、鳳凰)</td>
-                <td>5</td>
-            </tr>
-            <tr>
-                <td>從業歌手</td>
-                <td>單日超過 100 位 (需頻繁趕場)</td>
-                <td>數量銳減，多為資深歌手</td>
-                <td>4</td>
-            </tr>
-            <tr>
-                <td>主要分佈區</td>
-                <td>漢中街、武昌街、獅子林大樓</td>
-                <td>零星散佈於舊大樓內</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>經濟產值</td>
-                <td>支撐周邊禮服、美容、花店產業</td>
-                <td>僅能維持基本營運，甚至虧損</td>
-                <td>4</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="data-text-paragraph">
-        在全盛時期，一家歌廳一天可能有數十位歌手輪番登台，紅牌歌手甚至需要在不同歌廳間「趕場」。西門町的「紅包場經濟圈」養活了大量的周邊產業。例如，為了展現排場，歌迷會在歌手生日或週年慶時，訂購巨大的花籃與花圈，甚至搭起「花門」，沿著樓梯一路擺放至舞台，形成壯觀的「花海隧道」<span class="source-citation">4</span>。此外，歌手對華麗禮服的需求，也帶動了周邊旗袍店與珠寶銀樓的生意 <span class="source-citation">2</span>。
+    <div class="chart-container-wrapper">
+        <h5 class="text-xl font-serif text-gray-200 mb-4">圖 1：西門町紅包場/歌廳數量變遷 (1960 - 2024)</h5>
+        <div class="chart-canvas">
+            <canvas id="trendChart"></canvas>
+        </div>
+        <p class="text-xs text-gray-500 mt-4">資料來源：文史報導與資深業者回憶整理</p>
     </div>
 
-    <h4>3.2 紅包經濟學：從打賞到生計</h4>
     <div class="data-text-paragraph">
-        紅包場的經濟邏輯建立在「非強制性消費」上。門票或茶資通常低廉（約200-300元），歌手甚至沒有底薪，完全依賴觀眾的紅包 <span class="source-citation">1</span>。
+        西門町的「紅包場經濟圈」養活了大量的周邊產業。例如，歌迷會在歌手生日時訂購巨大的花籃與花圈，甚至沿著樓梯擺放至舞台，形成壯觀的「花海隧道」<span class="source-citation">4</span>。此外，歌手對華麗禮服的需求，也帶動了周邊旗袍店與珠寶銀樓的生意 <span class="source-citation">2</span>。
     </div>
 
-    <table class="styled-table">
-        <caption>表 2：紅包場消費與收入結構分析</caption>
-        <thead>
-            <tr>
-                <th>項目</th>
-                <th>內容描述</th>
-                <th>備註</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>基本消費</td>
-                <td>茶資/門票約 NT$300</td>
-                <td>包含茶水、瓜果，這部分歸店家所有</td>
-            </tr>
-            <tr>
-                <td>紅包機制</td>
-                <td>觀眾自願給予，金額不定</td>
-                <td>歌手主要收入來源，需與店家拆帳</td>
-            </tr>
-            <tr>
-                <td>全盛期收入</td>
-                <td>紅牌歌手日收可達 NT$40,000 - 50,000</td>
-                <td>特別是在農曆春節期間 <span class="source-citation">5</span></td>
-            </tr>
-            <tr>
-                <td>衰退期收入</td>
-                <td>視觀眾多寡而定，紅包變薄</td>
-                <td>受老兵凋零與兩岸開放影響</td>
-            </tr>
-        </tbody>
-    </table>
+    <h4>3.2 紅包經濟學：消費結構與收入分析</h4>
+    <div class="data-text-paragraph">
+        紅包場的經濟邏輯建立在「非強制性消費」上。歌手甚至沒有底薪，完全依賴觀眾的紅包 <span class="source-citation">1</span>。紅包的金額和給予方式，同時代表了**觀眾的財力**和**對歌手的情感投射**。
+    </div>
+    
+    <div class="chart-container-wrapper">
+        <h5 class="text-xl font-serif text-gray-200 mb-4">圖 2：紅包收入結構 vs. 基本消費 (全盛時期推估)</h5>
+        <div class="chart-canvas w-full max-w-sm h-72">
+            <canvas id="incomeChart"></canvas>
+        </div>
+        <p class="text-xs text-gray-500 mt-4">註：紅牌歌手日收可達 NT$40,000-50,000，金額來自紅包分成。</p>
+    </div>
 
     <div class="data-text-paragraph">
-        這種經濟模式極度依賴歌手與觀眾之間的私人關係。為了獲得紅包，歌手必須在舞台下進行大量的社交勞動（Social Labor），記住客人的喜好、家鄉、生日，甚至在台下陪伴聊天。
+        這種模式極度依賴歌手與觀眾之間的私人關係。為了獲得紅包，歌手必須在舞台下進行大量的社交勞動（Social Labor），記住客人的喜好、家鄉、生日，甚至在台下陪伴聊天。這是一種超越金錢的**情感契約**。
     </div>
   </section>
   <div class="chapter-stack">
@@ -1323,48 +1222,16 @@
     
     <h4>4.1 榮民人口結構與「孤獨經濟」</h4>
     <div class="social-text-paragraph">
-        紅包場的主要消費者是所謂的「老兵」或「榮民」。這群人在年輕時隨軍來台，受限於早期的「禁婚令」或經濟條件，許多人終身未婚，或將妻兒留在了大陸 <span class="source-citation">10</span>。
-        <br/>
-        根據內政部與退輔會的資料，萬華區因有「空南三村」、「新和新村」等眷村，聚集了大量榮民人口。然而，隨著時間推移，這群人口正快速凋零。
+        紅包場的主要消費者是「老兵」或「榮民」。這群人在年輕時隨軍來台，許多人終身未婚，或將妻兒留在了大陸 <span class="source-citation">10</span>。根據資料，萬華區因有眷村聚集大量榮民人口。然而，隨著時間推移，核心客群正快速凋零。
     </div>
     
-    <table class="styled-table">
-        <caption>表 3：萬華區人口變遷與榮民結構之關聯</caption>
-        <thead>
-            <tr>
-                <th>年份</th>
-                <th>萬華區總人口</th>
-                <th>趨勢解讀</th>
-                <th>對紅包場之影響</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1991</td>
-                <td>230,801</td>
-                <td>基準點</td>
-                <td>紅包場仍處於活躍期</td>
-            </tr>
-            <tr>
-                <td>2001</td>
-                <td>204,024</td>
-                <td>下滑 (-3.3%)</td>
-                <td>觀眾基數開始萎縮</td>
-            </tr>
-            <tr>
-                <td>2011</td>
-                <td>190,855</td>
-                <td>下滑 (-2.1%)</td>
-                <td>產業進入整併期</td>
-            </tr>
-            <tr>
-                <td>2021</td>
-                <td>176,617</td>
-                <td>顯著下滑 (-8.7%)</td>
-                <td>核心客群極度匱乏 <span class="source-citation">12</span></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="chart-container-wrapper">
+        <h5 class="text-xl font-serif text-gray-200 mb-4">圖 3：萬華區總人口數變遷 (1991 - 2021)</h5>
+        <div class="chart-canvas">
+            <canvas id="populationChart"></canvas>
+        </div>
+        <p class="text-xs text-gray-500 mt-4">資料來源：內政部戶政司、退輔會資料整理 <span class="source-citation">12</span></p>
+    </div>
 
     <div class="social-text-paragraph">
         對於這群生活在眷村或單身宿舍的老兵而言，紅包場不僅是娛樂場所，更是「情感的避風港」。他們在這裡花費退休金，購買的不僅是歌曲，更是「尊嚴」與「親情」<span class="source-citation">3</span>。
@@ -1418,6 +1285,11 @@
         下一章：霓虹燈下的組成
         <span>CHAPTER 02 &rarr;</span>
       </a>
+    </div>
+    
+    <div class="footer-info">
+        <p>「台北僅存的紅包場」專案小組</p>
+        <p>梁朝勛、彭賀琳、莊馨予</p>
     </div>
   </div>
 
@@ -1649,12 +1521,8 @@
           const containerRect = container.getBoundingClientRect();
           const viewHeight = window.innerHeight;
           
-          // 圖片進入視口時開始計算
           if (containerRect.top < viewHeight && containerRect.bottom > 0) {
-            // 滾動進度：從 0 (頂部進入) 到 1 (底部離開)
             const progress = 1 - (containerRect.bottom / (container.offsetHeight + viewHeight));
-            // 縮放比例：從 1.0 放大到 1.15，並在中間段落達成
-            // 範圍 (0-1) -> 範圍 (1.0-1.15)
             const scale = 1.0 + (progress * 0.15); 
             
             el.style.transform = `scale(${Math.min(scale, 1.15)})`;
@@ -1664,6 +1532,146 @@
       };
       
       handleImageZoom();
+      
+      // === 9. Chart.js 初始化 (數據圖表) ===
+      
+      const chartRed = 'rgb(151, 12, 16)';
+      const chartGold = 'rgb(255, 232, 122)';
+      const chartLight = 'rgb(209, 213, 219)';
+
+      // Chart 1: 歌廳數量變遷趨勢 (Chapter 3)
+      const ctxTrend = document.getElementById('trendChart');
+      if (ctxTrend) {
+          new Chart(ctxTrend.getContext('2d'), {
+              type: 'line',
+              data: {
+                  labels: ['1960 (萌芽)', '1970 (歌廳熱)', '1985 (全盛)', '1995 (轉變)', '2010 (衰退)', '2024 (現今)'],
+                  datasets: [{
+                      label: '歌廳/紅包場 估計數量',
+                      data: [3, 15, 30, 20, 5, 2],
+                      borderColor: chartRed,
+                      backgroundColor: 'rgba(151, 12, 16, 0.3)',
+                      fill: true,
+                      tension: 0.3,
+                      pointRadius: 6,
+                      pointBackgroundColor: chartGold,
+                      pointBorderColor: chartRed,
+                      pointBorderWidth: 2
+                  }]
+              },
+              options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                      y: {
+                          beginAtZero: true,
+                          title: { display: true, text: '店家數量 (家)', color: chartLight },
+                          grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                          ticks: { color: chartLight }
+                      },
+                      x: {
+                          grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                          ticks: { color: chartLight }
+                      }
+                  },
+                  plugins: {
+                      legend: { labels: { color: chartLight } },
+                      tooltip: { 
+                          callbacks: {
+                              afterLabel: function(context) {
+                                  if (context.dataIndex === 2) return '股市萬點行情，紅包場最鼎盛時期';
+                                  if (context.dataIndex === 5) return '僅存：金鑽、鳳凰等 (需確認)';
+                              }
+                          }
+                      }
+                  }
+              }
+          });
+      }
+
+      // Chart 2: 紅包收入結構圓餅圖 (Chapter 3)
+      const ctxIncome = document.getElementById('incomeChart');
+      if (ctxIncome) {
+          new Chart(ctxIncome.getContext('2d'), {
+              type: 'doughnut',
+              data: {
+                  labels: ['歌手紅包收入 (分成後)', '店家茶資/門票收入', '樂隊/其他開支'],
+                  datasets: [{
+                      data: [50, 35, 15], 
+                      backgroundColor: [
+                          chartGold,
+                          chartRed,
+                          '#555555'
+                      ],
+                      borderWidth: 0
+                  }]
+              },
+              options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                      legend: { position: 'bottom', labels: { color: chartLight } },
+                      tooltip: {
+                          callbacks: {
+                              label: function(context) {
+                                  let label = context.label || '';
+                                  if (label) label += ': ';
+                                  if (context.raw) label += context.raw + '%';
+                                  return label;
+                              },
+                              footer: function(context) {
+                                  if (context[0].dataIndex === 0) return '歌手主要生計來源，需靠社交勞動維繫';
+                                  if (context[0].dataIndex === 1) return '固定成本，歸場地所有';
+                              }
+                          }
+                      }
+                  }
+              }
+          });
+      }
+      
+      // Chart 3: 萬華區人口趨勢 (Chapter 4)
+      const ctxPopulation = document.getElementById('populationChart');
+      if (ctxPopulation) {
+          new Chart(ctxPopulation.getContext('2d'), {
+              type: 'bar',
+              data: {
+                  labels: ['1991 (基準點)', '2001 (下滑 -3.3%)', '2011 (下滑 -2.1%)', '2021 (顯著下滑 -8.7%)'],
+                  datasets: [{
+                      label: '萬華區總人口數 (人)',
+                      data: [230801, 204024, 190855, 176617],
+                      backgroundColor: chartRed,
+                      hoverBackgroundColor: chartGold,
+                  }]
+              },
+              options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                      y: {
+                          title: { display: true, text: '人口數 (人)', color: chartLight },
+                          grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                          ticks: { color: chartLight }
+                      },
+                      x: {
+                          grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                          ticks: { color: chartLight }
+                      }
+                  },
+                  plugins: {
+                      legend: { display: false },
+                      tooltip: {
+                          callbacks: {
+                              afterLabel: function(context) {
+                                  const trend = ['紅包場活躍期', '觀眾基數開始萎縮', '產業進入整併期', '核心客群極度匱乏'];
+                                  return '趨勢：' + trend[context.dataIndex];
+                              }
+                          }
+                      }
+                  }
+              }
+          });
+      }
 
     });
   </script>
