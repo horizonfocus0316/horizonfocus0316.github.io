@@ -141,16 +141,16 @@
     
     .editorial-layout {
       display: flex; 
-      min-height: 250vh; /* 確保有足夠的捲動空間來展示所有文字 */
+      min-height: 250vh; 
       margin: 150px 0;
     }
 
     /* 左側固定圖片容器 */
     .editorial-image-sticky {
       position: sticky; 
-      top: 100px; /* 圖片開始黏住的位置 */
+      top: 100px; 
       width: 40%; 
-      height: 600px; /* 圖片本身的高度 */
+      height: 600px;
       margin-right: 5%;
       flex-shrink: 0;
       align-self: flex-start;
@@ -172,14 +172,14 @@
         background: rgba(20, 5, 5, 0.85); 
         backdrop-filter: blur(10px);
         padding: 40px; 
-        margin-bottom: 80px; /* 增加區塊間距 */
+        margin-bottom: 80px; 
         border-left: 4px solid var(--accent-red);
     }
     
     /* 修正：字體較小，更適於長文案閱讀 */
     .editorial-content-block p {
         font-size: 17px; 
-        line-height: 2; /* 增加行距，利於閱讀 */
+        line-height: 2; 
         text-align: justify;
     }
     
@@ -331,6 +331,7 @@
 
     /* RWD */
     @media (max-width: 768px) {
+      /* 手機版：圖片不再固定，而是放在最上方 */
       .editorial-layout { flex-direction: column; min-height: auto; }
       .editorial-image-sticky { position: relative; width: 100%; margin-right: 0; top: 0; height: 350px; }
       .editorial-bg-img { mask-image: none; }
@@ -490,7 +491,7 @@
             對深耕萬華十年的綠雷德團隊來說，文化從來不是被冰封在博物館的文物。它是一種流動的人情，是對時代的詮釋。有人對紅包的<span style="color:#fff;">儀式感</span>新奇；有人是對歌星的<span style="color:#fff;">歌藝與人生</span>產生共感；也有人熱衷於台下<span style="color:#fff;">源源不絕的聊天互動</span>。
         </p>
         <p>
-            他們的策略正是在這個時代，用這個時代的語言將文化再現與創新。他們不以獵奇眼光看待，而是透過**「沉浸式體驗」**與**「共感設計」**，讓年輕一代透過故事理解長輩的情感需求。
+            他們的策略正是在這個時代，用這個時代的語言將文化再現與創新。他們不以獵奇眼光看待，而是透過<span style="font-weight:700;">「沉浸式體驗」</span>與<span style="font-weight:700;">「共感設計」</span>，讓年輕一代透過故事理解長輩的情感需求。
         </p>
     </div>
 
@@ -530,7 +531,7 @@
        <video controls playsinline loop>
         <source src="videos/singer1.mp4" type="video/mp4">
       </video>
-      <div class="video-caption">▲ 現場：打破第四道牆的沉浸式體驗 (點擊播放控制列開啟聲音)</div>
+      <div class="video-caption">▲ 現場：點擊播放控制列開啟聲音，感受沉浸式體驗的氛圍。</div>
     </div>
     
     <div class="flip-grid">
