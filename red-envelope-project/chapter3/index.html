@@ -76,7 +76,7 @@
       font-size: clamp(30px, 6vw, 50px);
       letter-spacing: 0.1em; color: #fff; margin-bottom: 60px; font-weight: 900;
       text-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
-      opacity: 0; animation: fadeIn 2s ease forwards 0.5s;
+      /* 移除 opacity: 0; animation: fadeIn ...; 讓它立即顯示 */
     }
 
     /* 膠囊紅包按鈕 */
@@ -86,13 +86,18 @@
       font-weight: 900; letter-spacing: 3px;
       cursor: pointer; transition: 0.3s;
       box-shadow: 0 0 30px rgba(194, 24, 7, 0.6);
-      position: relative; z-index: 10; overflow: visible;
-      opacity: 0; animation: scaleIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 1.2s;
+      position: relative; 
+      z-index: 10; /* 雖然父層已經很高，但確保按鈕本身也在上面 */
+      overflow: visible;
+      opacity: 1; /* 確保初始透明度是 1 */
+      animation: scaleIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; /* 移除延遲 1.2s，讓它立即執行放大動畫 */
     }
     .pill-red-envelope:hover {
       transform: scale(1.05); background: #e02210; 
       box-shadow: 0 0 50px rgba(255, 215, 0, 0.6);
     }
+    @keyframes scaleIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
 
     /* 鈔票與彩帶特效 */
     .money-bill {
@@ -369,7 +374,7 @@
     <h1 class="gate-title">台北僅存的紅包場</h1>
     
     <button class="pill-red-envelope" onclick="enterSite(this)"
-        style="background: #c21807; color: #ffd700; border: 2px solid #ffd700;">
+        style="background: #c21807; color: #ffd700; border: 2px solid #ffd700; z-index: 10;">
       🧧 遞出紅包
     </button>
     
